@@ -141,7 +141,7 @@ const ALL_PHOTOS_POOL = [
     'full/bikbanner2.webp',
     'full/bikini.webp',
     'full/bikini3.webp',
-    'full/bikini5.webp',
+    'full/bikini5.webp'
 ];//
 // ============================
 // CONTENT DATA - PARTE 2
