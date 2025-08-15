@@ -1,16 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌊 BeachGirl.pics - Galería Premium Ibiza</title>
-    <meta name="description" content="Galería premium de Ibiza con 200+ fotos y 40+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.">
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="/manifest.json">
     <script src="seo-enhancements.js" defer></script>
     <script src="main-script.js" defer></script>
 </head>
 <body>
-    <div class="loading-screen" id="loadingScreen">
+
+    <!-- Loading Screen -->
+    <div class="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">🌊 BeachGirl.pics</div>
             <p>Cargando el paraíso...</p>
@@ -20,8 +22,9 @@
         </div>
     </div>
 
+    <!-- Language Selector -->
     <div class="language-selector">
-        <select id="languageSelect" onchange="changeLanguage(this.value)">
+        <select id="language-select">
             <option value="es">🇪🇸 Español</option>
             <option value="en">🇬🇧 English</option>
             <option value="fr">🇫🇷 Français</option>
@@ -31,209 +34,224 @@
         </select>
     </div>
 
+    <!-- Header -->
     <header class="main-header">
         <div class="header-content">
-            <h1>🌊 BeachGirl.pics</h1>
+            <div class="header-logo">🌊 BeachGirl.pics</div>
             <div class="header-buttons">
-                <button data-i18n="megapack">📦 MEGA PACKS -70%</button>
-                <button data-i18n="monthly">💳 €15/Mes</button>
-                <button data-i18n="lifetime">👑 Lifetime €100</button>
+                <a href="#" class="header-button" id="packs-button">📦 MEGA PACKS -70%</a>
+                <a href="#" class="header-button" id="vip-button">💳 €15/Mes</a>
+                <a href="#" class="header-button" id="lifetime-button">👑 Lifetime €100</a>
             </div>
         </div>
     </header>
 
-    <nav class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
-        <ul>
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <a itemprop="item" href="/">
-                    <span itemprop="name">Inicio</span>
-                </a>
-                <meta itemprop="position" content="1">
-            </li>
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <span itemprop="name">Galería Premium Ibiza</span>
-                <meta itemprop="position" content="2">
-            </li>
-        </ul>
-    </nav>
-
-    <main>
-        <section class="banner-section">
-            <div class="banner-title" data-i18n="welcome">Bienvenida al Paraíso 🌴</div>
-            <p data-i18n="daily_content">200+ fotos y 40+ videos actualizados DIARIAMENTE</p>
+    <!-- Banner -->
+    <section class="banner-section">
+        <div class="banner-background"></div>
+        <img src="public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp" alt="Playa de Ibiza" class="banner-image">
+        <div class="banner-content">
+            <h1 class="banner-title">Bienvenida al Paraíso 🌴</h1>
+            <p class="banner-subtitle">200+ fotos y 40+ videos actualizados DIARIAMENTE</p>
             <div class="banner-cta">
-                <button onclick="showVIPModal()" data-i18n="unlock_all">🔓 Desbloquear Todo</button>
-                <button onclick="scrollToGallery()" data-i18n="view_gallery">📸 Ver Galería</button>
+                <button class="header-button" id="unlock-all">🔓 Desbloquear Todo</button>
+                <button class="header-button" id="view-gallery">📸 Ver Galería</button>
             </div>
-        </section>
-
-        <section class="teaser-carousel-container">
-            <h2 data-i18n="preview_gallery">🔥 Vista Previa Exclusiva - Mejores Fotos Ibiza</h2>
-            <p data-i18n="gallery_description">Explora una selección de nuestras mejores fotografías de Ibiza. Contenido premium del paraíso mediterráneo actualizado cada día.</p>
-            <div class="teaser-carousel">
-                <div class="teaser-carousel-inner"></div>
-            </div>
-        </section>
-
-        <section class="stats-section">
-            <h2>Estadísticas en Tiempo Real de la Galería</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span>📸</span>
-                    <h3>200</h3>
-                    <p data-i18n="photos_today">Fotos de Hoy</p>
-                </div>
-                <div class="stat-item">
-                    <span>🎬</span>
-                    <h3>40</h3>
-                    <p data-i18n="videos_hd">Videos HD</p>
-                </div>
-                <div class="stat-item">
-                    <span>👁️</span>
-                    <h3>25.8M</h3>
-                    <p data-i18n="total_views">Vistas Totales</p>
-                </div>
-                <div class="stat-item">
-                    <span>🔥</span>
-                    <h3>24/7</h3>
-                    <p data-i18n="updates">Actualizaciones</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="photos-section">
-            <h2 data-i18n="paradise_photos">📸 Fotos del Paraíso</h2>
-            <p data-i18n="new_today">¡NUEVO HOY!</p>
-            <div class="content-grid">
-                <!-- Photos will be rendered here -->
-            </div>
-        </section>
-
-        <div class="ad-container" id="ad1">
-            <!-- Advertisement Space -->
         </div>
+    </section>
 
-        <section class="videos-section">
-            <h2 data-i18n="exclusive_videos">🎬 Videos Exclusivos</h2>
-            <p data-i18n="fresh_content">¡CONTENIDO FRESCO!</p>
-            <div class="content-grid">
-                <!-- Videos will be rendered here -->
+    <!-- Teaser Carousel -->
+    <section class="teaser-section">
+        <h2 class="section-title">🔥 Vista Previa Exclusiva - Mejores Fotos Ibiza</h2>
+        <p class="section-subtitle">Explora una selección de nuestras mejores fotografías de Ibiza. Contenido premium del paraíso mediterráneo actualizado cada día.</p>
+        <div class="teaser-carousel-container">
+            <div class="teaser-carousel" id="teaser-carousel">
+                <!-- Teasers rendered dynamically -->
             </div>
-        </section>
-
-        <div class="ad-container" id="ad2">
-            <!-- Advertisement Space -->
         </div>
-    </main>
+    </section>
 
+    <!-- Stats -->
+    <section class="stats-section">
+        <div class="stat-card">
+            <div class="stat-icon">📸</div>
+            <div class="stat-number">200</div>
+            <div class="stat-label">Fotos de Hoy</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎬</div>
+            <div class="stat-number">40</div>
+            <div class="stat-label">Videos HD</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👁️</div>
+            <div class="stat-number">25.8M</div>
+            <div class="stat-label">Vistas Totales</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Actualizaciones</div>
+        </div>
+    </section>
+
+    <!-- Photos Section -->
+    <section id="photos-section">
+        <h2 class="section-title">📸 Fotos del Paraíso</h2>
+        <div class="section-header">
+            <span class="new-badge">¡NUEVO HOY!</span>
+        </div>
+        <div class="content-grid" id="photos-grid">
+            <!-- Photos rendered dynamically -->
+        </div>
+    </section>
+
+    <!-- Videos Section -->
+    <section id="videos-section">
+        <h2 class="section-title">🎬 Videos Exclusivos</h2>
+        <div class="section-header">
+            <span class="new-badge">¡CONTENIDO FRESCO!</span>
+        </div>
+        <div class="content-grid" id="videos-grid">
+            <!-- Videos rendered dynamically -->
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="main-footer">
         <div class="footer-content">
             <div class="footer-logo">BeachGirl.pics</div>
-            <p data-i18n="footer_desc">Tu destino diario para contenido exclusivo del paraíso mediterráneo. Actualizado 24/7 con las mejores fotos y videos.</p>
+            <p>Tu destino diario para contenido exclusivo del paraíso mediterráneo. Actualizado 24/7 con las mejores fotos y videos.</p>
         </div>
         <div class="footer-columns">
             <div class="footer-column">
-                <h4 data-i18n="quick_links">Enlaces Rápidos</h4>
+                <h4>Enlaces Rápidos</h4>
                 <ul class="footer-links">
-                    <li><a href="#photos" data-i18n="photos">Fotos</a></li>
-                    <li><a href="#videos" data-i18n="videos">Videos</a></li>
-                    <li><a href="#vip" data-i18n="vip_subscription">Suscripción VIP</a></li>
-                    <li><a href="#packs" data-i18n="mega_packs">Mega Packs</a></li>
+                    <li><a href="#photos-section">Fotos</a></li>
+                    <li><a href="#videos-section">Videos</a></li>
+                    <li><a href="#" id="vip-footer">Suscripción VIP</a></li>
+                    <li><a href="#" id="packs-footer">Mega Packs</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h4 data-i18n="support">Soporte</h4>
+                <h4>Soporte</h4>
                 <ul class="footer-links">
-                    <li><a href="#terms" data-i18n="terms">Términos de Servicio</a></li>
-                    <li><a href="#privacy" data-i18n="privacy">Política de Privacidad</a></li>
-                    <li><a href="#contact" data-i18n="contact">Contacto</a></li>
+                    <li><a href="/terms">Términos de Servicio</a></li>
+                    <li><a href="/privacy">Política de Privacidad</a></li>
+                    <li><a href="/contact">Contacto</a></li>
                 </ul>
             </div>
         </div>
-        <div class="footer-bottom" data-i18n="copyright">© 2025 BeachGirl.pics - Todos los derechos reservados | 18+ Solo Adultos</div>
+        <div class="footer-bottom">
+            © 2025 BeachGirl.pics - Todos los derechos reservados | 18+ Solo Adultos
+        </div>
     </footer>
 
-    <div class="isabella-window" id="isabellaWindow">
-        <div class="isabella-header">
-            <span data-i18n="isabella_title">💕 Isabella - Tu Guía VIP</span>
-            <button onclick="closeIsabella()">×</button>
-        </div>
-        <div class="isabella-chat" id="isabellaChat"></div>
+    <!-- Credits Display -->
+    <div class="credits-display" id="credits-display">
+        <div class="credits-number" id="credits-number">0</div>
+        <div class="credits-label">Créditos Disponibles</div>
     </div>
 
-    <div class="modal" id="vipModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 data-i18n="vip_unlimited">👑 Acceso VIP Ilimitado</h2>
+    <!-- Isabella Chat -->
+    <div class="isabella-window" id="isabella-window">
+        <div class="isabella-header">
+            <img src="public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp" alt="Isabella Avatar" class="isabella-avatar">
+            <span class="isabella-name">💕 Isabella - Tu Guía VIP</span>
+            <span class="isabella-close" id="isabella-close">×</span>
+        </div>
+        <div class="isabella-chat" id="isabella-chat"></div>
+        <div class="isabella-input">
+            <input type="text" placeholder="Escribe un mensaje..." id="isabella-input">
+            <button id="isabella-send">Enviar</button>
+        </div>
+    </div>
+
+    <!-- VIP Modal -->
+    <div class="unlock-modal" id="vip-modal">
+        <div class="unlock-content">
+            <span class="unlock-close" id="vip-close">×</span>
+            <h3 class="unlock-title">👑 Acceso VIP Ilimitado</h3>
             <div class="plans-container">
                 <div class="plan-card">
-                    <h3 data-i18n="plan_monthly">📅 Mensual</h3>
-                    <p class="price">€15</p>
-                    <p data-i18n="unlimited_access">Acceso ilimitado</p>
-                    <p data-i18n="hd_videos">200+ fotos HD</p>
-                    <p data-i18n="daily_updates">40+ videos HD</p>
-                    <p data-i18n="no_ads">Sin publicidad</p>
+                    <h4 class="plan-title">📅 Mensual</h4>
+                    <div class="plan-price">€15</div>
+                    <ul class="plan-features">
+                        <li>✔️ Acceso ilimitado</li>
+                        <li>✔️ 200+ fotos HD</li>
+                        <li>✔️ 40+ videos HD</li>
+                        <li>✔️ Sin publicidad</li>
+                    </ul>
+                    <div id="paypal-monthly"></div>
                 </div>
-                <div class="plan-card best-value">
-                    <span data-i18n="best_value">MEJOR VALOR</span>
-                    <h3 data-i18n="plan_lifetime">♾️ Lifetime</h3>
-                    <p class="price">€100</p>
-                    <p data-i18n="save_yearly">¡Ahorra €80 al año!</p>
-                    <p data-i18n="unlimited_access">Acceso ilimitado de por vida</p>
-                    <p data-i18n="all_content">Todo el contenido actual y futuro</p>
-                    <p data-i18n="priority_support">Soporte prioritario</p>
-                    <p data-i18n="exclusive_content">Contenido exclusivo VIP</p>
+                <div class="plan-card plan-best">
+                    <h4 class="plan-title">♾️ Lifetime</h4>
+                    <div class="plan-price">€100</div>
+                    <ul class="plan-features">
+                        <li>✔️ ¡Ahorra €80 al año!</li>
+                        <li>✔️ Acceso ilimitado de por vida</li>
+                        <li>✔️ Todo el contenido actual y futuro</li>
+                        <li>✔️ Soporte prioritario</li>
+                        <li>✔️ Contenido exclusivo VIP</li>
+                    </ul>
+                    <div id="paypal-lifetime"></div>
                 </div>
             </div>
-            <div id="paypal-button-container-vip"></div>
         </div>
     </div>
 
-    <div class="modal" id="packModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 data-i18n="pack_selection">📦 MEGA PACKS - Ahorra 70%</h2>
+    <!-- Packs Modal -->
+    <div class="unlock-modal" id="packs-modal">
+        <div class="unlock-content">
+            <span class="unlock-close" id="packs-close">×</span>
+            <h3 class="unlock-title">📦 MEGA PACKS - Ahorra 70%</h3>
             <div class="packs-container">
                 <div class="pack-card">
-                    <h3 data-i18n="pack_starter">Starter Pack</h3>
-                    <p>10 <span data-i18n="items">contenidos</span></p>
-                    <p class="price">€10</p>
-                    <p data-i18n="save">Ahorra 33%</p>
+                    <div class="pack-savings">Ahorra 33%</div>
+                    <h4 class="pack-title">Starter Pack</h4>
+                    <div class="pack-items">10 contenidos</div>
+                    <div class="pack-price">€10</div>
+                    <div id="paypal-starter"></div>
                 </div>
                 <div class="pack-card">
-                    <h3 data-i18n="pack_bronze">Bronze Pack</h3>
-                    <p>20 <span data-i18n="items">contenidos</span></p>
-                    <p class="price">€15</p>
-                    <p data-i18n="save">Ahorra 50%</p>
+                    <div class="pack-savings">Ahorra 50%</div>
+                    <h4 class="pack-title">Bronze Pack</h4>
+                    <div class="pack-items">20 contenidos</div>
+                    <div class="pack-price">€15</div>
+                    <div id="paypal-bronze"></div>
                 </div>
                 <div class="pack-card">
-                    <h3 data-i18n="pack_silver">Silver Pack</h3>
-                    <p>50 <span data-i18n="items">contenidos</span></p>
-                    <p class="price">€30</p>
-                    <p data-i18n="save">Ahorra 60%</p>
+                    <div class="pack-savings">Ahorra 60%</div>
+                    <h4 class="pack-title">Silver Pack</h4>
+                    <div class="pack-items">50 contenidos</div>
+                    <div class="pack-price">€30</div>
+                    <div id="paypal-silver"></div>
                 </div>
-                <div class="pack-card best-value">
-                    <span data-i18n="best_value">MEJOR VALOR</span>
-                    <h3 data-i18n="pack_gold">Gold Pack</h3>
-                    <p>100 <span data-i18n="items">contenidos</span></p>
-                    <p class="price">€50</p>
-                    <p data-i18n="save">Ahorra 70%</p>
+                <div class="pack-card pack-best">
+                    <div class="pack-savings">Ahorra 70%</div>
+                    <h4 class="pack-title">Gold Pack</h4>
+                    <div class="pack-items">100 contenidos</div>
+                    <div class="pack-price">€50</div>
+                    <div id="paypal-gold"></div>
                 </div>
             </div>
-            <div id="paypal-button-container-pack"></div>
         </div>
     </div>
 
-    <div class="modal" id="ppvModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 id="ppvTitle" data-i18n="unlock_content">🔓 Desbloquear Contenido</h2>
-            <p id="ppvPrice">€0.10</p>
-            <div id="paypal-button-container-ppv"></div>
+    <!-- Single Unlock Modal -->
+    <div class="unlock-modal" id="single-unlock-modal">
+        <div class="unlock-content">
+            <span class="unlock-close" id="single-close">×</span>
+            <h3 class="unlock-title">🔓 Desbloquear Contenido</h3>
+            <div class="unlock-preview" id="unlock-preview"></div>
+            <p class="unlock-description">Usa 1 crédito para desbloquear este contenido premium.</p>
+            <button class="header-button" id="unlock-single">Desbloquear por €0.10</button>
+            <div id="paypal-single"></div>
         </div>
     </div>
 
-    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9...&currency=EUR" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notification-toast"></div>
+
 </body>
 </html>
