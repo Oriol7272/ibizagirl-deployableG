@@ -1,18 +1,18 @@
-# IbizaGirl.pics - Robots.txt Optimizado SEO
-# Última actualización: 2025-08-15
+# BeachGirl.pics - Robots.txt Optimizado SEO
+# Última actualización: 2025-01-15
 
 User-agent: *
 Allow: /
 Allow: /index.html
 Allow: /main.html
-Allow: /Full/
+Allow: /public/assets/full/
 Allow: /manifest.json
 Allow: /sw.js
 Allow: /sitemap.xml
 
 # Contenido premium protegido
-Disallow: /uncensored/
-Disallow: /uncensored-videos/
+Disallow: /public/assets/uncensored/
+Disallow: /public/assets/uncensored-videos/
 
 # Archivos del sistema
 Disallow: /admin/
@@ -35,7 +35,7 @@ Allow: /
 Crawl-delay: 1
 
 User-agent: Googlebot-Image
-Allow: /Full/
+Allow: /public/assets/full/
 Allow: /
 
 User-agent: Bingbot
@@ -67,7 +67,7 @@ User-agent: PetalBot
 Disallow: /
 
 # Sitemap principal
-Sitemap: https://ibizagirl.pics/sitemap.xml
+Sitemap: https://beachgirl.pics/sitemap.xml
 
 # Host preferido
-Host: ibizagirl.pics
+Host: beachgirl.pics
