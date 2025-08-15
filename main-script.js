@@ -1,6 +1,6 @@
 // ============================
 // BeachGirl.pics Gallery Script v14.0.0
-// Script principal con rutas corregidas y rotación diaria
+// Script principal con rutas corregidas
 // ============================
 
 'use strict';
@@ -29,11 +29,7 @@ const CONFIG = {
     },
     PAYPAL: {
         CLIENT_ID: 'AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5',
-        CURRENCY: 'EUR',
-        SUBSCRIPTION_PLANS: {
-            MONTHLY: 'P-XXXXXXXXX', // Reemplazar con tu Plan ID de PayPal
-            LIFETIME: 'P-YYYYYYYYY'  // Reemplazar con tu Plan ID de PayPal
-        }
+        CURRENCY: 'EUR'
     },
     PRICES: {
         MONTHLY: 15,
@@ -45,7 +41,12 @@ const CONFIG = {
             100: 50
         }
     },
-    BASE_PATH: '/public/assets'  // Ruta base para los archivos
+    // Configuración de rutas - IMPORTANTE: sin /public/assets
+    PATHS: {
+        DEFAULT_IMAGE: 'full/bikini.jpg',  // Imagen por defecto si falla la carga
+        DEFAULT_BANNER: 'full/bikbanner.jpg',
+        DEFAULT_BANNER2: 'full/bikbanner2.jpg'
+    }
 };
 
 // ============================
@@ -139,6 +140,30 @@ const TRANSLATIONS = {
 };
 
 // ============================
+// FUNCIONES DE UTILIDAD
+// ============================
+
+function buildImagePath(path) {
+    // Las rutas ya vienen con /full o /uncensored desde content-database.js
+    // Solo quitar la barra inicial si existe
+    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+    return cleanPath;
+}
+
+function getDefaultImage() {
+    return CONFIG.PATHS.DEFAULT_IMAGE;
+}
+
+function handleImageError(img, isVideo = false) {
+    // Si falla la carga, usar imagen por defecto
+    if (!img.dataset.defaultUsed) {
+        img.dataset.defaultUsed = 'true';
+        img.src = getDefaultImage();
+        console.warn('Image load failed, using default:', img.src);
+    }
+}
+
+// ============================
 // FUNCIONES DE ROTACIÓN DIARIA
 // ============================
 
@@ -162,17 +187,6 @@ function getDailyRotation(pool, count) {
 // FUNCIONES DE RENDERIZADO
 // ============================
 
-function buildFullPath(path) {
-    // Construir ruta completa
-    return CONFIG.BASE_PATH + path;
-}
-
-function generateThumbnail(videoPath) {
-    // Para videos, usar una imagen placeholder o el primer frame
-    // Por ahora usar una imagen genérica
-    return CONFIG.BASE_PATH + '/full/bikini.jpg';
-}
-
 function renderPhotosProgressive(container, photos) {
     if (!container) return;
     
@@ -183,19 +197,20 @@ function renderPhotosProgressive(container, photos) {
         setTimeout(() => {
             const isUnlocked = state.isVIP || state.unlockedPhotos.has(photo);
             const isNew = Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE;
-            const fullPath = buildFullPath(photo);
+            const imagePath = buildImagePath(photo);
             
             const item = document.createElement('div');
             item.classList.add('content-item', isUnlocked ? 'unlocked' : 'locked');
             if (isNew) item.classList.add('new-item');
             
+            // Crear estructura HTML
             item.innerHTML = `
                 <div class="content-wrapper">
-                    <img src="${fullPath}" 
+                    <img src="${imagePath}" 
                          alt="Foto Premium ${index + 1}" 
-                         class="content-img lazy" 
+                         class="content-img" 
                          loading="lazy"
-                         onerror="this.src='${CONFIG.BASE_PATH}/full/bikini.jpg'">
+                         onerror="handleImageError(this)">
                     ${isNew ? '<span class="badge-new">NUEVO</span>' : ''}
                     ${!isUnlocked ? `
                         <div class="lock-overlay">
@@ -211,6 +226,12 @@ function renderPhotosProgressive(container, photos) {
                 </div>
             `;
             
+            // Agregar manejador de error a la imagen
+            const img = item.querySelector('img');
+            img.addEventListener('error', function() {
+                handleImageError(this);
+            });
+            
             container.appendChild(item);
             
             // Animación de entrada
@@ -219,9 +240,8 @@ function renderPhotosProgressive(container, photos) {
             }, 50);
             
             loadedCount++;
-            updateLoadingProgress(loadedCount, photos.length);
             
-        }, index * 30); // Carga progresiva más rápida
+        }, index * 30); // Carga progresiva
     });
 }
 
@@ -235,8 +255,9 @@ function renderVideosProgressive(container, videos) {
         setTimeout(() => {
             const isUnlocked = state.isVIP || state.unlockedVideos.has(video);
             const isNew = Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE;
-            const fullPath = buildFullPath(video);
-            const thumbnail = generateThumbnail(video);
+            const videoPath = buildImagePath(video);
+            // Para el thumbnail, usar la imagen por defecto ya que no tenemos thumbnails específicos
+            const thumbnail = getDefaultImage();
             
             const item = document.createElement('div');
             item.classList.add('content-item', 'video-item', isUnlocked ? 'unlocked' : 'locked');
@@ -249,13 +270,14 @@ function renderVideosProgressive(container, videos) {
                                controls 
                                poster="${thumbnail}"
                                preload="metadata">
-                            <source src="${fullPath}" type="video/mp4">
+                            <source src="${videoPath}" type="video/mp4">
                             Tu navegador no soporta videos HTML5.
                         </video>
                     ` : `
                         <img src="${thumbnail}" 
                              alt="Video Premium ${index + 1}" 
-                             class="video-thumb">
+                             class="video-thumb"
+                             onerror="handleImageError(this, true)">
                     `}
                     <div class="video-badge">
                         <span class="duration">HD</span>
@@ -277,6 +299,14 @@ function renderVideosProgressive(container, videos) {
                 </div>
             `;
             
+            // Agregar manejador de error a la imagen thumbnail
+            const img = item.querySelector('img');
+            if (img) {
+                img.addEventListener('error', function() {
+                    handleImageError(this, true);
+                });
+            }
+            
             container.appendChild(item);
             
             // Animación de entrada
@@ -285,7 +315,6 @@ function renderVideosProgressive(container, videos) {
             }, 50);
             
             loadedCount++;
-            updateLoadingProgress(loadedCount, videos.length);
             
         }, index * 30);
     });
@@ -298,18 +327,25 @@ function renderTeaserCarousel() {
     carousel.innerHTML = '';
     
     state.teaserItems.forEach((item, index) => {
-        const fullPath = buildFullPath(item);
+        const imagePath = buildImagePath(item);
         const teaserItem = document.createElement('div');
         teaserItem.className = 'teaser-item';
         teaserItem.innerHTML = `
-            <img src="${fullPath}" 
+            <img src="${imagePath}" 
                  alt="Preview ${index + 1}" 
                  loading="lazy"
-                 onerror="this.src='${CONFIG.BASE_PATH}/full/bikini.jpg'">
+                 onerror="handleImageError(this)">
             <div class="teaser-overlay">
                 <button onclick="showVIPModal()">Ver Completo</button>
             </div>
         `;
+        
+        // Agregar manejador de error
+        const img = teaserItem.querySelector('img');
+        img.addEventListener('error', function() {
+            handleImageError(this);
+        });
+        
         carousel.appendChild(teaserItem);
     });
 }
@@ -358,11 +394,71 @@ function celebrateUnlock() {
     }
 }
 
+// ============================
+// NOTIFICACIONES
+// ============================
+
 function showNotification(message, type = 'info') {
+    // Remover notificación existente si hay
+    const existing = document.querySelector('.notification');
+    if (existing) {
+        existing.remove();
+    }
+    
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
-    notification.textContent = message;
+    notification.innerHTML = `
+        <span class="notification-icon">
+            ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
+        </span>
+        <span class="notification-text">${message}</span>
+    `;
     document.body.appendChild(notification);
+    
+    // Agregar estilos si no existen
+    if (!document.getElementById('notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                z-index: 10000;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+            }
+            .notification.show {
+                transform: translateX(0);
+            }
+            .notification.success {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+            .notification.error {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                color: white;
+            }
+            .notification-icon {
+                font-size: 20px;
+            }
+            .pulse {
+                animation: pulse 0.5s ease;
+            }
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.2); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
     
     setTimeout(() => {
         notification.classList.add('show');
@@ -381,7 +477,10 @@ function showNotification(message, type = 'info') {
 // ============================
 
 function initializePayPal() {
-    if (typeof paypal === 'undefined') return;
+    if (typeof paypal === 'undefined') {
+        console.warn('PayPal SDK not loaded');
+        return;
+    }
     
     // Botón para VIP
     const vipContainer = document.getElementById('paypal-button-container-vip');
@@ -405,6 +504,10 @@ function initializePayPal() {
                     showNotification(TRANSLATIONS[state.language].vip_activated, 'success');
                     closeModal();
                 });
+            },
+            onError: function(err) {
+                console.error('PayPal Error:', err);
+                showNotification('Error al procesar el pago', 'error');
             }
         }).render('#paypal-button-container-vip');
     }
@@ -414,7 +517,10 @@ function initializePayPal() {
     if (packContainer && !packContainer.hasChildNodes()) {
         paypal.Buttons({
             createOrder: function(data, actions) {
-                if (!state.selectedPack) return;
+                if (!state.selectedPack) {
+                    showNotification('Selecciona un pack primero', 'error');
+                    return;
+                }
                 
                 return actions.order.create({
                     purchase_units: [{
@@ -433,6 +539,10 @@ function initializePayPal() {
                     showNotification(message, 'success');
                     closeModal();
                 });
+            },
+            onError: function(err) {
+                console.error('PayPal Error:', err);
+                showNotification('Error al procesar el pago', 'error');
             }
         }).render('#paypal-button-container-pack');
     }
@@ -477,14 +587,6 @@ function updateCreditsDisplay() {
     }
 }
 
-function updateLoadingProgress(current, total) {
-    const progress = (current / total) * 100;
-    const progressBar = document.querySelector('.loading-progress');
-    if (progressBar) {
-        progressBar.style.width = `${progress}%`;
-    }
-}
-
 function changeLanguage(lang) {
     state.language = lang;
     localStorage.setItem('language', lang);
@@ -505,7 +607,7 @@ function showVIPModal() {
     if (modal) {
         modal.style.display = 'flex';
         state.currentModal = 'vip';
-        initializePayPal();
+        setTimeout(() => initializePayPal(), 100);
     }
 }
 
@@ -514,7 +616,7 @@ function showPackModal() {
     if (modal) {
         modal.style.display = 'flex';
         state.currentModal = 'pack';
-        initializePayPal();
+        setTimeout(() => initializePayPal(), 100);
     }
 }
 
@@ -530,7 +632,10 @@ function selectPlan(plan) {
     document.querySelectorAll('.plan-card').forEach(card => {
         card.classList.remove('selected');
     });
-    document.getElementById(plan + 'Plan')?.classList.add('selected');
+    const planCard = document.getElementById(plan + 'Plan');
+    if (planCard) {
+        planCard.classList.add('selected');
+    }
 }
 
 function selectPack(credits) {
@@ -538,7 +643,9 @@ function selectPack(credits) {
     document.querySelectorAll('.pack-card').forEach(card => {
         card.classList.remove('selected');
     });
-    event.currentTarget.classList.add('selected');
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('selected');
+    }
 }
 
 // ============================
@@ -606,6 +713,11 @@ function initializeGallery() {
     // Actualizar UI
     updateCreditsDisplay();
     changeLanguage(state.language);
+    
+    // Actualizar imágenes del banner con rutas correctas
+    const bannerImages = document.querySelectorAll('.banner-slide img');
+    if (bannerImages[0]) bannerImages[0].src = CONFIG.PATHS.DEFAULT_BANNER;
+    if (bannerImages[1]) bannerImages[1].src = CONFIG.PATHS.DEFAULT_BANNER2;
     
     console.log(`✅ Galería inicializada:
     - ${state.dailyPhotos.length} fotos del día
@@ -678,6 +790,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // EXPORTAR FUNCIONES GLOBALES
 // ============================
 
+window.handleImageError = handleImageError;
 window.changeLanguage = changeLanguage;
 window.showVIPModal = showVIPModal;
 window.showPackModal = showPackModal;
@@ -740,5 +853,10 @@ console.log(`
    • ${CONFIG.CONTENT.NEW_PERCENTAGE * 100}% aparece como nuevo
    
    🛠️ Debug: galleryDebug
+   • galleryDebug.stats() - Ver estadísticas
+   • galleryDebug.unlockAll() - Desbloquear todo
+   • galleryDebug.addCredits(100) - Añadir créditos
+   • galleryDebug.testRotation() - Ver rotación actual
+   
 🌊 ===============================================
 `);
