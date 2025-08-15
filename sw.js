@@ -19,12 +19,12 @@ const STATIC_ASSETS = [
     '/manifest.json',
     
     // Imágenes críticas para SEO
-    '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-    '/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
-    '/full/0lySugcO4Pp4pEZKvz9U.webp',
-    '/full/0nSaCJQxbVw4BDrhnhHO.webp',
-    '/full/13TXvyRVZ7LtvAOx7kme.webp',
-    '/full/18VQaczW5kdfdiqUVasH.webp'
+    '/public/assets/full/bikini.jpg',
+    '/public/assets/full/bikbanner.jpg',
+    '/public/assets/full/bikbanner2.jpg',
+    '/public/assets/full/backbikini.jpg',
+    '/public/assets/full/bikini3.jpg',
+    '/public/assets/full/bikini5.jpg'
 ];
 
 // External scripts to cache
@@ -34,8 +34,8 @@ const EXTERNAL_SCRIPTS = [
 
 // URLs que no deben cachearse
 const EXCLUDED_URLS = [
-    '/uncensored/',
-    '/uncensored-videos/',
+    '/public/assets/uncensored/',
+    '/public/assets/uncensored-videos/',
     '/admin',
     'chrome-extension://',
     'extension://',
@@ -112,73 +112,140 @@ self.addEventListener('activate', event => {
         })
     );
 });
+// ============================
+// ESTRATEGIAS DE CACHE
+// ============================
+
+// Estrategia: Cache First con timeout
+async function cacheFirstWithTimeout(request, timeout = 3000) {
+    try {
+        const cachePromise = caches.match(request);
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Cache timeout')), timeout)
+        );
+        
+        const cached = await Promise.race([cachePromise, timeoutPromise]);
+        if (cached) {
+            return cached;
+        }
+    } catch (error) {
+        console.log('Cache timeout, fetching from network');
+    }
+    
+    const response = await fetch(request);
+    if (response.ok) {
+        const cache = await caches.open(STATIC_CACHE);
+        cache.put(request, response.clone());
+    }
+    return response;
+}
+
+// Estrategia: Network First con fallback
+async function networkFirstWithFallback(request) {
+    try {
+        const response = await fetch(request);
+        if (response.ok) {
+            const cache = await caches.open(DYNAMIC_CACHE);
+            cache.put(request, response.clone());
+        }
+        return response;
+    } catch (error) {
+        const cached = await caches.match(request);
+        if (cached) {
+            return cached;
+        }
+        
+        // Fallback para páginas HTML
+        if (request.headers.get('accept')?.includes('text/html')) {
+            return caches.match('/index.html');
+        }
+        
+        throw error;
+    }
+}
+
+// Estrategia: Stale While Revalidate
+async function staleWhileRevalidate(request) {
+    const cached = await caches.match(request);
+    
+    // Fetch en background
+    const fetchPromise = fetch(request).then(response => {
+        if (response.ok) {
+            const cache = caches.open(IMAGE_CACHE);
+            cache.then(c => c.put(request, response.clone()));
+        }
+        return response;
+    }).catch(() => cached);
+    
+    return cached || fetchPromise;
+}
 
 // ============================
-// ESTRATEGIA DE CACHE
+// INTERCEPTAR REQUESTS
 // ============================
 
 self.addEventListener('fetch', event => {
-    const url = new URL(event.request.url);
-
-    // Ignorar peticiones a URLs excluidas
-    if (EXCLUDED_URLS.some(excluded => url.pathname.startsWith(excluded) || url.hostname.includes(excluded))) {
-        return event.respondWith(fetch(event.request));
+    const { request } = event;
+    const url = new URL(request.url);
+    
+    // Ignorar URLs excluidas
+    if (EXCLUDED_URLS.some(excludedUrl => url.href.includes(excludedUrl))) {
+        return;
     }
-
-    // Network-only para PayPal
-    if (url.hostname.includes('paypal')) {
-        return event.respondWith(fetch(event.request));
+    
+    // Ignorar requests que no sean GET
+    if (request.method !== 'GET') {
+        return;
     }
-
-    // Cache-first para assets estáticos
-    if (STATIC_ASSETS.includes(url.pathname) || EXTERNAL_SCRIPTS.includes(url.href)) {
-        event.respondWith(
-            caches.match(event.request).then(response => {
-                return response || fetch(event.request).then(fetchResponse => {
-                    if (fetchResponse.ok) {
-                        caches.open(STATIC_CACHE).then(cache => cache.put(event.request, fetchResponse.clone()));
-                    }
-                    return fetchResponse;
-                });
-            })
-        );
-    } else if (url.pathname.endsWith('.webp') || url.pathname.endsWith('.jpg') || url.pathname.endsWith('.png')) {
-        // Stale-while-revalidate para imágenes
-        event.respondWith(staleWhileRevalidate(event.request));
-    } else if (url.pathname.endsWith('.mp4') || url.pathname.endsWith('.webm')) {
-        // Stale-while-revalidate para videos
-        event.respondWith(staleWhileRevalidate(event.request));
-    } else {
-        // Network-first con fallback a cache para otros
-        event.respondWith(
-            fetch(event.request).then(response => {
-                if (response.ok) {
-                    caches.open(DYNAMIC_CACHE).then(cache => cache.put(event.request, response.clone()));
-                }
-                return response;
-            }).catch(() => {
-                return caches.match(event.request);
-            })
-        );
+    
+    // Ignorar chrome-extension y extension requests
+    if (url.protocol === 'chrome-extension:' || url.protocol === 'extension:') {
+        return;
     }
+    
+    event.respondWith(handleFetch(request, url));
 });
 
-// Función stale-while-revalidate con fallback mejorado
-async function staleWhileRevalidate(request) {
-    const cached = await caches.match(request);
-    const fetchPromise = fetch(request).then(response => {
-        if (response.ok) {
-            const cache = await caches.open(DYNAMIC_CACHE);
-            await cache.put(request, response.clone());
-            return response;
+async function handleFetch(request, url) {
+    try {
+        // Para HTML - Network First
+        if (request.headers.get('accept')?.includes('text/html')) {
+            return await networkFirstWithFallback(request);
         }
-        throw new Error('Fetch failed');
-    }).catch(() => {
-        if (cached) return cached;
-        return new Response('Offline - No cache available', { status: 503 });
-    });
-
-    return cached ? Promise.race([fetchPromise, Promise.resolve(cached)]) : fetchPromise;
+        
+        // Para imágenes - Stale While Revalidate
+        if (request.headers.get('accept')?.includes('image/') || 
+            url.pathname.includes('/public/assets/') ||
+            url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
+            return await staleWhileRevalidate(request);
+        }
+        
+        // Para JavaScript/CSS - Cache First con timeout
+        if (url.pathname.includes('.js') || 
+            url.pathname.includes('.css') ||
+            url.hostname === 'cdn.jsdelivr.net') {
+            return await cacheFirstWithTimeout(request);
+        }
+        
+        // Para PayPal y APIs externas - Network Only
+        if (url.hostname.includes('paypal') || 
+            url.hostname !== location.hostname) {
+            return await fetch(request);
+        }
+        
+        // Default: Network First
+        return await networkFirstWithFallback(request);
+        
+    } catch (error) {
+        console.error('🚨 Service Worker: Fetch error', error);
+        
+        // Retornar respuesta de error
+        return new Response('Network error occurred', {
+            status: 408,
+            statusText: 'Request Timeout',
+            headers: { 'Content-Type': 'text/plain' }
+        });
+    }
 }
 
 // ============================
@@ -232,9 +299,9 @@ async function preloadContent() {
         console.log('🔄 Service Worker: Preloading content...');
         
         const imagesToPreload = [
-            '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-            '/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
-            '/full/0lySugcO4Pp4pEZKvz9U.webp'
+            '/public/assets/full/bikini.jpg',
+            '/public/assets/full/bikbanner.jpg',
+            '/public/assets/full/bikini3.jpg'
         ];
         
         const cache = await caches.open(IMAGE_CACHE);
@@ -269,10 +336,10 @@ self.addEventListener('push', event => {
     
     const options = {
         body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
-        icon: '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-        badge: '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-        image: data.image || '/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
-        tag: 'beachgirl-update',
+        icon: '/public/assets/full/bikini.jpg',
+        badge: '/public/assets/full/bikini.jpg',
+        image: data.image || '/public/assets/full/bikbanner.jpg',
+        tag: 'beach-update',
         requireInteraction: false,
         data: {
             url: data.url || '/main.html'
@@ -281,7 +348,7 @@ self.addEventListener('push', event => {
             {
                 action: 'view',
                 title: 'Ver galería',
-                icon: '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp'
+                icon: '/public/assets/full/bikini.jpg'
             },
             {
                 action: 'close',
