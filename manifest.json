@@ -10,7 +10,7 @@
   "orientation": "portrait",
   "theme_color": "#0077be",
   "background_color": "#001f3f",
-  "lang": "es-ES",
+  "lang": "es",
   "dir": "ltr",
   
   "icons": [
@@ -43,6 +43,12 @@
       "sizes": "72x72",
       "type": "image/webp",
       "purpose": "any"
+    },
+    {
+      "src": "/full/fallback-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   
