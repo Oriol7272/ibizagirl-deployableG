@@ -5,16 +5,16 @@ User-agent: *
 Allow: /
 Allow: /index.html
 Allow: /main.html
-Allow: /full/
-Allow: /uncensored/
-Allow: /uncensored-videos/
+Allow: /public/assets/full/
 Allow: /manifest.json
 Allow: /sw.js
 Allow: /sitemap.xml
 
 # Contenido premium protegido
-Disallow: /censored/
-Disallow: /censored-videos/
+Disallow: /public/assets/censored/
+Disallow: /public/assets/uncensored/
+Disallow: /public/assets/censored-videos/
+Disallow: /public/assets/uncensored-videos/
 
 # Archivos del sistema
 Disallow: /admin/
@@ -37,7 +37,7 @@ Allow: /
 Crawl-delay: 1
 
 User-agent: Googlebot-Image
-Allow: /full/
+Allow: /public/assets/full/
 Allow: /
 
 User-agent: Bingbot
