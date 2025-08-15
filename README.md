@@ -3,7 +3,7 @@
 Deployable version of BeachGirl.pics PWA. This repository contains the full source for BeachGirl.pics, a premium gallery site featuring Ibiza-themed content. Includes PWA support, SEO enhancements, and multi-language features.
 
 ## Setup
-- Clone the repo: git clone https://github.com/Oriol7272/ibizagirl-deployableG.git
+- Clone the repo: git clone https://github.com/Oriol7272/beachgirl-deployableG.git
 - Serve locally or deploy to a host supporting static files.
 
 ## Features
