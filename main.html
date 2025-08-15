@@ -6,29 +6,23 @@
     <title>BeachGirl.pics - Galería Premium</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Galería premium con más de 400 fotos y 80 videos HD actualizados diariamente.">
-    <meta name="keywords" content="galería premium, contenido exclusivo, fotos HD, videos HD">
-    <meta name="author" content="BeachGirl.pics">
-    <meta name="robots" content="index, follow">
+    <meta name="description" content="Galería premium con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo.">
+    <meta name="keywords" content="fotos playa, galería premium, contenido exclusivo, paraíso mediterráneo">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="BeachGirl.pics - Galería Premium">
+    <meta property="og:title" content="BeachGirl.pics - Galería Premium del Paraíso">
     <meta property="og:description" content="400+ fotos y 80+ videos HD actualizados diariamente">
-    <meta property="og:image" content="/public/assets/full/bikbanner.jpg">
+    <meta property="og:image" content="https://beachgirl.pics/public/assets/full/bikini.jpg">
     <meta property="og:url" content="https://beachgirl.pics/main.html">
-    <meta property="og:type" content="website">
-    
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#0077be">
     
     <!-- Preconnect para optimizar carga -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://www.paypal.com">
+    <link rel="preconnect" href="https://raw.githubusercontent.com">
     
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="content-database.js" as="script">
+    <link rel="preload" href="content-data.js" as="script">
     <link rel="preload" href="main-script.js" as="script">
     
     <!-- Estilos -->
@@ -72,42 +66,18 @@
                 <div class="logo-subtitle" data-translate="subtitle">Contenido Exclusivo del Paraíso</div>
             </div>
             
-            <div class="header-stats">
-                <div class="stat-item">
-                    <span class="stat-number">400+</span>
-                    <span class="stat-label" data-translate="photos_today">Fotos de Hoy</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">80+</span>
-                    <span class="stat-label" data-translate="videos_hd">Videos HD</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">25.8M</span>
-                    <span class="stat-label" data-translate="total_views">Vistas Totales</span>
-                </div>
-            </div>
-            
             <div class="header-buttons">
-                <button class="header-btn pack-btn" onclick="showPackModal()" data-translate="megapack">
-                    📦 MEGA PACKS -70%
-                </button>
-                <button class="header-btn monthly-btn" onclick="showVIPModal()" data-translate="monthly">
-                    💳 €15/Mes
-                </button>
-                <button class="header-btn vip-btn" onclick="showVIPModal()" data-translate="lifetime">
-                    👑 Lifetime €100
-                </button>
+                <button class="header-btn" onclick="showPackModal()" data-translate="megapack">📦 MEGA PACKS -70%</button>
+                <button class="header-btn" onclick="showVIPModal()" data-translate="monthly">💳 €15/Mes</button>
+                <button class="header-btn vip" onclick="showVIPModal()" data-translate="lifetime">👑 Lifetime €100</button>
             </div>
         </div>
     </header>
 
     <!-- Credits Display -->
     <div class="credits-display" id="creditsDisplay">
-        <div class="credits-icon">💎</div>
-        <div class="credits-info">
-            <div class="credits-number" id="creditsNumber">0</div>
-            <div class="credits-label" data-translate="credits_available">Créditos disponibles</div>
-        </div>
+        <div class="credits-number" id="creditsNumber">0</div>
+        <div class="credits-label" data-translate="credits_available">Créditos disponibles</div>
     </div>
 
     <!-- Main Container -->
@@ -118,38 +88,59 @@
                 <img src="public/assets/full/bikbanner.jpg" alt="Paradise Banner" loading="eager">
             </div>
             <div class="banner-slide">
-                <img src="public/assets/full/bikbanner2.jpg" alt="Paradise Banner 2" loading="lazy">
+                <img src="public/assets/full/bikbanner2.jpg" alt="Paradise Banner 2" loading="eager">
             </div>
             <div class="banner-overlay">
                 <h1 class="banner-title" data-translate="welcome">Bienvenida al Paraíso 🌴</h1>
                 <p class="banner-subtitle" data-translate="daily_content">200+ fotos y 40+ videos actualizados DIARIAMENTE</p>
                 <div class="banner-cta">
-                    <button class="cta-button primary" onclick="showVIPModal()" data-translate="unlock_all">
-                        🔓 Desbloquear Todo
-                    </button>
-                    <button class="cta-button secondary" onclick="document.getElementById('photosSection').scrollIntoView({behavior: 'smooth'})" data-translate="view_gallery">
-                        📸 Ver Galería
-                    </button>
+                    <button class="header-btn cta-primary" onclick="showVIPModal()" data-translate="unlock_all">🔓 Desbloquear Todo</button>
+                    <button class="header-btn cta-secondary" onclick="document.getElementById('photosSection').scrollIntoView({behavior: 'smooth'})" data-translate="view_gallery">📸 Ver Galería</button>
                 </div>
-            </div>
-            <div class="banner-indicators">
-                <span class="indicator active"></span>
-                <span class="indicator"></span>
             </div>
         </section>
 
         <!-- Teaser Carousel -->
-        <section class="teaser-section">
-            <div class="section-header">
-                <h2 class="section-title" data-translate="teaser_title">🔥 Vista Previa Exclusiva</h2>
-                <p class="section-subtitle" data-translate="teaser_desc">Las mejores fotos del día seleccionadas para ti</p>
+        <section class="teaser-carousel-container">
+            <h2 class="teaser-title" data-translate="preview_gallery">🔥 Vista Previa Exclusiva</h2>
+            <div class="teaser-carousel" id="teaserCarousel"></div>
+            <div class="carousel-nav">
+                <button class="carousel-btn" onclick="scrollCarousel(-1)">‹</button>
+                <button class="carousel-btn" onclick="scrollCarousel(1)">›</button>
             </div>
-            <div class="teaser-carousel" id="teaserCarousel">
-                <!-- Se llena dinámicamente -->
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">📸</div>
+                <div class="stat-number" id="photoCount">200</div>
+                <div class="stat-label" data-translate="photos_today">Fotos de Hoy</div>
+                <div class="stat-update">
+                    <span data-translate="updated_at">Actualizado a las</span>
+                    <time id="updateHour">3:00 AM</time>
+                </div>
             </div>
-            <div class="carousel-controls">
-                <button class="carousel-btn prev" onclick="moveCarousel(-1)">‹</button>
-                <button class="carousel-btn next" onclick="moveCarousel(1)">›</button>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🎬</div>
+                <div class="stat-number" id="videoCount">40</div>
+                <div class="stat-label" data-translate="videos_hd">Videos HD</div>
+                <div class="stat-update" data-translate="new_content">¡NUEVO CONTENIDO!</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">👁️</div>
+                <div class="stat-number" id="totalViews">25.8M</div>
+                <div class="stat-label" data-translate="total_views">Vistas Totales</div>
+                <div class="stat-update">+120K <span data-translate="today">hoy</span></div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-number">24/7</div>
+                <div class="stat-label" data-translate="updates">Actualizaciones</div>
+                <div class="stat-update" data-translate="always_fresh">SIEMPRE FRESCO</div>
             </div>
         </section>
 
@@ -157,22 +148,12 @@
         <section class="content-section" id="photosSection">
             <div class="section-header">
                 <h2 class="section-title">
-                    <span data-translate="photos_paradise">📸 Fotos del Paraíso</span>
-                    <span class="badge new" data-translate="new_today">¡NUEVO HOY!</span>
+                    <span data-translate="paradise_photos">📸 Fotos del Paraíso</span>
+                    <span class="section-badge" data-translate="new_today">¡NUEVO HOY!</span>
                 </h2>
-                <div class="section-filters">
-                    <button class="filter-btn active" data-filter="all">Todas</button>
-                    <button class="filter-btn" data-filter="new">Nuevas</button>
-                    <button class="filter-btn" data-filter="popular">Populares</button>
-                </div>
             </div>
             <div class="content-grid" id="photosGrid">
-                <!-- Se llena dinámicamente con main-script.js -->
-            </div>
-            <div class="load-more">
-                <button class="load-more-btn" onclick="loadMorePhotos()">
-                    Cargar más fotos
-                </button>
+                <!-- Photos will be dynamically loaded here -->
             </div>
         </section>
 
@@ -180,48 +161,12 @@
         <section class="content-section" id="videosSection">
             <div class="section-header">
                 <h2 class="section-title">
-                    <span data-translate="videos_exclusive">🎬 Videos Exclusivos HD</span>
-                    <span class="badge fresh" data-translate="fresh_content">¡CONTENIDO FRESCO!</span>
+                    <span data-translate="exclusive_videos">🎬 Videos Exclusivos</span>
+                    <span class="section-badge" data-translate="fresh_content">¡CONTENIDO FRESCO!</span>
                 </h2>
-                <div class="section-filters">
-                    <button class="filter-btn active" data-filter="all">Todos</button>
-                    <button class="filter-btn" data-filter="new">Nuevos</button>
-                    <button class="filter-btn" data-filter="hd">Full HD</button>
-                </div>
             </div>
-            <div class="content-grid video-grid" id="videosGrid">
-                <!-- Se llena dinámicamente con main-script.js -->
-            </div>
-            <div class="load-more">
-                <button class="load-more-btn" onclick="loadMoreVideos()">
-                    Cargar más videos
-                </button>
-            </div>
-        </section>
-
-        <!-- Stats Section -->
-        <section class="stats-section">
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-icon">📸</div>
-                    <div class="stat-value">400+</div>
-                    <div class="stat-text">Fotos Premium</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🎬</div>
-                    <div class="stat-value">80+</div>
-                    <div class="stat-text">Videos HD</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🔄</div>
-                    <div class="stat-value">24/7</div>
-                    <div class="stat-text">Actualizaciones</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-value">25.8M</div>
-                    <div class="stat-text">Vistas Totales</div>
-                </div>
+            <div class="content-grid" id="videosGrid">
+                <!-- Videos will be dynamically loaded here -->
             </div>
         </section>
     </div>
@@ -230,100 +175,58 @@
     <div class="isabella-chat">
         <div class="isabella-bubble" onclick="toggleIsabella()">
             <span class="isabella-avatar">💕</span>
-            <span class="isabella-text">Isabella</span>
             <div class="isabella-notification">1</div>
         </div>
         
         <div class="isabella-window" id="isabellaWindow">
             <div class="isabella-header">
-                <div class="isabella-info">
-                    <span class="isabella-avatar">💕</span>
-                    <div>
-                        <div class="isabella-name" data-translate="isabella_title">Isabella - Tu Guía VIP</div>
-                        <div class="isabella-status">En línea</div>
-                    </div>
+                <div class="isabella-title">
+                    <span>💕</span>
+                    <span data-translate="isabella_title">Isabella - Tu Guía VIP</span>
                 </div>
                 <button class="isabella-close" onclick="toggleIsabella()">×</button>
             </div>
-            <div class="isabella-messages" id="isabellaMessages">
-                <div class="isabella-message">
-                    <span class="message-avatar">💕</span>
-                    <span>¡Hola! Soy Isabella, tu guía personal. ¿En qué puedo ayudarte hoy?</span>
-                </div>
-            </div>
+            <div class="isabella-messages" id="isabellaMessages"></div>
             <div class="isabella-actions">
-                <button class="isabella-btn" onclick="isabellaAction('vip')" data-translate="vip_info">
-                    💎 VIP Info
-                </button>
-                <button class="isabella-btn" onclick="isabellaAction('daily')" data-translate="news">
-                    📅 Novedades
-                </button>
-                <button class="isabella-btn" onclick="isabellaAction('help')" data-translate="help">
-                    ❓ Ayuda
-                </button>
+                <button class="isabella-btn" onclick="isabellaAction('vip')" data-translate="vip_info">💎 VIP Info</button>
+                <button class="isabella-btn" onclick="isabellaAction('daily')" data-translate="news">📅 Novedades</button>
+                <button class="isabella-btn" onclick="isabellaAction('help')" data-translate="help">❓ Ayuda</button>
             </div>
         </div>
     </div>
 
     <!-- VIP Modal -->
-    <div class="modal" id="vipModal" onclick="if(event.target === this) closeModal()">
-        <div class="modal-content vip-modal">
+    <div class="modal" id="vipModal">
+        <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" data-translate="vip_unlimited">👑 Acceso VIP Ilimitado</h2>
                 <button class="modal-close" onclick="closeModal()">×</button>
             </div>
             
-            <div class="vip-benefits">
-                <div class="benefit-item">
-                    <span class="benefit-icon">✅</span>
-                    <span>Acceso ilimitado a todo el contenido</span>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">✅</span>
-                    <span>400+ fotos premium HD</span>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">✅</span>
-                    <span>80+ videos exclusivos</span>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">✅</span>
-                    <span>Contenido nuevo diario</span>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">✅</span>
-                    <span>Sin publicidad</span>
-                </div>
-            </div>
-            
             <div class="plans-container">
-                <div class="plan-card" id="monthlyPlan" onclick="selectPlan('monthly')">
-                    <div class="plan-header">
-                        <div class="plan-type" data-translate="monthly">📅 Mensual</div>
-                        <div class="plan-price">€15<span>/mes</span></div>
-                    </div>
+                <div class="plan-card" onclick="selectPlan('monthly')">
+                    <div class="plan-type" data-translate="plan_monthly">📅 Mensual</div>
+                    <div class="plan-price">€15</div>
+                    <div class="plan-period" data-translate="per_month">/mes</div>
                     <ul class="plan-features">
-                        <li>Acceso completo 30 días</li>
-                        <li>Cancela cuando quieras</li>
-                        <li>Soporte prioritario</li>
+                        <li data-translate="unlimited_access">Acceso ilimitado</li>
+                        <li data-translate="photos_hd">200+ fotos HD</li>
+                        <li data-translate="videos_hd">40+ videos HD</li>
+                        <li data-translate="no_ads">Sin publicidad</li>
                     </ul>
-                    <button class="plan-select-btn">Seleccionar</button>
                 </div>
                 
-                <div class="plan-card featured" id="lifetimePlan" onclick="selectPlan('lifetime')">
-                    <div class="plan-badge">MEJOR VALOR</div>
-                    <div class="plan-header">
-                        <div class="plan-type" data-translate="lifetime">♾️ Lifetime</div>
-                        <div class="plan-price">€100<span>/único pago</span></div>
-                    </div>
-                    <div class="plan-savings">¡Ahorra €80 al año!</div>
+                <div class="plan-card selected" onclick="selectPlan('lifetime')">
+                    <div class="best-value" data-translate="best_value">MEJOR VALOR</div>
+                    <div class="plan-type" data-translate="plan_lifetime">♾️ Lifetime</div>
+                    <div class="plan-price">€100</div>
+                    <div class="plan-period" data-translate="save_yearly">¡Ahorra €80 al año!</div>
                     <ul class="plan-features">
-                        <li>Acceso de por vida</li>
-                        <li>Todo el contenido futuro incluido</li>
-                        <li>Soporte VIP exclusivo</li>
-                        <li>Contenido exclusivo VIP</li>
+                        <li data-translate="unlimited_access">Acceso ilimitado de por vida</li>
+                        <li data-translate="all_content">Todo el contenido actual y futuro</li>
+                        <li data-translate="priority_support">Soporte prioritario</li>
+                        <li data-translate="exclusive_content">Contenido exclusivo VIP</li>
                     </ul>
-                    <button class="plan-select-btn">Seleccionar</button>
                 </div>
             </div>
             
@@ -332,56 +235,44 @@
     </div>
 
     <!-- Pack Modal -->
-    <div class="modal" id="packModal" onclick="if(event.target === this) closeModal()">
-        <div class="modal-content pack-modal">
+    <div class="modal" id="packModal">
+        <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" data-translate="packs_title">📦 MEGA PACKS - Ahorra hasta 70%</h2>
+                <h2 class="modal-title" data-translate="pack_selection">📦 MEGA PACKS - Ahorra 70%</h2>
                 <button class="modal-close" onclick="closeModal()">×</button>
             </div>
             
-            <p class="modal-subtitle">Compra créditos para desbloquear contenido individual</p>
-            
-            <div class="packs-grid">
-                <div class="pack-card" onclick="selectPack(10)">
-                    <div class="pack-discount">-33%</div>
-                    <div class="pack-icon">🥉</div>
-                    <div class="pack-name">Starter Pack</div>
-                    <div class="pack-credits">10 créditos</div>
+            <div class="packs-container">
+                <div class="pack-card" onclick="selectPack('starter')">
+                    <div class="pack-title" data-translate="pack_starter">Starter Pack</div>
+                    <div class="pack-items">10</div>
+                    <div class="pack-label" data-translate="items">contenidos</div>
                     <div class="pack-price">€10</div>
-                    <div class="pack-per-credit">€1 por crédito</div>
-                    <button class="pack-btn">Seleccionar</button>
+                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 33%</div>
                 </div>
                 
-                <div class="pack-card popular" onclick="selectPack(20)">
-                    <div class="pack-badge">MÁS POPULAR</div>
-                    <div class="pack-discount">-50%</div>
-                    <div class="pack-icon">🥈</div>
-                    <div class="pack-name">Bronze Pack</div>
-                    <div class="pack-credits">20 créditos</div>
-                    <div class="pack-price">€15</div>
-                    <div class="pack-per-credit">€0.75 por crédito</div>
-                    <button class="pack-btn">Seleccionar</button>
+                <div class="pack-card" onclick="selectPack('bronze')">
+                    <div class="pack-title" data-translate="pack_bronze">Bronze Pack</div>
+                    <div class="pack-items">25</div>
+                    <div class="pack-label" data-translate="items">contenidos</div>
+                    <div class="pack-price">€20</div>
+                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 50%</div>
                 </div>
                 
-                <div class="pack-card" onclick="selectPack(50)">
-                    <div class="pack-discount">-60%</div>
-                    <div class="pack-icon">🥇</div>
-                    <div class="pack-name">Silver Pack</div>
-                    <div class="pack-credits">50 créditos</div>
-                    <div class="pack-price">€25</div>
-                    <div class="pack-per-credit">€0.50 por crédito</div>
-                    <button class="pack-btn">Seleccionar</button>
+                <div class="pack-card selected" onclick="selectPack('silver')">
+                    <div class="pack-title" data-translate="pack_silver">Silver Pack</div>
+                    <div class="pack-items">50</div>
+                    <div class="pack-label" data-translate="items">contenidos</div>
+                    <div class="pack-price">€35</div>
+                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 65%</div>
                 </div>
                 
-                <div class="pack-card best" onclick="selectPack(100)">
-                    <div class="pack-badge">MEJOR OFERTA</div>
-                    <div class="pack-discount">-70%</div>
-                    <div class="pack-icon">💎</div>
-                    <div class="pack-name">Gold Pack</div>
-                    <div class="pack-credits">100 créditos</div>
-                    <div class="pack-price">€50</div>
-                    <div class="pack-per-credit">€0.50 por crédito</div>
-                    <button class="pack-btn">Seleccionar</button>
+                <div class="pack-card" onclick="selectPack('gold')">
+                    <div class="pack-title" data-translate="pack_gold">Gold Pack</div>
+                    <div class="pack-items">100</div>
+                    <div class="pack-label" data-translate="items">contenidos</div>
+                    <div class="pack-price">€60</div>
+                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 70%</div>
                 </div>
             </div>
             
@@ -389,25 +280,32 @@
         </div>
     </div>
 
+    <!-- PPV Modal -->
+    <div class="modal" id="ppvModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="ppvTitle" data-translate="unlock_content">🔓 Desbloquear Contenido</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="ppv-price" id="ppvPrice">€0.10</div>
+            <p style="text-align: center; margin: 1rem 0; color: #999;">
+                <span data-translate="use_credit">Usa 1 crédito para desbloquear</span>
+            </p>
+            <div id="paypal-button-container-ppv" class="paypal-button-container"></div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="main-footer">
         <div class="footer-content">
             <div class="footer-section">
-                <div class="footer-logo">
-                    <span>🌊</span>
-                    <h3>BeachGirl.pics</h3>
-                </div>
-                <p data-translate="footer_desc">Tu destino diario para contenido exclusivo del paraíso mediterráneo. Actualizado 24/7 con las mejores fotos y videos.</p>
-                <div class="footer-social">
-                    <a href="#" aria-label="Twitter">🐦</a>
-                    <a href="#" aria-label="Instagram">📷</a>
-                    <a href="#" aria-label="Telegram">✈️</a>
-                </div>
+                <h3>BeachGirl.pics</h3>
+                <p data-translate="footer_desc">Tu destino diario para contenido exclusivo del paraíso mediterráneo.</p>
             </div>
             
             <div class="footer-section">
-                <h4 data-translate="quick_links">Enlaces Rápidos</h4>
-                <ul>
+                <h3 data-translate="quick_links">Enlaces Rápidos</h3>
+                <ul class="footer-links">
                     <li><a href="#photosSection" data-translate="photos">Fotos</a></li>
                     <li><a href="#videosSection" data-translate="videos">Videos</a></li>
                     <li><a href="#" onclick="showVIPModal(); return false;" data-translate="vip_subscription">Suscripción VIP</a></li>
@@ -416,22 +314,12 @@
             </div>
             
             <div class="footer-section">
-                <h4 data-translate="support">Soporte</h4>
-                <ul>
-                    <li><a href="/terms.html" data-translate="terms">Términos de Servicio</a></li>
-                    <li><a href="/privacy.html" data-translate="privacy">Política de Privacidad</a></li>
-                    <li><a href="/contact.html" data-translate="contact">Contacto</a></li>
-                    <li><a href="/faq.html">FAQ</a></li>
+                <h3 data-translate="support">Soporte</h3>
+                <ul class="footer-links">
+                    <li><a href="#" data-translate="terms">Términos de Servicio</a></li>
+                    <li><a href="#" data-translate="privacy">Política de Privacidad</a></li>
+                    <li><a href="#" data-translate="contact">Contacto</a></li>
                 </ul>
-            </div>
-            
-            <div class="footer-section">
-                <h4>Newsletter</h4>
-                <p>Recibe notificaciones de contenido nuevo</p>
-                <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
-                    <input type="email" placeholder="tu@email.com" required>
-                    <button type="submit">Suscribir</button>
-                </form>
             </div>
         </div>
         
@@ -440,18 +328,18 @@
         </div>
     </footer>
 
-    <!-- Scripts en orden correcto -->
+    <!-- Scripts - ORDEN IMPORTANTE: content-data.js debe cargar ANTES que main-script.js -->
     
-    <!-- 1. PRIMERO: Cargar la base de datos de contenido -->
-    <script src="content-database.js"></script>
+    <!-- 1. Primero cargamos los datos del contenido -->
+    <script src="content-data.js"></script>
     
-    <!-- 2. SEGUNDO: Cargar el script principal que usa la base de datos -->
-    <script src="main-script.js"></script>
+    <!-- 2. Luego el script de mejoras SEO (opcional) -->
+    <script src="seo-enhancements.js" defer></script>
     
-    <!-- 3. TERCERO: Cargar mejoras SEO y PWA -->
-    <script src="seo-enhancements.js"></script>
+    <!-- 3. Finalmente el script principal que usa los datos -->
+    <script src="main-script.js" defer></script>
     
-    <!-- 4. OPCIONAL: Google Analytics -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -459,14 +347,5 @@
         gtag('js', new Date());
         gtag('config', 'G-DBXYNPBSPY');
     </script>
-    <!-- DIAGNOSTIC - BORRAR DESPUÉS DE USAR -->
-<script src="diagnostic.js"></script>
-
-<!-- Scripts normales -->
-<script src="content-database.js"></script>
-<script src="main-script.js"></script>
-<script src="seo-enhancements.js"></script>
-</body>
-</html>
 </body>
 </html>
