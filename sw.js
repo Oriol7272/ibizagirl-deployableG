@@ -1,13 +1,13 @@
 // ============================
-// BEACHGIRL.PICS SERVICE WORKER v1.3.0
+// IBIZAGIRL.PICS SERVICE WORKER v1.3.0
 // PWA + Performance + SEO Optimized
 // ============================
 
 const CACHE_VERSION = '1.3.0';
-const CACHE_NAME = `beachgirl-v${CACHE_VERSION}`;
-const STATIC_CACHE = `beachgirl-static-v${CACHE_VERSION}`;
-const DYNAMIC_CACHE = `beachgirl-dynamic-v${CACHE_VERSION}`;
-const IMAGE_CACHE = `beachgirl-images-v${CACHE_VERSION}`;
+const CACHE_NAME = `ibizagirl-v${CACHE_VERSION}`;
+const STATIC_CACHE = `ibizagirl-static-v${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `ibizagirl-dynamic-v${CACHE_VERSION}`;
+const IMAGE_CACHE = `ibizagirl-images-v${CACHE_VERSION}`;
 
 // Archivos críticos para cachear
 const STATIC_ASSETS = [
@@ -180,6 +180,7 @@ async function staleWhileRevalidate(request) {
     
     return cached || fetchPromise;
 }
+
 // ============================
 // INTERCEPTAR REQUESTS
 // ============================
@@ -335,11 +336,11 @@ self.addEventListener('push', event => {
     const data = event.data.json();
     
     const options = {
-        body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
+        body: data.body || 'Nuevo contenido disponible en IbizaGirl.pics',
         icon: '/public/assets/full/bikini.jpg',
         badge: '/public/assets/full/bikini.jpg',
         image: data.image || '/public/assets/full/bikbanner.jpg',
-        tag: 'beach-update',
+        tag: 'ibiza-update',
         requireInteraction: false,
         data: {
             url: data.url || '/main.html'
@@ -359,7 +360,7 @@ self.addEventListener('push', event => {
     
     event.waitUntil(
         self.registration.showNotification(
-            data.title || 'BeachGirl.pics - Nuevo contenido',
+            data.title || 'IbizaGirl.pics - Nuevo contenido',
             options
         )
     );
@@ -371,9 +372,9 @@ self.addEventListener('notificationclick', event => {
     if (event.action === 'view' || !event.action) {
         const urlToOpen = event.notification.data?.url || '/main.html';
         event.waitUntil(
-            clients.openWindow(`https://beachgirl.pics${urlToOpen}`)
+            clients.openWindow(`https://ibizagirl.pics${urlToOpen}`)
         );
     }
 });
 
-console.log(`🌊 BeachGirl.pics Service Worker v${CACHE_VERSION} loaded successfully`);
+console.log(`🌊 IbizaGirl.pics Service Worker v${CACHE_VERSION} loaded successfully`);
