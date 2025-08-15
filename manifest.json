@@ -3,7 +3,7 @@
   "short_name": "IbizaGirl",
   "description": "Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.",
   "version": "1.2.0",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "start_url": "/?utm_source=pwa",
   "scope": "/",
   "display": "standalone",
@@ -15,31 +15,31 @@
   
   "icons": [
     {
-      "src": "/public/assets/full/bikini.jpg",
+      "src": "/Full/bikini.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "/public/assets/full/bikbanner.jpg",
+      "src": "/Full/bikbanner.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "/public/assets/full/bikini3.jpg",
+      "src": "/Full/bikini3.jpg",
       "sizes": "144x144",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/public/assets/full/bikini5.jpg",
+      "src": "/Full/bikini5.jpg",
       "sizes": "96x96",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/public/assets/full/backbikini.jpg",
+      "src": "/Full/backbikini.jpg",
       "sizes": "72x72",
       "type": "image/jpeg",
       "purpose": "any"
@@ -48,14 +48,14 @@
   
   "screenshots": [
     {
-      "src": "/public/assets/full/bikbanner.jpg",
+      "src": "/Full/bikbanner.jpg",
       "sizes": "1280x720",
       "type": "image/jpeg",
       "form_factor": "wide",
       "label": "Galería principal de fotos de Ibiza"
     },
     {
-      "src": "/public/assets/full/bikbanner2.jpg",
+      "src": "/Full/bikbanner2.jpg",
       "sizes": "750x1334",
       "type": "image/jpeg",
       "form_factor": "narrow",
@@ -78,7 +78,7 @@
       "url": "/main.html?utm_source=pwa_shortcut",
       "icons": [
         {
-          "src": "/public/assets/full/bikini.jpg",
+          "src": "/Full/bikini.jpg",
           "sizes": "192x192",
           "type": "image/jpeg"
         }
@@ -91,7 +91,7 @@
       "url": "/main.html?utm_source=pwa_vip",
       "icons": [
         {
-          "src": "/public/assets/full/bikini3.jpg",
+          "src": "/Full/bikini3.jpg",
           "sizes": "192x192",
           "type": "image/jpeg"
         }
@@ -104,7 +104,7 @@
       "url": "/main.html?utm_source=pwa_new",
       "icons": [
         {
-          "src": "/public/assets/full/bikini5.jpg",
+          "src": "/Full/bikini5.jpg",
           "sizes": "192x192",
           "type": "image/jpeg"
         }
