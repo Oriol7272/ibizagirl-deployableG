@@ -1005,16 +1005,12 @@ const ALL_VIDEOS_POOL = [
 ];
 // Teaser Images (example, adjust as needed)
 const TEASER_IMAGES = [
-    'full/teaser1.webp',
-    'full/teaser2.webp',
-    'full/teaser3.webp',
-    'full/teaser4.webp',
-    'full/teaser5.webp',
-    'full/teaser6.webp',
-    'full/teaser7.webp',
-    'full/teaser8.webp',
-    'full/teaser9.webp',
-    'full/teaser10.webp'
+  `${CONFIG.BASE_URL}full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp`,
+  `${CONFIG.BASE_URL}full/0Tc8Vtd0mEIvNHZwYGBq.webp`,
+  `${CONFIG.BASE_URL}full/0lySugcO4Pp4pEZKvz9U.webp`,
+  `${CONFIG.BASE_URL}full/0nSaCJQxbVw4BDrhnhHO.webp`,
+  `${CONFIG.BASE_URL}full/13TXvyRVZ7LtvAOx7kme.webp`,
+  `${CONFIG.BASE_URL}full/18VQaczW5kdfdiqUVasH.webp`
 ];
 // Banner Images (example, adjust as needed)
 const BANNER_IMAGES = [
