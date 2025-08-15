@@ -1,5 +1,5 @@
 // ============================
-// SEO ENHANCEMENTS v2.0.0 - CORRECTED
+// SEO ENHANCEMENTS v2.0.0 - BEACHGIRL.PICS
 // Lazy Loading + Open Graph + JSON-LD + Performance
 // ============================
 
@@ -176,34 +176,308 @@ function loadCriticalImages() {
         }
     });
 }
+
 // ============================
 // OPEN GRAPH DINÁMICO
 // ============================
 
-function updateOpenGraph() {
-    // Código truncado en original, asumiendo completo con correcciones
-    // Por ejemplo, cambiar URLs a beachgirl.pics
-    console.log('Updating Open Graph for BeachGirl.pics');
-    // ... (resto del código asumido corregido, sin truncamiento visible)
-}
+function updateOpenGraph(contentData = {}) {
+    const lang = window.state?.currentLanguage || 'es';
+    const trans = window.TRANSLATIONS?.[lang] || {};
+    
+    const defaultData = {
+        title: trans.photos_seo_title || 'BeachGirl.pics - Galería Premium Paraíso | 400+ Fotos Diarias',
+        description: trans.meta_description || 'Galería premium con 400+ fotos y 80+ videos HD actualizados diariamente.',
+        image: 'https://beachgirl.pics/public/assets/full/bikini.jpg',
+        url: window.location.href,
+        type: 'website'
+    };
 
-// Función truncada en original, completando basado en contexto
-function injectAdvancedJSONLD() {
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "url": "https://beachgirl.pics/",
-        "name": "BeachGirl.pics",
-        "description": "Galería premium de playas"
-        // ... agregar más si es necesario
+    const data = { ...defaultData, ...contentData };
+
+    // Actualizar meta tags existentes o crear nuevos
+    const metaTags = [
+        { property: 'og:title', content: data.title },
+        { property: 'og:description', content: data.description },
+        { property: 'og:image', content: data.image },
+        { property: 'og:url', content: data.url },
+        { property: 'og:type', content: data.type },
+        { property: 'og:site_name', content: 'BeachGirl.pics' },
+        { property: 'og:locale', content: lang === 'es' ? 'es_ES' : 
+                                        lang === 'en' ? 'en_US' :
+                                        lang === 'fr' ? 'fr_FR' :
+                                        lang === 'de' ? 'de_DE' :
+                                        lang === 'it' ? 'it_IT' :
+                                        lang === 'pt' ? 'pt_PT' : 'es_ES' },
+        { property: 'og:updated_time', content: new Date().toISOString() },
+        
+        // Twitter Cards
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:site', content: '@beachgirlpics' },
+        { name: 'twitter:title', content: data.title },
+        { name: 'twitter:description', content: data.description },
+        { name: 'twitter:image', content: data.image },
+        
+        // Adicionales para mejor SEO
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:alt', content: 'Galería premium del paraíso - Fotos exclusivas mediterráneo' },
+        
+        // Para Pinterest
+        { name: 'pinterest-rich-pin', content: 'true' },
+        { name: 'pinterest:description', content: data.description }
+    ];
+
+    metaTags.forEach(tag => {
+        let element = document.querySelector(`meta[${tag.property ? 'property' : 'name'}="${tag.property || tag.name}"]`);
+        
+        if (!element) {
+            element = document.createElement('meta');
+            if (tag.property) {
+                element.setAttribute('property', tag.property);
+            } else {
+                element.setAttribute('name', tag.name);
+            }
+            document.head.appendChild(element);
+        }
+        
+        element.setAttribute('content', tag.content);
     });
-    document.head.appendChild(script);
+
+    // Actualizar canonical URL
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.rel = 'canonical';
+        document.head.appendChild(canonical);
+    }
+    canonical.href = data.url;
 }
 
 // ============================
-// SERVICE WORKER REGISTRATION
+// JSON-LD AVANZADO
+// ============================
+
+function injectAdvancedJSONLD() {
+    const lang = window.state?.currentLanguage || 'es';
+    const trans = window.TRANSLATIONS?.[lang] || {};
+    
+    // Schema principal del sitio web
+    const websiteSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://beachgirl.pics/#website",
+        "name": "BeachGirl.pics",
+        "alternateName": ["Galería Paraíso", "Beach Photos", "Paradise Gallery"],
+        "description": trans.meta_description || "Galería premium con contenido exclusivo",
+        "url": "https://beachgirl.pics/",
+        "inLanguage": lang === 'es' ? 'es-ES' : 
+                      lang === 'en' ? 'en-US' :
+                      lang === 'fr' ? 'fr-FR' :
+                      lang === 'de' ? 'de-DE' :
+                      lang === 'it' ? 'it-IT' :
+                      lang === 'pt' ? 'pt-PT' : 'es-ES',
+        "isAccessibleForFree": false,
+        "datePublished": "2025-01-15T00:00:00+01:00",
+        "dateModified": new Date().toISOString(),
+        "publisher": {
+            "@type": "Organization",
+            "@id": "https://beachgirl.pics/#organization"
+        },
+        "potentialAction": [
+            {
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://beachgirl.pics/search?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+            },
+            {
+                "@type": "ViewAction",
+                "target": "https://beachgirl.pics/main.html",
+                "name": "Ver Galería Premium"
+            }
+        ]
+    };
+
+    // Schema de la organización
+    const organizationSchema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": "https://beachgirl.pics/#organization",
+        "name": "BeachGirl.pics",
+        "legalName": "BeachGirl.pics",
+        "url": "https://beachgirl.pics/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://beachgirl.pics/public/assets/full/bikini.jpg",
+            "width": 1200,
+            "height": 630
+        },
+        "sameAs": [
+            "https://instagram.com/beachgirl.pics",
+            "https://tiktok.com/@beachgirl.pics",
+            "https://twitter.com/beachgirlpics"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "availableLanguage": ["Spanish", "English", "French", "German", "Italian", "Portuguese"]
+        }
+    };
+    // Schema de galería de imágenes
+    const imageGallerySchema = {
+        "@context": "https://schema.org",
+        "@type": "ImageGallery",
+        "@id": "https://beachgirl.pics/main.html#gallery",
+        "name": trans.photos_seo_title || "Galería de Fotos del Paraíso",
+        "description": trans.gallery_description || "Colección exclusiva de fotos del paraíso",
+        "url": "https://beachgirl.pics/main.html",
+        "mainEntity": {
+            "@type": "WebPage",
+            "@id": "https://beachgirl.pics/main.html#webpage",
+            "name": trans.photos_seo_title || "Fotos del Paraíso",
+            "description": trans.gallery_description || "Galería premium",
+            "primaryImageOfPage": {
+                "@type": "ImageObject",
+                "url": "https://beachgirl.pics/public/assets/full/bikini.jpg",
+                "caption": trans.seo_keywords?.primary || "Beach paradise gallery",
+                "width": 1200,
+                "height": 800
+            }
+        },
+        "numberOfItems": window.state?.dailyContent ? window.state.dailyContent.photos.length : 400,
+        "contentLocation": {
+            "@type": "Place",
+            "name": "Mediterranean Paradise",
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": "39.5696",
+                "longitude": "2.6502"
+            },
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "ES",
+                "addressRegion": "Islas Baleares"
+            }
+        },
+        "dateModified": new Date().toISOString(),
+        "inLanguage": lang === 'es' ? 'es-ES' : 
+                      lang === 'en' ? 'en-US' :
+                      lang === 'fr' ? 'fr-FR' :
+                      lang === 'de' ? 'de-DE' :
+                      lang === 'it' ? 'it-IT' :
+                      lang === 'pt' ? 'pt-PT' : 'es-ES',
+        "keywords": trans.seo_keywords?.primary || "beach photos gallery",
+        "author": {
+            "@type": "Organization",
+            "@id": "https://beachgirl.pics/#organization"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "@id": "https://beachgirl.pics/#organization"
+        }
+    };
+
+    // Schema de destino turístico
+    const touristDestinationSchema = {
+        "@context": "https://schema.org",
+        "@type": "TouristDestination",
+        "name": "Paradise Beaches",
+        "description": "Las mejores playas capturadas en nuestra galería premium",
+        "url": "https://beachgirl.pics/",
+        "image": "https://beachgirl.pics/public/assets/full/bikbanner.jpg",
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "39.5696",
+            "longitude": "2.6502"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "ES",
+            "addressRegion": "Mediterranean"
+        },
+        "touristType": ["Beach Lover", "Photography Enthusiast", "Nature Lover"],
+        "includesAttraction": [
+            {
+                "@type": "TouristAttraction",
+                "name": "Paradise Beach",
+                "description": "Una de las playas más hermosas"
+            },
+            {
+                "@type": "TouristAttraction", 
+                "name": "Sunset Cove",
+                "description": "Famosa por sus increíbles atardeceres"
+            }
+        ]
+    };
+
+    // Schema de producto/servicio
+    const serviceSchema = {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Galería Premium BeachGirl",
+        "description": "Servicio de galería fotográfica premium con contenido exclusivo",
+        "provider": {
+            "@type": "Organization",
+            "@id": "https://beachgirl.pics/#organization"
+        },
+        "areaServed": {
+            "@type": "Place",
+            "name": "Worldwide"
+        },
+        "audience": {
+            "@type": "Audience",
+            "audienceType": "Adults 18+"
+        },
+        "offers": [
+            {
+                "@type": "Offer",
+                "name": "VIP Lifetime Access",
+                "description": "Acceso de por vida a toda la galería premium",
+                "price": "100",
+                "priceCurrency": "EUR",
+                "availability": "https://schema.org/InStock",
+                "validFrom": "2025-01-15"
+            },
+            {
+                "@type": "Offer",
+                "name": "VIP Monthly Access",
+                "description": "Acceso mensual a toda la galería premium",
+                "price": "15",
+                "priceCurrency": "EUR",
+                "availability": "https://schema.org/InStock",
+                "validFrom": "2025-01-15"
+            }
+        ]
+    };
+
+    // Inyectar todos los schemas
+    const schemas = [
+        websiteSchema,
+        organizationSchema,
+        imageGallerySchema,
+        touristDestinationSchema,
+        serviceSchema
+    ];
+
+    schemas.forEach((schema, index) => {
+        let scriptTag = document.getElementById(`jsonld-schema-${index}`);
+        if (!scriptTag) {
+            scriptTag = document.createElement('script');
+            scriptTag.type = 'application/ld+json';
+            scriptTag.id = `jsonld-schema-${index}`;
+            document.head.appendChild(scriptTag);
+        }
+        scriptTag.textContent = JSON.stringify(schema, null, 2);
+    });
+
+    console.log('✅ Advanced JSON-LD schemas injected');
+}
+
+// ============================
+// PWA SERVICE WORKER REGISTRATION
 // ============================
 
 function registerServiceWorker() {
@@ -211,7 +485,9 @@ function registerServiceWorker() {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js')
                 .then(registration => {
-                    console.log('✅ Service Worker registered');
+                    console.log('✅ Service Worker registered:', registration);
+                    
+                    // Manejar actualizaciones
                     registration.addEventListener('updatefound', () => {
                         const newWorker = registration.installing;
                         newWorker.addEventListener('statechange', () => {
@@ -276,7 +552,7 @@ function updateBreadcrumbs(currentPage = '') {
 
     if (currentPage === 'gallery') {
         breadcrumbs.push({ 
-            name: trans.photos_seo_title || 'Galería Premium Playas', 
+            name: trans.photos_seo_title || 'Galería Premium', 
             url: '/main.html', 
             position: 2 
         });
