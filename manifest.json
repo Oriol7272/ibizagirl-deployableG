@@ -15,31 +15,31 @@
   
   "icons": [
     {
-      "src": "/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp",
+      "src": "/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp",
       "sizes": "192x192",
       "type": "image/webp",
       "purpose": "any maskable"
     },
     {
-      "src": "/public/assets/full/0Tc8Vtd0mEIvNHZwYGBq.webp",
+      "src": "/full/0Tc8Vtd0mEIvNHZwYGBq.webp",
       "sizes": "512x512",
       "type": "image/webp",
       "purpose": "any maskable"
     },
     {
-      "src": "/public/assets/full/0lySugcO4Pp4pEZKvz9U.webp",
+      "src": "/full/0lySugcO4Pp4pEZKvz9U.webp",
       "sizes": "144x144",
       "type": "image/webp",
       "purpose": "any"
     },
     {
-      "src": "/public/assets/full/0nSaCJQxbVw4BDrhnhHO.webp",
+      "src": "/full/0nSaCJQxbVw4BDrhnhHO.webp",
       "sizes": "96x96",
       "type": "image/webp",
       "purpose": "any"
     },
     {
-      "src": "/public/assets/full/13TXvyRVZ7LtvAOx7kme.webp",
+      "src": "/full/13TXvyRVZ7LtvAOx7kme.webp",
       "sizes": "72x72",
       "type": "image/webp",
       "purpose": "any"
@@ -48,14 +48,14 @@
   
   "screenshots": [
     {
-      "src": "/public/assets/full/0Tc8Vtd0mEIvNHZwYGBq.webp",
+      "src": "/full/0Tc8Vtd0mEIvNHZwYGBq.webp",
       "sizes": "1280x720",
       "type": "image/webp",
       "form_factor": "wide",
       "label": "Galería principal de fotos de Ibiza"
     },
     {
-      "src": "/public/assets/full/0lySugcO4Pp4pEZKvz9U.webp",
+      "src": "/full/0lySugcO4Pp4pEZKvz9U.webp",
       "sizes": "750x1334",
       "type": "image/webp",
       "form_factor": "narrow",
@@ -78,7 +78,7 @@
       "url": "/main.html?utm_source=pwa_shortcut",
       "icons": [
         {
-          "src": "/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp",
+          "src": "/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp",
           "sizes": "192x192",
           "type": "image/webp"
         }
@@ -91,7 +91,7 @@
       "url": "/main.html?utm_source=pwa_vip",
       "icons": [
         {
-          "src": "/public/assets/full/0lySugcO4Pp4pEZKvz9U.webp",
+          "src": "/full/0lySugcO4Pp4pEZKvz9U.webp",
           "sizes": "192x192",
           "type": "image/webp"
         }
@@ -104,7 +104,7 @@
       "url": "/main.html?utm_source=pwa_new",
       "icons": [
         {
-          "src": "/public/assets/full/0nSaCJQxbVw4BDrhnhHO.webp",
+          "src": "/full/0nSaCJQxbVw4BDrhnhHO.webp",
           "sizes": "192x192",
           "type": "image/webp"
         }
