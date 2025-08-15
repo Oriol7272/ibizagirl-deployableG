@@ -14,11 +14,9 @@ const BASE_PATHS = {
 // FOTOS CARPETA FULL
 // ============================
 const ALL_PHOTOS_POOL = [
-    // Archivos con GUID y otros formatos especiales
+    
     'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
     'full/85158b64-4168-45fa-9cb4-0b40634f7fa1.webp',
-    
-    // Archivos alfanuméricos regulares
     'full/0Tc8Vtd0mEIvNHZwYGBq.webp',
     'full/0lySugcO4Pp4pEZKvz9U.webp',
     'full/0nSaCJQxbVw4BDrhnhHO.webp',
@@ -132,8 +130,6 @@ const ALL_PHOTOS_POOL = [
     'full/zUNmPEaVFiJfL1mo27ga.webp',
     'full/zs7GNC0HKhDQwRIsB9IM.webp',
     'full/zx83JCzdTKNfyKUY6Djs.webp',
-    
-    // Archivos con nombres especiales
     'full/Sinoseup.webp',
     'full/Sinportada.webp',
     'full/Sintulo.webp',
@@ -146,14 +142,14 @@ const ALL_PHOTOS_POOL = [
     'full/bikini.webp',
     'full/bikini3.webp',
     'full/bikini5.webp'
-];
+];//
 // ============================
 // CONTENT DATA - PARTE 2
-// FOTOS CARPETA UNCENSORED (Primera mitad)
+// FOTOS CARPETA UNCENSORED 
 // ============================
 
 const ALL_UNCENSORED_PHOTOS_POOL = [
-    // Archivos con (còpia) y caracteres especiales
+    
     'uncensored/00wd2wVE89BJnQVenuNP (còpia).webp',
     'uncensored/00wd2wVE89BJnQVenuNP.webp',
     'uncensored/46yy65BCWILWvvLCbqn2 (còpia).webp',
@@ -176,8 +172,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
     'uncensored/vkwJiraLyrhOBVLz1B1o.webp',
     'uncensored/zgaFEhJq9b3FJ7y9LCcC (còpia).webp',
     'uncensored/zgaFEhJq9b3FJ7y9LCcC.webp',
-    
-    // Archivos con números de tiempo (18.52.53, 18.52.54, etc.)
     'uncensored/1cCATxFagDwKacKPXz0S 18.52.53.webp',
     'uncensored/1cCATxFagDwKacKPXz0S.webp',
     'uncensored/3WgVIdLpmtrHE84hkBfh 18.52.54.webp',
@@ -198,8 +192,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
     'uncensored/VZMm5YiJeGpoUt5VsLDk.webp',
     'uncensored/yqTobCZL2AABmmNJ7EPU 18.52.53.webp',
     'uncensored/yqTobCZL2AABmmNJ7EPU.webp',
-    
-    // Archivos alfanuméricos regulares (A-M)
     'uncensored/01CTDHff9PmCsZqjjCoO.webp',
     'uncensored/02gNvnd7bLJgBX7wvQ2r.webp',
     'uncensored/05mTzCtfbQ5McL31hk49.webp',
@@ -296,10 +288,7 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
     'uncensored/9HoKHfzfIKXiINyRQ7OG.webp',
     'uncensored/9KlT5M8s7HTxMuptLEkN.webp',
     'uncensored/9YLpn3gsg8sTGaN0CmZm.webp'
-    
-// Base de datos completa de contenido multimedia
-      // Letras A
-      'uncensored/AHKAq0biFDUtkxlx7TCu.webp',
+    'uncensored/AHKAq0biFDUtkxlx7TCu.webp',
       'uncensored/ANhHtA0GivBfeAo6dvJG.webp',
       'uncensored/AOOPNFh6elOmLpET52cL.webp',
       'uncensored/AWHi4bruJeZpZWykW5WY.webp',
@@ -312,8 +301,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/aer0cOYKwlfdLN2soOxd.webp',
       'uncensored/amjSkXY4CehaPR7pb6LP.webp',
       'uncensored/avrdLWr4n6wdrVj7Ace2.webp',
-      
-      // Letras B
       'uncensored/BLHvjp8XiOuMwnFiiSx0.webp',
       'uncensored/BR4erJG0H1rJe4ZJ5NST.webp',
       'uncensored/BUantPVDTvninIArlmnK.webp',
@@ -342,8 +329,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/buxNTxdJrOaiUnp3CCgW.webp',
       'uncensored/bymSR1aP4BBTZXfHXqDx.webp',
       'uncensored/bywUeU5kqyduPEyNnH1d.webp',
-      
-      // Letras C
       'uncensored/CTyCcna8JSPObRQpulKJ.webp',
       'uncensored/CJoiRWToytr1BwAXi9fY.webp',
       'uncensored/CKowwClF8BDYHfDWTyyn.webp',
@@ -362,8 +347,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/cXDRoW23fDfaocJdTVZs.webp',
       'uncensored/chD2c0Gum1c5kFk0yeGN.webp',
       'uncensored/cj7ehJboFud6ZLuS4IBB.webp',
-      
-      // Letras D
       'uncensored/D0mPdYeYsfvlsrAIKDYT.webp',
       'uncensored/D1ucetT6b2O4sxJzDNCI.webp',
       'uncensored/D3QdNfIR9B8YKPIYl0Hg.webp',
@@ -379,8 +362,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/dwNhaABVUxVgZqEh8x7R.webp',
       'uncensored/dwer.webp',
       'uncensored/dy1ftClNZHFt9B49BTEp.webp',
-      
-      // Letras E
       'uncensored/E75eiElJeiCVSn0WS72T.webp',
       'uncensored/E7JzkeEr78vOg3uIWy5I.webp',
       'uncensored/EAgRrr2lNOrxmrDL3yVU.webp',
@@ -397,8 +378,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/ekmYbNBjpyWxZwRlc1EK.webp',
       'uncensored/em8NYnW4IDBJVnQs9lto.webp',
       'uncensored/eoLBYaofqZgS4nlCIhQR.webp',
-      
-      // Letras F
       'uncensored/F0liPF1HeD6KbXLkDAoy.webp',
       'uncensored/F14ftMYyM08k2mMKscbw.jpg',
       'uncensored/F3yLtdx1zDT72xCUNhyp.webp',
@@ -422,8 +401,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/feDWFZXdWOjqFXBuGVBW.webp',
       'uncensored/fima8JceRo46sZEPXqa2.webp',
       'uncensored/frByUlLa0C2K5lgDkcQ4.webp',
-      
-      // Letras G
       'uncensored/G4YdNFtdunscrnPe5Qb6.webp',
       'uncensored/G5tR4rjmD4dWct9aKfMu.webp',
       'uncensored/GBaZuttvlobM3dZ0DvMp.webp',
@@ -446,8 +423,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/gWHDLmu43lpXkeDV4tbF.webp',
       'uncensored/gcLWreCoolbJqNwOf8U1.webp',
       'uncensored/gyqtLyHCjFjxa5Xlu6Ne.webp',
-      
-      // Letras H
       'uncensored/H2G48QtUrqK6CTkVFepL.webp',
       'uncensored/HGMKwHDnRHyC8JcVjM4d.webp',
       'uncensored/HJk26Z6e0TG9m5R4FGSF.webp',
@@ -464,8 +439,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/hd1lg4PmT8FlPiRGl3lo.webp',
       'uncensored/hdXKfkAqMbbJskcA4BxU.webp',
       'uncensored/hxxXN7wkWVNaytlNJnWi.webp',
-      
-      // Letras I
       'uncensored/I153uRWwV7VOeJDIs4sW.webp',
       'uncensored/I1ShZ7ErsJgCeQwmZwwF.webp',
       'uncensored/I2enQjaFiBfPB2hml0xQ.webp',
@@ -485,8 +458,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/ibBknsEWo2ZZsqY8ebGd.webp',
       'uncensored/ivlJ70pfwGp4OvaZWKDI.webp',
       'uncensored/iyK9KloK0wI0knjJ2cDX.webp',
-      
-      // Letras J
       'uncensored/J5Kwtdb5IugC0tRQYiSL.webp',
       'uncensored/J6veLoeh1n1Sn7GLMFGI.webp',
       'uncensored/JFIqTqkFspgFZDpiXz1E.webp',
@@ -510,8 +481,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/jeHUaQKdkvKP3jpwDOYF.webp',
       'uncensored/jt426nGP8qxAKabKAFm3.webp',
       'uncensored/jz5OXcNF67acc8gd7kdY.webp',
-      
-      // Letras K
       'uncensored/K1jKFhSlZDPveOh77wv0.webp',
       'uncensored/K5MQWWTZ5DH31NLdu0MK.webp',
       'uncensored/K6AqNa8lHyPw8rujRCux.webp',
@@ -534,8 +503,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/kl7uL0kYuxv1ywgVArK6.webp',
       'uncensored/kr5FiUdTaiQ7imq1xHlH.webp',
       'uncensored/kvMWPx1dZLAKZTdYz021.webp',
-      
-      // Letras L
       'uncensored/LNN7yt3LxaWZM0GLv9GH.webp',
       'uncensored/LRN5FatqF8trNHPNO1hf.webp',
       'uncensored/LTNnisZwtW4gCMWBDnRt.webp',
@@ -553,8 +520,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/ln4cy8UbL9pYn1VLTF0e.webp',
       'uncensored/lnwQF627cnv9wGAJAYyv.webp',
       'uncensored/lx1Vs3BouTFD4QV5znFg.webp',
-      
-      // Letras M
       'uncensored/M0vnSlmKQmrKMwH5ZUgj.webp',
       'uncensored/M5g8cirHf8JJPdpnnsv6.webp',
       'uncensored/MLsK990TwEGQUcWiIHtN.webp',
@@ -571,8 +536,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/mJ5co04gw0DHvm11vrSm.webp',
       'uncensored/mclWDmpQy6Jw4mioMNj7.webp',
       'uncensored/mrDqEi5kwO2z7tUPLsRb.webp',
-      
-      // Letras N
       'uncensored/N1FecOcWCLvy3UeJyhyC.webp',
       'uncensored/N7QBurnWQH4xeS8X6iUA.webp',
       'uncensored/NDGfqsuUip0F4dU9wgVL.webp',
@@ -595,8 +558,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/niRDWeZ3BtT2RR9Cdckc.webp',
       'uncensored/nm6YKc38NLqwGPaNiDhc.webp',
       'uncensored/nyVLfjGqj8DdIYERQ99Q.webp',
-      
-      // Letras O
       'uncensored/O1liPEh6fua3iMGqbGSv.webp',
       'uncensored/OEgHK5KXpZFdq6NLoG5Y.webp',
       'uncensored/OEikSia0qKPA9abxuCkt.webp',
@@ -616,8 +577,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/osLuGEmMEbvUS4Wg0vPd.webp',
       'uncensored/owPT3Y4puK3dRHWNsj47.webp',
       'uncensored/oyvzaYAsJMYwriGwLPpH.webp',
-      
-      // Letras P
       'uncensored/P3GqyhUt8X9wpa6AQq83.webp',
       'uncensored/P5Ub5tzpVEJqb5XJz2Gb.webp',
       'uncensored/PAo0HSU3ztynrbi5Z0Pm.webp',
@@ -646,8 +605,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/pqY5nm0h3KOVpPeMavsh.webp',
       'uncensored/pshgDOF3v7yu8WjL2yOw.webp',
       'uncensored/psZEFLlVAhAiq10uJ8qd.webp',
-      
-      // Letras Q
       'uncensored/Q1ykJ3sHIwR1f9kYOluf.webp',
       'uncensored/Q3VtgaAlFcFsFkxYRgIJ.webp',
       'uncensored/Q8YLAcSYnDB3Vb4pKuyk.webp',
@@ -680,8 +637,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/qkv44mGKiKa7EWTcvzDO.webp',
       'uncensored/qtxWuSAFLyXBjHVE1Tpu.webp',
       'uncensored/qxIzW9ZMuhkEY6dmGKSv.webp',
-      
-      // Letras R
       'uncensored/R6xtD32yLznN3ooTRBP9.webp',
       'uncensored/R72I1Vrwagr4YQFpwcZp.webp',
       'uncensored/RD9x9mcTKA991iaAbUaf.webp',
@@ -710,8 +665,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/rmOwWvP02A4uUpm7kfgz.webp',
       'uncensored/rsfMAiPzZKLa55Yl6oM5.webp',
       'uncensored/ryoPQY0cdPjvn19kAr1R.webp',
-      
-      // Letras S
       'uncensored/S4J6LLRoGsjvq4BNylGE.webp',
       'uncensored/SPx53vX83UXLurLpvx3H.webp',
       'uncensored/SPz0O8J0T6G5uVWIoDzQ.webp',
@@ -745,7 +698,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/SrPco4nWLMbJXQoWYfFc.webp',
       'uncensored/SyWKyUgFoMmXtcTCGRcD.webp',
       'uncensored/Sütulo3.webp',
-      's0yJlM1LkAD1GgcxE9Tl.webp',
       'uncensored/s1Z1dpOlcfmfpmxIPsQz.webp',
       'uncensored/s201pek0Ftm1mlgP0Ssm.webp',
       'uncensored/sBcbjHl9tBNpffy5N757.webp',
@@ -760,8 +712,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/sswuJjrax66x9z46s2ol.webp',
       'uncensored/stzVPLHAEPf2tSjyaQv7.webp',
       'uncensored/suU3JgTP9BD64Z1DVfcR.webp',
-      
-      // Letras T
       'uncensored/TVuPPIBhFDMDCmBdsceB.webp',
       'uncensored/Te2nfJ7cUJ4CLzPXOGNP.webp',
       'uncensored/TgxnDUvTym3gq8YTlsJ2.webp',
@@ -783,8 +733,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/tcvZT8b6xDsJU8ELJLZR.webp',
       'uncensored/tymVwJGf7k95S23WgwHf.webp',
       'uncensored/tzico6mUJuc7Lz8HYdEF.webp',
-      
-      // Letras U
       'uncensored/U7P8FbQo0hWzHrxvi9wk.webp',
       'uncensored/UQzUY6tuS0GVfhvLeNK4.webp',
       'uncensored/UY3djnFnYQxf0fCsdlnM.webp',
@@ -804,8 +752,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/ufXYerfLKedF1f6OYNhd.webp',
       'uncensored/ukDMjQc287vTIu0dSDjD.webp',
       'uncensored/uuWZbWHBiO61Hak3zs4Y.webp',
-      
-      // Letras V
       'uncensored/V598zvT31JDtncTW8taC.webp',
       'uncensored/V9GKbtJQTNaM8l93aw36.webp',
       'uncensored/VNLiXyl3RjjeeSin6s1L.jpg',
@@ -824,8 +770,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/vUkyOoG7i2f0aiw64hKT.webp',
       'uncensored/vXRd2oZvaaxA7eJdcvoo.webp',
       'uncensored/vr6T66fOk1VKjDzxBl96.webp',
-      
-      // Letras W
       'uncensored/W9CK51Mronx3uf5hfQ3U.webp',
       'uncensored/W9dJWz2EQiyHO6hi61Ke.webp',
       'uncensored/WEYv5fEVOU5b3TXEhdvp.webp',
@@ -846,8 +790,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/wrs60TS7VJQlmWbyKKUu.webp',
       'uncensored/wtuihFN4OoObLMyng5Qg.webp',
       'uncensored/wx0EdfjBwmcgVHSpTMxS.webp',
-      
-      // Letras X
       'uncensored/XDC7mdzYxqbcW96Ll8F1.webp',
       'uncensored/XdVpvijn3dM2vO9l7gDo.webp',
       'uncensored/XrwKIgKRAo8bThGJivai.webp',
@@ -862,8 +804,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/xaVDntVPn9ebtoaFT8Dz.webp',
       'uncensored/xhQTgYHiVAYbnYrKIsOq.webp',
       'uncensored/xjZqnXA5GEJed7iEaR0G.webp',
-      
-      // Letras Y
       'uncensored/Y1v5ySZBgQ9bvFMzv0A4.webp',
       'uncensored/Y20jBClEmK9x7H3gAEbQ.webp',
       'uncensored/Y8zMVR7HKXDnqEt8jgLy.webp',
@@ -882,8 +822,6 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/yk0bZlZR6aSRAoUCihPq.webp',
       'uncensored/yqTobCZL2AABmmNJ7EPU.webp',
       'uncensored/yz4R00MMukJ7GJBzzDtl.webp',
-      
-      // Letras Z
       'uncensored/Z1PRTgXZcRtlo6S85wI6.webp',
       'uncensored/Z7Z7UTXyqeJ8LszoaSgW.webp',
       'uncensored/ZCi86V1pgMMljnEamKg9.webp',
@@ -906,7 +844,7 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
       'uncensored/zs7GNC0HKhDQwRIsB9IM.webp',
       'uncensored/zx83JCzdTKNfyKUY6Djs.webp'
     ]
-  },
+ ];//
   const ALL_VIDEOS_POOL = [
     'uncensored-videos/0nF138CMxl1eGWUxaG2d.mp4',
     'uncensored-videos/0xXK6PxXSv6cpYxvI7HX.mp4',
