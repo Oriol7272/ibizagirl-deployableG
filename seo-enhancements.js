@@ -1,6 +1,7 @@
 // ============================
-// SEO ENHANCEMENTS v2.0.0 - BEACHGIRL.PICS
+// SEO ENHANCEMENTS v2.1.0 - BEACHGIRL.PICS
 // Lazy Loading + Open Graph + JSON-LD + Performance
+// Actualizado para usar content-data.js
 // ============================
 
 // ============================
@@ -262,6 +263,16 @@ function injectAdvancedJSONLD() {
     const lang = window.state?.currentLanguage || 'es';
     const trans = window.TRANSLATIONS?.[lang] || {};
     
+    // Obtener información del contenido si está disponible
+    let totalPhotos = 400;
+    let totalVideos = 80;
+    
+    if (window.CONTENT_DATA) {
+        totalPhotos = (window.CONTENT_DATA.ALL_PHOTOS_POOL?.length || 0) + 
+                     (window.CONTENT_DATA.ALL_UNCENSORED_PHOTOS_POOL?.length || 0);
+        totalVideos = window.CONTENT_DATA.ALL_VIDEOS_POOL?.length || 0;
+    }
+    
     // Schema principal del sitio web
     const websiteSchema = {
         "@context": "https://schema.org",
@@ -326,7 +337,8 @@ function injectAdvancedJSONLD() {
             "availableLanguage": ["Spanish", "English", "French", "German", "Italian", "Portuguese"]
         }
     };
-    // Schema de galería de imágenes
+
+    // Schema de galería de imágenes con datos actualizados
     const imageGallerySchema = {
         "@context": "https://schema.org",
         "@type": "ImageGallery",
@@ -347,7 +359,7 @@ function injectAdvancedJSONLD() {
                 "height": 800
             }
         },
-        "numberOfItems": window.state?.dailyContent ? window.state.dailyContent.photos.length : 400,
+        "numberOfItems": totalPhotos + totalVideos,
         "contentLocation": {
             "@type": "Place",
             "name": "Mediterranean Paradise",
@@ -473,7 +485,7 @@ function injectAdvancedJSONLD() {
         scriptTag.textContent = JSON.stringify(schema, null, 2);
     });
 
-    console.log('✅ Advanced JSON-LD schemas injected');
+    console.log('✅ Advanced JSON-LD schemas injected with content data');
 }
 
 // ============================
@@ -637,11 +649,28 @@ function initPerformanceMonitoring() {
 }
 
 // ============================
+// CONTENT STATS DISPLAY
+// ============================
+
+function displayContentStats() {
+    if (!window.CONTENT_DATA) return;
+    
+    const totalPhotos = (window.CONTENT_DATA.ALL_PHOTOS_POOL?.length || 0) + 
+                       (window.CONTENT_DATA.ALL_UNCENSORED_PHOTOS_POOL?.length || 0);
+    const totalVideos = window.CONTENT_DATA.ALL_VIDEOS_POOL?.length || 0;
+    
+    console.log(`📊 SEO Content Stats:
+    - Total Photos: ${totalPhotos}
+    - Total Videos: ${totalVideos}
+    - Total Content: ${totalPhotos + totalVideos}`);
+}
+
+// ============================
 // INICIALIZACIÓN GLOBAL
 // ============================
 
 function initializeSEOEnhancements() {
-    console.log('🚀 Initializing SEO Enhancements v2.0.0...');
+    console.log('🚀 Initializing SEO Enhancements v2.1.0...');
     
     // Lazy loading avanzado
     setupAdvancedLazyLoading();
@@ -649,7 +678,7 @@ function initializeSEOEnhancements() {
     // Open Graph dinámico
     updateOpenGraph();
     
-    // JSON-LD avanzado
+    // JSON-LD avanzado con datos del contenido
     injectAdvancedJSONLD();
     
     // Service Worker PWA
@@ -661,6 +690,9 @@ function initializeSEOEnhancements() {
     // Performance monitoring
     initPerformanceMonitoring();
     
+    // Display content stats
+    displayContentStats();
+    
     console.log('✅ SEO Enhancements initialized');
 }
 
@@ -668,7 +700,8 @@ function initializeSEOEnhancements() {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeSEOEnhancements);
 } else {
-    initializeSEOEnhancements();
+    // Esperar un momento para asegurar que content-data.js esté cargado
+    setTimeout(initializeSEOEnhancements, 100);
 }
 
 // Exponer funciones globales
@@ -676,3 +709,4 @@ window.updateOpenGraph = updateOpenGraph;
 window.updateBreadcrumbs = updateBreadcrumbs;
 window.updateApp = updateApp;
 window.initializeSEOEnhancements = initializeSEOEnhancements;
+window.setupAdvancedLazyLoading = setupAdvancedLazyLoading;
