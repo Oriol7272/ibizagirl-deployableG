@@ -1,7 +1,7 @@
 {
-  "name": "IbizaGirl.pics - Galería Premium Ibiza",
-  "short_name": "IbizaGirl",
-  "description": "Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.",
+  "name": "BeachGirl.pics - Galería Premium Paraíso",
+  "short_name": "BeachGirl",
+  "description": "Galería premium con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo.",
   "version": "1.2.0",
   "manifest_version": 2,
   "start_url": "/?utm_source=pwa",
@@ -15,31 +15,31 @@
   
   "icons": [
     {
-      "src": "/Full/bikini.jpg",
+      "src": "/public/assets/full/bikini.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "/Full/bikbanner.jpg",
+      "src": "/public/assets/full/bikbanner.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "/Full/bikini3.jpg",
+      "src": "/public/assets/full/bikini3.jpg",
       "sizes": "144x144",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/Full/bikini5.jpg",
+      "src": "/public/assets/full/bikini5.jpg",
       "sizes": "96x96",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/Full/backbikini.jpg",
+      "src": "/public/assets/full/backbikini.jpg",
       "sizes": "72x72",
       "type": "image/jpeg",
       "purpose": "any"
@@ -48,18 +48,18 @@
   
   "screenshots": [
     {
-      "src": "/Full/bikbanner.jpg",
+      "src": "/public/assets/full/bikbanner.jpg",
       "sizes": "1280x720",
       "type": "image/jpeg",
       "form_factor": "wide",
-      "label": "Galería principal de fotos de Ibiza"
+      "label": "Galería principal de fotos del paraíso"
     },
     {
-      "src": "/Full/bikbanner2.jpg",
+      "src": "/public/assets/full/bikbanner2.jpg",
       "sizes": "750x1334",
       "type": "image/jpeg",
       "form_factor": "narrow",
-      "label": "Vista móvil de la galería Ibiza"
+      "label": "Vista móvil de la galería"
     }
   ],
   
@@ -78,7 +78,7 @@
       "url": "/main.html?utm_source=pwa_shortcut",
       "icons": [
         {
-          "src": "/Full/bikini.jpg",
+          "src": "/public/assets/full/bikini.jpg",
           "sizes": "192x192",
           "type": "image/jpeg"
         }
@@ -91,7 +91,7 @@
       "url": "/main.html?utm_source=pwa_vip",
       "icons": [
         {
-          "src": "/Full/bikini3.jpg",
+          "src": "/public/assets/full/bikini3.jpg",
           "sizes": "192x192",
           "type": "image/jpeg"
         }
@@ -104,7 +104,7 @@
       "url": "/main.html?utm_source=pwa_new",
       "icons": [
         {
-          "src": "/Full/bikini5.jpg",
+          "src": "/public/assets/full/bikini5.jpg",
           "sizes": "192x192",
           "type": "image/jpeg"
         }
@@ -117,7 +117,7 @@
   
   "protocol_handlers": [
     {
-      "protocol": "web+ibizagirl",
+      "protocol": "web+beachgirl",
       "url": "/?url=%s"
     }
   ],
