@@ -1,15 +1,17 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌊 BeachGirl.pics - Paradise Awaits</title>
-    <meta name="description" content="Exclusive content from the Mediterranean paradise. 400+ photos and 80+ videos updated daily. 18+ only.">
+    <title>🌊 BeachGirl.pics - Verificación de Edad</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="/manifest.json">
     <script src="seo-enhancements.js" defer></script>
 </head>
 <body>
-    <div class="loading-screen" id="loadingScreen">
+
+    <!-- Loading Screen -->
+    <div class="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">🌊 BeachGirl.pics</div>
             <p>Paradise Awaits</p>
@@ -19,42 +21,38 @@
         </div>
     </div>
 
-    <main class="age-gate">
-        <header class="age-header">
-            <h1>Verificación de Edad Requerida</h1>
-            <p>Este sitio web contiene contenido exclusivo para adultos.</p>
-            <p>Debes ser mayor de 18 años para entrar.</p>
-            <p>400+ fotos y 80+ videos del paraíso mediterráneo te esperan dentro.</p>
-        </header>
-
-        <section class="age-stats">
-            <div>
-                <span>400+</span>
-                <p>Fotos Diarias</p>
+    <!-- Age Verification -->
+    <div class="age-verification">
+        <h1 class="banner-title">Verificación de Edad Requerida</h1>
+        <p>Este sitio web contiene contenido exclusivo para adultos.</p>
+        <p>Debes ser mayor de 18 años para entrar.</p>
+        <p>400+ fotos y 80+ videos del paraíso mediterráneo te esperan dentro.</p>
+        
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number">400+</div>
+                <div class="stat-label">Fotos Diarias</div>
             </div>
-            <div>
-                <span>80+</span>
-                <p>Videos HD</p>
+            <div class="stat-card">
+                <div class="stat-number">80+</div>
+                <div class="stat-label">Videos HD</div>
             </div>
-            <div>
-                <span>24/7</span>
-                <p>Actualizado</p>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Actualizado</div>
             </div>
-        </section>
+        </div>
+        
+        <div class="age-buttons">
+            <button id="enter-button" class="header-button">Soy Mayor de 18</button>
+            <a href="https://www.google.com" class="header-button exit-button">Salir</a>
+        </div>
+        
+        <p class="legal-text">Al entrar a este sitio, confirmas que eres mayor de edad en tu jurisdicción 
+        y aceptas nuestros <a href="/terms">Términos de Servicio</a> y 
+        <a href="/privacy">Política de Privacidad</a>.
+        Todo el contenido es © 2025 BeachGirl.pics - Todos los derechos reservados.</p>
+    </div>
 
-        <section class="age-buttons">
-            <button onclick="window.location.href='main.html'">Soy Mayor de 18</button>
-            <button onclick="window.location.href='https://google.com'">Salir</button>
-        </section>
-
-        <footer class="age-footer">
-            Al entrar a este sitio, confirmas que eres mayor de edad en tu jurisdicción 
-            y aceptas nuestros Términos de Servicio y 
-            Política de Privacidad.
-            Todo el contenido es © 2025 BeachGirl.pics - Todos los derechos reservados.
-        </footer>
-    </main>
-
-    <script src="main-script.js" defer></script>
 </body>
 </html>
