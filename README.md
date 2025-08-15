@@ -1,15 +1,18 @@
-# beachgirl-deployableG
+# beachgirl-deployable
 
-Deployable version of BeachGirl.pics PWA. This repository contains the full source for BeachGirl.pics, a premium gallery site featuring Ibiza-themed content. Includes PWA support, SEO enhancements, and multi-language features.
+## Descripción
+Proyecto de galería PWA para BeachGirl.pics, con contenido premium de playas, suscripciones y optimizaciones SEO/PWA.
 
-## Setup
-- Clone the repo: git clone https://github.com/Oriol7272/beachgirl-deployableG.git
-- Serve locally or deploy to a host supporting static files.
+## Instalación
+1. Clona el repo.
+2. Configura Vercel para deploy en beachgirl.pics.
+3. Asegúrate de que /public/assets/full/ contenga todas las imágenes.
 
-## Features
-- Daily updated gallery with 200+ photos and 40+ videos.
-- PayPal integration for subscriptions and packs.
-- Service Worker for offline/PWA functionality.
-- Multi-language support (ES, EN, FR, DE, IT, PT).
+## Uso
+- Ejecuta localmente con un server estático.
+- Deploy en Vercel para producción.
 
-© 2025 BeachGirl.pics - All rights reserved.
+## Notas
+- Versión: v1.0 (2025)
+- Corrige branding a BeachGirl.pics.
+- Prueba PWA y PayPal en sandbox.
