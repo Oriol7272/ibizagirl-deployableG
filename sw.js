@@ -112,6 +112,7 @@ self.addEventListener('activate', event => {
         })
     );
 });
+
 // ============================
 // ESTRATEGIAS DE CACHE
 // ============================
@@ -179,7 +180,6 @@ async function staleWhileRevalidate(request) {
     
     return cached || fetchPromise;
 }
-
 // ============================
 // INTERCEPTAR REQUESTS
 // ============================
