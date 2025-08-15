@@ -1,11 +1,12 @@
+'use strict';
 // ============================
 // SEO ENHANCEMENTS v2.0.0 - CORRECTED
 // Lazy Loading + Open Graph + JSON-LD + Performance
 // ============================
 
 // ============================
- // LAZY LOADING MEJORADO v2.0
- // ============================
+// LAZY LOADING MEJORADO v2.0
+// ============================
 
 function setupAdvancedLazyLoading() {
     // Configuración más agresiva para mejor performance
@@ -86,7 +87,7 @@ function setupAdvancedLazyLoading() {
             img.classList.add('error');
             
             // Try fallback image
-            img.src = 'public/assets/full/bikini.jpg';
+            img.src = 'public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp';
         };
         
         tempImg.src = img.dataset.src;
@@ -156,7 +157,7 @@ function updateOpenGraph() {
     const ogTags = {
         'og:title': trans.photos_seo_title || 'Galería Premium Ibiza',
         'og:description': trans.gallery_description,
-        'og:image': CONFIG.BASE_URL + 'full/bikini.jpg',
+        'og:image': CONFIG.BASE_URL + 'public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
         'og:url': window.location.href,
         'og:type': 'website',
         'og:locale': lang === 'es' ? 'es_ES' : lang === 'en' ? 'en_US' : lang === 'de' ? 'de_DE' : lang === 'it' ? 'it_IT' : 'fr_FR',
@@ -167,10 +168,10 @@ function updateOpenGraph() {
         let meta = document.querySelector(`meta[property="${key}"]`);
         if (!meta) {
             meta = document.createElement('meta');
-            meta.property = key;
+            meta.setAttribute('property', key);
             document.head.appendChild(meta);
         }
-        meta.content = value;
+        meta.setAttribute('content', value);
     });
 }
 
@@ -179,26 +180,12 @@ function updateOpenGraph() {
 // ============================
 
 function injectAdvancedJSONLD() {
-    const lang = window.state?.currentLanguage || 'es';
-    const trans = TRANSLATIONS[lang];
-
     const jsonLD = {
         "@context": "https://schema.org",
-        "@type": "ImageGallery",
-        "name": trans.photos_seo_title || 'Galería Premium Ibiza',
-        "description": trans.gallery_description,
-        "url": window.location.href,
-        "datePublished": new Date().toISOString(),
-        "publisher": {
-            "@type": "Organization",
-            "name": "BeachGirl.pics",
-            "logo": {
-                "@type": "ImageObject",
-                "url": CONFIG.BASE_URL + 'full/bikini.jpg'
-            }
-        },
-        "image": ALL_PHOTOS_POOL.slice(0, 5).map(img => CONFIG.BASE_URL + 'full/' + img),
-        "keywords": Object.values(trans.seo_keywords).flat().join(', '),
+        "@type": "WebSite",
+        "name": "BeachGirl.pics",
+        "url": "https://beachgirl.pics",
+        "description": "Galería premium de Ibiza con contenido diario actualizado",
         "potentialAction": {
             "@type": "SearchAction",
             "target": "{search_term_string}",
