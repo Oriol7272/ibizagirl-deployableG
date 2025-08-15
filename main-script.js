@@ -1,6 +1,6 @@
 // ============================
 // BeachGirl.pics Gallery Script v14.0.0
-// Script principal que importa la base de datos de contenido
+// Script principal con rutas corregidas y rotación diaria
 // ============================
 
 'use strict';
@@ -9,12 +9,10 @@
 // VERIFICAR CARGA DE BASE DE DATOS
 // ============================
 
-// Verificar que content-database.js está cargado
 if (typeof window.ALL_PHOTOS_POOL === 'undefined' || 
     typeof window.ALL_UNCENSORED_PHOTOS_POOL === 'undefined' || 
     typeof window.ALL_VIDEOS_POOL === 'undefined') {
     console.error('❌ ERROR: content-database.js no está cargado correctamente');
-    console.error('Asegúrate de que content-database.js se carga ANTES de main-script.js');
 }
 
 // ============================
@@ -26,13 +24,16 @@ const CONFIG = {
     CONTENT: {
         DAILY_PHOTOS: 200,
         DAILY_VIDEOS: 40,
-        NEW_PERCENTAGE: 0.3,
+        NEW_PERCENTAGE: 0.3,  // 30% aparece como "nuevo"
         TEASER_COUNT: 15
     },
     PAYPAL: {
         CLIENT_ID: 'AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5',
         CURRENCY: 'EUR',
-        SUBSCRIPTION_ID: 'YOUR_SUBSCRIPTION_PLAN_ID'
+        SUBSCRIPTION_PLANS: {
+            MONTHLY: 'P-XXXXXXXXX', // Reemplazar con tu Plan ID de PayPal
+            LIFETIME: 'P-YYYYYYYYY'  // Reemplazar con tu Plan ID de PayPal
+        }
     },
     PRICES: {
         MONTHLY: 15,
@@ -44,17 +45,7 @@ const CONFIG = {
             100: 50
         }
     },
-    CREDITS: {
-        COST_PER_UNLOCK: 1,
-        VALUE_PER_CREDIT: 0.10
-    }
-};
-
-// Environment detection
-const ENVIRONMENT = {
-    isDevelopment: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
-    baseURL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 
-        'https://beachgirl.pics/' : 'https://raw.githubusercontent.com/Oriol7272/ibizagirl-deployable2/main/'
+    BASE_PATH: '/public/assets'  // Ruta base para los archivos
 };
 
 // ============================
@@ -71,7 +62,9 @@ const state = {
     dailyVideos: [],
     teaserItems: [],
     isabellaOpen: false,
-    currentModal: null
+    currentModal: null,
+    selectedPlan: 'lifetime',
+    selectedPack: null
 };
 
 // ============================
@@ -80,58 +73,37 @@ const state = {
 
 const TRANSLATIONS = {
     es: {
-        // Textos principales
         welcome: 'Bienvenida al Paraíso 🌴',
         daily_content: '200+ fotos y 40+ videos actualizados DIARIAMENTE',
         unlock_all: '🔓 Desbloquear Todo',
         view_gallery: '📸 Ver Galería',
         loading: 'Cargando el paraíso...',
         subtitle: 'Contenido Exclusivo del Paraíso',
-        
-        // Secciones
         teaser_title: '🔥 Vista Previa Exclusiva',
         photos_paradise: '📸 Fotos del Paraíso',
         new_today: '¡NUEVO HOY!',
         videos_exclusive: '🎬 Videos Exclusivos',
         fresh_content: '¡CONTENIDO FRESCO!',
-        
-        // Estadísticas
         photos_today: '200 Fotos de Hoy',
         videos_hd: '40 Videos HD',
         total_views: '25.8M Vistas Totales',
         updates: '24/7 Actualizaciones',
-        
-        // VIP y Packs
-        vip_title: '👑 Acceso VIP Ilimitado',
         vip_unlimited: '👑 Acceso VIP Ilimitado',
         monthly: '📅 Mensual',
         lifetime: '♾️ Lifetime',
         megapack: '📦 MEGA PACKS -70%',
-        
-        // Isabella Bot
         isabella_title: 'Isabella - Tu Guía VIP',
         vip_info: '💎 VIP Info',
         news: '📅 Novedades',
         help: '❓ Ayuda',
-        
-        // Footer
-        quick_links: 'Enlaces Rápidos',
-        photos: 'Fotos',
-        videos: 'Videos',
-        vip_subscription: 'Suscripción VIP',
-        mega_packs: 'Mega Packs',
-        support: 'Soporte',
-        terms: 'Términos de Servicio',
-        privacy: 'Política de Privacidad',
-        contact: 'Contacto',
-        copyright: '© 2025 BeachGirl.pics - Todos los derechos reservados | 18+ Solo Adultos',
-        
-        // Créditos
         credits_available: 'Créditos Disponibles',
-        unlock_credit: 'Desbloquear por 1 crédito',
-        get_unlimited: 'Obtener Acceso Ilimitado'
+        unlock_credit: 'Desbloquear (1 crédito)',
+        get_unlimited: 'Obtener Acceso Ilimitado',
+        no_credits: 'Sin créditos suficientes',
+        unlocked_success: '¡Contenido desbloqueado!',
+        pack_purchased: '¡Pack comprado! +{credits} créditos',
+        vip_activated: '¡VIP Activado! Acceso ilimitado'
     },
-    
     en: {
         welcome: 'Welcome to Paradise 🌴',
         daily_content: '200+ photos and 40+ videos updated DAILY',
@@ -148,7 +120,6 @@ const TRANSLATIONS = {
         videos_hd: '40 HD Videos',
         total_views: '25.8M Total Views',
         updates: '24/7 Updates',
-        vip_title: '👑 Unlimited VIP Access',
         vip_unlimited: '👑 Unlimited VIP Access',
         monthly: '📅 Monthly',
         lifetime: '♾️ Lifetime',
@@ -157,131 +128,206 @@ const TRANSLATIONS = {
         vip_info: '💎 VIP Info',
         news: '📅 News',
         help: '❓ Help',
-        quick_links: 'Quick Links',
-        photos: 'Photos',
-        videos: 'Videos',
-        vip_subscription: 'VIP Subscription',
-        mega_packs: 'Mega Packs',
-        support: 'Support',
-        terms: 'Terms of Service',
-        privacy: 'Privacy Policy',
-        contact: 'Contact',
-        copyright: '© 2025 BeachGirl.pics - All rights reserved | 18+ Adults Only',
         credits_available: 'Credits Available',
-        unlock_credit: 'Unlock for 1 credit',
-        get_unlimited: 'Get Unlimited Access'
+        unlock_credit: 'Unlock (1 credit)',
+        get_unlimited: 'Get Unlimited Access',
+        no_credits: 'Not enough credits',
+        unlocked_success: 'Content unlocked!',
+        pack_purchased: 'Pack purchased! +{credits} credits',
+        vip_activated: 'VIP Activated! Unlimited access'
     }
-    // Agregar más idiomas: de, it, fr, pt...
 };
 
 // ============================
-// FUNCIONES PRINCIPALES
+// FUNCIONES DE ROTACIÓN DIARIA
 // ============================
 
-// Cambiar idioma
-function changeLanguage(lang) {
-    state.language = lang;
-    localStorage.setItem('language', lang);
-    
-    // Actualizar todos los textos
-    document.querySelectorAll('[data-translate]').forEach(el => {
-        const key = el.dataset.translate;
-        el.textContent = TRANSLATIONS[lang][key] || TRANSLATIONS['es'][key] || key;
-    });
-    
-    // Actualizar meta tags si existe la función
-    if (typeof updateOpenGraph === 'function') {
-        updateOpenGraph('gallery', lang);
-    }
-}
-
-// Rotación diaria de contenido
 function getDailyRotation(pool, count) {
-    const today = new Date().toDateString();
-    const seed = today.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+    // Usar la fecha como semilla para que cambie cada día
+    const today = new Date();
+    const dateString = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+    const seed = dateString.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
     
-    // Mezclar usando seed del día
+    // Función de mezcla determinística basada en la semilla
     const shuffled = [...pool].sort((a, b) => {
         const aVal = a.split('').reduce((sum, char) => sum + char.charCodeAt(0), seed);
         const bVal = b.split('').reduce((sum, char) => sum + char.charCodeAt(0), seed);
-        return aVal - bVal;
+        return (aVal * 9301 + 49297) % 233280 - (bVal * 9301 + 49297) % 233280;
     });
     
     return shuffled.slice(0, Math.min(count, pool.length));
 }
 
-// Renderizar fotos progresivamente
+// ============================
+// FUNCIONES DE RENDERIZADO
+// ============================
+
+function buildFullPath(path) {
+    // Construir ruta completa
+    return CONFIG.BASE_PATH + path;
+}
+
+function generateThumbnail(videoPath) {
+    // Para videos, usar una imagen placeholder o el primer frame
+    // Por ahora usar una imagen genérica
+    return CONFIG.BASE_PATH + '/full/bikini.jpg';
+}
+
 function renderPhotosProgressive(container, photos) {
     if (!container) return;
     
     container.innerHTML = '';
+    let loadedCount = 0;
     
     photos.forEach((photo, index) => {
         setTimeout(() => {
             const isUnlocked = state.isVIP || state.unlockedPhotos.has(photo);
+            const isNew = Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE;
+            const fullPath = buildFullPath(photo);
+            
             const item = document.createElement('div');
             item.classList.add('content-item', isUnlocked ? 'unlocked' : 'locked');
+            if (isNew) item.classList.add('new-item');
             
             item.innerHTML = `
-                <img src="${photo}" alt="Foto Premium" class="content-img lazy" loading="lazy">
-                ${!isUnlocked ? `
-                    <div class="lock-overlay">
-                        <div class="lock-icon">🔒</div>
-                        <button class="unlock-btn" onclick="unlockContent('${photo}', 'photo')">
-                            ${TRANSLATIONS[state.language].unlock_credit}
-                        </button>
-                    </div>
-                ` : ''}
-                ${Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE ? '<span class="new-badge">NEW</span>' : ''}
+                <div class="content-wrapper">
+                    <img src="${fullPath}" 
+                         alt="Foto Premium ${index + 1}" 
+                         class="content-img lazy" 
+                         loading="lazy"
+                         onerror="this.src='${CONFIG.BASE_PATH}/full/bikini.jpg'">
+                    ${isNew ? '<span class="badge-new">NUEVO</span>' : ''}
+                    ${!isUnlocked ? `
+                        <div class="lock-overlay">
+                            <div class="lock-content">
+                                <div class="lock-icon">🔒</div>
+                                <button class="unlock-btn" onclick="unlockContent('${photo}', 'photo')">
+                                    <span class="unlock-text">${TRANSLATIONS[state.language].unlock_credit}</span>
+                                    <span class="credit-cost">💎 1</span>
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
             `;
             
             container.appendChild(item);
-        }, index * 50); // Carga progresiva
+            
+            // Animación de entrada
+            setTimeout(() => {
+                item.classList.add('loaded');
+            }, 50);
+            
+            loadedCount++;
+            updateLoadingProgress(loadedCount, photos.length);
+            
+        }, index * 30); // Carga progresiva más rápida
     });
 }
 
-// Renderizar videos progresivamente
 function renderVideosProgressive(container, videos) {
     if (!container) return;
     
     container.innerHTML = '';
+    let loadedCount = 0;
     
     videos.forEach((video, index) => {
         setTimeout(() => {
             const isUnlocked = state.isVIP || state.unlockedVideos.has(video);
+            const isNew = Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE;
+            const fullPath = buildFullPath(video);
+            const thumbnail = generateThumbnail(video);
+            
             const item = document.createElement('div');
             item.classList.add('content-item', 'video-item', isUnlocked ? 'unlocked' : 'locked');
+            if (isNew) item.classList.add('new-item');
             
             item.innerHTML = `
-                <video class="content-video" ${isUnlocked ? 'controls' : ''} poster="${video.replace('.mp4', '_thumb.jpg')}">
-                    ${isUnlocked ? `<source src="${video}" type="video/mp4">` : ''}
-                </video>
-                ${!isUnlocked ? `
-                    <div class="lock-overlay">
-                        <div class="lock-icon">🔒</div>
-                        <button class="unlock-btn" onclick="unlockContent('${video}', 'video')">
-                            ${TRANSLATIONS[state.language].unlock_credit}
-                        </button>
+                <div class="content-wrapper">
+                    ${isUnlocked ? `
+                        <video class="content-video" 
+                               controls 
+                               poster="${thumbnail}"
+                               preload="metadata">
+                            <source src="${fullPath}" type="video/mp4">
+                            Tu navegador no soporta videos HTML5.
+                        </video>
+                    ` : `
+                        <img src="${thumbnail}" 
+                             alt="Video Premium ${index + 1}" 
+                             class="video-thumb">
+                    `}
+                    <div class="video-badge">
+                        <span class="duration">HD</span>
+                        <span class="quality">1080p</span>
                     </div>
-                ` : ''}
-                <div class="video-duration">HD</div>
-                ${Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE ? '<span class="new-badge">NEW</span>' : ''}
+                    ${isNew ? '<span class="badge-new">NUEVO</span>' : ''}
+                    ${!isUnlocked ? `
+                        <div class="lock-overlay">
+                            <div class="lock-content">
+                                <div class="play-icon">▶️</div>
+                                <div class="lock-icon">🔒</div>
+                                <button class="unlock-btn" onclick="unlockContent('${video}', 'video')">
+                                    <span class="unlock-text">${TRANSLATIONS[state.language].unlock_credit}</span>
+                                    <span class="credit-cost">💎 1</span>
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
             `;
             
             container.appendChild(item);
-        }, index * 50);
+            
+            // Animación de entrada
+            setTimeout(() => {
+                item.classList.add('loaded');
+            }, 50);
+            
+            loadedCount++;
+            updateLoadingProgress(loadedCount, videos.length);
+            
+        }, index * 30);
     });
 }
 
-// Desbloquear contenido
+function renderTeaserCarousel() {
+    const carousel = document.getElementById('teaserCarousel');
+    if (!carousel) return;
+    
+    carousel.innerHTML = '';
+    
+    state.teaserItems.forEach((item, index) => {
+        const fullPath = buildFullPath(item);
+        const teaserItem = document.createElement('div');
+        teaserItem.className = 'teaser-item';
+        teaserItem.innerHTML = `
+            <img src="${fullPath}" 
+                 alt="Preview ${index + 1}" 
+                 loading="lazy"
+                 onerror="this.src='${CONFIG.BASE_PATH}/full/bikini.jpg'">
+            <div class="teaser-overlay">
+                <button onclick="showVIPModal()">Ver Completo</button>
+            </div>
+        `;
+        carousel.appendChild(teaserItem);
+    });
+}
+
+// ============================
+// FUNCIONES DE DESBLOQUEO
+// ============================
+
 function unlockContent(item, type) {
-    if (state.credits < CONFIG.CREDITS.COST_PER_UNLOCK) {
+    // Verificar créditos
+    if (state.credits < 1) {
+        showNotification(TRANSLATIONS[state.language].no_credits, 'error');
         showPackModal();
         return;
     }
     
     // Descontar crédito
-    state.credits -= CONFIG.CREDITS.COST_PER_UNLOCK;
+    state.credits -= 1;
     localStorage.setItem('credits', state.credits);
     
     // Marcar como desbloqueado
@@ -295,9 +341,14 @@ function unlockContent(item, type) {
     
     // Actualizar UI
     updateCreditsDisplay();
-    initializeGallery(); // Recargar galería
+    initializeGallery();
     
-    // Celebrar
+    // Notificación y celebración
+    showNotification(TRANSLATIONS[state.language].unlocked_success, 'success');
+    celebrateUnlock();
+}
+
+function celebrateUnlock() {
     if (typeof confetti === 'function') {
         confetti({
             particleCount: 100,
@@ -307,33 +358,166 @@ function unlockContent(item, type) {
     }
 }
 
-// Actualizar display de créditos
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+// ============================
+// PAYPAL INTEGRATION
+// ============================
+
+function initializePayPal() {
+    if (typeof paypal === 'undefined') return;
+    
+    // Botón para VIP
+    const vipContainer = document.getElementById('paypal-button-container-vip');
+    if (vipContainer && !vipContainer.hasChildNodes()) {
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                const price = state.selectedPlan === 'monthly' ? CONFIG.PRICES.MONTHLY : CONFIG.PRICES.LIFETIME;
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: price.toString(),
+                            currency_code: CONFIG.PAYPAL.CURRENCY
+                        },
+                        description: state.selectedPlan === 'monthly' ? 'VIP Mensual' : 'VIP Lifetime'
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    activateVIP(state.selectedPlan);
+                    showNotification(TRANSLATIONS[state.language].vip_activated, 'success');
+                    closeModal();
+                });
+            }
+        }).render('#paypal-button-container-vip');
+    }
+    
+    // Botón para Packs
+    const packContainer = document.getElementById('paypal-button-container-pack');
+    if (packContainer && !packContainer.hasChildNodes()) {
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                if (!state.selectedPack) return;
+                
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: CONFIG.PRICES.PACKS[state.selectedPack].toString(),
+                            currency_code: CONFIG.PAYPAL.CURRENCY
+                        },
+                        description: `Pack de ${state.selectedPack} créditos`
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    addCredits(state.selectedPack);
+                    const message = TRANSLATIONS[state.language].pack_purchased.replace('{credits}', state.selectedPack);
+                    showNotification(message, 'success');
+                    closeModal();
+                });
+            }
+        }).render('#paypal-button-container-pack');
+    }
+}
+
+function activateVIP(plan) {
+    state.isVIP = true;
+    localStorage.setItem('isVIP', 'true');
+    
+    if (plan === 'monthly') {
+        // Guardar fecha de expiración (30 días)
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + 30);
+        localStorage.setItem('vipExpiry', expiry.toISOString());
+    } else {
+        // Lifetime no expira
+        localStorage.setItem('vipExpiry', 'lifetime');
+    }
+    
+    initializeGallery();
+    celebrateUnlock();
+}
+
+function addCredits(amount) {
+    state.credits += parseInt(amount);
+    localStorage.setItem('credits', state.credits);
+    updateCreditsDisplay();
+}
+
+// ============================
+// UI FUNCTIONS
+// ============================
+
 function updateCreditsDisplay() {
     const creditsNumber = document.getElementById('creditsNumber');
     if (creditsNumber) {
         creditsNumber.textContent = state.credits;
+        creditsNumber.classList.add('pulse');
+        setTimeout(() => {
+            creditsNumber.classList.remove('pulse');
+        }, 500);
     }
 }
 
-// Mostrar modal VIP
+function updateLoadingProgress(current, total) {
+    const progress = (current / total) * 100;
+    const progressBar = document.querySelector('.loading-progress');
+    if (progressBar) {
+        progressBar.style.width = `${progress}%`;
+    }
+}
+
+function changeLanguage(lang) {
+    state.language = lang;
+    localStorage.setItem('language', lang);
+    
+    // Actualizar todos los textos
+    document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.dataset.translate;
+        el.textContent = TRANSLATIONS[lang][key] || TRANSLATIONS['es'][key] || key;
+    });
+}
+
+// ============================
+// MODALES
+// ============================
+
 function showVIPModal() {
     const modal = document.getElementById('vipModal');
     if (modal) {
         modal.style.display = 'flex';
         state.currentModal = 'vip';
+        initializePayPal();
     }
 }
 
-// Mostrar modal de packs
 function showPackModal() {
     const modal = document.getElementById('packModal');
     if (modal) {
         modal.style.display = 'flex';
         state.currentModal = 'pack';
+        initializePayPal();
     }
 }
 
-// Cerrar modal
 function closeModal() {
     document.querySelectorAll('.modal').forEach(modal => {
         modal.style.display = 'none';
@@ -341,7 +525,26 @@ function closeModal() {
     state.currentModal = null;
 }
 
-// Isabella Chat Bot
+function selectPlan(plan) {
+    state.selectedPlan = plan;
+    document.querySelectorAll('.plan-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    document.getElementById(plan + 'Plan')?.classList.add('selected');
+}
+
+function selectPack(credits) {
+    state.selectedPack = credits;
+    document.querySelectorAll('.pack-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    event.currentTarget.classList.add('selected');
+}
+
+// ============================
+// ISABELLA CHAT BOT
+// ============================
+
 function toggleIsabella() {
     const window = document.getElementById('isabellaWindow');
     if (window) {
@@ -358,14 +561,14 @@ function isabellaAction(action) {
     
     switch(action) {
         case 'vip':
-            message = '💎 ¡Hazte VIP y desbloquea TODO el contenido! Solo €15/mes o €100 lifetime. ¡Más de 400 fotos y 80 videos te esperan!';
+            message = '💎 ¡Hazte VIP y desbloquea TODO! Solo €15/mes o €100 lifetime. Más de 400 fotos y 80 videos HD te esperan.';
             setTimeout(() => showVIPModal(), 1000);
             break;
         case 'daily':
-            message = '📅 ¡Hoy tenemos 200 fotos nuevas y 40 videos HD frescos! El contenido se actualiza cada día a las 00:00.';
+            message = `📅 Hoy tenemos ${CONFIG.CONTENT.DAILY_PHOTOS} fotos nuevas y ${CONFIG.CONTENT.DAILY_VIDEOS} videos HD. ¡El contenido cambia cada día!`;
             break;
         case 'help':
-            message = '❓ Puedes comprar créditos para desbloquear contenido individual o hacerte VIP para acceso ilimitado. ¿Necesitas algo más?';
+            message = '❓ Puedes comprar créditos para desbloquear contenido o hacerte VIP para acceso ilimitado. ¿Qué prefieres?';
             break;
     }
     
@@ -381,51 +584,53 @@ function isabellaAction(action) {
 // ============================
 
 function initializeGallery() {
-    // Verificar que los arrays estén cargados
-    if (typeof window.ALL_PHOTOS_POOL === 'undefined') {
-        console.error('❌ Error: content-database.js no está cargado');
+    // Verificar arrays
+    if (!window.ALL_PHOTOS_POOL || !window.ALL_UNCENSORED_PHOTOS_POOL || !window.ALL_VIDEOS_POOL) {
+        console.error('❌ Content database not loaded');
         return;
     }
     
-    // Combinar fotos de ambas carpetas
+    // Combinar todas las fotos
     const allPhotos = [...window.ALL_PHOTOS_POOL, ...window.ALL_UNCENSORED_PHOTOS_POOL];
     
-    // Obtener rotación diaria
+    // Obtener rotación diaria (cambia cada día)
     state.dailyPhotos = getDailyRotation(allPhotos, CONFIG.CONTENT.DAILY_PHOTOS);
     state.dailyVideos = getDailyRotation(window.ALL_VIDEOS_POOL, CONFIG.CONTENT.DAILY_VIDEOS);
-    state.teaserItems = getDailyRotation(allPhotos, CONFIG.CONTENT.TEASER_COUNT);
+    state.teaserItems = getDailyRotation(window.ALL_PHOTOS_POOL, CONFIG.CONTENT.TEASER_COUNT);
     
     // Renderizar contenido
     renderPhotosProgressive(document.getElementById('photosGrid'), state.dailyPhotos);
     renderVideosProgressive(document.getElementById('videosGrid'), state.dailyVideos);
+    renderTeaserCarousel();
     
-    // Actualizar créditos
+    // Actualizar UI
     updateCreditsDisplay();
-    
-    // Cargar idioma
     changeLanguage(state.language);
     
     console.log(`✅ Galería inicializada:
     - ${state.dailyPhotos.length} fotos del día
     - ${state.dailyVideos.length} videos del día
+    - ${state.teaserItems.length} items en carousel
     - Idioma: ${state.language}
     - VIP: ${state.isVIP}
     - Créditos: ${state.credits}`);
 }
 
 // ============================
-// EVENTOS Y CARGA INICIAL
+// EVENT LISTENERS
 // ============================
 
-// Esperar a que el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    // Ocultar pantalla de carga después de 2 segundos
+    // Ocultar pantalla de carga
     setTimeout(() => {
         const loadingScreen = document.getElementById('loadingScreen');
         if (loadingScreen) {
-            loadingScreen.style.display = 'none';
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
         }
-    }, 2000);
+    }, 1500);
     
     // Inicializar galería
     initializeGallery();
@@ -433,7 +638,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Banner slideshow
     let currentSlide = 0;
     const slides = document.querySelectorAll('.banner-slide');
-    
     if (slides.length > 1) {
         setInterval(() => {
             slides[currentSlide].classList.remove('active');
@@ -442,19 +646,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     }
     
-    // Cerrar modales al hacer clic fuera
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal')) {
-            closeModal();
+    // Carousel controls
+    window.moveCarousel = (direction) => {
+        const carousel = document.getElementById('teaserCarousel');
+        if (carousel) {
+            const scrollAmount = 300 * direction;
+            carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         }
-    });
+    };
+    
+    // Load more functions
+    window.loadMorePhotos = () => {
+        showNotification('Hazte VIP para ver todo el contenido', 'info');
+        showVIPModal();
+    };
+    
+    window.loadMoreVideos = () => {
+        showNotification('Hazte VIP para ver todos los videos', 'info');
+        showVIPModal();
+    };
+    
+    // Newsletter
+    window.subscribeNewsletter = (e) => {
+        e.preventDefault();
+        showNotification('¡Suscrito! Te avisaremos de las novedades', 'success');
+        e.target.reset();
+    };
 });
 
 // ============================
 // EXPORTAR FUNCIONES GLOBALES
 // ============================
 
-// Hacer funciones disponibles globalmente
 window.changeLanguage = changeLanguage;
 window.showVIPModal = showVIPModal;
 window.showPackModal = showPackModal;
@@ -462,18 +685,23 @@ window.closeModal = closeModal;
 window.toggleIsabella = toggleIsabella;
 window.isabellaAction = isabellaAction;
 window.unlockContent = unlockContent;
-window.selectPlan = (plan) => console.log('Plan seleccionado:', plan);
+window.selectPlan = selectPlan;
+window.selectPack = selectPack;
 
 // ============================
 // DEBUG TOOLS
 // ============================
 
 const galleryDebug = {
-    contentStats: () => ({
-        totalPhotos: window.ALL_PHOTOS_POOL?.length + window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0,
-        totalVideos: window.ALL_VIDEOS_POOL?.length || 0,
+    stats: () => ({
+        totalPhotos: window.ALL_PHOTOS_POOL?.length + window.ALL_UNCENSORED_PHOTOS_POOL?.length,
+        totalVideos: window.ALL_VIDEOS_POOL?.length,
         dailyPhotos: state.dailyPhotos.length,
-        dailyVideos: state.dailyVideos.length
+        dailyVideos: state.dailyVideos.length,
+        unlockedPhotos: state.unlockedPhotos.size,
+        unlockedVideos: state.unlockedVideos.size,
+        credits: state.credits,
+        isVIP: state.isVIP
     }),
     unlockAll: () => {
         state.isVIP = true;
@@ -482,14 +710,16 @@ const galleryDebug = {
         console.log('✅ Todo desbloqueado');
     },
     addCredits: (num) => {
-        state.credits += num;
-        localStorage.setItem('credits', state.credits);
-        updateCreditsDisplay();
+        addCredits(num);
         console.log(`✅ ${num} créditos añadidos. Total: ${state.credits}`);
     },
-    resetAll: () => {
-        localStorage.clear();
+    resetDaily: () => {
+        localStorage.removeItem('lastRotation');
         location.reload();
+    },
+    testRotation: () => {
+        console.log('Fotos de hoy:', state.dailyPhotos);
+        console.log('Videos de hoy:', state.dailyVideos);
     }
 };
 
@@ -499,16 +729,16 @@ console.log(`
 🌊 ===============================================
    BeachGirl.pics Gallery v${CONFIG.VERSION}
    
-   📊 Contenido disponible:
+   📊 Contenido cargado:
    • ${window.ALL_PHOTOS_POOL?.length || 0} fotos en /full
    • ${window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0} fotos en /uncensored  
    • ${window.ALL_VIDEOS_POOL?.length || 0} videos HD
    
-   🛠️ Debug tools: galleryDebug
-   • galleryDebug.contentStats() - Ver estadísticas
-   • galleryDebug.unlockAll() - Desbloquear todo
-   • galleryDebug.addCredits(100) - Añadir créditos
-   • galleryDebug.resetAll() - Resetear todo
+   📅 Rotación diaria:
+   • ${CONFIG.CONTENT.DAILY_PHOTOS} fotos por día
+   • ${CONFIG.CONTENT.DAILY_VIDEOS} videos por día
+   • ${CONFIG.CONTENT.NEW_PERCENTAGE * 100}% aparece como nuevo
    
+   🛠️ Debug: galleryDebug
 🌊 ===============================================
 `);
