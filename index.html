@@ -3,10 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌊 BeachGirl.pics - Verificación de Edad</title>
+    <meta name="description" content="Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo.">
+    <meta name="keywords" content="Ibiza fotos, playas Ibiza, galería Ibiza 2025, videos HD Ibiza, paraíso mediterráneo, turismo España, Islas Baleares">
+    <meta name="eroads_" content="5f8afe77e5b70fec960d89b314e045a4" />
+    <title>🌊 BeachGirl.pics - Entrada</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="/manifest.json">
+    <link rel="canonical" href="https://beachgirl.pics/">
     <script src="seo-enhancements.js" defer></script>
+    <script>
+        // Age verification script
+        window.addEventListener('load', () => {
+            const enterBtn = document.querySelector('.enter-btn');
+            const exitBtn = document.querySelector('.exit-btn');
+            enterBtn.addEventListener('click', () => {
+                localStorage.setItem('ageVerified', 'true');
+                window.location.href = '/main.html';
+            });
+            exitBtn.addEventListener('click', () => {
+                window.location.href = 'https://google.com';
+            });
+            if (localStorage.getItem('ageVerified') === 'true') {
+                window.location.href = '/main.html';
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -23,11 +44,10 @@
 
     <!-- Age Verification -->
     <div class="age-verification">
-        <h1 class="banner-title">Verificación de Edad Requerida</h1>
+        <h1>Verificación de Edad Requerida</h1>
         <p>Este sitio web contiene contenido exclusivo para adultos.</p>
         <p>Debes ser mayor de 18 años para entrar.</p>
         <p>400+ fotos y 80+ videos del paraíso mediterráneo te esperan dentro.</p>
-        
         <div class="stats-section">
             <div class="stat-card">
                 <div class="stat-number">400+</div>
@@ -42,13 +62,11 @@
                 <div class="stat-label">Actualizado</div>
             </div>
         </div>
-        
-        <div class="age-buttons">
-            <button id="enter-button" class="header-button">Soy Mayor de 18</button>
-            <a href="https://www.google.com" class="header-button exit-button">Salir</a>
+        <div class="verification-buttons">
+            <button class="btn btn-primary enter-btn">Soy Mayor de 18</button>
+            <button class="btn btn-secondary exit-btn">Salir</button>
         </div>
-        
-        <p class="legal-text">Al entrar a este sitio, confirmas que eres mayor de edad en tu jurisdicción 
+        <p class="verification-disclaimer">Al entrar a este sitio, confirmas que eres mayor de edad en tu jurisdicción 
         y aceptas nuestros <a href="/terms">Términos de Servicio</a> y 
         <a href="/privacy">Política de Privacidad</a>.
         Todo el contenido es © 2025 BeachGirl.pics - Todos los derechos reservados.</p>
