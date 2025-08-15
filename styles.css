@@ -114,692 +114,109 @@ body {
 
 .loading-progress {
     height: 100%;
-    background: linear-gradient(90deg, var(--aqua-light), var(--sea-foam));
-    width: 0;
-    animation: loading 2s ease-in-out infinite;
+    background: linear-gradient(90deg, var(--aqua-light), var(--sunset-pink));
+    animation: loading 2s ease infinite;
 }
 
 @keyframes loading {
-    0% { width: 0; }
-    50% { width: 100%; }
-    100% { width: 0; }
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 100%; }
 }
 
-/* Header */
-.header {
-    padding: 1rem;
-    position: relative;
+/* Main Header */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 33, 66, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 1rem 2rem;
+    z-index: 1000;
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+}
+
+.main-header.scrolled {
+    padding: 0.5rem 2rem;
+    background: rgba(0, 33, 66, 0.98);
 }
 
 .header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-section {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
 }
 
-.header-logo {
+.logo {
     font-size: 1.8rem;
-    font-weight: 800;
+    font-weight: 700;
     background: linear-gradient(135deg, var(--aqua-light), var(--sunset-pink));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    cursor: pointer;
 }
 
+.logo-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+/* Header Buttons */
 .header-buttons {
     display: flex;
-    gap: 0.5rem;
-}
-
-.btn {
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    text-decoration: none;
-    color: var(--text-primary);
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--sunset-gold), var(--sunset-orange));
-}
-
-.btn-secondary {
-    background: linear-gradient(135deg, var(--ocean-light), var(--ocean-bright));
-}
-
-.btn-tertiary {
-    background: linear-gradient(135deg, var(--sunset-pink), var(--isabella-pink));
-}
-
-/* Banner */
-.banner {
-    background: linear-gradient(135deg, var(--glass-bg), rgba(0, 168, 204, 0.2));
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 2rem;
-    margin: 1rem;
-    text-align: center;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-}
-
-.banner-title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--aqua-light), var(--sea-foam));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.banner-description {
-    font-size: 1.2rem;
-    margin-bottom: 1.5rem;
-    color: var(--text-secondary);
-}
-
-.banner-cta {
-    display: flex;
-    justify-content: center;
     gap: 1rem;
-}
-
-/* Stats */
-.stats-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.stat-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 15px;
-    padding: 1rem;
-    text-align: center;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.stat-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-.stat-number {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--sunset-gold);
-}
-
-.stat-label {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-/* Section Titles */
-.section-title {
-    font-size: 1.8rem;
-    margin: 2rem 1rem 1rem;
-    background: linear-gradient(135deg, var(--sunset-pink), var(--sunset-orange));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.section-subtitle {
-    font-size: 1rem;
-    color: var(--update-green);
-    margin: -0.5rem 1rem 1rem;
-    animation: pulse 2s ease infinite;
-}
-
-/* Content Grid */
-.content-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.content-item {
-    position: relative;
-    border-radius: 15px;
-    overflow: hidden;
-    aspect-ratio: 2 / 3;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.content-item:hover {
-    transform: scale(1.05);
-}
-
-.content-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: blur(0);
-    transition: filter 0.3s ease;
-}
-
-.locked .content-img {
-    filter: blur(8px);
-}
-
-.lock-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 33, 66, 0.7);
-    display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.5rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
 }
 
-.locked .lock-overlay {
-    opacity: 1;
-}
-
-.lock-icon {
-    font-size: 2rem;
-    color: var(--sunset-gold);
-}
-
-.unlock-btn {
-    background: linear-gradient(135deg, var(--update-green), var(--update-pulse));
-    color: var(--ocean-deep);
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    font-weight: 600;
-}
-
-/* Teaser Carousel */
-.teaser-carousel-container {
-    padding: 1rem 1rem 2rem;
-    position: relative;
-}
-
-.teaser-carousel {
-    display: flex;
-    overflow-x: auto;
-    gap: 1rem;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.teaser-carousel::-webkit-scrollbar {
-    display: none;
-}
-
-.teaser-item {
-    flex: 0 0 250px;
-    height: 350px;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-    scroll-snap-align: start;
-    position: relative;
-}
-
-.teaser-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.teaser-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(0deg, rgba(0, 33, 66, 0.8), transparent);
-    padding: 1rem;
-}
-
-.teaser-title {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-}
-
-.teaser-description {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-/* Plans Section */
-.section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 1rem;
-}
-
-.section-update {
-    background: var(--update-green);
-    color: var(--ocean-deep);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.8rem;
-    animation: pulse 1.5s ease infinite;
-}
-
-.plans-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.plan-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 1.5rem;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.plan-title {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--sunset-gold);
-}
-
-.plan-price {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.plan-savings {
-    background: var(--update-pulse);
-    color: var(--ocean-deep);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    display: inline-block;
-}
-
-.plan-features {
-    list-style: none;
-    margin-bottom: 1.5rem;
-}
-
-.plan-feature {
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    color: var(--text-secondary);
-}
-
-.plan-btn {
-    background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink));
-    width: 100%;
-}
-
-/* Packs Section */
-.packs-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.pack-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 15px;
-    padding: 1rem;
-    text-align: center;
-    backdrop-filter: blur(10px);
-}
-
-.pack-savings {
-    background: var(--sunset-gold);
-    color: var(--ocean-deep);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.pack-title {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-}
-
-.pack-items {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
-}
-
-.pack-price {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.pack-btn {
+.header-btn {
+    padding: 0.5rem 1.5rem;
     background: linear-gradient(135deg, var(--ocean-bright), var(--aqua-light));
-    width: 100%;
-}
-
-/* Footer */
-.footer {
-    padding: 2rem 1rem 4rem;
-    text-align: center;
-    color: var(--text-secondary);
-}
-
-.footer-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.footer-description {
-    margin-bottom: 1.5rem;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-}
-
-.footer-column {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.footer-link {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-link:hover {
-    color: var(--text-primary);
-}
-
-.footer-copyright {
-    font-size: 0.8rem;
-    margin-top: 1rem;
-}
-
-/* Isabella Window */
-.isabella-window {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 300px;
-    background: rgba(0, 33, 66, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 1rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    display: none;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.isabella-window.active {
-    display: flex;
-}
-
-.isabella-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.isabella-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--isabella-pink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-}
-
-.isabella-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.isabella-close {
-    margin-left: auto;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-}
-
-.isabella-messages {
-    max-height: 200px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.isabella-message {
-    background: var(--glass-bg);
-    padding: 0.5rem 1rem;
-    border-radius: 15px;
-    font-size: 0.9rem;
-}
-
-.isabella-input {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.isabella-textarea {
-    flex: 1;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    color: var(--text-primary);
-    resize: none;
-    outline: none;
-}
-
-.isabella-send {
-    background: var(--isabella-pink);
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-/* Unlock Modal */
-.unlock-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 33, 66, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10002;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-.unlock-modal.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.unlock-content {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 2rem;
-    max-width: 400px;
-    width: 90%;
-    text-align: center;
-}
-
-.unlock-title {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-}
-
-.unlock-description {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
-}
-
-.unlock-options {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.unlock-btn {
-    padding: 0.8rem;
+    border: none;
     border-radius: 25px;
+    color: var(--ocean-deep);
     font-weight: 600;
-}
-
-/* VIP Modal */
-.vip-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 33, 66, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10002;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-.vip-modal.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.vip-content {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 2rem;
-    max-width: 600px;
-    width: 90%;
-}
-
-.vip-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-}
-
-.vip-title {
-    font-size: 1.8rem;
-}
-
-.vip-close {
     cursor: pointer;
-    font-size: 1.5rem;
-    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.vip-plans {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+.header-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: all 0.5s;
 }
 
-/* Packs Modal */
-.packs-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 33, 66, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10002;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
+.header-btn:hover::before {
+    left: 100%;
 }
 
-.packs-modal.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.packs-content {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 2rem;
-    max-width: 600px;
-    width: 90%;
-}
-
-.packs-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-}
-
-.packs-title {
-    font-size: 1.8rem;
-}
-
-.packs-close {
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: var(--text-secondary);
-}
-
-.packs-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+.header-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 168, 204, 0.4);
 }
 
 /* Credits Display */
 .credits-display {
     position: fixed;
-    top: 20px;
+    top: 80px;
     left: 20px;
     background: rgba(0, 33, 66, 0.95);
     backdrop-filter: blur(10px);
@@ -832,114 +249,483 @@ body {
     margin-top: 0.3rem;
 }
 
-/* Notification Toast */
-.notification-toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, var(--update-green), var(--update-pulse));
-    color: var(--ocean-deep);
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    font-weight: 700;
-    z-index: 10001;
-    animation: notificationSlide 0.5s ease;
-    box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+/* Welcome Section */
+.welcome-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
 }
 
-@keyframes notificationSlide {
-    from { transform: translateX(-50%) translateY(100px); opacity: 0; }
-    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+.welcome-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .content-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 0.8rem;
-    }
+.banner-carousel {
+    position: relative;
+    margin-bottom: 2rem;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
 
-    .header-content {
-        flex-direction: column;
-        gap: 1rem;
-    }
+.banner-carousel img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.5s ease;
+}
 
-    .header-buttons {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+.banner-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--aqua-light), var(--sunset-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill Primero, el usuario quiere todos los scripts con correcciones, uno por uno, para copiar y pegar en GitHub. Todo hardcoded a "beachgirl.pics".
 
-    .language-selector {
-        top: 5px;
-        right: 5px;
-    }
+Los archivos proporcionados en el contexto inicial son:
 
-    .banner-title {
-        font-size: 2rem;
-    }
+- sw.js
 
-    .stats-section {
-        grid-template-columns: 1fr 1fr;
-    }
+- main.html
 
-    .isabella-window {
-        width: 90%;
-        max-width: 350px;
-        right: 5%;
-    }
+- manifest.json
 
-    .section-title {
-        font-size: 1.5rem;
-    }
+- seo-enhancements.js
 
-    .plans-container {
-        grid-template-columns: 1fr;
-    }
+- README.md
 
-    .packs-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
+- robots.txt
 
-    .teaser-carousel-container {
-        padding: 1rem;
-    }
+- sitemap.xml
 
-    .teaser-item {
-        flex: 0 0 200px;
-        height: 280px;
-    }
+- styles.css
 
-    .banner-cta {
-        flex-direction: column;
-    }
+- main-script.js
 
-    .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
+Necesito aplicar las correcciones que mencioné en mi respuesta anterior:
 
-    .credits-display {
-        top: auto;
-        bottom: 80px;
-        left: 10px;
-        right: 10px;
+- Cambiar todos los "ibizagirl.pics" y referencias a "IbizaGirl" por "beachgirl.pics" y "BeachGirl".
+
+- Ajustar branding: Cambiar "Ibiza" a algo como "Beach Paradise" o similar, pero como el usuario dijo "beachgirl.pics", asumiré rebrand a "BeachGirl.pics" con tema de playa genérico. Para mantener consistencia, cambiaré "Ibiza" a "Beach" donde sea relevante.
+
+- Otras correcciones: Por ejemplo, en PayPal, sugerí cambiar a live, pero como no hay ID live, dejaré como está o asumir test.
+
+- Archivos grandes: Si son grandes, dividir en partes. main-script.js es muy grande (truncado en 96899 chars), seo-enhancements.js y styles.css también truncados. Debo pasarlos divididos si es necesario.
+
+Estructura de respuesta:
+
+- Pasar uno por uno: Empezar con el nombre del archivo, luego el contenido corregido.
+
+- Si grande, dividir: Por ejemplo, "Parte 1 de main-script.js", luego "Parte 2", etc.
+
+- No usar tools: El usuario no pregunta nada que requiera tools; es directo.
+
+- Final response: Interweave render components if appropriate, but here none needed.
+
+Hardcode to beachgirl.pics:
+
+- Buscar y reemplazar:
+
+  - ibizagirl.pics -> beachgirl.pics
+
+  - IbizaGirl -> BeachGirl
+
+  - Ibiza -> Beach (e.g., "IbizaGirl.pics - Galería Premium Ibiza" -> "BeachGirl.pics - Galería Premium Beach")
+
+  - En descripciones: "paraíso mediterráneo" -> "paraíso de playa" o similar, pero para simplicidad, cambiar "Ibiza" a "Beach".
+
+En sitemap.xml, cambiar fechas a current date: August 15, 2025? El mensaje dice "The current date is August 15, 2025." y en sitemap hay "2025-01-15", pero probablemente actualizar a 2025-08-15.
+
+En sitemap: Cambiar fechas a 2025-08-15.
+
+En copyright: "© 2025" -> OK, pero actual si necesario.
+
+Para archivos truncados: Como están truncados en el prompt, asumiré que proporciono versiones corregidas basadas en lo visible, y notar "truncated" si es el caso, pero el usuario quiere "todos los scripts", así que proporcionar completos donde posible.
+
+El prompt tiene "<DOCUMENT filename="..." truncated ... characters>...", así que para respuesta, generar versiones corregidas completas basadas en lo dado.### sw.js (Corregido)
+```javascript
+// ============================
+// BEACHGIRL.PICS SERVICE WORKER v1.3.0
+// PWA + Performance + SEO Optimized
+// ============================
+
+const CACHE_VERSION = '1.3.0';
+const CACHE_NAME = `beachgirl-v${CACHE_VERSION}`;
+const STATIC_CACHE = `beachgirl-static-v${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `beachgirl-dynamic-v${CACHE_VERSION}`;
+const IMAGE_CACHE = `beachgirl-images-v${CACHE_VERSION}`;
+
+// Archivos críticos para cachear
+const STATIC_ASSETS = [
+    '/',
+    '/index.html',
+    '/main.html',
+    '/main-script.js',
+    '/seo-enhancements.js',
+    '/manifest.json',
+    
+    // Imágenes críticas para SEO
+    '/public/assets/full/bikini.jpg',
+    '/public/assets/full/bikbanner.jpg',
+    '/public/assets/full/bikbanner2.jpg',
+    '/public/assets/full/backbikini.jpg',
+    '/public/assets/full/bikini3.jpg',
+    '/public/assets/full/bikini5.jpg'
+];
+
+// External scripts to cache
+const EXTERNAL_SCRIPTS = [
+    'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'
+];
+
+// URLs que no deben cachearse
+const EXCLUDED_URLS = [
+    '/public/assets/uncensored/',
+    '/public/assets/uncensored-videos/',
+    '/admin',
+    'chrome-extension://',
+    'extension://',
+    'paypal.com',
+    'paypalobjects.com'
+];
+
+// ============================
+// INSTALACIÓN DEL SERVICE WORKER
+// ============================
+
+self.addEventListener('install', event => {
+    console.log('🔧 Service Worker: Installing version', CACHE_VERSION);
+    
+    event.waitUntil(
+        Promise.all([
+            // Cache static assets
+            caches.open(STATIC_CACHE).then(cache => {
+                console.log('📦 Service Worker: Caching static assets...');
+                return Promise.all(
+                    STATIC_ASSETS.map(url => {
+                        return cache.add(url).catch(err => {
+                            console.warn(`Failed to cache ${url}:`, err);
+                        });
+                    })
+                );
+            }),
+            // Cache external scripts
+            caches.open(STATIC_CACHE).then(cache => {
+                return Promise.all(
+                    EXTERNAL_SCRIPTS.map(url => {
+                        return fetch(url)
+                            .then(response => {
+                                if (response.ok) {
+                                    return cache.put(url, response);
+                                }
+                            })
+                            .catch(err => {
+                                console.warn(`Failed to cache external script ${url}:`, err);
+                            });
+                    })
+                );
+            })
+        ]).then(() => {
+            console.log('✅ Service Worker: Installation complete');
+            return self.skipWaiting();
+        }).catch(error => {
+            console.error('❌ Service Worker: Installation failed', error);
+        })
+    );
+});
+
+// ============================
+// ACTIVACIÓN DEL SERVICE WORKER
+// ============================
+
+self.addEventListener('activate', event => {
+    console.log('🚀 Service Worker: Activating version', CACHE_VERSION);
+    
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            // Limpiar caches antiguos
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (!cacheName.includes(CACHE_VERSION)) {
+                        console.log('🗑️ Service Worker: Deleting old cache:', cacheName);
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        }).then(() => {
+            console.log('✅ Service Worker: Activation complete');
+            return self.clients.claim();
+        })
+    );
+});
+
+// ============================
+// ESTRATEGIAS DE CACHE
+// ============================
+
+// Estrategia: Cache First con timeout
+async function cacheFirstWithTimeout(request, timeout = 3000) {
+    try {
+        const cachePromise = caches.match(request);
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Cache timeout')), timeout)
+        );
+        
+        const cached = await Promise.race([cachePromise, timeoutPromise]);
+        if (cached) {
+            return cached;
+        }
+    } catch (error) {
+        console.log('Cache timeout, fetching from network');
+    }
+    
+    const response = await fetch(request);
+    if (response.ok) {
+        const cache = await caches.open(STATIC_CACHE);
+        cache.put(request, response.clone());
+    }
+    return response;
+}
+
+// Estrategia: Network First con fallback
+async function networkFirstWithFallback(request) {
+    try {
+        const response = await fetch(request);
+        if (response.ok) {
+            const cache = await caches.open(DYNAMIC_CACHE);
+            cache.put(request, response.clone());
+        }
+        return response;
+    } catch (error) {
+        const cached = await caches.match(request);
+        if (cached) {
+            return cached;
+        }
+        
+        // Fallback para páginas HTML
+        if (request.headers.get('accept')?.includes('text/html')) {
+            return caches.match('/index.html');
+        }
+        
+        throw error;
     }
 }
 
-/* Lazy Loading */
-.lazy {
-    opacity: 0;
-    transition: opacity 0.3s ease;
+// Estrategia: Stale While Revalidate
+async function staleWhileRevalidate(request) {
+    const cached = await caches.match(request);
+    
+    // Fetch en background
+    const fetchPromise = fetch(request).then(response => {
+        if (response.ok) {
+            const cache = caches.open(IMAGE_CACHE);
+            cache.then(c => c.put(request, response.clone()));
+        }
+        return response;
+    }).catch(() => cached);
+    
+    return cached || fetchPromise;
 }
 
-.loaded {
-    opacity: 1;
+// ============================
+// INTERCEPTAR REQUESTS
+// ============================
+
+self.addEventListener('fetch', event => {
+    const { request } = event;
+    const url = new URL(request.url);
+    
+    // Ignorar URLs excluidas
+    if (EXCLUDED_URLS.some(excludedUrl => url.href.includes(excludedUrl))) {
+        return;
+    }
+    
+    // Ignorar requests que no sean GET
+    if (request.method !== 'GET') {
+        return;
+    }
+    
+    // Ignorar chrome-extension y extension requests
+    if (url.protocol === 'chrome-extension:' || url.protocol === 'extension:') {
+        return;
+    }
+    
+    event.respondWith(handleFetch(request, url));
+});
+
+async function handleFetch(request, url) {
+    try {
+        // Para HTML - Network First
+        if (request.headers.get('accept')?.includes('text/html')) {
+            return await networkFirstWithFallback(request);
+        }
+        
+        // Para imágenes - Stale While Revalidate
+        if (request.headers.get('accept')?.includes('image/') || 
+            url.pathname.includes('/public/assets/') ||
+            url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
+            return await staleWhileRevalidate(request);
+        }
+        
+        // Para JavaScript/CSS - Cache First con timeout
+        if (url.pathname.includes('.js') || 
+            url.pathname.includes('.css') ||
+            url.hostname === 'cdn.jsdelivr.net') {
+            return await cacheFirstWithTimeout(request);
+        }
+        
+        // Para PayPal y APIs externas - Network Only
+        if (url.hostname.includes('paypal') || 
+            url.hostname !== location.hostname) {
+            return await fetch(request);
+        }
+        
+        // Default: Network First
+        return await networkFirstWithFallback(request);
+        
+    } catch (error) {
+        console.error('🚨 Service Worker: Fetch error', error);
+        
+        // Retornar respuesta de error
+        return new Response('Network error occurred', {
+            status: 408,
+            statusText: 'Request Timeout',
+            headers: { 'Content-Type': 'text/plain' }
+        });
+    }
 }
 
-/* Error State */
-.error {
-    background: rgba(255, 0, 0, 0.1);
-    border: 1px solid rgba(255, 0, 0, 0.3);
+// ============================
+// MENSAJES DEL CLIENTE
+// ============================
+
+self.addEventListener('message', event => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+    
+    if (event.data && event.data.type === 'GET_VERSION') {
+        event.ports[0].postMessage({
+            version: CACHE_VERSION,
+            caches: {
+                static: STATIC_CACHE,
+                dynamic: DYNAMIC_CACHE,
+                images: IMAGE_CACHE
+            }
+        });
+    }
+    
+    if (event.data && event.data.type === 'CLEAR_CACHE') {
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => caches.delete(cacheName))
+            );
+        }).then(() => {
+            if (event.ports[0]) {
+                event.ports[0].postMessage({ success: true });
+            }
+        });
+    }
+});
+
+// ============================
+// SINCRONIZACIÓN EN BACKGROUND
+// ============================
+
+self.addEventListener('sync', event => {
+    console.log('📡 Background sync triggered:', event.tag);
+    
+    if (event.tag === 'content-preload') {
+        event.waitUntil(preloadContent());
+    }
+});
+
+// Función para precargar contenido
+async function preloadContent() {
+    try {
+        console.log('🔄 Service Worker: Preloading content...');
+        
+        const imagesToPreload = [
+            '/public/assets/full/bikini.jpg',
+            '/public/assets/full/bikbanner.jpg',
+            '/public/assets/full/bikini3.jpg'
+        ];
+        
+        const cache = await caches.open(IMAGE_CACHE);
+        
+        await Promise.all(
+            imagesToPreload.map(async url => {
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        await cache.put(url, response);
+                    }
+                } catch (err) {
+                    console.warn(`Failed to preload ${url}:`, err);
+                }
+            })
+        );
+        
+        console.log('✅ Service Worker: Content preloaded');
+    } catch (error) {
+        console.error('❌ Service Worker: Preload failed', error);
+    }
 }
+
+// ============================
+// NOTIFICACIONES PUSH (Preparado para futuro)
+// ============================
+
+self.addEventListener('push', event => {
+    if (!event.data) return;
+    
+    const data = event.data.json();
+    
+    const options = {
+        body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
+        icon: '/public/assets/full/bikini.jpg',
+        badge: '/public/assets/full/bikini.jpg',
+        image: data.image || '/public/assets/full/bikbanner.jpg',
+        tag: 'beach-update',
+        requireInteraction: false,
+        data: {
+            url: data.url || '/main.html'
+        },
+        actions: [
+            {
+                action: 'view',
+                title: 'Ver galería',
+                icon: '/public/assets/full/bikini.jpg'
+            },
+            {
+                action: 'close',
+                title: 'Cerrar'
+            }
+        ]
+    };
+    
+    event.waitUntil(
+        self.registration.showNotification(
+            data.title || 'BeachGirl.pics - Nuevo contenido',
+            options
+        )
+    );
+});
+
+self.addEventListener('notificationclick', event => {
+    event.notification.close();
+    
+    if (event.action === 'view' || !event.action) {
+        const urlToOpen = event.notification.data?.url || '/main.html';
+        event.waitUntil(
+            clients.openWindow(`https://beachgirl.pics${urlToOpen}`)
+        );
+    }
+});
+
+console.log(`🌊 BeachGirl.pics Service Worker v${CACHE_VERSION} loaded successfully`);
