@@ -1,6 +1,6 @@
 // ============================
-// BeachGirl.pics Gallery Script v14.2.1 - FIXED
-// Corregido error de sintaxis en línea 91
+// BeachGirl.pics Gallery Script v14.2.2 - FIXED
+// Corregido FALLBACK_IMAGE definitivamente
 // ============================
 
 'use strict';
@@ -16,12 +16,7 @@ const PathDetector = {
     async detectBasePath() {
         console.log('🔍 Detectando estructura de archivos...');
         
-        // Ya no hay carpeta public/assets, todo está en la raíz
-        const possiblePaths = [
-            '' // Raíz - las carpetas están directamente aquí
-        ];
-        
-        // Imagen de prueba que sabemos que existe (ahora es .webp)
+        const possiblePaths = [''];
         const testImage = '/full/bikini.webp';
         
         for (const basePath of possiblePaths) {
@@ -42,22 +37,18 @@ const PathDetector = {
             }
         }
         
-        // Si no encuentra nada, asumimos que las carpetas están en la raíz
         console.log('✅ Usando rutas por defecto (raíz)');
         this.basePathFound = '';
         return '';
     },
     
     buildPath(relativePath) {
-        // Quitar / inicial si existe
         const cleanPath = relativePath.startsWith('/') ? relativePath.substring(1) : relativePath;
         
-        // Si ya detectamos la ruta base, usarla
         if (this.basePathFound !== null) {
             return this.basePathFound ? `${this.basePathFound}/${cleanPath}` : cleanPath;
         }
         
-        // Si no, devolver la ruta limpia
         return cleanPath;
     }
 };
@@ -67,7 +58,7 @@ const PathDetector = {
 // ============================
 
 const CONFIG = {
-    VERSION: '14.2.1', // Incrementada versión
+    VERSION: '14.2.2',
     CONTENT: {
         DAILY_PHOTOS: 200,
         DAILY_VIDEOS: 40,
@@ -88,8 +79,8 @@ const CONFIG = {
             100: 60
         }
     },
-    // FIXED: Imagen fallback como base64 válida de una línea
-    FALLBACK_IMAGE: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzY2N2VlYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+8J+MiyBCZWFjaEdpcmwucGljczwvdGV4dD48L3N2Zz4='
+    // FIXED: Imagen fallback simplificada
+    FALLBACK_IMAGE: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iIzY2N2VlYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE2IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkJlYWNoR2lybC5waWNzPC90ZXh0Pjwvc3ZnPg=='
 };
 
 // ============================
@@ -108,11 +99,10 @@ const state = {
     isabellaOpen: false,
     currentModal: null,
     selectedPlan: 'lifetime',
-    selectedPack: 50, // Default silver pack
+    selectedPack: 50,
     initialized: false
 };
 
-// Exponer state globalmente para depuración
 window.state = state;
 
 // ============================
@@ -176,7 +166,6 @@ const TRANSLATIONS = {
     }
 };
 
-// Exponer translations globalmente
 window.TRANSLATIONS = TRANSLATIONS;
 
 // ============================
@@ -186,7 +175,6 @@ window.TRANSLATIONS = TRANSLATIONS;
 function handleImageError(img) {
     console.warn('Error cargando imagen:', img.src);
     
-    // Usar imagen fallback SVG
     if (!img.dataset.fallbackUsed) {
         img.dataset.fallbackUsed = 'true';
         img.src = CONFIG.FALLBACK_IMAGE;
@@ -258,13 +246,11 @@ function renderPhotosProgressive(container, photos) {
                 
                 container.appendChild(item);
                 
-                // Agregar manejador de error después
                 const img = document.getElementById(imgId);
                 if (img) {
                     img.onerror = function() { handleImageError(this); };
                 }
                 
-                // Animación de entrada
                 setTimeout(() => {
                     item.classList.add('loaded');
                 }, 50);
@@ -332,7 +318,6 @@ function renderVideosProgressive(container, videos) {
                 
                 container.appendChild(item);
                 
-                // Animación de entrada
                 setTimeout(() => {
                     item.classList.add('loaded');
                 }, 50);
@@ -367,7 +352,6 @@ function renderTeaserCarousel() {
         
         carousel.appendChild(teaserItem);
         
-        // Agregar manejador de error
         setTimeout(() => {
             const img = document.getElementById(imgId);
             if (img) {
@@ -434,7 +418,6 @@ function showNotification(message, type = 'info') {
     `;
     document.body.appendChild(notification);
     
-    // Agregar estilos inline si no existen
     if (!document.getElementById('notification-styles')) {
         const style = document.createElement('style');
         style.id = 'notification-styles';
@@ -628,7 +611,6 @@ function selectPlan(plan) {
 }
 
 function selectPack(pack) {
-    // Mapear el nombre del pack al número de créditos
     const packMap = {
         'starter': 10,
         'bronze': 25,
@@ -732,7 +714,6 @@ function toggleIsabella() {
         state.isabellaOpen = !state.isabellaOpen;
         window.style.display = state.isabellaOpen ? 'block' : 'none';
         
-        // Si es la primera vez que se abre, mostrar mensaje de bienvenida
         if (state.isabellaOpen) {
             const messages = document.getElementById('isabellaMessages');
             if (messages && messages.children.length === 0) {
@@ -796,7 +777,6 @@ async function initializeGallery() {
         return;
     }
     
-    // Detectar rutas solo la primera vez
     if (!state.initialized) {
         await PathDetector.detectBasePath();
         state.initialized = true;
@@ -815,7 +795,6 @@ async function initializeGallery() {
     updateCreditsDisplay();
     changeLanguage(state.language);
     
-    // Actualizar contadores
     const photoCount = document.getElementById('photoCount');
     const videoCount = document.getElementById('videoCount');
     
@@ -835,7 +814,6 @@ async function initializeGallery() {
 // ============================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Ocultar pantalla de carga
     setTimeout(() => {
         const loadingScreen = document.getElementById('loadingScreen');
         if (loadingScreen) {
@@ -846,10 +824,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 1500);
     
-    // Inicializar galería
     initializeGallery();
     
-    // Banner slideshow
     let currentSlide = 0;
     const slides = document.querySelectorAll('.banner-slide');
     if (slides.length > 1) {
@@ -860,7 +836,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     }
     
-    // Verificar expiración VIP mensual
     const vipExpiry = localStorage.getItem('vipExpiry');
     if (vipExpiry && vipExpiry !== 'lifetime') {
         const expiryDate = new Date(vipExpiry);
