@@ -1,30 +1,79 @@
 // ============================
-// BeachGirl.pics Gallery Script v14.0.0
-// Script principal con rutas corregidas
+// BeachGirl.pics Gallery Script v14.1.0
+// Con detección automática de rutas
 // ============================
 
 'use strict';
 
 // ============================
-// VERIFICAR CARGA DE BASE DE DATOS
+// DETECCIÓN AUTOMÁTICA DE RUTAS
 // ============================
 
-if (typeof window.ALL_PHOTOS_POOL === 'undefined' || 
-    typeof window.ALL_UNCENSORED_PHOTOS_POOL === 'undefined' || 
-    typeof window.ALL_VIDEOS_POOL === 'undefined') {
-    console.error('❌ ERROR: content-database.js no está cargado correctamente');
-}
+const PathDetector = {
+    basePathFound: null,
+    checkedPaths: new Set(),
+    
+    async detectBasePath() {
+        console.log('🔍 Detectando estructura de archivos...');
+        
+        // Posibles estructuras de carpetas
+        const possiblePaths = [
+            '', // Raíz
+            '/public/assets',
+            'public/assets',
+            '/beachgirl-pics', // Por si es GitHub Pages
+            '/ibizagirl-deployable2' // Nombre del repo en GitHub
+        ];
+        
+        // Imagen de prueba que sabemos que existe
+        const testImage = '/full/bikini.jpg';
+        
+        for (const basePath of possiblePaths) {
+            const testUrl = basePath + testImage;
+            
+            if (this.checkedPaths.has(testUrl)) continue;
+            this.checkedPaths.add(testUrl);
+            
+            try {
+                const response = await fetch(testUrl, { method: 'HEAD' });
+                if (response.ok) {
+                    this.basePathFound = basePath;
+                    console.log(`✅ Ruta base encontrada: ${basePath || '(raíz)'}`);
+                    return basePath;
+                }
+            } catch (e) {
+                // Continuar probando
+            }
+        }
+        
+        console.warn('⚠️ No se encontró ruta base, usando rutas por defecto');
+        return '';
+    },
+    
+    buildPath(relativePath) {
+        // Quitar / inicial si existe
+        const cleanPath = relativePath.startsWith('/') ? relativePath.substring(1) : relativePath;
+        
+        // Si ya detectamos la ruta base, usarla
+        if (this.basePathFound !== null) {
+            return this.basePathFound ? `${this.basePathFound}/${cleanPath}` : cleanPath;
+        }
+        
+        // Si no, devolver la ruta limpia
+        return cleanPath;
+    }
+};
 
 // ============================
 // CONFIGURATION
 // ============================
 
 const CONFIG = {
-    VERSION: '14.0.0',
+    VERSION: '14.1.0',
     CONTENT: {
         DAILY_PHOTOS: 200,
         DAILY_VIDEOS: 40,
-        NEW_PERCENTAGE: 0.3,  // 30% aparece como "nuevo"
+        NEW_PERCENTAGE: 0.3,
         TEASER_COUNT: 15
     },
     PAYPAL: {
@@ -41,12 +90,7 @@ const CONFIG = {
             100: 50
         }
     },
-    // Configuración de rutas - IMPORTANTE: sin /public/assets
-    PATHS: {
-        DEFAULT_IMAGE: 'full/bikini.jpg',  // Imagen por defecto si falla la carga
-        DEFAULT_BANNER: 'full/bikbanner.jpg',
-        DEFAULT_BANNER2: 'full/bikbanner2.jpg'
-    }
+    FALLBACK_IMAGE: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzY2N2VlYSIvPgogIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+8J+MiiBCZWFjaEdpcmwucGljczwvdGV4dD4KPC9zdmc+'
 };
 
 // ============================
@@ -65,11 +109,12 @@ const state = {
     isabellaOpen: false,
     currentModal: null,
     selectedPlan: 'lifetime',
-    selectedPack: null
+    selectedPack: null,
+    initialized: false
 };
 
 // ============================
-// MULTI-IDIOMA
+// TRANSLATIONS
 // ============================
 
 const TRANSLATIONS = {
@@ -93,17 +138,11 @@ const TRANSLATIONS = {
         monthly: '📅 Mensual',
         lifetime: '♾️ Lifetime',
         megapack: '📦 MEGA PACKS -70%',
-        isabella_title: 'Isabella - Tu Guía VIP',
-        vip_info: '💎 VIP Info',
-        news: '📅 Novedades',
-        help: '❓ Ayuda',
         credits_available: 'Créditos Disponibles',
         unlock_credit: 'Desbloquear (1 crédito)',
-        get_unlimited: 'Obtener Acceso Ilimitado',
-        no_credits: 'Sin créditos suficientes',
-        unlocked_success: '¡Contenido desbloqueado!',
-        pack_purchased: '¡Pack comprado! +{credits} créditos',
-        vip_activated: '¡VIP Activado! Acceso ilimitado'
+        no_credits: '¡Necesitas créditos! Compra un pack',
+        unlocked_success: '¡Contenido desbloqueado! 🎉',
+        vip_activated: '¡VIP Activado! Acceso ilimitado 👑'
     },
     en: {
         welcome: 'Welcome to Paradise 🌴',
@@ -125,55 +164,36 @@ const TRANSLATIONS = {
         monthly: '📅 Monthly',
         lifetime: '♾️ Lifetime',
         megapack: '📦 MEGA PACKS -70%',
-        isabella_title: 'Isabella - Your VIP Guide',
-        vip_info: '💎 VIP Info',
-        news: '📅 News',
-        help: '❓ Help',
         credits_available: 'Credits Available',
         unlock_credit: 'Unlock (1 credit)',
-        get_unlimited: 'Get Unlimited Access',
-        no_credits: 'Not enough credits',
-        unlocked_success: 'Content unlocked!',
-        pack_purchased: 'Pack purchased! +{credits} credits',
-        vip_activated: 'VIP Activated! Unlimited access'
+        no_credits: 'You need credits! Buy a pack',
+        unlocked_success: 'Content unlocked! 🎉',
+        vip_activated: 'VIP Activated! Unlimited access 👑'
     }
 };
 
 // ============================
-// FUNCIONES DE UTILIDAD
+// UTILIDADES
 // ============================
 
-function buildImagePath(path) {
-    // Las rutas ya vienen con /full o /uncensored desde content-database.js
-    // Solo quitar la barra inicial si existe
-    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
-    return cleanPath;
-}
-
-function getDefaultImage() {
-    return CONFIG.PATHS.DEFAULT_IMAGE;
-}
-
-function handleImageError(img, isVideo = false) {
-    // Si falla la carga, usar imagen por defecto
-    if (!img.dataset.defaultUsed) {
-        img.dataset.defaultUsed = 'true';
-        img.src = getDefaultImage();
-        console.warn('Image load failed, using default:', img.src);
+function handleImageError(img) {
+    console.warn('Error cargando imagen:', img.src);
+    
+    // Usar imagen fallback SVG
+    if (!img.dataset.fallbackUsed) {
+        img.dataset.fallbackUsed = 'true';
+        img.src = CONFIG.FALLBACK_IMAGE;
+        img.style.objectFit = 'cover';
     }
 }
 
-// ============================
-// FUNCIONES DE ROTACIÓN DIARIA
-// ============================
-
 function getDailyRotation(pool, count) {
-    // Usar la fecha como semilla para que cambie cada día
+    if (!pool || pool.length === 0) return [];
+    
     const today = new Date();
     const dateString = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
     const seed = dateString.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
     
-    // Función de mezcla determinística basada en la semilla
     const shuffled = [...pool].sort((a, b) => {
         const aVal = a.split('').reduce((sum, char) => sum + char.charCodeAt(0), seed);
         const bVal = b.split('').reduce((sum, char) => sum + char.charCodeAt(0), seed);
@@ -184,140 +204,135 @@ function getDailyRotation(pool, count) {
 }
 
 // ============================
-// FUNCIONES DE RENDERIZADO
+// RENDERIZADO
 // ============================
 
 function renderPhotosProgressive(container, photos) {
-    if (!container) return;
+    if (!container || !photos) return;
     
-    container.innerHTML = '';
-    let loadedCount = 0;
+    container.innerHTML = '<div class="loading-message">Cargando fotos...</div>';
     
-    photos.forEach((photo, index) => {
-        setTimeout(() => {
-            const isUnlocked = state.isVIP || state.unlockedPhotos.has(photo);
-            const isNew = Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE;
-            const imagePath = buildImagePath(photo);
-            
-            const item = document.createElement('div');
-            item.classList.add('content-item', isUnlocked ? 'unlocked' : 'locked');
-            if (isNew) item.classList.add('new-item');
-            
-            // Crear estructura HTML
-            item.innerHTML = `
-                <div class="content-wrapper">
-                    <img src="${imagePath}" 
-                         alt="Foto Premium ${index + 1}" 
-                         class="content-img" 
-                         loading="lazy"
-                         onerror="handleImageError(this)">
-                    ${isNew ? '<span class="badge-new">NUEVO</span>' : ''}
-                    ${!isUnlocked ? `
-                        <div class="lock-overlay">
-                            <div class="lock-content">
-                                <div class="lock-icon">🔒</div>
-                                <button class="unlock-btn" onclick="unlockContent('${photo}', 'photo')">
-                                    <span class="unlock-text">${TRANSLATIONS[state.language].unlock_credit}</span>
-                                    <span class="credit-cost">💎 1</span>
-                                </button>
-                            </div>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-            
-            // Agregar manejador de error a la imagen
-            const img = item.querySelector('img');
-            img.addEventListener('error', function() {
-                handleImageError(this);
-            });
-            
-            container.appendChild(item);
-            
-            // Animación de entrada
+    setTimeout(() => {
+        container.innerHTML = '';
+        
+        photos.forEach((photo, index) => {
             setTimeout(() => {
-                item.classList.add('loaded');
-            }, 50);
-            
-            loadedCount++;
-            
-        }, index * 30); // Carga progresiva
-    });
+                const isUnlocked = state.isVIP || state.unlockedPhotos.has(photo);
+                const isNew = Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE;
+                const imagePath = PathDetector.buildPath(photo);
+                
+                const item = document.createElement('div');
+                item.classList.add('content-item', isUnlocked ? 'unlocked' : 'locked');
+                if (isNew) item.classList.add('new-item');
+                
+                const imgId = `photo-${index}`;
+                
+                item.innerHTML = `
+                    <div class="content-wrapper">
+                        <img id="${imgId}"
+                             src="${imagePath}" 
+                             alt="Foto Premium ${index + 1}" 
+                             class="content-img" 
+                             loading="lazy">
+                        ${isNew ? '<span class="badge-new">NUEVO</span>' : ''}
+                        ${!isUnlocked ? `
+                            <div class="lock-overlay">
+                                <div class="lock-content">
+                                    <div class="lock-icon">🔒</div>
+                                    <button class="unlock-btn" onclick="unlockContent('${photo}', 'photo')">
+                                        <span class="unlock-text">${TRANSLATIONS[state.language].unlock_credit}</span>
+                                        <span class="credit-cost">💎 1</span>
+                                    </button>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                container.appendChild(item);
+                
+                // Agregar manejador de error después
+                const img = document.getElementById(imgId);
+                if (img) {
+                    img.onerror = function() { handleImageError(this); };
+                }
+                
+                // Animación de entrada
+                setTimeout(() => {
+                    item.classList.add('loaded');
+                }, 50);
+                
+            }, index * 30);
+        });
+    }, 100);
 }
 
 function renderVideosProgressive(container, videos) {
-    if (!container) return;
+    if (!container || !videos) return;
     
-    container.innerHTML = '';
-    let loadedCount = 0;
+    container.innerHTML = '<div class="loading-message">Cargando videos...</div>';
     
-    videos.forEach((video, index) => {
-        setTimeout(() => {
-            const isUnlocked = state.isVIP || state.unlockedVideos.has(video);
-            const isNew = Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE;
-            const videoPath = buildImagePath(video);
-            // Para el thumbnail, usar la imagen por defecto ya que no tenemos thumbnails específicos
-            const thumbnail = getDefaultImage();
-            
-            const item = document.createElement('div');
-            item.classList.add('content-item', 'video-item', isUnlocked ? 'unlocked' : 'locked');
-            if (isNew) item.classList.add('new-item');
-            
-            item.innerHTML = `
-                <div class="content-wrapper">
-                    ${isUnlocked ? `
-                        <video class="content-video" 
-                               controls 
-                               poster="${thumbnail}"
-                               preload="metadata">
-                            <source src="${videoPath}" type="video/mp4">
-                            Tu navegador no soporta videos HTML5.
-                        </video>
-                    ` : `
-                        <img src="${thumbnail}" 
-                             alt="Video Premium ${index + 1}" 
-                             class="video-thumb"
-                             onerror="handleImageError(this, true)">
-                    `}
-                    <div class="video-badge">
-                        <span class="duration">HD</span>
-                        <span class="quality">1080p</span>
-                    </div>
-                    ${isNew ? '<span class="badge-new">NUEVO</span>' : ''}
-                    ${!isUnlocked ? `
-                        <div class="lock-overlay">
-                            <div class="lock-content">
-                                <div class="play-icon">▶️</div>
-                                <div class="lock-icon">🔒</div>
-                                <button class="unlock-btn" onclick="unlockContent('${video}', 'video')">
-                                    <span class="unlock-text">${TRANSLATIONS[state.language].unlock_credit}</span>
-                                    <span class="credit-cost">💎 1</span>
-                                </button>
-                            </div>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-            
-            // Agregar manejador de error a la imagen thumbnail
-            const img = item.querySelector('img');
-            if (img) {
-                img.addEventListener('error', function() {
-                    handleImageError(this, true);
-                });
-            }
-            
-            container.appendChild(item);
-            
-            // Animación de entrada
+    setTimeout(() => {
+        container.innerHTML = '';
+        
+        videos.forEach((video, index) => {
             setTimeout(() => {
-                item.classList.add('loaded');
-            }, 50);
-            
-            loadedCount++;
-            
-        }, index * 30);
-    });
+                const isUnlocked = state.isVIP || state.unlockedVideos.has(video);
+                const isNew = Math.random() < CONFIG.CONTENT.NEW_PERCENTAGE;
+                const videoPath = PathDetector.buildPath(video);
+                
+                const item = document.createElement('div');
+                item.classList.add('content-item', 'video-item', isUnlocked ? 'unlocked' : 'locked');
+                if (isNew) item.classList.add('new-item');
+                
+                const imgId = `video-thumb-${index}`;
+                
+                item.innerHTML = `
+                    <div class="content-wrapper">
+                        ${isUnlocked ? `
+                            <video class="content-video" 
+                                   controls 
+                                   poster="${CONFIG.FALLBACK_IMAGE}"
+                                   preload="metadata">
+                                <source src="${videoPath}" type="video/mp4">
+                                Tu navegador no soporta videos HTML5.
+                            </video>
+                        ` : `
+                            <img id="${imgId}"
+                                 src="${CONFIG.FALLBACK_IMAGE}" 
+                                 alt="Video Premium ${index + 1}" 
+                                 class="video-thumb">
+                        `}
+                        <div class="video-badge">
+                            <span class="duration">HD</span>
+                            <span class="quality">1080p</span>
+                        </div>
+                        ${isNew ? '<span class="badge-new">NUEVO</span>' : ''}
+                        ${!isUnlocked ? `
+                            <div class="lock-overlay">
+                                <div class="lock-content">
+                                    <div class="play-icon">▶️</div>
+                                    <div class="lock-icon">🔒</div>
+                                    <button class="unlock-btn" onclick="unlockContent('${video}', 'video')">
+                                        <span class="unlock-text">${TRANSLATIONS[state.language].unlock_credit}</span>
+                                        <span class="credit-cost">💎 1</span>
+                                    </button>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                container.appendChild(item);
+                
+                // Animación de entrada
+                setTimeout(() => {
+                    item.classList.add('loaded');
+                }, 50);
+                
+            }, index * 30);
+        });
+    }, 100);
 }
 
 function renderTeaserCarousel() {
@@ -327,26 +342,31 @@ function renderTeaserCarousel() {
     carousel.innerHTML = '';
     
     state.teaserItems.forEach((item, index) => {
-        const imagePath = buildImagePath(item);
+        const imagePath = PathDetector.buildPath(item);
         const teaserItem = document.createElement('div');
         teaserItem.className = 'teaser-item';
+        
+        const imgId = `teaser-${index}`;
+        
         teaserItem.innerHTML = `
-            <img src="${imagePath}" 
+            <img id="${imgId}"
+                 src="${imagePath}" 
                  alt="Preview ${index + 1}" 
-                 loading="lazy"
-                 onerror="handleImageError(this)">
+                 loading="lazy">
             <div class="teaser-overlay">
                 <button onclick="showVIPModal()">Ver Completo</button>
             </div>
         `;
         
-        // Agregar manejador de error
-        const img = teaserItem.querySelector('img');
-        img.addEventListener('error', function() {
-            handleImageError(this);
-        });
-        
         carousel.appendChild(teaserItem);
+        
+        // Agregar manejador de error
+        setTimeout(() => {
+            const img = document.getElementById(imgId);
+            if (img) {
+                img.onerror = function() { handleImageError(this); };
+            }
+        }, 100);
     });
 }
 
@@ -355,18 +375,15 @@ function renderTeaserCarousel() {
 // ============================
 
 function unlockContent(item, type) {
-    // Verificar créditos
     if (state.credits < 1) {
         showNotification(TRANSLATIONS[state.language].no_credits, 'error');
         showPackModal();
         return;
     }
     
-    // Descontar crédito
     state.credits -= 1;
     localStorage.setItem('credits', state.credits);
     
-    // Marcar como desbloqueado
     if (type === 'photo') {
         state.unlockedPhotos.add(item);
         localStorage.setItem('unlockedPhotos', JSON.stringify([...state.unlockedPhotos]));
@@ -375,11 +392,9 @@ function unlockContent(item, type) {
         localStorage.setItem('unlockedVideos', JSON.stringify([...state.unlockedVideos]));
     }
     
-    // Actualizar UI
     updateCreditsDisplay();
     initializeGallery();
     
-    // Notificación y celebración
     showNotification(TRANSLATIONS[state.language].unlocked_success, 'success');
     celebrateUnlock();
 }
@@ -399,11 +414,8 @@ function celebrateUnlock() {
 // ============================
 
 function showNotification(message, type = 'info') {
-    // Remover notificación existente si hay
     const existing = document.querySelector('.notification');
-    if (existing) {
-        existing.remove();
-    }
+    if (existing) existing.remove();
     
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
@@ -415,7 +427,7 @@ function showNotification(message, type = 'info') {
     `;
     document.body.appendChild(notification);
     
-    // Agregar estilos si no existen
+    // Agregar estilos inline si no existen
     if (!document.getElementById('notification-styles')) {
         const style = document.createElement('style');
         style.id = 'notification-styles';
@@ -434,10 +446,9 @@ function showNotification(message, type = 'info') {
                 z-index: 10000;
                 transform: translateX(400px);
                 transition: transform 0.3s ease;
+                max-width: 300px;
             }
-            .notification.show {
-                transform: translateX(0);
-            }
+            .notification.show { transform: translateX(0); }
             .notification.success {
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
@@ -446,144 +457,42 @@ function showNotification(message, type = 'info') {
                 background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
                 color: white;
             }
-            .notification-icon {
-                font-size: 20px;
+            .notification.info {
+                background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+                color: white;
             }
-            .pulse {
-                animation: pulse 0.5s ease;
+            .loading-message {
+                text-align: center;
+                padding: 40px;
+                color: #666;
+                font-size: 18px;
             }
-            @keyframes pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.2); }
+            .content-item.loaded {
+                animation: fadeIn 0.5s ease;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
             }
         `;
         document.head.appendChild(style);
     }
     
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 100);
-    
+    setTimeout(() => notification.classList.add('show'), 100);
     setTimeout(() => {
         notification.classList.remove('show');
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
+        setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
 
 // ============================
-// PAYPAL INTEGRATION
-// ============================
-
-function initializePayPal() {
-    if (typeof paypal === 'undefined') {
-        console.warn('PayPal SDK not loaded');
-        return;
-    }
-    
-    // Botón para VIP
-    const vipContainer = document.getElementById('paypal-button-container-vip');
-    if (vipContainer && !vipContainer.hasChildNodes()) {
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                const price = state.selectedPlan === 'monthly' ? CONFIG.PRICES.MONTHLY : CONFIG.PRICES.LIFETIME;
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: price.toString(),
-                            currency_code: CONFIG.PAYPAL.CURRENCY
-                        },
-                        description: state.selectedPlan === 'monthly' ? 'VIP Mensual' : 'VIP Lifetime'
-                    }]
-                });
-            },
-            onApprove: function(data, actions) {
-                return actions.order.capture().then(function(details) {
-                    activateVIP(state.selectedPlan);
-                    showNotification(TRANSLATIONS[state.language].vip_activated, 'success');
-                    closeModal();
-                });
-            },
-            onError: function(err) {
-                console.error('PayPal Error:', err);
-                showNotification('Error al procesar el pago', 'error');
-            }
-        }).render('#paypal-button-container-vip');
-    }
-    
-    // Botón para Packs
-    const packContainer = document.getElementById('paypal-button-container-pack');
-    if (packContainer && !packContainer.hasChildNodes()) {
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                if (!state.selectedPack) {
-                    showNotification('Selecciona un pack primero', 'error');
-                    return;
-                }
-                
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: CONFIG.PRICES.PACKS[state.selectedPack].toString(),
-                            currency_code: CONFIG.PAYPAL.CURRENCY
-                        },
-                        description: `Pack de ${state.selectedPack} créditos`
-                    }]
-                });
-            },
-            onApprove: function(data, actions) {
-                return actions.order.capture().then(function(details) {
-                    addCredits(state.selectedPack);
-                    const message = TRANSLATIONS[state.language].pack_purchased.replace('{credits}', state.selectedPack);
-                    showNotification(message, 'success');
-                    closeModal();
-                });
-            },
-            onError: function(err) {
-                console.error('PayPal Error:', err);
-                showNotification('Error al procesar el pago', 'error');
-            }
-        }).render('#paypal-button-container-pack');
-    }
-}
-
-function activateVIP(plan) {
-    state.isVIP = true;
-    localStorage.setItem('isVIP', 'true');
-    
-    if (plan === 'monthly') {
-        // Guardar fecha de expiración (30 días)
-        const expiry = new Date();
-        expiry.setDate(expiry.getDate() + 30);
-        localStorage.setItem('vipExpiry', expiry.toISOString());
-    } else {
-        // Lifetime no expira
-        localStorage.setItem('vipExpiry', 'lifetime');
-    }
-    
-    initializeGallery();
-    celebrateUnlock();
-}
-
-function addCredits(amount) {
-    state.credits += parseInt(amount);
-    localStorage.setItem('credits', state.credits);
-    updateCreditsDisplay();
-}
-
-// ============================
-// UI FUNCTIONS
+// FUNCIONES UI
 // ============================
 
 function updateCreditsDisplay() {
     const creditsNumber = document.getElementById('creditsNumber');
     if (creditsNumber) {
         creditsNumber.textContent = state.credits;
-        creditsNumber.classList.add('pulse');
-        setTimeout(() => {
-            creditsNumber.classList.remove('pulse');
-        }, 500);
     }
 }
 
@@ -591,10 +500,9 @@ function changeLanguage(lang) {
     state.language = lang;
     localStorage.setItem('language', lang);
     
-    // Actualizar todos los textos
     document.querySelectorAll('[data-translate]').forEach(el => {
         const key = el.dataset.translate;
-        el.textContent = TRANSLATIONS[lang][key] || TRANSLATIONS['es'][key] || key;
+        el.textContent = TRANSLATIONS[lang]?.[key] || TRANSLATIONS['es'][key] || key;
     });
 }
 
@@ -607,7 +515,7 @@ function showVIPModal() {
     if (modal) {
         modal.style.display = 'flex';
         state.currentModal = 'vip';
-        setTimeout(() => initializePayPal(), 100);
+        initializePayPal();
     }
 }
 
@@ -616,7 +524,7 @@ function showPackModal() {
     if (modal) {
         modal.style.display = 'flex';
         state.currentModal = 'pack';
-        setTimeout(() => initializePayPal(), 100);
+        initializePayPal();
     }
 }
 
@@ -632,10 +540,8 @@ function selectPlan(plan) {
     document.querySelectorAll('.plan-card').forEach(card => {
         card.classList.remove('selected');
     });
-    const planCard = document.getElementById(plan + 'Plan');
-    if (planCard) {
-        planCard.classList.add('selected');
-    }
+    const card = document.getElementById(plan + 'Plan');
+    if (card) card.classList.add('selected');
 }
 
 function selectPack(credits) {
@@ -643,13 +549,91 @@ function selectPack(credits) {
     document.querySelectorAll('.pack-card').forEach(card => {
         card.classList.remove('selected');
     });
-    if (event && event.currentTarget) {
+    if (event?.currentTarget) {
         event.currentTarget.classList.add('selected');
     }
 }
 
 // ============================
-// ISABELLA CHAT BOT
+// PAYPAL
+// ============================
+
+function initializePayPal() {
+    if (typeof paypal === 'undefined') return;
+    
+    const vipContainer = document.getElementById('paypal-button-container-vip');
+    if (vipContainer && !vipContainer.hasChildNodes()) {
+        paypal.Buttons({
+            createOrder: (data, actions) => {
+                const price = state.selectedPlan === 'monthly' ? CONFIG.PRICES.MONTHLY : CONFIG.PRICES.LIFETIME;
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: price.toString(),
+                            currency_code: CONFIG.PAYPAL.CURRENCY
+                        }
+                    }]
+                });
+            },
+            onApprove: (data, actions) => {
+                return actions.order.capture().then(() => {
+                    activateVIP(state.selectedPlan);
+                    showNotification(TRANSLATIONS[state.language].vip_activated, 'success');
+                    closeModal();
+                });
+            }
+        }).render('#paypal-button-container-vip');
+    }
+    
+    const packContainer = document.getElementById('paypal-button-container-pack');
+    if (packContainer && !packContainer.hasChildNodes()) {
+        paypal.Buttons({
+            createOrder: (data, actions) => {
+                if (!state.selectedPack) return;
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: CONFIG.PRICES.PACKS[state.selectedPack].toString(),
+                            currency_code: CONFIG.PAYPAL.CURRENCY
+                        }
+                    }]
+                });
+            },
+            onApprove: (data, actions) => {
+                return actions.order.capture().then(() => {
+                    addCredits(state.selectedPack);
+                    showNotification(`+${state.selectedPack} créditos añadidos!`, 'success');
+                    closeModal();
+                });
+            }
+        }).render('#paypal-button-container-pack');
+    }
+}
+
+function activateVIP(plan) {
+    state.isVIP = true;
+    localStorage.setItem('isVIP', 'true');
+    
+    if (plan === 'monthly') {
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + 30);
+        localStorage.setItem('vipExpiry', expiry.toISOString());
+    } else {
+        localStorage.setItem('vipExpiry', 'lifetime');
+    }
+    
+    initializeGallery();
+    celebrateUnlock();
+}
+
+function addCredits(amount) {
+    state.credits += parseInt(amount);
+    localStorage.setItem('credits', state.credits);
+    updateCreditsDisplay();
+}
+
+// ============================
+// ISABELLA BOT
 // ============================
 
 function toggleIsabella() {
@@ -665,17 +649,16 @@ function isabellaAction(action) {
     if (!messages) return;
     
     let message = '';
-    
     switch(action) {
         case 'vip':
-            message = '💎 ¡Hazte VIP y desbloquea TODO! Solo €15/mes o €100 lifetime. Más de 400 fotos y 80 videos HD te esperan.';
+            message = '💎 ¡Hazte VIP y desbloquea TODO! Solo €15/mes o €100 lifetime.';
             setTimeout(() => showVIPModal(), 1000);
             break;
         case 'daily':
-            message = `📅 Hoy tenemos ${CONFIG.CONTENT.DAILY_PHOTOS} fotos nuevas y ${CONFIG.CONTENT.DAILY_VIDEOS} videos HD. ¡El contenido cambia cada día!`;
+            message = `📅 Hoy tenemos ${CONFIG.CONTENT.DAILY_PHOTOS} fotos y ${CONFIG.CONTENT.DAILY_VIDEOS} videos nuevos!`;
             break;
         case 'help':
-            message = '❓ Puedes comprar créditos para desbloquear contenido o hacerte VIP para acceso ilimitado. ¿Qué prefieres?';
+            message = '❓ Compra créditos o hazte VIP para desbloquear contenido.';
             break;
     }
     
@@ -690,40 +673,36 @@ function isabellaAction(action) {
 // INICIALIZACIÓN
 // ============================
 
-function initializeGallery() {
-    // Verificar arrays
+async function initializeGallery() {
     if (!window.ALL_PHOTOS_POOL || !window.ALL_UNCENSORED_PHOTOS_POOL || !window.ALL_VIDEOS_POOL) {
         console.error('❌ Content database not loaded');
+        showNotification('Error: Base de datos no cargada', 'error');
         return;
     }
     
-    // Combinar todas las fotos
+    // Detectar rutas solo la primera vez
+    if (!state.initialized) {
+        await PathDetector.detectBasePath();
+        state.initialized = true;
+    }
+    
     const allPhotos = [...window.ALL_PHOTOS_POOL, ...window.ALL_UNCENSORED_PHOTOS_POOL];
     
-    // Obtener rotación diaria (cambia cada día)
     state.dailyPhotos = getDailyRotation(allPhotos, CONFIG.CONTENT.DAILY_PHOTOS);
     state.dailyVideos = getDailyRotation(window.ALL_VIDEOS_POOL, CONFIG.CONTENT.DAILY_VIDEOS);
     state.teaserItems = getDailyRotation(window.ALL_PHOTOS_POOL, CONFIG.CONTENT.TEASER_COUNT);
     
-    // Renderizar contenido
     renderPhotosProgressive(document.getElementById('photosGrid'), state.dailyPhotos);
     renderVideosProgressive(document.getElementById('videosGrid'), state.dailyVideos);
     renderTeaserCarousel();
     
-    // Actualizar UI
     updateCreditsDisplay();
     changeLanguage(state.language);
-    
-    // Actualizar imágenes del banner con rutas correctas
-    const bannerImages = document.querySelectorAll('.banner-slide img');
-    if (bannerImages[0]) bannerImages[0].src = CONFIG.PATHS.DEFAULT_BANNER;
-    if (bannerImages[1]) bannerImages[1].src = CONFIG.PATHS.DEFAULT_BANNER2;
     
     console.log(`✅ Galería inicializada:
     - ${state.dailyPhotos.length} fotos del día
     - ${state.dailyVideos.length} videos del día
-    - ${state.teaserItems.length} items en carousel
-    - Idioma: ${state.language}
+    - Ruta base: ${PathDetector.basePathFound || 'default'}
     - VIP: ${state.isVIP}
     - Créditos: ${state.credits}`);
 }
@@ -752,42 +731,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const slides = document.querySelectorAll('.banner-slide');
     if (slides.length > 1) {
         setInterval(() => {
-            slides[currentSlide].classList.remove('active');
+            slides[currentSlide]?.classList.remove('active');
             currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
+            slides[currentSlide]?.classList.add('active');
         }, 5000);
     }
-    
-    // Carousel controls
-    window.moveCarousel = (direction) => {
-        const carousel = document.getElementById('teaserCarousel');
-        if (carousel) {
-            const scrollAmount = 300 * direction;
-            carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        }
-    };
-    
-    // Load more functions
-    window.loadMorePhotos = () => {
-        showNotification('Hazte VIP para ver todo el contenido', 'info');
-        showVIPModal();
-    };
-    
-    window.loadMoreVideos = () => {
-        showNotification('Hazte VIP para ver todos los videos', 'info');
-        showVIPModal();
-    };
-    
-    // Newsletter
-    window.subscribeNewsletter = (e) => {
-        e.preventDefault();
-        showNotification('¡Suscrito! Te avisaremos de las novedades', 'success');
-        e.target.reset();
-    };
 });
 
 // ============================
-// EXPORTAR FUNCIONES GLOBALES
+// EXPORTAR FUNCIONES
 // ============================
 
 window.handleImageError = handleImageError;
@@ -800,19 +752,35 @@ window.isabellaAction = isabellaAction;
 window.unlockContent = unlockContent;
 window.selectPlan = selectPlan;
 window.selectPack = selectPack;
+window.moveCarousel = (dir) => {
+    const carousel = document.getElementById('teaserCarousel');
+    if (carousel) carousel.scrollBy({ left: 300 * dir, behavior: 'smooth' });
+};
+window.loadMorePhotos = () => {
+    showNotification('Hazte VIP para ver todas las fotos', 'info');
+    showVIPModal();
+};
+window.loadMoreVideos = () => {
+    showNotification('Hazte VIP para ver todos los videos', 'info');
+    showVIPModal();
+};
+window.subscribeNewsletter = (e) => {
+    e.preventDefault();
+    showNotification('¡Suscrito! 📧', 'success');
+    e.target.reset();
+};
 
 // ============================
-// DEBUG TOOLS
+// DEBUG
 // ============================
 
-const galleryDebug = {
+window.galleryDebug = {
     stats: () => ({
         totalPhotos: window.ALL_PHOTOS_POOL?.length + window.ALL_UNCENSORED_PHOTOS_POOL?.length,
         totalVideos: window.ALL_VIDEOS_POOL?.length,
         dailyPhotos: state.dailyPhotos.length,
         dailyVideos: state.dailyVideos.length,
-        unlockedPhotos: state.unlockedPhotos.size,
-        unlockedVideos: state.unlockedVideos.size,
+        basePath: PathDetector.basePathFound,
         credits: state.credits,
         isVIP: state.isVIP
     }),
@@ -824,39 +792,32 @@ const galleryDebug = {
     },
     addCredits: (num) => {
         addCredits(num);
-        console.log(`✅ ${num} créditos añadidos. Total: ${state.credits}`);
+        console.log(`✅ ${num} créditos añadidos`);
     },
-    resetDaily: () => {
-        localStorage.removeItem('lastRotation');
+    testPath: async () => {
+        await PathDetector.detectBasePath();
+    },
+    reset: () => {
+        localStorage.clear();
         location.reload();
-    },
-    testRotation: () => {
-        console.log('Fotos de hoy:', state.dailyPhotos);
-        console.log('Videos de hoy:', state.dailyVideos);
     }
 };
-
-window.galleryDebug = galleryDebug;
 
 console.log(`
 🌊 ===============================================
    BeachGirl.pics Gallery v${CONFIG.VERSION}
    
-   📊 Contenido cargado:
+   📊 Contenido disponible:
    • ${window.ALL_PHOTOS_POOL?.length || 0} fotos en /full
    • ${window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0} fotos en /uncensored  
    • ${window.ALL_VIDEOS_POOL?.length || 0} videos HD
    
-   📅 Rotación diaria:
-   • ${CONFIG.CONTENT.DAILY_PHOTOS} fotos por día
-   • ${CONFIG.CONTENT.DAILY_VIDEOS} videos por día
-   • ${CONFIG.CONTENT.NEW_PERCENTAGE * 100}% aparece como nuevo
-   
    🛠️ Debug: galleryDebug
-   • galleryDebug.stats() - Ver estadísticas
+   • galleryDebug.stats() - Estadísticas
    • galleryDebug.unlockAll() - Desbloquear todo
    • galleryDebug.addCredits(100) - Añadir créditos
-   • galleryDebug.testRotation() - Ver rotación actual
+   • galleryDebug.testPath() - Probar rutas
+   • galleryDebug.reset() - Resetear todo
    
 🌊 ===============================================
 `);
