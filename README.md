@@ -1,18 +1,26 @@
 # beachgirl-deployable
 
 ## Descripción
-Proyecto de galería PWA para BeachGirl.pics, con contenido premium de playas, suscripciones y optimizaciones SEO/PWA.
+Este es el repositorio para el sitio web BeachGirl.pics, una galería premium de fotos y videos de playas y paraísos mediterráneos. Incluye funcionalidades como PWA, multi-idioma, pagos con PayPal, y optimizaciones SEO.
+
+## Requisitos
+- Node.js (para builds si aplica)
+- Vercel CLI para deploys
 
 ## Instalación
-1. Clona el repo.
-2. Configura Vercel para deploy en beachgirl.pics.
-3. Asegúrate de que /public/assets/full/ contenga todas las imágenes.
+1. Clona el repo: `git clone [url]`
+2. Instala dependencias: `npm install` (si hay package.json)
+3. Configura variables de entorno (e.g., PayPal keys)
 
-## Uso
-- Ejecuta localmente con un server estático.
-- Deploy en Vercel para producción.
+## Deploy en Vercel
+1. Inicia sesión en Vercel: `vercel login`
+2. Deploy: `vercel`
+3. Asigna dominio: beachgirl.pics
 
-## Notas
-- Versión: v1.0 (2025)
-- Corrige branding a BeachGirl.pics.
-- Prueba PWA y PayPal en sandbox.
+## Archivos clave
+- `main.html`: Página principal
+- `main-script.js`: Lógica principal
+- `sw.js`: Service Worker para PWA
+- `sitemap.xml` y `robots.txt`: SEO
+
+Última actualización: 2025-08-15
