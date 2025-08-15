@@ -305,3 +305,50 @@ async function preloadContent() {
 // ============================
 
 self.addEventListener('push', event => {
+    if (!event.data) return;
+    
+    const data = event.data.json();
+    
+    const options = {
+        body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
+        icon: '/full/bikini.jpg',
+        badge: '/full/bikini.jpg',
+        image: data.image || '/full/bikbanner.jpg',
+        tag: 'beachgirl-update',
+        requireInteraction: false,
+        data: {
+            url: data.url || '/main.html'
+        },
+        actions: [
+            {
+                action: 'view',
+                title: 'Ver galería',
+                icon: '/full/bikini.jpg'
+            },
+            {
+                action: 'close',
+                title: 'Cerrar'
+            }
+        ]
+    };
+    
+    event.waitUntil(
+        self.registration.showNotification(
+            data.title || 'BeachGirl.pics - Nuevo contenido',
+            options
+        )
+    );
+});
+
+self.addEventListener('notificationclick', event => {
+    event.notification.close();
+    
+    if (event.action === 'view' || !event.action) {
+        const urlToOpen = event.notification.data?.url || '/main.html';
+        event.waitUntil(
+            clients.openWindow(`https://beachgirl.pics${urlToOpen}`)
+        );
+    }
+});
+
+console.log(`🌊 BeachGirl.pics Service Worker v${CACHE_VERSION} loaded successfully`);
