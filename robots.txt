@@ -1,4 +1,4 @@
-# IbizaGirl.pics - Robots.txt Optimizado SEO
+# BeachGirl.pics - Robots.txt Optimizado SEO
 # Última actualización: 2025-01-15
 
 User-agent: *
@@ -69,7 +69,7 @@ User-agent: PetalBot
 Disallow: /
 
 # Sitemap principal
-Sitemap: https://ibizagirl.pics/sitemap.xml
+Sitemap: https://beachgirl.pics/sitemap.xml
 
 # Host preferido
-Host: ibizagirl.pics
+Host: beachgirl.pics
