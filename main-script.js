@@ -1554,4 +1554,686 @@ function scrollCarousel(direction) {
             behavior: 'smooth'
         });
         
-        trackInteraction('carousel_scroll', direction
+        trackInteraction('carousel_scroll', direction > 0 ? 'right' : 'left');
+    }
+}
+
+function openImageViewer(photoId, imagePath) {
+    // Crear modal de visor de imágenes
+    const viewer = document.createElement('div');
+    viewer.className = 'image-viewer-modal';
+    viewer.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10002;
+        backdrop-filter: blur(5px);
+    `;
+    
+    const container = document.createElement('div');
+    container.style.cssText = `
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+    
+    const img = document.createElement('img');
+    img.src = imagePath;
+    img.style.cssText = `
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 10px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    `;
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '×';
+    closeBtn.style.cssText = `
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    `;
+    
+    closeBtn.onclick = () => {
+        viewer.remove();
+        trackInteraction('image_viewer_close', photoId);
+    };
+    
+    viewer.onclick = (e) => {
+        if (e.target === viewer) {
+            viewer.remove();
+            trackInteraction('image_viewer_close', photoId);
+        }
+    };
+    
+    container.appendChild(img);
+    container.appendChild(closeBtn);
+    viewer.appendChild(container);
+    document.body.appendChild(viewer);
+    
+    // Animación de entrada
+    viewer.style.opacity = '0';
+    setTimeout(() => {
+        viewer.style.transition = 'opacity 0.3s ease';
+        viewer.style.opacity = '1';
+    }, 10);
+    
+    trackEvent('image_viewer_open', { photo_id: photoId });
+}
+
+// ============================
+// SISTEMA DE NOTIFICACIONES PUSH
+// ============================
+
+async function requestNotificationPermission() {
+    if (!CONFIG.FEATURES.PUSH_NOTIFICATIONS || !('Notification' in window)) return;
+    
+    try {
+        const permission = await Notification.requestPermission();
+        
+        if (permission === 'granted') {
+            // Registrar para notificaciones push
+            const registration = await navigator.serviceWorker.getRegistration();
+            if (registration) {
+                const subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY') // Reemplazar con tu clave VAPID
+                });
+                
+                // Enviar suscripción al servidor
+                await sendSubscriptionToServer(subscription);
+            }
+            
+            trackEvent('push_notifications_enabled');
+        }
+    } catch (error) {
+        console.warn('Push notifications error:', error);
+    }
+}
+
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+
+async function sendSubscriptionToServer(subscription) {
+    // Implementar envío al servidor
+    try {
+        const response = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                subscription: subscription,
+                userId: state.sessionStart,
+                language: state.language
+            })
+        });
+        
+        if (response.ok) {
+            console.log('Subscription sent to server');
+        }
+    } catch (error) {
+        console.warn('Failed to send subscription to server:', error);
+    }
+}
+
+// ============================
+// MODO OFFLINE
+// ============================
+
+function handleOfflineMode() {
+    if (!CONFIG.FEATURES.OFFLINE_MODE) return;
+    
+    window.addEventListener('online', () => {
+        state.offlineMode = false;
+        showNotification(TRANSLATIONS[state.language].connection_restored, 'success');
+        trackEvent('connection_restored');
+    });
+    
+    window.addEventListener('offline', () => {
+        state.offlineMode = true;
+        showNotification(TRANSLATIONS[state.language].offline_mode, 'info');
+        trackEvent('connection_lost');
+    });
+}
+
+// ============================
+// AUTO-SAVE SISTEMA
+// ============================
+
+function setupAutoSave() {
+    if (!CONFIG.FEATURES.AUTO_SAVE) return;
+    
+    const saveState = debounce(() => {
+        const stateToSave = {
+            language: state.language,
+            credits: state.credits,
+            isVIP: state.isVIP,
+            unlockedPhotos: [...state.unlockedPhotos],
+            unlockedVideos: [...state.unlockedVideos],
+            preferences: {
+                autoPlay: state.autoPlay,
+                qualityPreference: state.qualityPreference,
+                notifications: state.notifications
+            },
+            timestamp: Date.now()
+        };
+        
+        localStorage.setItem('autoSaveState', JSON.stringify(stateToSave));
+        console.log('💾 State auto-saved');
+    }, 1000);
+    
+    // Auto-save cuando cambie el estado
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function(key, value) {
+        originalSetItem.call(this, key, value);
+        if (['credits', 'isVIP', 'unlockedPhotos', 'unlockedVideos'].includes(key)) {
+            saveState();
+        }
+    };
+}
+
+// ============================
+// BÚSQUEDA AVANZADA
+// ============================
+
+function setupAdvancedSearch() {
+    if (!CONFIG.FEATURES.ADVANCED_SEARCH) return;
+    
+    // Crear interfaz de búsqueda
+    const searchContainer = document.createElement('div');
+    searchContainer.className = 'advanced-search-container';
+    searchContainer.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: rgba(0, 33, 66, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 15px;
+        padding: 20px;
+        z-index: 1000;
+        display: none;
+        min-width: 300px;
+        border: 1px solid rgba(127, 219, 255, 0.3);
+    `;
+    
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.placeholder = TRANSLATIONS[state.language].advanced_search;
+    searchInput.style.cssText = `
+        width: 100%;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        margin-bottom: 15px;
+    `;
+    
+    const filterContainer = document.createElement('div');
+    filterContainer.innerHTML = `
+        <label style="color: white; display: block; margin-bottom: 10px;">
+            ${TRANSLATIONS[state.language].filter_by}:
+            <select style="width: 100%; padding: 5px; margin-top: 5px; border-radius: 5px;">
+                <option value="all">Todo</option>
+                <option value="photos">Fotos</option>
+                <option value="videos">Videos</option>
+                <option value="new">Nuevo</option>
+                <option value="unlocked">Desbloqueado</option>
+            </select>
+        </label>
+        <label style="color: white; display: block;">
+            ${TRANSLATIONS[state.language].sort_by}:
+            <select style="width: 100%; padding: 5px; margin-top: 5px; border-radius: 5px;">
+                <option value="newest">${TRANSLATIONS[state.language].newest}</option>
+                <option value="popular">${TRANSLATIONS[state.language].popular}</option>
+                <option value="random">${TRANSLATIONS[state.language].random}</option>
+            </select>
+        </label>
+    `;
+    
+    searchContainer.appendChild(searchInput);
+    searchContainer.appendChild(filterContainer);
+    document.body.appendChild(searchContainer);
+    
+    // Toggle search
+    const toggleSearch = () => {
+        const isVisible = searchContainer.style.display === 'block';
+        searchContainer.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) {
+            searchInput.focus();
+        }
+    };
+    
+    // Agregar botón de búsqueda al header si no existe
+    const headerButtons = document.querySelector('.header-buttons');
+    if (headerButtons && !document.getElementById('searchBtn')) {
+        const searchBtn = document.createElement('button');
+        searchBtn.id = 'searchBtn';
+        searchBtn.className = 'header-btn';
+        searchBtn.innerHTML = '🔍 Buscar';
+        searchBtn.onclick = toggleSearch;
+        headerButtons.appendChild(searchBtn);
+    }
+    
+    // Implementar búsqueda en tiempo real
+    searchInput.addEventListener('input', debounce((e) => {
+        const query = e.target.value.toLowerCase();
+        performSearch(query);
+    }, 300));
+}
+
+function performSearch(query) {
+    if (!query) {
+        initializeGallery(); // Restaurar vista completa
+        return;
+    }
+    
+    const allPhotos = [...window.ALL_PHOTOS_POOL, ...window.ALL_UNCENSORED_PHOTOS_POOL];
+    const allVideos = [...window.ALL_VIDEOS_POOL];
+    
+    // Filtrar contenido basado en la búsqueda
+    const filteredPhotos = allPhotos.filter(photo => 
+        photo.toLowerCase().includes(query) ||
+        (state.unlockedPhotos.has(photo) && query.includes('unlock'))
+    );
+    
+    const filteredVideos = allVideos.filter(video => 
+        video.toLowerCase().includes(query) ||
+        (state.unlockedVideos.has(video) && query.includes('unlock'))
+    );
+    
+    // Renderizar resultados filtrados
+    renderPhotosProgressive(document.getElementById('photosGrid'), filteredPhotos.slice(0, 50));
+    renderVideosProgressive(document.getElementById('videosGrid'), filteredVideos.slice(0, 20));
+    
+    trackEvent('search_performed', { 
+        query: query, 
+        results_photos: filteredPhotos.length,
+        results_videos: filteredVideos.length
+    });
+}
+
+// ============================
+// INICIALIZACIÓN PRINCIPAL
+// ============================
+
+async function initializeGallery() {
+    if (!window.ALL_PHOTOS_POOL || !window.ALL_UNCENSORED_PHOTOS_POOL || !window.ALL_VIDEOS_POOL) {
+        console.error('❌ Content database not loaded');
+        showNotification('Error: Base de datos no cargada', 'error');
+        return;
+    }
+    
+    console.log('🌊 Initializing Gallery v' + CONFIG.VERSION);
+    
+    try {
+        // Combinar todos los arrays de fotos
+        const allPhotos = [...window.ALL_PHOTOS_POOL, ...window.ALL_UNCENSORED_PHOTOS_POOL];
+        
+        // Generar rotación diaria
+        state.dailyPhotos = getDailyRotation(allPhotos, CONFIG.CONTENT.DAILY_PHOTOS);
+        state.dailyVideos = getDailyRotation(window.ALL_VIDEOS_POOL, CONFIG.CONTENT.DAILY_VIDEOS);
+        state.teaserItems = getDailyRotation(window.ALL_PHOTOS_POOL, CONFIG.CONTENT.TEASER_COUNT);
+        
+        // Calcular páginas totales
+        state.totalPages = Math.ceil(state.dailyPhotos.length / CONFIG.CONTENT.ITEMS_PER_PAGE);
+        
+        // Renderizar contenido
+        renderPhotosProgressive(document.getElementById('photosGrid'), state.dailyPhotos);
+        renderVideosProgressive(document.getElementById('videosGrid'), state.dailyVideos);
+        renderTeaserCarousel();
+        
+        // Actualizar UI
+        updateCreditsDisplay();
+        updateStatsDisplay();
+        changeLanguage(state.language);
+        
+        // Verificar expiración VIP
+        checkVIPExpiry();
+        
+        // Inicializar PayPal
+        await paypalManager.initialize();
+        
+        state.initialized = true;
+        
+        trackEvent('gallery_initialized', {
+            total_photos: allPhotos.length,
+            total_videos: window.ALL_VIDEOS_POOL.length,
+            daily_photos: state.dailyPhotos.length,
+            daily_videos: state.dailyVideos.length,
+            is_vip: state.isVIP,
+            credits: state.credits
+        });
+        
+        console.log(`✅ Gallery initialized successfully:
+        - ${state.dailyPhotos.length} daily photos
+        - ${state.dailyVideos.length} daily videos  
+        - VIP: ${state.isVIP}
+        - Credits: ${state.credits}
+        - Total content: ${allPhotos.length + window.ALL_VIDEOS_POOL.length}`);
+        
+    } catch (error) {
+        console.error('❌ Gallery initialization failed:', error);
+        trackEvent('gallery_init_error', { error: error.message });
+        showNotification('Error al inicializar la galería', 'error');
+    }
+}
+
+function updateStatsDisplay() {
+    const elements = {
+        photoCount: document.getElementById('photoCount'),
+        videoCount: document.getElementById('videoCount'),
+        totalViews: document.getElementById('totalViews'),
+        updateHour: document.getElementById('updateHour')
+    };
+    
+    if (elements.photoCount) {
+        elements.photoCount.textContent = state.dailyPhotos.length;
+    }
+    
+    if (elements.videoCount) {
+        elements.videoCount.textContent = state.dailyVideos.length;
+    }
+    
+    if (elements.totalViews) {
+        // Generar número realista basado en el día
+        const baseViews = 25800000;
+        const dailyIncrease = Math.floor(Math.random() * 150000) + 50000;
+        const todayViews = baseViews + dailyIncrease;
+        elements.totalViews.textContent = (todayViews / 1000000).toFixed(1) + 'M';
+    }
+    
+    if (elements.updateHour) {
+        elements.updateHour.textContent = '3:00 AM';
+    }
+}
+
+function checkVIPExpiry() {
+    const vipExpiry = localStorage.getItem('vipExpiry');
+    if (vipExpiry && vipExpiry !== 'lifetime') {
+        const expiryDate = new Date(vipExpiry);
+        if (expiryDate < new Date()) {
+            state.isVIP = false;
+            localStorage.setItem('isVIP', 'false');
+            localStorage.removeItem('vipExpiry');
+            showNotification('Tu suscripción VIP ha expirado', 'info');
+            trackEvent('vip_expired');
+        }
+    }
+}
+
+// ============================
+// EVENT LISTENERS Y INICIALIZACIÓN
+// ============================
+
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🚀 DOM Content Loaded - Starting initialization...');
+    
+    try {
+        // Configurar sistemas principales
+        setupAutoSave();
+        handleOfflineMode();
+        setupAdvancedSearch();
+        
+        // Ocultar pantalla de carga con efecto
+        setTimeout(() => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+                loadingScreen.style.transition = 'opacity 0.5s ease';
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }
+        }, 1500);
+        
+        // Inicializar galería principal
+        await initializeGallery();
+        
+        // Configurar slideshow del banner
+        setupBannerSlideshow();
+        
+        // Configurar Isabella con tips periódicos
+        setInterval(() => {
+            if (Math.random() < 0.3) { // 30% probabilidad cada 2 minutos
+                isabella.showRandomTip();
+            }
+        }, 120000);
+        
+        // Solicitar permisos de notificación si es VIP
+        if (state.isVIP && CONFIG.FEATURES.PUSH_NOTIFICATIONS) {
+            setTimeout(() => requestNotificationPermission(), 3000);
+        }
+        
+        // Track session start
+        trackEvent('session_start', {
+            is_vip: state.isVIP,
+            credits: state.credits,
+            language: state.language,
+            user_agent: navigator.userAgent,
+            viewport: {
+                width: window.innerWidth,
+                height: window.innerHeight
+            }
+        });
+        
+        console.log('✅ Full application initialized successfully');
+        
+    } catch (error) {
+        console.error('❌ Application initialization failed:', error);
+        trackEvent('app_init_error', { error: error.message });
+        showNotification('Error al cargar la aplicación', 'error');
+    }
+});
+
+function setupBannerSlideshow() {
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.banner-slide');
+    
+    if (slides.length > 1) {
+        setInterval(() => {
+            slides[currentSlide]?.classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide]?.classList.add('active');
+        }, 5000);
+    }
+}
+
+// Cleanup al cerrar la página
+window.addEventListener('beforeunload', () => {
+    const sessionDuration = Date.now() - state.sessionStart;
+    
+    trackEvent('session_end', {
+        duration: sessionDuration,
+        interactions: state.interactions,
+        viewed_content: state.viewedContent.size,
+        average_load_time: state.averageLoadTime,
+        failed_loads: state.failedLoads
+    });
+    
+    // Cleanup PayPal
+    paypalManager.cleanup();
+});
+
+// ============================
+// EXPORTAR FUNCIONES GLOBALES
+// ============================
+
+// Funciones principales
+window.handleImageError = handleImageError;
+window.changeLanguage = changeLanguage;
+window.showVIPModal = showVIPModal;
+window.showPackModal = showPackModal;
+window.closeModal = closeModal;
+window.unlockContent = unlockContent;
+window.selectPlan = selectPlan;
+window.selectPack = selectPack;
+window.scrollCarousel = scrollCarousel;
+
+// Isabella Bot
+window.toggleIsabella = () => isabella.toggle();
+window.isabellaAction = (action) => isabella.handleAction(action);
+
+// Estado y configuración
+window.state = state;
+window.CONFIG = CONFIG;
+window.TRANSLATIONS = TRANSLATIONS;
+window.paypalManager = paypalManager;
+window.isabella = isabella;
+
+// Funciones de utilidad
+window.trackEvent = trackEvent;
+window.showNotification = showNotification;
+window.openImageViewer = openImageViewer;
+
+// ============================
+// DEBUG Y HERRAMIENTAS DE DESARROLLO
+// ============================
+
+window.galleryDebug = {
+    version: CONFIG.VERSION,
+    
+    stats: () => ({
+        version: CONFIG.VERSION,
+        totalPhotos: (window.ALL_PHOTOS_POOL?.length || 0) + (window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0),
+        totalVideos: window.ALL_VIDEOS_POOL?.length || 0,
+        dailyPhotos: state.dailyPhotos.length,
+        dailyVideos: state.dailyVideos.length,
+        credits: state.credits,
+        isVIP: state.isVIP,
+        unlockedPhotos: state.unlockedPhotos.size,
+        unlockedVideos: state.unlockedVideos.size,
+        sessionDuration: Date.now() - state.sessionStart,
+        interactions: state.interactions,
+        viewedContent: state.viewedContent.size,
+        averageLoadTime: state.averageLoadTime + 'ms',
+        failedLoads: state.failedLoads
+    }),
+    
+    unlockAll: () => {
+        state.isVIP = true;
+        localStorage.setItem('isVIP', 'true');
+        localStorage.setItem('vipExpiry', 'lifetime');
+        initializeGallery();
+        showNotification('🎉 Debug: Todo desbloqueado', 'success');
+        console.log('✅ Debug: Todo desbloqueado');
+    },
+    
+    addCredits: (num = 100) => {
+        state.credits += parseInt(num);
+        localStorage.setItem('credits', state.credits);
+        updateCreditsDisplay();
+        showNotification(`🎉 Debug: +${num} créditos añadidos`, 'success');
+        console.log(`✅ Debug: ${num} créditos añadidos`);
+    },
+    
+    simulatePayment: (type = 'vip', plan = 'lifetime') => {
+        if (type === 'vip') {
+            paypalManager.handleVIPActivation(plan, { 
+                id: 'DEBUG_' + Date.now(),
+                purchase_units: [{ amount: { value: plan === 'monthly' ? '15' : '100' } }]
+            });
+            showNotification('🎉 Debug: VIP activado', 'success');
+        } else if (type === 'credits') {
+            paypalManager.handleCreditsActivation(50, {
+                id: 'DEBUG_' + Date.now(),
+                purchase_units: [{ amount: { value: '35' } }]
+            });
+            showNotification('🎉 Debug: 50 créditos añadidos', 'success');
+        }
+    },
+    
+    resetAll: () => {
+        if (confirm('¿Resetear todo el estado de la aplicación?')) {
+            localStorage.clear();
+            location.reload();
+        }
+    },
+    
+    enableAllFeatures: () => {
+        Object.keys(CONFIG.FEATURES).forEach(feature => {
+            CONFIG.FEATURES[feature] = true;
+        });
+        console.log('✅ Debug: Todas las características habilitadas');
+        showNotification('🎉 Debug: Todas las características habilitadas', 'success');
+    },
+    
+    testNotification: (message = 'Test notification', type = 'info') => {
+        showNotification(message, type);
+    },
+    
+    exportState: () => {
+        const exportData = {
+            state: state,
+            config: CONFIG,
+            timestamp: new Date().toISOString(),
+            version: CONFIG.VERSION
+        };
+        console.log('📊 Estado exportado:', exportData);
+        return exportData;
+    },
+    
+    analytics: {
+        viewedContent: () => [...state.viewedContent],
+        interactions: () => state.interactions,
+        sessionDuration: () => Date.now() - state.sessionStart,
+        performance: () => ({
+            averageLoadTime: state.averageLoadTime,
+            failedLoads: state.failedLoads,
+            imageLoadTimes: state.imageLoadTimes.slice(-10) // Últimas 10
+        })
+    }
+};
+
+// Mensaje de bienvenida en consola
+console.log(`
+🌊 ===============================================
+   BeachGirl.pics Gallery v${CONFIG.VERSION}
+   COMPLETE EDITION with PayPal Integration
+   
+   📊 Estadísticas:
+   • ${(window.ALL_PHOTOS_POOL?.length || 0) + (window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0)} fotos totales
+   • ${window.ALL_VIDEOS_POOL?.length || 0} videos HD
+   • ${state.dailyPhotos.length} fotos del día
+   • ${state.dailyVideos.length} videos del día
+   
+   🛠️ Debug: galleryDebug
+   • galleryDebug.stats() - Estadísticas completas
+   • galleryDebug.unlockAll() - Desbloquear todo
+   • galleryDebug.addCredits(100) - Añadir créditos
+   • galleryDebug.simulatePayment('vip') - Simular pago VIP
+   • galleryDebug.resetAll() - Resetear todo
+   
+   💳 PayPal: Configurado y listo
+   🤖 Isabella: Bot activo
+   📊 Analytics: Habilitado
+   🔔 Notificaciones: Disponibles
+   
+🌊 ===============================================
+`);
