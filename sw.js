@@ -1,9 +1,9 @@
 // ============================
-// BEACHGIRL.PICS SERVICE WORKER v1.3.0
-// PWA + Performance + SEO Optimized
+// BEACHGIRL.PICS SERVICE WORKER v1.3.1 - FIXED
+// Corregido error de Response undefined
 // ============================
 
-const CACHE_VERSION = '1.3.0';
+const CACHE_VERSION = '1.3.1';
 const CACHE_NAME = `beachgirl-v${CACHE_VERSION}`;
 const STATIC_CACHE = `beachgirl-static-v${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `beachgirl-dynamic-v${CACHE_VERSION}`;
@@ -18,13 +18,13 @@ const STATIC_ASSETS = [
     '/seo-enhancements.js',
     '/manifest.json',
     
-    // Imágenes críticas para SEO
-    '/public/assets/full/bikini.jpg',
-    '/public/assets/full/bikbanner.jpg',
-    '/public/assets/full/bikbanner2.jpg',
-    '/public/assets/full/backbikini.jpg',
-    '/public/assets/full/bikini3.jpg',
-    '/public/assets/full/bikini5.jpg'
+    // Imágenes críticas para SEO (ahora .webp)
+    '/full/bikini.webp',
+    '/full/bikbanner.webp',
+    '/full/bikbanner2.webp',
+    '/full/backbikini.webp',
+    '/full/bikini3.webp',
+    '/full/bikini5.webp'
 ];
 
 // External scripts to cache
@@ -34,8 +34,8 @@ const EXTERNAL_SCRIPTS = [
 
 // URLs que no deben cachearse
 const EXCLUDED_URLS = [
-    '/public/assets/uncensored/',
-    '/public/assets/uncensored-videos/',
+    '/uncensored/',
+    '/uncensored-videos/',
     '/admin',
     'chrome-extension://',
     'extension://',
@@ -114,10 +114,10 @@ self.addEventListener('activate', event => {
 });
 
 // ============================
-// ESTRATEGIAS DE CACHE
+// ESTRATEGIAS DE CACHE - FIXED
 // ============================
 
-// Estrategia: Cache First con timeout
+// Estrategia: Cache First con timeout - FIXED
 async function cacheFirstWithTimeout(request, timeout = 3000) {
     try {
         const cachePromise = caches.match(request);
@@ -133,24 +133,46 @@ async function cacheFirstWithTimeout(request, timeout = 3000) {
         console.log('Cache timeout, fetching from network');
     }
     
-    const response = await fetch(request);
-    if (response.ok) {
-        const cache = await caches.open(STATIC_CACHE);
-        cache.put(request, response.clone());
+    try {
+        const response = await fetch(request);
+        if (response && response.ok) {
+            const cache = await caches.open(STATIC_CACHE);
+            cache.put(request, response.clone());
+            return response;
+        }
+        // Si la respuesta no es válida, intentar desde cache
+        const fallbackCache = await caches.match(request);
+        if (fallbackCache) return fallbackCache;
+        
+        // Último recurso: crear respuesta de error
+        return new Response('Resource not found', {
+            status: 404,
+            statusText: 'Not Found'
+        });
+    } catch (error) {
+        console.error('Network fetch failed:', error);
+        const fallbackCache = await caches.match(request);
+        if (fallbackCache) return fallbackCache;
+        
+        return new Response('Network error', {
+            status: 503,
+            statusText: 'Service Unavailable'
+        });
     }
-    return response;
 }
 
-// Estrategia: Network First con fallback
+// Estrategia: Network First con fallback - FIXED
 async function networkFirstWithFallback(request) {
     try {
         const response = await fetch(request);
-        if (response.ok) {
+        if (response && response.ok) {
             const cache = await caches.open(DYNAMIC_CACHE);
             cache.put(request, response.clone());
+            return response;
         }
-        return response;
+        throw new Error('Network response not ok');
     } catch (error) {
+        console.log('Network failed, trying cache:', error.message);
         const cached = await caches.match(request);
         if (cached) {
             return cached;
@@ -158,34 +180,68 @@ async function networkFirstWithFallback(request) {
         
         // Fallback para páginas HTML
         if (request.headers.get('accept')?.includes('text/html')) {
-            return caches.match('/index.html');
+            const indexFallback = await caches.match('/index.html');
+            if (indexFallback) return indexFallback;
         }
         
-        throw error;
+        // Fallback para imágenes
+        if (request.headers.get('accept')?.includes('image/')) {
+            return new Response('', {
+                status: 404,
+                statusText: 'Image not found'
+            });
+        }
+        
+        // Error genérico
+        return new Response('Resource not available', {
+            status: 404,
+            statusText: 'Not Found'
+        });
     }
 }
 
-// Estrategia: Stale While Revalidate
+// Estrategia: Stale While Revalidate - FIXED
 async function staleWhileRevalidate(request) {
     const cached = await caches.match(request);
     
-    // Fetch en background
+    // Fetch en background para actualizar cache
     const fetchPromise = fetch(request).then(response => {
-        if (response.ok) {
-            const cache = caches.open(IMAGE_CACHE);
-            const responseToCache = response.clone();
-cache.put(request, responseToCache);
-return response;
-            
+        if (response && response.ok) {
+            caches.open(IMAGE_CACHE).then(cache => {
+                cache.put(request, response.clone());
+            });
         }
         return response;
-    }).catch(() => cached);
+    }).catch(error => {
+        console.log('Background fetch failed:', error);
+        return cached; // Devolver cached si fetch falla
+    });
     
-    return cached || fetchPromise;
+    // Devolver cached inmediatamente si existe, sino esperar al fetch
+    if (cached) {
+        // Ejecutar fetch en background
+        fetchPromise;
+        return cached;
+    }
+    
+    // Si no hay cache, esperar al fetch
+    try {
+        const response = await fetchPromise;
+        if (response && response.ok) {
+            return response;
+        }
+        throw new Error('Fetch failed');
+    } catch (error) {
+        return new Response('Image not available', {
+            status: 404,
+            statusText: 'Not Found',
+            headers: { 'Content-Type': 'text/plain' }
+        });
+    }
 }
 
 // ============================
-// INTERCEPTAR REQUESTS
+// INTERCEPTAR REQUESTS - FIXED
 // ============================
 
 self.addEventListener('fetch', event => {
@@ -207,6 +263,7 @@ self.addEventListener('fetch', event => {
         return;
     }
     
+    // FIXED: Asegurar que siempre se retorna una Response válida
     event.respondWith(handleFetch(request, url));
 });
 
@@ -219,7 +276,8 @@ async function handleFetch(request, url) {
         
         // Para imágenes - Stale While Revalidate
         if (request.headers.get('accept')?.includes('image/') || 
-            url.pathname.includes('/public/assets/') ||
+            url.pathname.includes('/full/') ||
+            url.pathname.includes('/uncensored/') ||
             url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
             return await staleWhileRevalidate(request);
         }
@@ -233,7 +291,7 @@ async function handleFetch(request, url) {
         
         // Para PayPal y APIs externas - Network Only
         if (url.hostname.includes('paypal') || 
-            url.hostname !== location.hostname) {
+            url.hostname !== self.location.hostname) {
             return await fetch(request);
         }
         
@@ -241,12 +299,12 @@ async function handleFetch(request, url) {
         return await networkFirstWithFallback(request);
         
     } catch (error) {
-        console.error('🚨 Service Worker: Fetch error', error);
+        console.error('🚨 Service Worker: Fetch error for', url.href, error);
         
-        // Retornar respuesta de error
-        return new Response('Network error occurred', {
-            status: 408,
-            statusText: 'Request Timeout',
+        // FIXED: Siempre retornar una Response válida
+        return new Response('Service Worker error occurred', {
+            status: 503,
+            statusText: 'Service Unavailable',
             headers: { 'Content-Type': 'text/plain' }
         });
     }
@@ -303,9 +361,9 @@ async function preloadContent() {
         console.log('🔄 Service Worker: Preloading content...');
         
         const imagesToPreload = [
-            '/public/assets/full/bikini.jpg',
-            '/public/assets/full/bikbanner.jpg',
-            '/public/assets/full/bikini3.jpg'
+            '/full/bikini.webp',
+            '/full/bikbanner.webp',
+            '/full/bikini3.webp'
         ];
         
         const cache = await caches.open(IMAGE_CACHE);
@@ -314,7 +372,7 @@ async function preloadContent() {
             imagesToPreload.map(async url => {
                 try {
                     const response = await fetch(url);
-                    if (response.ok) {
+                    if (response && response.ok) {
                         await cache.put(url, response);
                     }
                 } catch (err) {
@@ -336,37 +394,41 @@ async function preloadContent() {
 self.addEventListener('push', event => {
     if (!event.data) return;
     
-    const data = event.data.json();
-    
-    const options = {
-        body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
-        icon: '/public/assets/full/bikini.jpg',
-        badge: '/public/assets/full/bikini.jpg',
-        image: data.image || '/public/assets/full/bikbanner.jpg',
-        tag: 'beach-update',
-        requireInteraction: false,
-        data: {
-            url: data.url || '/main.html'
-        },
-        actions: [
-            {
-                action: 'view',
-                title: 'Ver galería',
-                icon: '/public/assets/full/bikini.jpg'
+    try {
+        const data = event.data.json();
+        
+        const options = {
+            body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
+            icon: '/full/bikini.webp',
+            badge: '/full/bikini.webp',
+            image: data.image || '/full/bikbanner.webp',
+            tag: 'beach-update',
+            requireInteraction: false,
+            data: {
+                url: data.url || '/main.html'
             },
-            {
-                action: 'close',
-                title: 'Cerrar'
-            }
-        ]
-    };
-    
-    event.waitUntil(
-        self.registration.showNotification(
-            data.title || 'BeachGirl.pics - Nuevo contenido',
-            options
-        )
-    );
+            actions: [
+                {
+                    action: 'view',
+                    title: 'Ver galería',
+                    icon: '/full/bikini.webp'
+                },
+                {
+                    action: 'close',
+                    title: 'Cerrar'
+                }
+            ]
+        };
+        
+        event.waitUntil(
+            self.registration.showNotification(
+                data.title || 'BeachGirl.pics - Nuevo contenido',
+                options
+            )
+        );
+    } catch (error) {
+        console.error('Push notification error:', error);
+    }
 });
 
 self.addEventListener('notificationclick', event => {
@@ -375,7 +437,7 @@ self.addEventListener('notificationclick', event => {
     if (event.action === 'view' || !event.action) {
         const urlToOpen = event.notification.data?.url || '/main.html';
         event.waitUntil(
-            clients.openWindow(`https://beachgirl.pics${urlToOpen}`)
+            clients.openWindow(`https://www.beachgirl.pics${urlToOpen}`)
         );
     }
 });
