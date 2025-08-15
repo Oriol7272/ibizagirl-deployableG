@@ -193,6 +193,11 @@
                 width: 100%;
             }
         }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
     </style>
 </head>
 <body>
@@ -255,7 +260,7 @@
             window.location.href = 'main.html';
         }
 
-        // Multi-idioma
+        // Multi-idioma completo
         const translations = {
             es: {
                 warning: "ADVERTENCIA: Este sitio contiene contenido para adultos",
@@ -350,16 +355,6 @@
             document.querySelector('select').value = savedLang;
             changeLanguage(savedLang);
         }
-
-        // Animación de salida
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeOut {
-                from { opacity: 1; transform: translateY(0); }
-                to { opacity: 0; transform: translateY(-20px); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
