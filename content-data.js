@@ -296,7 +296,7 @@ const ALL_UNCENSORED_PHOTOS_POOL = [
     'uncensored/9HoKHfzfIKXiINyRQ7OG.webp',
     'uncensored/9KlT5M8s7HTxMuptLEkN.webp',
     'uncensored/9YLpn3gsg8sTGaN0CmZm.webp'
-    // content-data.js
+    
 // Base de datos completa de contenido multimedia
       // Letras A
       'uncensored/AHKAq0biFDUtkxlx7TCu.webp',
