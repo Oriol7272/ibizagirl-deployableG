@@ -69,6 +69,3 @@ Disallow: /
 
 # Sitemap principal
 Sitemap: https://beachgirl.pics/sitemap.xml
-
-# Host preferido
-Host: beachgirl.pics
