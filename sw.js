@@ -18,13 +18,13 @@ const STATIC_ASSETS = [
     '/seo-enhancements.js',
     '/manifest.json',
     
-    // Imágenes críticas para SEO
-    '/public/assets/full/bikini.jpg',
-    '/public/assets/full/bikbanner.jpg',
-    '/public/assets/full/bikbanner2.jpg',
-    '/public/assets/full/backbikini.jpg',
-    '/public/assets/full/bikini3.jpg',
-    '/public/assets/full/bikini5.jpg'
+    // Imágenes críticas para SEO from full folder
+    '/full/bikini.jpg',
+    '/full/bikbanner.jpg',
+    '/full/bikbanner2.jpg',
+    '/full/backbikini.jpg',
+    ' /full/bikini3.jpg',
+    '/full/bikini5.jpg'
 ];
 
 // External scripts to cache
@@ -34,8 +34,8 @@ const EXTERNAL_SCRIPTS = [
 
 // URLs que no deben cachearse
 const EXCLUDED_URLS = [
-    '/public/assets/uncensored/',
-    '/public/assets/uncensored-videos/',
+    '/uncensored/',
+    '/uncensored-videos/',
     '/admin',
     'chrome-extension://',
     'extension://',
@@ -86,7 +86,7 @@ self.addEventListener('install', event => {
             console.error('❌ Service Worker: Installation failed', error);
         })
     );
-});
+};
 
 // ============================
 // ACTIVACIÓN DEL SERVICE WORKER
@@ -111,7 +111,7 @@ self.addEventListener('activate', event => {
             return self.clients.claim();
         })
     );
-});
+};
 
 // ============================
 // ESTRATEGIAS DE CACHE
@@ -151,70 +151,7 @@ async function networkFirstWithFallback(request) {
         }
         return response;
     } catch (error) {
-        const cached = await caches.match(request);
-        if (cached) {
-            return cached;
-        }
-        
-        // Fallback para páginas HTML
-        if (request.headers.get('accept')?.includes('text/html')) {
-            return caches.match('/index.html');
-        }
-        
-        throw error;
-    }
-}
-
-// Estrategia: Stale While Revalidate
-async function staleWhileRevalidate(request) {
-    const cached = await caches.match(request);
-    
-    // Fetch en background
-    const fetchPromise = fetch(request).then(response => {
-        if (response.ok) {
-            const cache = caches.open(IMAGE_CACHE);
-            cache.then(c => c.put(request, response.clone()));
-        }
-        return response;
-    }).catch(() => cached);
-    
-    return cached || fetchPromise;
-}
-
-// ============================
-// INTERCEPTAR REQUESTS
-// ============================
-
-self.addEventListener('fetch', event => {
-    const { request } = event;
-    const url = new URL(request.url);
-    
-    // Ignorar URLs excluidas
-    if (EXCLUDED_URLS.some(excludedUrl => url.href.includes(excludedUrl))) {
-        return;
-    }
-    
-    // Ignorar requests que no sean GET
-    if (request.method !== 'GET') {
-        return;
-    }
-    
-    // Ignorar chrome-extension y extension requests
-    if (url.protocol === 'chrome-extension:' || url.protocol === 'extension:') {
-        return;
-    }
-    
-    event.respondWith(handleFetch(request, url));
-});
-
-async function handleFetch(request, url) {
-    try {
-        // Para HTML - Network First
-        if (request.headers.get('accept')?.includes('text/html')) {
-            return await networkFirstWithFallback(request);
-        }
-        
-        // Para imágenes - Stale While Revalidate
+        con... (truncated 1691 characters)...ara imágenes - Stale While Revalidate
         if (request.headers.get('accept')?.includes('image/') || 
             url.pathname.includes('/public/assets/') ||
             url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
@@ -300,9 +237,9 @@ async function preloadContent() {
         console.log('🔄 Service Worker: Preloading content...');
         
         const imagesToPreload = [
-            '/public/assets/full/bikini.jpg',
-            '/public/assets/full/bikbanner.jpg',
-            '/public/assets/full/bikini3.jpg'
+            '/full/bikini.jpg',
+            '/full/bikbanner.jpg',
+            '/full/bikini3.jpg'
         ];
         
         const cache = await caches.open(IMAGE_CACHE);
@@ -337,9 +274,9 @@ self.addEventListener('push', event => {
     
     const options = {
         body: data.body || 'Nuevo contenido disponible en IbizaGirl.pics',
-        icon: '/public/assets/full/bikini.jpg',
-        badge: '/public/assets/full/bikini.jpg',
-        image: data.image || '/public/assets/full/bikbanner.jpg',
+        icon: '/full/bikini.jpg',
+        badge: '/full/bikini.jpg',
+        image: data.image || '/full/bikbanner.jpg',
         tag: 'ibiza-update',
         requireInteraction: false,
         data: {
@@ -349,7 +286,7 @@ self.addEventListener('push', event => {
             {
                 action: 'view',
                 title: 'Ver galería',
-                icon: '/public/assets/full/bikini.jpg'
+                icon: '/full/bikini.jpg'
             },
             {
                 action: 'close',
