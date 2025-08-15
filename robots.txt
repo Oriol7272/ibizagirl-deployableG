@@ -1,20 +1,18 @@
 # IbizaGirl.pics - Robots.txt Optimizado SEO
-# Última actualización: 2025-01-15
+# Última actualización: 2025-08-15
 
 User-agent: *
 Allow: /
 Allow: /index.html
 Allow: /main.html
-Allow: /public/assets/full/
+Allow: /Full/
 Allow: /manifest.json
 Allow: /sw.js
 Allow: /sitemap.xml
 
 # Contenido premium protegido
-Disallow: /public/assets/censored/
-Disallow: /public/assets/uncensored/
-Disallow: /public/assets/censored-videos/
-Disallow: /public/assets/uncensored-videos/
+Disallow: /uncensored/
+Disallow: /uncensored-videos/
 
 # Archivos del sistema
 Disallow: /admin/
@@ -37,7 +35,7 @@ Allow: /
 Crawl-delay: 1
 
 User-agent: Googlebot-Image
-Allow: /public/assets/full/
+Allow: /Full/
 Allow: /
 
 User-agent: Bingbot
