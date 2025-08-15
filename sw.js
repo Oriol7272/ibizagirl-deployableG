@@ -19,12 +19,12 @@ const STATIC_ASSETS = [
     '/manifest.json',
     
     // Imágenes críticas para SEO
-    '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-    '/public/assets/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
-    '/public/assets/full/0lySugcO4Pp4pEZKvz9U.webp',
-    '/public/assets/full/0nSaCJQxbVw4BDrhnhHO.webp',
-    '/public/assets/full/13TXvyRVZ7LtvAOx7kme.webp',
-    '/public/assets/full/18VQaczW5kdfdiqUVasH.webp'
+    '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+    '/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
+    '/full/0lySugcO4Pp4pEZKvz9U.webp',
+    '/full/0nSaCJQxbVw4BDrhnhHO.webp',
+    '/full/13TXvyRVZ7LtvAOx7kme.webp',
+    '/full/18VQaczW5kdfdiqUVasH.webp'
 ];
 
 // External scripts to cache
@@ -274,9 +274,9 @@ async function preloadContent() {
         console.log('🔄 Service Worker: Preloading content...');
         
         const imagesToPreload = [
-            '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-            '/public/assets/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
-            '/public/assets/full/0lySugcO4Pp4pEZKvz9U.webp'
+            '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+            '/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
+            '/full/0lySugcO4Pp4pEZKvz9U.webp'
         ];
         
         const cache = await caches.open(IMAGE_CACHE);
@@ -311,9 +311,9 @@ self.addEventListener('push', event => {
     
     const options = {
         body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
-        icon: '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-        badge: '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-        image: data.image || '/public/assets/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
+        icon: '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+        badge: '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+        image: data.image || '/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
         tag: 'beachgirl-update',
         requireInteraction: false,
         data: {
@@ -323,7 +323,7 @@ self.addEventListener('push', event => {
             {
                 action: 'view',
                 title: 'Ver galería',
-                icon: '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp'
+                icon: '/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp'
             },
             {
                 action: 'close',
