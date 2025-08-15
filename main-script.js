@@ -1,6 +1,6 @@
 // ============================
-// BeachGirl.pics Gallery Script v14.2.0
-// Con detección automática de rutas corregida
+// BeachGirl.pics Gallery Script v14.2.1 - FIXED
+// Corregido error de sintaxis en línea 91
 // ============================
 
 'use strict';
@@ -67,7 +67,7 @@ const PathDetector = {
 // ============================
 
 const CONFIG = {
-    VERSION: '14.2.0',
+    VERSION: '14.2.1', // Incrementada versión
     CONTENT: {
         DAILY_PHOTOS: 200,
         DAILY_VIDEOS: 40,
@@ -88,8 +88,8 @@ const CONFIG = {
             100: 60
         }
     },
-    FALLBACK_IMAGE: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzY2N2VlYSIvPgogIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+🌊 BeachGirl.pics</text>
-</svg>'
+    // FIXED: Imagen fallback como base64 válida de una línea
+    FALLBACK_IMAGE: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzY2N2VlYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+8J+MiyBCZWFjaEdpcmwucGljczwvdGV4dD48L3N2Zz4='
 };
 
 // ============================
@@ -111,6 +111,9 @@ const state = {
     selectedPack: 50, // Default silver pack
     initialized: false
 };
+
+// Exponer state globalmente para depuración
+window.state = state;
 
 // ============================
 // TRANSLATIONS
@@ -172,6 +175,9 @@ const TRANSLATIONS = {
         vip_activated: 'VIP Activated! Unlimited access 👑'
     }
 };
+
+// Exponer translations globalmente
+window.TRANSLATIONS = TRANSLATIONS;
 
 // ============================
 // UTILIDADES
@@ -732,7 +738,7 @@ function toggleIsabella() {
             if (messages && messages.children.length === 0) {
                 const welcomeDiv = document.createElement('div');
                 welcomeDiv.className = 'isabella-message';
-                welcomeDiv.innerHTML = `<span class="message-avatar">💕</span><span>¡Hola! Soy Isabella, tu guía VIP. ¿En qué puedo ayudarte?</span>`;
+                welcomeDiv.innerHTML = '<span class="message-avatar">💕</span><span>¡Hola! Soy Isabella, tu guía VIP. ¿En qué puedo ayudarte?</span>';
                 messages.appendChild(welcomeDiv);
             }
         }
