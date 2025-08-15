@@ -114,113 +114,71 @@ self.addEventListener('activate', event => {
 });
 
 // ============================
-// ESTRATEGIAS DE CACHE
-// ============================
-
-// Estrategia: Cache First con timeout
-async function cacheFirstWithTimeout(request, timeout = 3000) {
-    try {
-        const cachePromise = caches.match(request);
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Cache timeout')), timeout)
-        );
-        
-        const cached = await Promise.race([cachePromise, timeoutPromise]);
-        if (cached) {
-            return cached;
-        }
-    } catch (error) {
-        console.log('Cache timeout, fetching from network');
-    }
-    
-    const response = await fetch(request);
-    if (response.ok) {
-        const cache = await caches.open(STATIC_CACHE);
-        cache.put(request, response.clone());
-    }
-    return response;
-}
-
-// Estrategia: Network First con fallback
-async function networkFirstWithFallback(request) {
-    try {
-        const response = await fetch(request);
-        if (response.ok) {
-            const cache = await caches.open(DYNAMIC_CACHE);
-            cache.put(request, response.clone());
-        }
-        return response;
-    } catch (error) {
-        const cached = await caches.match(request);
-        if (cached) return cached;
-        
-        return new Response('Offline fallback content', {
-            status: 200,
-            headers: { 'Content-Type': 'text/plain' }
-        });
-    }
-}
-
-// Estrategia: Stale While Revalidate
-async function staleWhileRevalidate(request) {
-    const cached = await caches.match(request);
-    const fetchPromise = fetch(request).then(response => {
-        if (response.ok) {
-            const cache = caches.open(DYNAMIC_CACHE);
-            cache.put(request, response.clone());
-        }
-        return response;
-    }).catch(() => cached);
-    
-    return cached || fetchPromise;
-}
-
-// ============================
-// FETCH HANDLER
+// ESTRATEGIA DE CACHE
 // ============================
 
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
-    
-    // Skip non-HTTP requests
-    if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
-    
-    // Skip excluded URLs
-    if (EXCLUDED_URLS.some(excluded => url.pathname.startsWith(excluded))) {
+
+    // Ignorar peticiones a URLs excluidas
+    if (EXCLUDED_URLS.some(excluded => url.pathname.startsWith(excluded) || url.hostname.includes(excluded))) {
         return event.respondWith(fetch(event.request));
     }
-    
-    event.respondWith(
-        (async () => {
-            // Para imágenes - Stale While Revalidate
-            if (event.request.headers.get('accept')?.includes('image/') || 
-                url.pathname.includes('/full/') || 
-                url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
-                return await staleWhileRevalidate(event.request);
-            }
-            
-            // Para videos - Stale While Revalidate
-            if (event.request.headers.get('accept')?.includes('video/') || url.pathname.includes('/uncensored-videos/')) {
-                return await staleWhileRevalidate(event.request);
-            }
-            
-            // Para JavaScript/CSS - Cache First con timeout
-            if (url.pathname.includes('.js') || 
-                url.pathname.includes('.css') ||
-                url.hostname === 'cdn.jsdelivr.net') {
-                return await cacheFirstWithTimeout(event.request);
-            }
-            
-            // Para PayPal y APIs externas - Network Only
-            if (url.hostname.includes('paypal') || 
-                url.hostname !== location.hostname) {
-                return await fetch(event.request);
-            }
-            
-            // Default: Network First
-            return await networkFirstWithFallback(event.request);
-        })()
-    );
+
+    // Network-only para PayPal
+    if (url.hostname.includes('paypal')) {
+        return event.respondWith(fetch(event.request));
+    }
+
+    // Cache-first para assets estáticos
+    if (STATIC_ASSETS.includes(url.pathname) || EXTERNAL_SCRIPTS.includes(url.href)) {
+        event.respondWith(
+            caches.match(event.request).then(response => {
+                return response || fetch(event.request).then(fetchResponse => {
+                    if (fetchResponse.ok) {
+                        caches.open(STATIC_CACHE).then(cache => cache.put(event.request, fetchResponse.clone()));
+                    }
+                    return fetchResponse;
+                });
+            })
+        );
+    } else if (url.pathname.endsWith('.webp') || url.pathname.endsWith('.jpg') || url.pathname.endsWith('.png')) {
+        // Stale-while-revalidate para imágenes
+        event.respondWith(staleWhileRevalidate(event.request));
+    } else if (url.pathname.endsWith('.mp4') || url.pathname.endsWith('.webm')) {
+        // Stale-while-revalidate para videos
+        event.respondWith(staleWhileRevalidate(event.request));
+    } else {
+        // Network-first con fallback a cache para otros
+        event.respondWith(
+            fetch(event.request).then(response => {
+                if (response.ok) {
+                    caches.open(DYNAMIC_CACHE).then(cache => cache.put(event.request, response.clone()));
+                }
+                return response;
+            }).catch(() => {
+                return caches.match(event.request);
+            })
+        );
+    }
+});
+
+// Función stale-while-revalidate con fallback mejorado
+async function staleWhileRevalidate(request) {
+    const cached = await caches.match(request);
+    const fetchPromise = fetch(request).then(response => {
+        if (response.ok) {
+            const cache = await caches.open(DYNAMIC_CACHE);
+            await cache.put(request, response.clone());
+            return response;
+        }
+        throw new Error('Fetch failed');
+    }).catch(() => {
+        if (cached) return cached;
+        return new Response('Offline - No cache available', { status: 503 });
+    });
+
+    return cached ? Promise.race([fetchPromise, Promise.resolve(cached)]) : fetchPromise;
 }
 
 // ============================
