@@ -173,7 +173,10 @@ async function staleWhileRevalidate(request) {
     const fetchPromise = fetch(request).then(response => {
         if (response.ok) {
             const cache = caches.open(IMAGE_CACHE);
-            cache.then(c => c.put(request, response.clone()));
+            const responseToCache = response.clone();
+cache.put(request, responseToCache);
+return response;
+            
         }
         return response;
     }).catch(() => cached);
