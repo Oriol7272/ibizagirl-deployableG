@@ -1,64 +1,16 @@
 // ============================
-// BeachGirl.pics Gallery Script v14.2.2 - FIXED
-// Corregido FALLBACK_IMAGE definitivamente
+// BeachGirl.pics Gallery Script v14.3.0 - ULTRA CLEAN
+// Sin líneas multi-string problemáticas
 // ============================
 
 'use strict';
 
 // ============================
-// DETECCIÓN AUTOMÁTICA DE RUTAS
-// ============================
-
-const PathDetector = {
-    basePathFound: null,
-    checkedPaths: new Set(),
-    
-    async detectBasePath() {
-        console.log('🔍 Detectando estructura de archivos...');
-        
-        const possiblePaths = [''];
-        const testImage = '/full/bikini.webp';
-        
-        for (const basePath of possiblePaths) {
-            const testUrl = basePath + testImage;
-            
-            if (this.checkedPaths.has(testUrl)) continue;
-            this.checkedPaths.add(testUrl);
-            
-            try {
-                const response = await fetch(testUrl, { method: 'HEAD' });
-                if (response.ok) {
-                    this.basePathFound = basePath;
-                    console.log(`✅ Ruta base encontrada: ${basePath || '(raíz)'}`);
-                    return basePath;
-                }
-            } catch (e) {
-                // Continuar probando
-            }
-        }
-        
-        console.log('✅ Usando rutas por defecto (raíz)');
-        this.basePathFound = '';
-        return '';
-    },
-    
-    buildPath(relativePath) {
-        const cleanPath = relativePath.startsWith('/') ? relativePath.substring(1) : relativePath;
-        
-        if (this.basePathFound !== null) {
-            return this.basePathFound ? `${this.basePathFound}/${cleanPath}` : cleanPath;
-        }
-        
-        return cleanPath;
-    }
-};
-
-// ============================
-// CONFIGURATION
+// CONFIGURACIÓN BÁSICA
 // ============================
 
 const CONFIG = {
-    VERSION: '14.2.2',
+    VERSION: '14.3.0',
     CONTENT: {
         DAILY_PHOTOS: 200,
         DAILY_VIDEOS: 40,
@@ -72,19 +24,15 @@ const CONFIG = {
     PRICES: {
         MONTHLY: 15,
         LIFETIME: 100,
-        PACKS: {
-            10: 10,
-            25: 20,
-            50: 35,
-            100: 60
-        }
-    },
-    // FIXED: Imagen fallback simplificada
-    FALLBACK_IMAGE: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iIzY2N2VlYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE2IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkJlYWNoR2lybC5waWNzPC90ZXh0Pjwvc3ZnPg=='
+        PACKS: { 10: 10, 25: 20, 50: 35, 100: 60 }
+    }
 };
 
+// Imagen fallback simple - NO TOCAR
+const FALLBACK_SVG = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iIzY2N2VlYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE2IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkJlYWNoR2lybC5waWNzPC90ZXh0Pjwvc3ZnPg==';
+
 // ============================
-// STATE MANAGEMENT
+// ESTADO GLOBAL
 // ============================
 
 const state = {
@@ -96,69 +44,21 @@ const state = {
     dailyPhotos: [],
     dailyVideos: [],
     teaserItems: [],
-    isabellaOpen: false,
-    currentModal: null,
-    selectedPlan: 'lifetime',
-    selectedPack: 50,
     initialized: false
 };
 
-window.state = state;
-
 // ============================
-// TRANSLATIONS
+// TRADUCCIONES
 // ============================
 
 const TRANSLATIONS = {
     es: {
-        welcome: 'Bienvenida al Paraíso 🌴',
-        daily_content: '200+ fotos y 40+ videos actualizados DIARIAMENTE',
-        unlock_all: '🔓 Desbloquear Todo',
-        view_gallery: '📸 Ver Galería',
-        loading: 'Cargando el paraíso...',
-        subtitle: 'Contenido Exclusivo del Paraíso',
-        preview_gallery: '🔥 Vista Previa Exclusiva',
-        paradise_photos: '📸 Fotos del Paraíso',
-        new_today: '¡NUEVO HOY!',
-        exclusive_videos: '🎬 Videos Exclusivos',
-        fresh_content: '¡CONTENIDO FRESCO!',
-        photos_today: 'Fotos de Hoy',
-        videos_hd: 'Videos HD',
-        total_views: 'Vistas Totales',
-        updates: 'Actualizaciones',
-        always_fresh: 'SIEMPRE FRESCO',
-        vip_unlimited: '👑 Acceso VIP Ilimitado',
-        plan_monthly: '📅 Mensual',
-        plan_lifetime: '♾️ Lifetime',
-        megapack: '📦 MEGA PACKS -70%',
-        credits_available: 'Créditos Disponibles',
         unlock_credit: 'Desbloquear (1 crédito)',
         no_credits: '¡Necesitas créditos! Compra un pack',
         unlocked_success: '¡Contenido desbloqueado! 🎉',
         vip_activated: '¡VIP Activado! Acceso ilimitado 👑'
     },
     en: {
-        welcome: 'Welcome to Paradise 🌴',
-        daily_content: '200+ photos and 40+ videos updated DAILY',
-        unlock_all: '🔓 Unlock Everything',
-        view_gallery: '📸 View Gallery',
-        loading: 'Loading paradise...',
-        subtitle: 'Exclusive Paradise Content',
-        preview_gallery: '🔥 Exclusive Preview',
-        paradise_photos: '📸 Paradise Photos',
-        new_today: 'NEW TODAY!',
-        exclusive_videos: '🎬 Exclusive Videos',
-        fresh_content: 'FRESH CONTENT!',
-        photos_today: 'Photos Today',
-        videos_hd: 'HD Videos',
-        total_views: 'Total Views',
-        updates: 'Updates',
-        always_fresh: 'ALWAYS FRESH',
-        vip_unlimited: '👑 Unlimited VIP Access',
-        plan_monthly: '📅 Monthly',
-        plan_lifetime: '♾️ Lifetime',
-        megapack: '📦 MEGA PACKS -70%',
-        credits_available: 'Credits Available',
         unlock_credit: 'Unlock (1 credit)',
         no_credits: 'You need credits! Buy a pack',
         unlocked_success: 'Content unlocked! 🎉',
@@ -166,18 +66,27 @@ const TRANSLATIONS = {
     }
 };
 
-window.TRANSLATIONS = TRANSLATIONS;
+// ============================
+// DETECCIÓN DE RUTAS
+// ============================
+
+const PathDetector = {
+    basePathFound: '',
+    
+    buildPath(relativePath) {
+        const cleanPath = relativePath.startsWith('/') ? relativePath.substring(1) : relativePath;
+        return cleanPath;
+    }
+};
 
 // ============================
 // UTILIDADES
 // ============================
 
 function handleImageError(img) {
-    console.warn('Error cargando imagen:', img.src);
-    
     if (!img.dataset.fallbackUsed) {
         img.dataset.fallbackUsed = 'true';
-        img.src = CONFIG.FALLBACK_IMAGE;
+        img.src = FALLBACK_SVG;
         img.style.objectFit = 'cover';
     }
 }
@@ -186,7 +95,7 @@ function getDailyRotation(pool, count) {
     if (!pool || pool.length === 0) return [];
     
     const today = new Date();
-    const dateString = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+    const dateString = today.getFullYear() + '-' + today.getMonth() + '-' + today.getDate();
     const seed = dateString.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
     
     const shuffled = [...pool].sort((a, b) => {
@@ -199,7 +108,7 @@ function getDailyRotation(pool, count) {
 }
 
 // ============================
-// RENDERIZADO
+// FUNCIONES DE RENDERIZADO
 // ============================
 
 function renderPhotosProgressive(container, photos) {
@@ -217,39 +126,65 @@ function renderPhotosProgressive(container, photos) {
                 const imagePath = PathDetector.buildPath(photo);
                 
                 const item = document.createElement('div');
-                item.classList.add('content-item', isUnlocked ? 'unlocked' : 'locked');
+                item.className = 'content-item ' + (isUnlocked ? 'unlocked' : 'locked');
                 if (isNew) item.classList.add('new-item');
                 
-                const imgId = `photo-${index}`;
+                const imgId = 'photo-' + index;
                 
-                item.innerHTML = `
-                    <div class="content-wrapper">
-                        <img id="${imgId}"
-                             src="${imagePath}" 
-                             alt="Foto Premium ${index + 1}" 
-                             class="content-img" 
-                             loading="lazy">
-                        ${isNew ? '<span class="badge-new">NUEVO</span>' : ''}
-                        ${!isUnlocked ? `
-                            <div class="lock-overlay">
-                                <div class="lock-content">
-                                    <div class="lock-icon">🔒</div>
-                                    <button class="unlock-btn" onclick="unlockContent('${photo}', 'photo')">
-                                        <span class="unlock-text">${TRANSLATIONS[state.language].unlock_credit}</span>
-                                        <span class="credit-cost">💎 1</span>
-                                    </button>
-                                </div>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
+                // Crear HTML sin template literals problemáticos
+                const wrapper = document.createElement('div');
+                wrapper.className = 'content-wrapper';
                 
-                container.appendChild(item);
+                const img = document.createElement('img');
+                img.id = imgId;
+                img.src = imagePath;
+                img.alt = 'Foto Premium ' + (index + 1);
+                img.className = 'content-img';
+                img.loading = 'lazy';
+                img.onerror = function() { handleImageError(this); };
                 
-                const img = document.getElementById(imgId);
-                if (img) {
-                    img.onerror = function() { handleImageError(this); };
+                wrapper.appendChild(img);
+                
+                if (isNew) {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge-new';
+                    badge.textContent = 'NUEVO';
+                    wrapper.appendChild(badge);
                 }
+                
+                if (!isUnlocked) {
+                    const overlay = document.createElement('div');
+                    overlay.className = 'lock-overlay';
+                    
+                    const content = document.createElement('div');
+                    content.className = 'lock-content';
+                    
+                    const icon = document.createElement('div');
+                    icon.className = 'lock-icon';
+                    icon.textContent = '🔒';
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'unlock-btn';
+                    btn.onclick = function() { unlockContent(photo, 'photo'); };
+                    
+                    const text = document.createElement('span');
+                    text.className = 'unlock-text';
+                    text.textContent = TRANSLATIONS[state.language].unlock_credit;
+                    
+                    const cost = document.createElement('span');
+                    cost.className = 'credit-cost';
+                    cost.textContent = '💎 1';
+                    
+                    btn.appendChild(text);
+                    btn.appendChild(cost);
+                    content.appendChild(icon);
+                    content.appendChild(btn);
+                    overlay.appendChild(content);
+                    wrapper.appendChild(overlay);
+                }
+                
+                item.appendChild(wrapper);
+                container.appendChild(item);
                 
                 setTimeout(() => {
                     item.classList.add('loaded');
@@ -275,47 +210,94 @@ function renderVideosProgressive(container, videos) {
                 const videoPath = PathDetector.buildPath(video);
                 
                 const item = document.createElement('div');
-                item.classList.add('content-item', 'video-item', isUnlocked ? 'unlocked' : 'locked');
+                item.className = 'content-item video-item ' + (isUnlocked ? 'unlocked' : 'locked');
                 if (isNew) item.classList.add('new-item');
                 
-                const imgId = `video-thumb-${index}`;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'content-wrapper';
                 
-                item.innerHTML = `
-                    <div class="content-wrapper">
-                        ${isUnlocked ? `
-                            <video class="content-video" 
-                                   controls 
-                                   poster="${CONFIG.FALLBACK_IMAGE}"
-                                   preload="metadata">
-                                <source src="${videoPath}" type="video/mp4">
-                                Tu navegador no soporta videos HTML5.
-                            </video>
-                        ` : `
-                            <img id="${imgId}"
-                                 src="${CONFIG.FALLBACK_IMAGE}" 
-                                 alt="Video Premium ${index + 1}" 
-                                 class="video-thumb">
-                        `}
-                        <div class="video-badge">
-                            <span class="duration">HD</span>
-                            <span class="quality">1080p</span>
-                        </div>
-                        ${isNew ? '<span class="badge-new">NUEVO</span>' : ''}
-                        ${!isUnlocked ? `
-                            <div class="lock-overlay">
-                                <div class="lock-content">
-                                    <div class="play-icon">▶️</div>
-                                    <div class="lock-icon">🔒</div>
-                                    <button class="unlock-btn" onclick="unlockContent('${video}', 'video')">
-                                        <span class="unlock-text">${TRANSLATIONS[state.language].unlock_credit}</span>
-                                        <span class="credit-cost">💎 1</span>
-                                    </button>
-                                </div>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
+                if (isUnlocked) {
+                    const video = document.createElement('video');
+                    video.className = 'content-video';
+                    video.controls = true;
+                    video.poster = FALLBACK_SVG;
+                    video.preload = 'metadata';
+                    
+                    const source = document.createElement('source');
+                    source.src = videoPath;
+                    source.type = 'video/mp4';
+                    
+                    video.appendChild(source);
+                    video.appendChild(document.createTextNode('Tu navegador no soporta videos HTML5.'));
+                    wrapper.appendChild(video);
+                } else {
+                    const img = document.createElement('img');
+                    img.src = FALLBACK_SVG;
+                    img.alt = 'Video Premium ' + (index + 1);
+                    img.className = 'video-thumb';
+                    wrapper.appendChild(img);
+                }
                 
+                // Badge de video
+                const badge = document.createElement('div');
+                badge.className = 'video-badge';
+                
+                const duration = document.createElement('span');
+                duration.className = 'duration';
+                duration.textContent = 'HD';
+                
+                const quality = document.createElement('span');
+                quality.className = 'quality';
+                quality.textContent = '1080p';
+                
+                badge.appendChild(duration);
+                badge.appendChild(quality);
+                wrapper.appendChild(badge);
+                
+                if (isNew) {
+                    const newBadge = document.createElement('span');
+                    newBadge.className = 'badge-new';
+                    newBadge.textContent = 'NUEVO';
+                    wrapper.appendChild(newBadge);
+                }
+                
+                if (!isUnlocked) {
+                    const overlay = document.createElement('div');
+                    overlay.className = 'lock-overlay';
+                    
+                    const content = document.createElement('div');
+                    content.className = 'lock-content';
+                    
+                    const playIcon = document.createElement('div');
+                    playIcon.className = 'play-icon';
+                    playIcon.textContent = '▶️';
+                    
+                    const lockIcon = document.createElement('div');
+                    lockIcon.className = 'lock-icon';
+                    lockIcon.textContent = '🔒';
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'unlock-btn';
+                    btn.onclick = function() { unlockContent(video, 'video'); };
+                    
+                    const text = document.createElement('span');
+                    text.className = 'unlock-text';
+                    text.textContent = TRANSLATIONS[state.language].unlock_credit;
+                    
+                    const cost = document.createElement('span');
+                    cost.className = 'credit-cost';
+                    cost.textContent = '💎 1';
+                    
+                    btn.appendChild(text);
+                    btn.appendChild(cost);
+                    content.appendChild(playIcon);
+                    content.appendChild(lockIcon);
+                    content.appendChild(btn);
+                    overlay.appendChild(content);
+                    wrapper.appendChild(overlay);
+                }
+                
+                item.appendChild(wrapper);
                 container.appendChild(item);
                 
                 setTimeout(() => {
@@ -338,31 +320,28 @@ function renderTeaserCarousel() {
         const teaserItem = document.createElement('div');
         teaserItem.className = 'teaser-item';
         
-        const imgId = `teaser-${index}`;
+        const img = document.createElement('img');
+        img.src = imagePath;
+        img.alt = 'Preview ' + (index + 1);
+        img.loading = 'lazy';
+        img.onerror = function() { handleImageError(this); };
         
-        teaserItem.innerHTML = `
-            <img id="${imgId}"
-                 src="${imagePath}" 
-                 alt="Preview ${index + 1}" 
-                 loading="lazy">
-            <div class="teaser-overlay">
-                <button onclick="showVIPModal()">Ver Completo</button>
-            </div>
-        `;
+        const overlay = document.createElement('div');
+        overlay.className = 'teaser-overlay';
         
+        const btn = document.createElement('button');
+        btn.textContent = 'Ver Completo';
+        btn.onclick = showVIPModal;
+        
+        overlay.appendChild(btn);
+        teaserItem.appendChild(img);
+        teaserItem.appendChild(overlay);
         carousel.appendChild(teaserItem);
-        
-        setTimeout(() => {
-            const img = document.getElementById(imgId);
-            if (img) {
-                img.onerror = function() { handleImageError(this); };
-            }
-        }, 100);
     });
 }
 
 // ============================
-// FUNCIONES DE DESBLOQUEO
+// FUNCIONES PRINCIPALES
 // ============================
 
 function unlockContent(item, type) {
@@ -387,10 +366,7 @@ function unlockContent(item, type) {
     initializeGallery();
     
     showNotification(TRANSLATIONS[state.language].unlocked_success, 'success');
-    celebrateUnlock();
-}
-
-function celebrateUnlock() {
+    
     if (typeof confetti === 'function') {
         confetti({
             particleCount: 100,
@@ -400,142 +376,30 @@ function celebrateUnlock() {
     }
 }
 
-// ============================
-// NOTIFICACIONES
-// ============================
-
-function showNotification(message, type = 'info') {
+function showNotification(message, type) {
     const existing = document.querySelector('.notification');
     if (existing) existing.remove();
     
     const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `
-        <span class="notification-icon">
-            ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
-        </span>
-        <span class="notification-text">${message}</span>
-    `;
+    notification.className = 'notification ' + type;
+    
+    const icon = document.createElement('span');
+    icon.className = 'notification-icon';
+    icon.textContent = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+    
+    const text = document.createElement('span');
+    text.className = 'notification-text';
+    text.textContent = message;
+    
+    notification.appendChild(icon);
+    notification.appendChild(text);
     document.body.appendChild(notification);
     
+    // Agregar estilos si no existen
     if (!document.getElementById('notification-styles')) {
         const style = document.createElement('style');
         style.id = 'notification-styles';
-        style.textContent = `
-            .notification {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: white;
-                padding: 15px 20px;
-                border-radius: 10px;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                z-index: 10000;
-                transform: translateX(400px);
-                transition: transform 0.3s ease;
-                max-width: 300px;
-            }
-            .notification.show { transform: translateX(0); }
-            .notification.success {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-            }
-            .notification.error {
-                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                color: white;
-            }
-            .notification.info {
-                background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-                color: white;
-            }
-            .loading-message {
-                text-align: center;
-                padding: 40px;
-                color: #999;
-                font-size: 18px;
-            }
-            .content-item.loaded {
-                animation: fadeIn 0.5s ease;
-            }
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            .content-wrapper {
-                position: relative;
-                width: 100%;
-                height: 100%;
-            }
-            .content-img, .content-video, .video-thumb {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-            .badge-new {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                background: linear-gradient(135deg, #00ff88, #4ade80);
-                color: #001f3f;
-                padding: 4px 12px;
-                border-radius: 20px;
-                font-size: 0.8rem;
-                font-weight: 700;
-                z-index: 2;
-            }
-            .video-badge {
-                position: absolute;
-                bottom: 10px;
-                right: 10px;
-                display: flex;
-                gap: 5px;
-                z-index: 2;
-            }
-            .video-badge span {
-                background: rgba(0, 0, 0, 0.8);
-                color: white;
-                padding: 3px 8px;
-                border-radius: 5px;
-                font-size: 0.75rem;
-                font-weight: 600;
-            }
-            .lock-overlay {
-                position: absolute;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.7);
-                backdrop-filter: blur(3px);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 3;
-            }
-            .lock-content {
-                text-align: center;
-            }
-            .lock-icon, .play-icon {
-                font-size: 2.5rem;
-                margin-bottom: 10px;
-            }
-            .unlock-btn {
-                background: linear-gradient(135deg, #ffd700, #ff6b35);
-                color: #001f3f;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 25px;
-                font-weight: 700;
-                cursor: pointer;
-                transition: transform 0.3s ease;
-            }
-            .unlock-btn:hover {
-                transform: scale(1.05);
-            }
-            .unlock-text {
-                margin-right: 5px;
-            }
-        `;
+        style.textContent = '.notification{position:fixed;top:20px;right:20px;background:white;padding:15px 20px;border-radius:10px;box-shadow:0 5px 20px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;z-index:10000;transform:translateX(400px);transition:transform 0.3s ease;max-width:300px}.notification.show{transform:translateX(0)}.notification.success{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white}.notification.error{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:white}.notification.info{background:linear-gradient(135deg,#89f7fe 0%,#66a6ff 100%);color:white}.loading-message{text-align:center;padding:40px;color:#999;font-size:18px}.content-item.loaded{animation:fadeIn 0.5s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.content-wrapper{position:relative;width:100%;height:100%}.content-img,.content-video,.video-thumb{width:100%;height:100%;object-fit:cover}.badge-new{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#00ff88,#4ade80);color:#001f3f;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:700;z-index:2}.video-badge{position:absolute;bottom:10px;right:10px;display:flex;gap:5px;z-index:2}.video-badge span{background:rgba(0,0,0,0.8);color:white;padding:3px 8px;border-radius:5px;font-size:0.75rem;font-weight:600}.lock-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:3}.lock-content{text-align:center}.lock-icon,.play-icon{font-size:2.5rem;margin-bottom:10px}.unlock-btn{background:linear-gradient(135deg,#ffd700,#ff6b35);color:#001f3f;border:none;padding:10px 20px;border-radius:25px;font-weight:700;cursor:pointer;transition:transform 0.3s ease}.unlock-btn:hover{transform:scale(1.05)}.unlock-text{margin-right:5px}';
         document.head.appendChild(style);
     }
     
@@ -545,10 +409,6 @@ function showNotification(message, type = 'info') {
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
-
-// ============================
-// FUNCIONES UI
-// ============================
 
 function updateCreditsDisplay() {
     const creditsNumber = document.getElementById('creditsNumber');
@@ -569,7 +429,10 @@ function changeLanguage(lang) {
     
     document.querySelectorAll('[data-translate]').forEach(el => {
         const key = el.dataset.translate;
-        el.textContent = TRANSLATIONS[lang]?.[key] || TRANSLATIONS['es'][key] || key;
+        const translations = TRANSLATIONS[lang] || TRANSLATIONS['es'];
+        if (translations[key]) {
+            el.textContent = translations[key];
+        }
     });
 }
 
@@ -581,8 +444,7 @@ function showVIPModal() {
     const modal = document.getElementById('vipModal');
     if (modal) {
         modal.style.display = 'flex';
-        state.currentModal = 'vip';
-        initializePayPal();
+        initializePayPal('vip');
     }
 }
 
@@ -590,8 +452,7 @@ function showPackModal() {
     const modal = document.getElementById('packModal');
     if (modal) {
         modal.style.display = 'flex';
-        state.currentModal = 'pack';
-        initializePayPal();
+        initializePayPal('pack');
     }
 }
 
@@ -599,7 +460,6 @@ function closeModal() {
     document.querySelectorAll('.modal').forEach(modal => {
         modal.style.display = 'none';
     });
-    state.currentModal = null;
 }
 
 function selectPlan(plan) {
@@ -607,78 +467,77 @@ function selectPlan(plan) {
     document.querySelectorAll('.plan-card').forEach(card => {
         card.classList.remove('selected');
     });
-    event?.currentTarget?.classList.add('selected');
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('selected');
+    }
 }
 
 function selectPack(pack) {
-    const packMap = {
-        'starter': 10,
-        'bronze': 25,
-        'silver': 50,
-        'gold': 100
-    };
-    
+    const packMap = { 'starter': 10, 'bronze': 25, 'silver': 50, 'gold': 100 };
     state.selectedPack = packMap[pack] || 50;
     
     document.querySelectorAll('.pack-card').forEach(card => {
         card.classList.remove('selected');
     });
-    event?.currentTarget?.classList.add('selected');
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('selected');
+    }
 }
 
 // ============================
 // PAYPAL
 // ============================
 
-function initializePayPal() {
+function initializePayPal(type) {
     if (typeof paypal === 'undefined') return;
     
-    const vipContainer = document.getElementById('paypal-button-container-vip');
-    if (vipContainer && !vipContainer.hasChildNodes() && state.currentModal === 'vip') {
-        paypal.Buttons({
-            createOrder: (data, actions) => {
-                const price = state.selectedPlan === 'monthly' ? CONFIG.PRICES.MONTHLY : CONFIG.PRICES.LIFETIME;
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: price.toString(),
-                            currency_code: CONFIG.PAYPAL.CURRENCY
-                        }
-                    }]
-                });
-            },
-            onApprove: (data, actions) => {
-                return actions.order.capture().then(() => {
-                    activateVIP(state.selectedPlan);
-                    showNotification(TRANSLATIONS[state.language].vip_activated, 'success');
-                    closeModal();
-                });
-            }
-        }).render('#paypal-button-container-vip');
-    }
-    
-    const packContainer = document.getElementById('paypal-button-container-pack');
-    if (packContainer && !packContainer.hasChildNodes() && state.currentModal === 'pack') {
-        paypal.Buttons({
-            createOrder: (data, actions) => {
-                if (!state.selectedPack) return;
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: CONFIG.PRICES.PACKS[state.selectedPack].toString(),
-                            currency_code: CONFIG.PAYPAL.CURRENCY
-                        }
-                    }]
-                });
-            },
-            onApprove: (data, actions) => {
-                return actions.order.capture().then(() => {
-                    addCredits(state.selectedPack);
-                    showNotification(`+${state.selectedPack} créditos añadidos!`, 'success');
-                    closeModal();
-                });
-            }
-        }).render('#paypal-button-container-pack');
+    if (type === 'vip') {
+        const container = document.getElementById('paypal-button-container-vip');
+        if (container && !container.hasChildNodes()) {
+            paypal.Buttons({
+                createOrder: (data, actions) => {
+                    const price = state.selectedPlan === 'monthly' ? CONFIG.PRICES.MONTHLY : CONFIG.PRICES.LIFETIME;
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: price.toString(),
+                                currency_code: CONFIG.PAYPAL.CURRENCY
+                            }
+                        }]
+                    });
+                },
+                onApprove: (data, actions) => {
+                    return actions.order.capture().then(() => {
+                        activateVIP(state.selectedPlan);
+                        showNotification(TRANSLATIONS[state.language].vip_activated, 'success');
+                        closeModal();
+                    });
+                }
+            }).render('#paypal-button-container-vip');
+        }
+    } else if (type === 'pack') {
+        const container = document.getElementById('paypal-button-container-pack');
+        if (container && !container.hasChildNodes()) {
+            paypal.Buttons({
+                createOrder: (data, actions) => {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: CONFIG.PRICES.PACKS[state.selectedPack].toString(),
+                                currency_code: CONFIG.PAYPAL.CURRENCY
+                            }
+                        }]
+                    });
+                },
+                onApprove: (data, actions) => {
+                    return actions.order.capture().then(() => {
+                        addCredits(state.selectedPack);
+                        showNotification('+' + state.selectedPack + ' créditos añadidos!', 'success');
+                        closeModal();
+                    });
+                }
+            }).render('#paypal-button-container-pack');
+        }
     }
 }
 
@@ -695,7 +554,6 @@ function activateVIP(plan) {
     }
     
     initializeGallery();
-    celebrateUnlock();
 }
 
 function addCredits(amount) {
@@ -711,10 +569,10 @@ function addCredits(amount) {
 function toggleIsabella() {
     const window = document.getElementById('isabellaWindow');
     if (window) {
-        state.isabellaOpen = !state.isabellaOpen;
-        window.style.display = state.isabellaOpen ? 'block' : 'none';
+        const isOpen = window.style.display === 'block';
+        window.style.display = isOpen ? 'none' : 'block';
         
-        if (state.isabellaOpen) {
+        if (!isOpen) {
             const messages = document.getElementById('isabellaMessages');
             if (messages && messages.children.length === 0) {
                 const welcomeDiv = document.createElement('div');
@@ -733,34 +591,29 @@ function isabellaAction(action) {
     let message = '';
     switch(action) {
         case 'vip':
-            message = '💎 ¡Hazte VIP y desbloquea TODO! Solo €15/mes o €100 lifetime. Acceso ilimitado a todo el contenido actual y futuro.';
+            message = '💎 ¡Hazte VIP y desbloquea TODO! Solo €15/mes o €100 lifetime.';
             setTimeout(() => showVIPModal(), 1000);
             break;
         case 'daily':
-            message = `📅 Hoy tenemos ${CONFIG.CONTENT.DAILY_PHOTOS} fotos y ${CONFIG.CONTENT.DAILY_VIDEOS} videos nuevos! Actualizamos contenido todos los días a las 3:00 AM.`;
+            message = '📅 Hoy tenemos ' + CONFIG.CONTENT.DAILY_PHOTOS + ' fotos y ' + CONFIG.CONTENT.DAILY_VIDEOS + ' videos nuevos!';
             break;
         case 'help':
-            message = '❓ Puedes comprar créditos para desbloquear contenido individual (1 crédito = 1 contenido) o hacerte VIP para acceso ilimitado. ¿Qué prefieres?';
+            message = '❓ Puedes comprar créditos o hacerte VIP para acceso ilimitado.';
             break;
     }
     
     const messageDiv = document.createElement('div');
     messageDiv.className = 'isabella-message';
-    messageDiv.innerHTML = `<span class="message-avatar">💕</span><span>${message}</span>`;
+    messageDiv.innerHTML = '<span class="message-avatar">💕</span><span>' + message + '</span>';
     messages.appendChild(messageDiv);
     messages.scrollTop = messages.scrollHeight;
 }
 
-// ============================
-// SCROLL CAROUSEL
-// ============================
-
 function scrollCarousel(direction) {
     const carousel = document.getElementById('teaserCarousel');
     if (carousel) {
-        const scrollAmount = 300;
         carousel.scrollBy({
-            left: scrollAmount * direction,
+            left: 300 * direction,
             behavior: 'smooth'
         });
     }
@@ -775,11 +628,6 @@ async function initializeGallery() {
         console.error('❌ Content database not loaded');
         showNotification('Error: Base de datos no cargada', 'error');
         return;
-    }
-    
-    if (!state.initialized) {
-        await PathDetector.detectBasePath();
-        state.initialized = true;
     }
     
     const allPhotos = [...window.ALL_PHOTOS_POOL, ...window.ALL_UNCENSORED_PHOTOS_POOL];
@@ -801,12 +649,7 @@ async function initializeGallery() {
     if (photoCount) photoCount.textContent = state.dailyPhotos.length;
     if (videoCount) videoCount.textContent = state.dailyVideos.length;
     
-    console.log(`✅ Galería inicializada:
-    - ${state.dailyPhotos.length} fotos del día
-    - ${state.dailyVideos.length} videos del día
-    - Ruta base: ${PathDetector.basePathFound || 'raíz'}
-    - VIP: ${state.isVIP}
-    - Créditos: ${state.credits}`);
+    console.log('✅ Galería inicializada v' + CONFIG.VERSION);
 }
 
 // ============================
@@ -814,6 +657,7 @@ async function initializeGallery() {
 // ============================
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Ocultar pantalla de carga
     setTimeout(() => {
         const loadingScreen = document.getElementById('loadingScreen');
         if (loadingScreen) {
@@ -824,18 +668,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 1500);
     
+    // Inicializar galería
     initializeGallery();
     
+    // Banner slideshow
     let currentSlide = 0;
     const slides = document.querySelectorAll('.banner-slide');
     if (slides.length > 1) {
         setInterval(() => {
-            slides[currentSlide]?.classList.remove('active');
+            slides[currentSlide].classList.remove('active');
             currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide]?.classList.add('active');
+            slides[currentSlide].classList.add('active');
         }, 5000);
     }
     
+    // Verificar expiración VIP
     const vipExpiry = localStorage.getItem('vipExpiry');
     if (vipExpiry && vipExpiry !== 'lifetime') {
         const expiryDate = new Date(vipExpiry);
@@ -849,7 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================
-// EXPORTAR FUNCIONES
+// EXPORTAR FUNCIONES GLOBALES
 // ============================
 
 window.handleImageError = handleImageError;
@@ -863,6 +710,8 @@ window.unlockContent = unlockContent;
 window.selectPlan = selectPlan;
 window.selectPack = selectPack;
 window.scrollCarousel = scrollCarousel;
+window.state = state;
+window.TRANSLATIONS = TRANSLATIONS;
 
 // ============================
 // DEBUG
@@ -870,11 +719,11 @@ window.scrollCarousel = scrollCarousel;
 
 window.galleryDebug = {
     stats: () => ({
+        version: CONFIG.VERSION,
         totalPhotos: (window.ALL_PHOTOS_POOL?.length || 0) + (window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0),
         totalVideos: window.ALL_VIDEOS_POOL?.length || 0,
         dailyPhotos: state.dailyPhotos.length,
         dailyVideos: state.dailyVideos.length,
-        basePath: PathDetector.basePathFound,
         credits: state.credits,
         isVIP: state.isVIP,
         unlockedPhotos: state.unlockedPhotos.size,
@@ -889,10 +738,7 @@ window.galleryDebug = {
     },
     addCredits: (num) => {
         addCredits(num);
-        console.log(`✅ ${num} créditos añadidos`);
-    },
-    testPath: async () => {
-        await PathDetector.detectBasePath();
+        console.log('✅ ' + num + ' créditos añadidos');
     },
     reset: () => {
         localStorage.clear();
@@ -900,21 +746,4 @@ window.galleryDebug = {
     }
 };
 
-console.log(`
-🌊 ===============================================
-   BeachGirl.pics Gallery v${CONFIG.VERSION}
-   
-   📊 Contenido disponible:
-   • ${window.ALL_PHOTOS_POOL?.length || 0} fotos en /full
-   • ${window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0} fotos en /uncensored  
-   • ${window.ALL_VIDEOS_POOL?.length || 0} videos HD
-   
-   🛠️ Debug: galleryDebug
-   • galleryDebug.stats() - Estadísticas
-   • galleryDebug.unlockAll() - Desbloquear todo
-   • galleryDebug.addCredits(100) - Añadir créditos
-   • galleryDebug.testPath() - Probar rutas
-   • galleryDebug.reset() - Resetear todo
-   
-🌊 ===============================================
-`);
+console.log('🌊 BeachGirl.pics Gallery v' + CONFIG.VERSION + ' loaded successfully');
