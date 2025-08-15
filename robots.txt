@@ -5,22 +5,23 @@ User-agent: *
 Allow: /
 Allow: /index.html
 Allow: /main.html
-Allow: /full/
+Allow: /public/assets/full/
 Allow: /manifest.json
 Allow: /sw.js
 Allow: /sitemap.xml
 
 # Contenido premium protegido
-Disallow: /censored/
-Disallow: /uncensored/
-Disallow: /censored-videos/
-Disallow: /uncensored-videos/
+Disallow: /public/assets/censored/
+Disallow: /public/assets/uncensored/
+Disallow: /public/assets/censored-videos/
+Disallow: /public/assets/uncensored-videos/
 
 # Archivos del sistema
 Disallow: /admin/
 Disallow: /private/
 Disallow: /*.json$
 Disallow: /*?*
+Disallow: /search
 
 # Google Search Console verification
 Allow: /google2e40209785af1244.html
@@ -36,7 +37,7 @@ Allow: /
 Crawl-delay: 1
 
 User-agent: Googlebot-Image
-Allow: /full/
+Allow: /public/assets/full/
 Allow: /
 
 User-agent: Bingbot
@@ -69,3 +70,6 @@ Disallow: /
 
 # Sitemap principal
 Sitemap: https://beachgirl.pics/sitemap.xml
+
+# Host preferido
+Host: beachgirl.pics
