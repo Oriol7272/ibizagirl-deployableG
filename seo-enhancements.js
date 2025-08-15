@@ -87,7 +87,7 @@ function setupAdvancedLazyLoading() {
             img.classList.add('error');
             
             // Try fallback image
-            img.src = 'public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp';
+            img.src = 'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp';
         };
         
         tempImg.src = img.dataset.src;
@@ -157,7 +157,7 @@ function updateOpenGraph() {
     const ogTags = {
         'og:title': trans.photos_seo_title || 'Galería Premium Ibiza',
         'og:description': trans.gallery_description,
-        'og:image': CONFIG.BASE_URL + 'public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+        'og:image': CONFIG.BASE_URL + 'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
         'og:url': window.location.href,
         'og:type': 'website',
         'og:locale': lang === 'es' ? 'es_ES' : lang === 'en' ? 'en_US' : lang === 'de' ? 'de_DE' : lang === 'it' ? 'it_IT' : 'fr_FR',
@@ -235,7 +235,7 @@ function updateApp() {
 }
 
 // ============================
-// BREADCRUMBS DINÁMICOS
+// BREADCRUMBS DINÁMICO
 // ============================
 
 function updateBreadcrumbs(currentPage = 'gallery') {
