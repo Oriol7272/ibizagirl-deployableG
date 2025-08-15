@@ -19,12 +19,12 @@ const STATIC_ASSETS = [
     '/manifest.json',
     
     // Imágenes críticas para SEO
-'/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-'/public/assets/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
-'/public/assets/full/0lySugcO4Pp4pEZKvz9U.webp',
-'/public/assets/full/0nSaCJQxbVw4BDrhnhHO.webp',
-'/public/assets/full/13TXvyRVZ7LtvAOx7kme.webp',
-'/public/assets/full/18VQaczW5kdfdiqUVasH.webp'
+    '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+    '/public/assets/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
+    '/public/assets/full/0lySugcO4Pp4pEZKvz9U.webp',
+    '/public/assets/full/0nSaCJQxbVw4BDrhnhHO.webp',
+    '/public/assets/full/13TXvyRVZ7LtvAOx7kme.webp',
+    '/public/assets/full/18VQaczW5kdfdiqUVasH.webp'
 ];
 
 // External scripts to cache
@@ -86,7 +86,7 @@ self.addEventListener('install', event => {
             console.error('❌ Service Worker: Installation failed', error);
         })
     );
-};
+});
 
 // ============================
 // ACTIVACIÓN DEL SERVICE WORKER
@@ -111,7 +111,7 @@ self.addEventListener('activate', event => {
             return self.clients.claim();
         })
     );
-};
+});
 
 // ============================
 // ESTRATEGIAS DE CACHE
@@ -274,9 +274,9 @@ async function preloadContent() {
         console.log('🔄 Service Worker: Preloading content...');
         
         const imagesToPreload = [
-            '/full/bikini.jpg',
-            '/full/bikbanner.jpg',
-            '/full/bikini3.jpg'
+            '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+            '/public/assets/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
+            '/public/assets/full/0lySugcO4Pp4pEZKvz9U.webp'
         ];
         
         const cache = await caches.open(IMAGE_CACHE);
@@ -302,7 +302,7 @@ async function preloadContent() {
 
 // ============================
 // NOTIFICACIONES PUSH (Preparado para futuro)
- // ============================
+// ============================
 
 self.addEventListener('push', event => {
     if (!event.data) return;
@@ -311,9 +311,9 @@ self.addEventListener('push', event => {
     
     const options = {
         body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
-        icon: '/full/bikini.jpg',
-        badge: '/full/bikini.jpg',
-        image: data.image || '/full/bikbanner.jpg',
+        icon: '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+        badge: '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+        image: data.image || '/public/assets/full/0Tc8Vtd0mEIvNHZwYGBq.webp',
         tag: 'beachgirl-update',
         requireInteraction: false,
         data: {
@@ -323,7 +323,7 @@ self.addEventListener('push', event => {
             {
                 action: 'view',
                 title: 'Ver galería',
-                icon: '/full/bikini.jpg'
+                icon: '/public/assets/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp'
             },
             {
                 action: 'close',
