@@ -111,21 +111,6 @@ function setupAdvancedLazyLoading() {
                         
                         // Preload metadata para mejor UX
                         video.preload = 'metadata';
-                        
-                        // Performance tracking
-                        if (window.trackEvent) {
-                            window.trackEvent('video_loaded', {
-                                src: source.src,
-                                duration: video.duration,
-                                loading_method: 'lazy'
-                            });
-                        }
-                    }, { once: true });
-                    
-                    video.addEventListener('error', () => {
-                        console.error('Failed to load video:', source.src);
-                        video.classList.remove('skeleton', 'lazy');
-                        video.classList.add('error');
                     }, { once: true });
                 }
                 
@@ -134,15 +119,16 @@ function setupAdvancedLazyLoading() {
         });
     }, lazyVideoOptions);
 
-    // Apply observers to all lazy elements
+    // Aplicar observers a elementos lazy
     document.querySelectorAll('img.lazy').forEach(img => imageObserver.observe(img));
     document.querySelectorAll('video.lazy').forEach(video => videoObserver.observe(video));
 }
 
+// Función para verificar soporte WEBP
 function supportsWebP() {
     const elem = document.createElement('canvas');
-    if (!!(elem.getContext && elem.getContext('2d'))) {
-        return elem.toDataURL('image/webp').indexOf('data:image/webp') == 0;
+    if (elem.getContext && elem.getContext('2d')) {
+        return elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
     }
     return false;
 }
@@ -151,27 +137,45 @@ function supportsWebP() {
 // OPEN GRAPH DINÁMICO
 // ============================
 
-function updateOpenGraph() {
-    const lang = window.state?.currentLanguage || 'es';
-    const trans = TRANSLATIONS[lang];
-    const ogTags = {
-        'og:title': trans.photos_seo_title || 'Galería Premium Ibiza',
-        'og:description': trans.gallery_description,
-        'og:image': CONFIG.BASE_URL + 'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+function updateOpenGraph(page = 'home', lang = 'es') {
+    // Metas base
+    const ogMetas = {
+        'og:title': lang === 'es' ? 'BeachGirl.pics - Galería Premium Ibiza 2025' : lang === 'en' ? 'BeachGirl.pics - Premium Ibiza Gallery 2025' : lang === 'fr' ? 'BeachGirl.pics - Galerie Premium Ibiza 2025' : lang === 'de' ? 'BeachGirl.pics - Premium Ibiza Galerie 2025' : lang === 'it' ? 'BeachGirl.pics - Galleria Premium Ibiza 2025' : lang === 'pt' ? 'BeachGirl.pics - Galeria Premium Ibiza 2025' : 'BeachGirl.pics - Premium Ibiza Gallery 2025',
+        'og:description': lang === 'es' ? 'Descubre 400+ fotos y 80+ videos HD de Ibiza actualizados diariamente. Contenido exclusivo del paraíso mediterráneo.' : lang === 'en' ? 'Discover 400+ photos and 80+ HD videos from Ibiza updated daily. Exclusive Mediterranean paradise content.' : lang === 'fr' ? 'Découvrez 400+ photos et 80+ vidéos HD d\'Ibiza mises à jour quotidiennement. Contenu exclusif du paradis méditerranéen.' : lang === 'de' ? 'Entdecken Sie 400+ Fotos und 80+ HD-Videos aus Ibiza, täglich aktualisiert. Exklusiver Inhalt aus dem mediterranen Paradies.' : lang === 'it' ? 'Scopri 400+ foto e 80+ video HD da Ibiza aggiornati quotidianamente. Contenuti esclusivi del paradiso mediterraneo.' : lang === 'pt' ? 'Descubra 400+ fotos e 80+ vídeos HD de Ibiza atualizados diariamente. Conteúdo exclusivo do paraíso mediterrâneo.' : 'Discover 400+ photos and 80+ HD videos from Ibiza updated daily. Exclusive Mediterranean paradise content.',
+        'og:image': 'https://beachgirl.pics/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
         'og:url': window.location.href,
         'og:type': 'website',
-        'og:locale': lang === 'es' ? 'es_ES' : lang === 'en' ? 'en_US' : lang === 'de' ? 'de_DE' : lang === 'it' ? 'it_IT' : 'fr_FR',
-        'og:site_name': 'BeachGirl.pics - Paradise Gallery'
+        'og:site_name': 'BeachGirl.pics',
+        'og:locale': lang === 'es' ? 'es_ES' : lang === 'en' ? 'en_US' : lang === 'fr' ? 'fr_FR' : lang === 'de' ? 'de_DE' : lang === 'it' ? 'it_IT' : lang === 'pt' ? 'pt_PT' : 'en_US',
     };
 
-    Object.entries(ogTags).forEach(([key, value]) => {
-        let meta = document.querySelector(`meta[property="${key}"]`);
+    // Actualizar o crear metas OG
+    Object.entries(ogMetas).forEach(([property, content]) => {
+        let meta = document.querySelector(`meta[property="${property}"]`);
         if (!meta) {
             meta = document.createElement('meta');
-            meta.setAttribute('property', key);
+            meta.setAttribute('property', property);
             document.head.appendChild(meta);
         }
-        meta.setAttribute('content', value);
+        meta.setAttribute('content', content);
+    });
+
+    // Twitter cards (compatibles con OG)
+    const twitterMetas = {
+        'twitter:card': 'summary_large_image',
+        'twitter:title': ogMetas['og:title'],
+        'twitter:description': ogMetas['og:description'],
+        'twitter:image': ogMetas['og:image'],
+    };
+
+    Object.entries(twitterMetas).forEach(([name, content]) => {
+        let meta = document.querySelector(`meta[name="${name}"]`);
+        if (!meta) {
+            meta = document.createElement('meta');
+            meta.setAttribute('name', name);
+            document.head.appendChild(meta);
+        }
+        meta.setAttribute('content', content);
     });
 }
 
@@ -180,72 +184,106 @@ function updateOpenGraph() {
 // ============================
 
 function injectAdvancedJSONLD() {
-    const jsonLD = {
+    const jsonLdScript = document.createElement('script');
+    jsonLdScript.type = 'application/ld+json';
+    jsonLdScript.innerHTML = JSON.stringify({
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "BeachGirl.pics",
         "url": "https://beachgirl.pics",
-        "description": "Galería premium de Ibiza con contenido diario actualizado",
+        "description": "Galería premium de Ibiza con fotos y videos diarios del paraíso mediterráneo",
         "potentialAction": {
             "@type": "SearchAction",
-            "target": "{search_term_string}",
+            "target": "https://beachgirl.pics/search?q={search_term_string}",
             "query-input": "required name=search_term_string"
+        },
+        "inLanguage": "es-ES",
+        "image": {
+            "@type": "ImageObject",
+            "url": "https://beachgirl.pics/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp",
+            "width": 1200,
+            "height": 800
+        },
+        "sameAs": [
+            "https://twitter.com/beachgirlpics",
+            "https://instagram.com/beachgirlpics"
+        ],
+        "publisher": {
+            "@type": "Organization",
+            "name": "BeachGirl.pics",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://beachgirl.pics/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp"
+            }
         }
-    };
-
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify(jsonLD);
-    document.head.appendChild(script);
+    });
+    document.head.appendChild(jsonLdScript);
 }
 
 // ============================
-// SERVICE WORKER PARA PWA
+// REGISTRO SERVICE WORKER PWA
 // ============================
 
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(reg => {
-                console.log('✅ Service Worker registered', reg);
-                reg.addEventListener('updatefound', () => {
-                    const installingWorker = reg.installing;
-                    installingWorker.addEventListener('statechange', () => {
-                        if (installingWorker.state === 'installed') {
-                            if (navigator.serviceWorker.controller) {
-                                console.log('New content is available; please refresh.');
-                            } else {
-                                console.log('Content is cached for offline use.');
-                            }
-                        }
-                    });
-                });
-            })
-            .catch(err => console.error('Service Worker registration failed:', err));
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => {
+                    console.log('✅ Service Worker registered', reg.scope);
+                    if (reg.installing) {
+                        console.log('Service worker installing');
+                    } else if (reg.waiting) {
+                        console.log('Service worker installed');
+                    } else if (reg.active) {
+                        console.log('Service worker active');
+                    }
+                })
+                .catch(err => console.error('❌ Service Worker registration failed', err));
+        });
     }
 }
 
+// ============================
+// UPDATE APP (PWA INSTALL PROMPT)
+// ============================
+
 function updateApp() {
-    navigator.serviceWorker.getRegistration().then(registration => {
-        if (registration && registration.waiting) {
-            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-            window.location.reload();
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // Mostrar botón de instalación si es necesario
+        const installBtn = document.querySelector('#install-btn');
+        if (installBtn) {
+            installBtn.style.display = 'block';
+            installBtn.addEventListener('click', () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choice) => {
+                    if (choice.outcome === 'accepted') {
+                        console.log('User accepted PWA install');
+                    }
+                    deferredPrompt = null;
+                });
+            });
         }
+    });
+    
+    window.addEventListener('appinstalled', () => {
+        console.log('✅ PWA installed');
     });
 }
 
 // ============================
-// BREADCRUMBS DINÁMICO
+// BREADCRUMBS DINÁMICOS
 // ============================
 
-function updateBreadcrumbs(currentPage = 'gallery') {
-    const breadcrumbContainer = document.querySelector('.breadcrumb');
+function updateBreadcrumbs(currentPage) {
+    const breadcrumbContainer = document.querySelector('#breadcrumb');
     if (!breadcrumbContainer) return;
 
-    const lang = window.state?.currentLanguage || 'es';
-    const trans = TRANSLATIONS[lang];
     const breadcrumbs = [
-        { name: 'Inicio', url: '/', position: 1 }
+        { name: 'BeachGirl.pics', url: '/', position: 1 }
     ];
 
     if (currentPage === 'gallery') {
