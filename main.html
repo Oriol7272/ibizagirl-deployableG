@@ -11,6 +11,7 @@
     
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="content-database.js" as="script">
     <link rel="preload" href="main-script.js" as="script">
     
     <!-- Estilos -->
@@ -65,7 +66,7 @@
     <!-- Credits Display -->
     <div class="credits-display" id="creditsDisplay">
         <div class="credits-number" id="creditsNumber">0</div>
-        <div class="credits-label">Créditos disponibles</div>
+        <div class="credits-label" data-translate="credits_available">Créditos disponibles</div>
     </div>
 
     <!-- Main Container -->
@@ -90,45 +91,11 @@
 
         <!-- Teaser Carousel -->
         <section class="teaser-carousel-container">
-            <h2 class="teaser-title" data-translate="preview_gallery">🔥 Vista Previa Exclusiva</h2>
+            <h2 class="teaser-title" data-translate="teaser_title">🔥 Vista Previa Exclusiva</h2>
             <div class="teaser-carousel" id="teaserCarousel"></div>
             <div class="carousel-nav">
-                <button class="carousel-btn" onclick="scrollCarousel(-1)">‹</button>
-                <button class="carousel-btn" onclick="scrollCarousel(1)">›</button>
-            </div>
-        </section>
-
-        <!-- Stats Section -->
-        <section class="stats-section">
-            <div class="stat-card">
-                <div class="stat-icon">📸</div>
-                <div class="stat-number" id="photoCount">200</div>
-                <div class="stat-label" data-translate="photos_today">Fotos de Hoy</div>
-                <div class="stat-update">
-                    <span data-translate="updated_at">Actualizado a las</span>
-                    <time id="updateHour">3:00 AM</time>
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">🎬</div>
-                <div class="stat-number" id="videoCount">40</div>
-                <div class="stat-label" data-translate="videos_hd">Videos HD</div>
-                <div class="stat-update" data-translate="new_content">¡NUEVO CONTENIDO!</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">👁️</div>
-                <div class="stat-number" id="totalViews">25.8M</div>
-                <div class="stat-label" data-translate="total_views">Vistas Totales</div>
-                <div class="stat-update">+120K <span data-translate="today">hoy</span></div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">🔥</div>
-                <div class="stat-number">24/7</div>
-                <div class="stat-label" data-translate="updates">Actualizaciones</div>
-                <div class="stat-update" data-translate="always_fresh">SIEMPRE FRESCO</div>
+                <button class="carousel-btn prev">‹</button>
+                <button class="carousel-btn next">›</button>
             </div>
         </section>
 
@@ -136,7 +103,7 @@
         <section class="content-section" id="photosSection">
             <div class="section-header">
                 <h2 class="section-title">
-                    <span data-translate="paradise_photos">📸 Fotos del Paraíso</span>
+                    <span data-translate="photos_paradise">📸 Fotos del Paraíso</span>
                     <span class="section-badge" data-translate="new_today">¡NUEVO HOY!</span>
                 </h2>
             </div>
@@ -147,7 +114,7 @@
         <section class="content-section" id="videosSection">
             <div class="section-header">
                 <h2 class="section-title">
-                    <span data-translate="exclusive_videos">🎬 Videos Exclusivos</span>
+                    <span data-translate="videos_exclusive">🎬 Videos Exclusivos</span>
                     <span class="section-badge" data-translate="fresh_content">¡CONTENIDO FRESCO!</span>
                 </h2>
             </div>
@@ -189,24 +156,24 @@
             
             <div class="plans-container">
                 <div class="plan-card" onclick="selectPlan('monthly')">
-                    <div class="plan-type" data-translate="plan_monthly">📅 Mensual</div>
+                    <div class="plan-type" data-translate="monthly">📅 Mensual</div>
                     <div class="plan-price">€15</div>
                     <div class="plan-period">/mes</div>
                     <ul class="plan-features">
                         <li data-translate="unlimited_access">Acceso ilimitado</li>
-                        <li data-translate="hd_videos">200+ fotos HD</li>
-                        <li data-translate="daily_updates">40+ videos HD</li>
+                        <li data-translate="hd_photos">200+ fotos HD</li>
+                        <li data-translate="hd_videos">40+ videos HD</li>
                         <li data-translate="no_ads">Sin publicidad</li>
                     </ul>
                 </div>
                 
                 <div class="plan-card selected" onclick="selectPlan('lifetime')">
                     <div class="best-value" data-translate="best_value">MEJOR VALOR</div>
-                    <div class="plan-type" data-translate="plan_lifetime">♾️ Lifetime</div>
+                    <div class="plan-type" data-translate="lifetime">♾️ Lifetime</div>
                     <div class="plan-price">€100</div>
                     <div class="plan-period" data-translate="save_yearly">¡Ahorra €80 al año!</div>
                     <ul class="plan-features">
-                        <li data-translate="unlimited_access">Acceso ilimitado de por vida</li>
+                        <li data-translate="lifetime_access">Acceso ilimitado de por vida</li>
                         <li data-translate="all_content">Todo el contenido actual y futuro</li>
                         <li data-translate="priority_support">Soporte prioritario</li>
                         <li data-translate="exclusive_content">Contenido exclusivo VIP</li>
@@ -222,57 +189,47 @@
     <div class="modal" id="packModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" data-translate="pack_selection">📦 MEGA PACKS - Ahorra 70%</h2>
+                <h2 class="modal-title" data-translate="packs_title">📦 MEGA PACKS - Ahorra 70%</h2>
                 <button class="modal-close" onclick="closeModal()">×</button>
             </div>
             
-            <div class="packs-container">
-                <div class="pack-card" onclick="selectPack('starter')">
-                    <div class="pack-title" data-translate="pack_starter">Starter Pack</div>
-                    <div class="pack-items">10</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
+            <div class="packs-grid">
+                <div class="pack-card" onclick="selectPack(10)">
+                    <div class="pack-discount">-33%</div>
+                    <div class="pack-name">Starter Pack</div>
+                    <div class="pack-credits">10 créditos</div>
                     <div class="pack-price">€10</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 33%</div>
+                    <button class="pack-btn">Comprar</button>
                 </div>
                 
-                <div class="pack-card" onclick="selectPack('bronze')">
-                    <div class="pack-title" data-translate="pack_bronze">Bronze Pack</div>
-                    <div class="pack-items">20</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
+                <div class="pack-card popular" onclick="selectPack(20)">
+                    <div class="pack-badge">MÁS POPULAR</div>
+                    <div class="pack-discount">-50%</div>
+                    <div class="pack-name">Bronze Pack</div>
+                    <div class="pack-credits">20 créditos</div>
                     <div class="pack-price">€15</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 50%</div>
+                    <button class="pack-btn">Comprar</button>
                 </div>
                 
-                <div class="pack-card selected" onclick="selectPack('silver')">
-                    <div class="pack-title" data-translate="pack_silver">Silver Pack</div>
-                    <div class="pack-items">50</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
-                    <div class="pack-price">€30</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 60%</div>
+                <div class="pack-card" onclick="selectPack(50)">
+                    <div class="pack-discount">-60%</div>
+                    <div class="pack-name">Silver Pack</div>
+                    <div class="pack-credits">50 créditos</div>
+                    <div class="pack-price">€25</div>
+                    <button class="pack-btn">Comprar</button>
                 </div>
                 
-                <div class="pack-card" onclick="selectPack('gold')">
-                    <div class="pack-title" data-translate="pack_gold">Gold Pack</div>
-                    <div class="pack-items">100</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
+                <div class="pack-card best" onclick="selectPack(100)">
+                    <div class="pack-badge">MEJOR OFERTA</div>
+                    <div class="pack-discount">-70%</div>
+                    <div class="pack-name">Gold Pack</div>
+                    <div class="pack-credits">100 créditos</div>
                     <div class="pack-price">€50</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 70%</div>
+                    <button class="pack-btn">Comprar</button>
                 </div>
             </div>
             
             <div id="paypal-button-container-pack" class="paypal-button-container"></div>
-        </div>
-    </div>
-
-    <!-- PPV Modal -->
-    <div class="modal" id="ppvModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="ppvTitle" data-translate="unlock_content">🔓 Desbloquear Contenido</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
-            <div class="ppv-price" id="ppvPrice">€0.10</div>
-            <div id="paypal-button-container-ppv" class="paypal-button-container"></div>
         </div>
     </div>
 
@@ -285,8 +242,8 @@
             </div>
             
             <div class="footer-section">
-                <h3 data-translate="quick_links">Enlaces Rápidos</h3>
-                <ul class="footer-links">
+                <h4 data-translate="quick_links">Enlaces Rápidos</h4>
+                <ul>
                     <li><a href="#photosSection" data-translate="photos">Fotos</a></li>
                     <li><a href="#videosSection" data-translate="videos">Videos</a></li>
                     <li><a href="#" onclick="showVIPModal()" data-translate="vip_subscription">Suscripción VIP</a></li>
@@ -295,8 +252,8 @@
             </div>
             
             <div class="footer-section">
-                <h3 data-translate="support">Soporte</h3>
-                <ul class="footer-links">
+                <h4 data-translate="support">Soporte</h4>
+                <ul>
                     <li><a href="#" data-translate="terms">Términos de Servicio</a></li>
                     <li><a href="#" data-translate="privacy">Política de Privacidad</a></li>
                     <li><a href="#" data-translate="contact">Contacto</a></li>
@@ -309,7 +266,13 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="main-script.js" defer></script>
+    <!-- IMPORTANTE: Cargar primero la base de datos de contenido -->
+    <script src="content-database.js"></script>
+    
+    <!-- Luego cargar el script principal -->
+    <script src="main-script.js"></script>
+    
+    <!-- SEO Enhancements al final -->
+    <script src="seo-enhancements.js"></script>
 </body>
 </html>
