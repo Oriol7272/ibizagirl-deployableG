@@ -1,165 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  
   <url>
-    <loc>https://beachgirl.pics/</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikini.jpg</image:loc>
-      <image:title>Galería premium de playas - Paradise de playas</image:title>
-      <image:caption>BeachGirl.pics - Fotos exclusivas de playas</image:caption>
-      <image:geo_location>España</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikini.jpg</image:loc>
+      <image:title>Galería premium de Ibiza - Paradise mediterráneo</image:title>
+      <image:caption>IbizaGirl.pics - Fotos exclusivas de Ibiza</image:caption>
+      <image:geo_location>Ibiza, España</image:geo_location>
     </image:image>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikbanner.jpg</image:loc>
-      <image:title>Playas - Contenido diario actualizado</image:title>
-      <image:caption>Mejores playas 2025</image:caption>
-      <image:geo_location>España</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikbanner.jpg</image:loc>
+      <image:title>Playas de Ibiza - Contenido diario actualizado</image:title>
+      <image:caption>Mejores playas de Ibiza 2025</image:caption>
+      <image:geo_location>Ibiza, España</image:geo_location>
     </image:image>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikbanner2.jpg</image:loc>
-      <image:title>Atardeceres - Galería</image:title>
-      <image:caption>Atardeceres paradisíacos</image:caption>
-      <image:geo_location>España</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikbanner2.jpg</image:loc>
+      <image:title>Atardeceres en Ibiza - Galería mediterránea</image:title>
+      <image:caption>Atardeceres paradisíacos Ibiza</image:caption>
+      <image:geo_location>Ibiza, España</image:geo_location>
     </image:image>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/backbikini.jpg</image:loc>
-      <image:title>Calas cristalinas - Turismo España</image:title>
-      <image:caption>Calas secretas - España</image:caption>
-      <image:geo_location>España</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/backbikini.jpg</image:loc>
+      <image:title>Calas cristalinas de Ibiza - Turismo España</image:title>
+      <image:caption>Calas secretas Ibiza - Islas Baleares</image:caption>
+      <image:geo_location>Ibiza, España</image:geo_location>
     </image:image>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikini3.jpg</image:loc>
-      <image:title>Vistas oceánicas - español</image:title>
-      <image:caption>Ocean views - Premium content</image:caption>
-      <image:geo_location>España</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikini3.jpg</image:loc>
+      <image:title>Vistas oceánicas Ibiza - Mediterráneo español</image:title>
+      <image:caption>Ocean views Ibiza - Premium content</image:caption>
+      <image:geo_location>Ibiza, España</image:geo_location>
     </image:image>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikini5.jpg</image:loc>
-      <image:title>Sesiones de verano - Contenido exclusivo</image:title>
-      <image:caption>Summer sessions - Galería diaria</image:caption>
-      <image:geo_location>España</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikini5.jpg</image:loc>
+      <image:title>Sesiones de verano Ibiza - Contenido exclusivo</image:title>
+      <image:caption>Summer sessions Ibiza - Galería diaria</image:caption>
+      <image:geo_location>Ibiza, España</image:geo_location>
     </image:image>
   </url>
-
   <url>
-    <loc>https://beachgirl.pics/main.html</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/main.html</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikini.jpg</image:loc>
-      <image:title>Galería diaria - 400+ fotos actualizadas</image:title>
-      <image:caption>Galería premium - Contenido</image:caption>
-      <image:geo_location>España</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikini.jpg</image:loc>
+      <image:title>Galería diaria Ibiza - 400+ fotos actualizadas</image:title>
+      <image:caption>Galería premium Ibiza - Contenido mediterráneo</image:caption>
+      <image:geo_location>Ibiza, España</image:geo_location>
     </image:image>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikbanner.jpg</image:loc>
-      <image:title>200+ fotos diarias - Premium gallery</image:title>
-      <image:caption>Daily photos - Paradise</image:caption>
-      <image:geo_location>España</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikbanner.jpg</image:loc>
+      <image:title>200+ fotos diarias de Ibiza - Premium gallery</image:title>
+      <image:caption>Daily Ibiza photos - Mediterranean paradise</image:caption>
+      <image:geo_location>Ibiza, España</image:geo_location>
     </image:image>
   </url>
-
   <url>
-    <loc>https://beachgirl.pics/en/</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/en/</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikini.jpg</image:loc>
-      <image:title>Premium gallery - Paradise photos</image:title>
-      <image:caption>Best photos 2025 - Daily updated gallery</image:caption>
-      <image:geo_location>Spain</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikini.jpg</image:loc>
+      <image:title>Ibiza premium gallery - Mediterranean paradise photos</image:title>
+      <image:caption>Best Ibiza photos 2025 - Daily updated gallery</image:caption>
+      <image:geo_location>Ibiza, Spain</image:geo_location>
     </image:image>
   </url>
-
   <url>
-    <loc>https://beachgirl.pics/fr/</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/fr/</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikini.jpg</image:loc>
-      <image:title>Galerie premium - Photos paradis</image:title>
-      <image:caption>Meilleures photos 2025 - Galerie quotidienne</image:caption>
-      <image:geo_location>Espagne</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikini.jpg</image:loc>
+      <image:title>Galerie premium Ibiza - Photos paradis méditerranéen</image:title>
+      <image:caption>Meilleures photos Ibiza 2025 - Galerie quotidienne</image:caption>
+      <image:geo_location>Ibiza, Espagne</image:geo_location>
     </image:image>
   </url>
-
   <url>
-    <loc>https://beachgirl.pics/de/</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/de/</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikini.jpg</image:loc>
-      <image:title>Premium Galerie - Mittelmeerparadies Fotos</image:title>
-      <image:caption>Beste Fotos 2025 - Täglich aktualisierte Galerie</image:caption>
-      <image:geo_location>Spanien</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikini.jpg</image:loc>
+      <image:title>Ibiza Premium Galerie - Mittelmeerparadies Fotos</image:title>
+      <image:caption>Beste Ibiza Fotos 2025 - Täglich aktualisierte Galerie</image:caption>
+      <image:geo_location>Ibiza, Spanien</image:geo_location>
     </image:image>
   </url>
-
   <url>
-    <loc>https://beachgirl.pics/it/</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/it/</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikini.jpg</image:loc>
-      <image:title>Galleria premium - Foto paradiso mediterraneo</image:title>
-      <image:caption>Migliori foto 2025 - Galleria aggiornata quotidianamente</image:caption>
-      <image:geo_location>Spagna</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikini.jpg</image:loc>
+      <image:title>Galleria premium Ibiza - Foto paradiso mediterraneo</image:title>
+      <image:caption>Migliori foto Ibiza 2025 - Galleria aggiornata quotidianamente</image:caption>
+      <image:geo_location>Ibiza, Spagna</image:geo_location>
     </image:image>
   </url>
-
   <url>
-    <loc>https://beachgirl.pics/pt/</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/pt/</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    
     <image:image>
-      <image:loc>https://beachgirl.pics/public/assets/full/bikini.jpg</image:loc>
-      <image:title>Galeria premium - Fotos paraíso mediterrâneo</image:title>
-      <image:caption>Melhores fotos 2025 - Galeria atualizada diariamente</image:caption>
-      <image:geo_location>Espanha</image:geo_location>
+      <image:loc>https://ibizagirl.pics/public/assets/full/bikini.jpg</image:loc>
+      <image:title>Galeria premium Ibiza - Fotos paraíso mediterrâneo</image:title>
+      <image:caption>Melhores fotos Ibiza 2025 - Galeria atualizada diariamente</image:caption>
+      <image:geo_location>Ibiza, Espanha</image:geo_location>
     </image:image>
   </url>
-
   <url>
-    <loc>https://beachgirl.pics/terms</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/terms</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
-
   <url>
-    <loc>https://beachgirl.pics/privacy</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/privacy</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
-
   <url>
-    <loc>https://beachgirl.pics/contact</loc>
-    <lastmod>2025-08-15T13:41:13+02:00</lastmod>
+    <loc>https://ibizagirl.pics/contact</loc>
+    <lastmod>2025-01-15T13:41:13+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
-
 </urlset>
