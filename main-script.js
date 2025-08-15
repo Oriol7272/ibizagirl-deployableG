@@ -1,5 +1,5 @@
 // ============================
-// BeachGirl.pics Gallery Script v15.0.0 - COMPLETE EDITION
+// BeachGirl.pics Gallery Script v15.0.0 - COMPLETE EDITION FIXED
 // PayPal + Todas las mejoras + Sistema completo
 // ============================
 
@@ -22,7 +22,7 @@ const CONFIG = {
     PAYPAL: {
         CLIENT_ID: 'AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5',
         CURRENCY: 'EUR',
-        ENVIRONMENT: 'production', // o 'sandbox' para pruebas
+        ENVIRONMENT: 'production',
         STYLE: {
             layout: 'vertical',
             color: 'blue',
@@ -40,7 +40,7 @@ const CONFIG = {
             silver: { credits: 50, price: 35, discount: 65 },
             gold: { credits: 100, price: 60, discount: 70 }
         },
-        PPV: 0.10 // Precio por contenido individual
+        PPV: 0.10
     },
     ANIMATIONS: {
         DURATION: 300,
@@ -56,8 +56,8 @@ const CONFIG = {
     }
 };
 
-// Imagen fallback optimizada
-const FALLBACK_SVG = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDA0IiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM2NjdlZWEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3NjRiYTIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDA0IiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNnKSIvPjx0ZXh0IHg9IjUwJSIgeT0iNDAlIiBmb250LXNpemU9IjQ4IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfjYo8L3RleHQ+PHRleHQgeD0iNTAlIiB5PSI2NSUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+QmVhY2hHaXJsLnBpY3M8L3RleHQ+PC9zdmc+';
+// Imagen fallback real (no SVG)
+const FALLBACK_IMAGE = 'full/bikini.webp';
 
 // ============================
 // ESTADO GLOBAL AVANZADO
@@ -174,8 +174,8 @@ const TRANSLATIONS = {
         help: '❓ Ayuda',
         
         // Navigation
-        monthly: '📅 Mensual',
-        lifetime: '👑 Lifetime',
+        monthly: '💳 €15/Mes',
+        lifetime: '👑 Lifetime €100',
         
         // Footer
         footer_desc: 'Tu destino diario para contenido exclusivo del paraíso mediterráneo.',
@@ -212,7 +212,7 @@ const TRANSLATIONS = {
         random: 'Aleatorio'
     },
     en: {
-        // Core UI (versión inglesa similar pero completa)
+        // Core UI
         welcome: 'Welcome to Paradise 🌴',
         daily_content: '200+ photos and 40+ videos updated DAILY',
         unlock_all: '🔓 Unlock Everything',
@@ -275,8 +275,8 @@ const TRANSLATIONS = {
         help: '❓ Help',
         
         // Navigation
-        monthly: '📅 Monthly',
-        lifetime: '👑 Lifetime',
+        monthly: '💳 €15/Month',
+        lifetime: '👑 Lifetime €100',
         
         // Footer
         footer_desc: 'Your daily destination for exclusive Mediterranean paradise content.',
@@ -312,7 +312,6 @@ const TRANSLATIONS = {
         popular: 'Popular',
         random: 'Random'
     }
-    // Nota: Puedes añadir más idiomas (de, fr, it, pt) siguiendo la misma estructura
 };
 
 // ============================
@@ -329,7 +328,6 @@ const PathDetector = {
     },
     
     getOptimalImageFormat() {
-        // Detectar soporte WEBP
         if (this.supportsWebP()) return 'webp';
         return 'jpg';
     },
@@ -347,11 +345,21 @@ const PathDetector = {
 // ============================
 
 function handleImageError(img) {
-    if (!img.dataset.fallbackUsed) {
-        img.dataset.fallbackUsed = 'true';
-        img.src = FALLBACK_SVG;
+    // Evitar loop infinito de errores
+    if (!img || img.dataset.fallbackUsed === 'true') {
+        return;
+    }
+    
+    img.dataset.fallbackUsed = 'true';
+    state.failedLoads++;
+    
+    // Usar una imagen real como fallback
+    const fallbackPath = FALLBACK_IMAGE;
+    
+    // Solo intentar el fallback si no es la misma imagen
+    if (!img.src.includes(fallbackPath)) {
+        img.src = fallbackPath;
         img.style.objectFit = 'cover';
-        state.failedLoads++;
         
         // Analytics de errores
         if (CONFIG.FEATURES.ANALYTICS) {
@@ -359,6 +367,28 @@ function handleImageError(img) {
                 original_src: img.dataset.originalSrc || img.src,
                 error_count: state.failedLoads
             });
+        }
+    } else {
+        // Si el fallback también falla, poner un placeholder simple
+        img.style.display = 'none';
+        
+        // Crear un div de placeholder
+        const placeholder = document.createElement('div');
+        placeholder.style.cssText = `
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            border-radius: 12px;
+        `;
+        placeholder.innerHTML = '🌊';
+        
+        if (img.parentElement) {
+            img.parentElement.appendChild(placeholder);
         }
     }
 }
@@ -402,9 +432,7 @@ function throttle(func, limit) {
             setTimeout(() => inThrottle = false, limit);
         }
     };
-}
-
-// ============================
+}// ============================
 // ANALYTICS Y TRACKING
 // ============================
 
@@ -467,7 +495,7 @@ function trackInteraction(action, target) {
 }
 
 // ============================
-// PAYPAL INTEGRACIÓN COMPLETA
+// PAYPAL INTEGRACIÓN COMPLETA - CORREGIDA
 // ============================
 
 class PayPalManager {
@@ -523,7 +551,13 @@ class PayPalManager {
                     }],
                     application_context: {
                         brand_name: 'BeachGirl.pics',
-                        locale: state.language === 'es' ? 'es_ES' : 'en_US',
+                        // CORRECCIÓN: Usar locale válido con guión
+                        locale: state.language === 'es' ? 'es-ES' : 
+                               state.language === 'en' ? 'en-US' :
+                               state.language === 'de' ? 'de-DE' :
+                               state.language === 'fr' ? 'fr-FR' :
+                               state.language === 'it' ? 'it-IT' :
+                               state.language === 'pt' ? 'pt-BR' : 'en-US',
                         user_action: 'PAY_NOW',
                         shipping_preference: 'NO_SHIPPING'
                     }
@@ -565,7 +599,7 @@ class PayPalManager {
             
             onError: (err) => {
                 console.error('PayPal error:', err);
-                trackEvent('paypal_error', { type: 'button_error', error: err });
+                trackEvent('paypal_error', { type: 'button_error', error: err.toString() });
                 showNotification(TRANSLATIONS[state.language].payment_error, 'error');
             },
             
@@ -609,7 +643,13 @@ class PayPalManager {
                     }],
                     application_context: {
                         brand_name: 'BeachGirl.pics',
-                        locale: state.language === 'es' ? 'es_ES' : 'en_US',
+                        // CORRECCIÓN: Usar locale válido
+                        locale: state.language === 'es' ? 'es-ES' : 
+                               state.language === 'en' ? 'en-US' :
+                               state.language === 'de' ? 'de-DE' :
+                               state.language === 'fr' ? 'fr-FR' :
+                               state.language === 'it' ? 'it-IT' :
+                               state.language === 'pt' ? 'pt-BR' : 'en-US',
                         user_action: 'PAY_NOW',
                         shipping_preference: 'NO_SHIPPING'
                     }
@@ -644,7 +684,7 @@ class PayPalManager {
             
             onError: (err) => {
                 console.error('PayPal pack error:', err);
-                trackEvent('paypal_pack_error', { error: err });
+                trackEvent('paypal_pack_error', { error: err.toString() });
                 showNotification(TRANSLATIONS[state.language].payment_error, 'error');
             },
             
@@ -683,7 +723,13 @@ class PayPalManager {
                     }],
                     application_context: {
                         brand_name: 'BeachGirl.pics',
-                        locale: state.language === 'es' ? 'es_ES' : 'en_US',
+                        // CORRECCIÓN: Usar locale válido sin guión bajo
+                        locale: state.language === 'es' ? 'es-ES' : 
+                               state.language === 'en' ? 'en-US' :
+                               state.language === 'de' ? 'de-DE' :
+                               state.language === 'fr' ? 'fr-FR' :
+                               state.language === 'it' ? 'it-IT' :
+                               state.language === 'pt' ? 'pt-BR' : 'en-US',
                         user_action: 'PAY_NOW',
                         shipping_preference: 'NO_SHIPPING'
                     }
@@ -710,6 +756,12 @@ class PayPalManager {
                     trackEvent('paypal_ppv_payment_error', { error: error.message });
                     showNotification(TRANSLATIONS[state.language].payment_error, 'error');
                 }
+            },
+            
+            onError: (err) => {
+                console.error('PayPal PPV error:', err);
+                trackEvent('paypal_ppv_error', { error: err.toString() });
+                showNotification(TRANSLATIONS[state.language].payment_error, 'error');
             }
             
         }).render(container);
@@ -848,6 +900,7 @@ function createPhotoItem(photo, index, isUnlocked, isNew, imagePath) {
     img.alt = 'Foto Premium ' + (index + 1);
     img.className = 'content-img';
     img.loading = 'lazy';
+    img.onerror = function() { handleImageError(this); };
     
     // Click handler para tracking y vista
     img.addEventListener('click', () => {
@@ -865,7 +918,7 @@ function createPhotoItem(photo, index, isUnlocked, isNew, imagePath) {
     
     if (isNew) {
         const badge = document.createElement('span');
-        badge.className = 'badge-new';
+        badge.className = 'new-badge';
         badge.textContent = TRANSLATIONS[state.language].new_today;
         wrapper.appendChild(badge);
     }
@@ -898,16 +951,7 @@ function createLockOverlay(contentId, type) {
         const creditBtn = document.createElement('button');
         creditBtn.className = 'unlock-btn credit-btn';
         creditBtn.onclick = function() { unlockContent(contentId, type); };
-        
-        const text = document.createElement('span');
-        text.textContent = TRANSLATIONS[state.language].unlock_credit;
-        
-        const cost = document.createElement('span');
-        cost.className = 'credit-cost';
-        cost.textContent = '💎 1';
-        
-        creditBtn.appendChild(text);
-        creditBtn.appendChild(cost);
+        creditBtn.textContent = TRANSLATIONS[state.language].unlock_credit;
         btnContainer.appendChild(creditBtn);
     }
     
@@ -983,6 +1027,7 @@ function renderVideosProgressive(container, videos) {
 function createVideoItem(video, index, isUnlocked, isNew, videoPath) {
     const item = document.createElement('div');
     item.className = 'content-item video-item ' + (isUnlocked ? 'unlocked' : 'locked');
+    item.dataset.type = 'video';
     if (isNew) item.classList.add('new-item');
     
     const wrapper = document.createElement('div');
@@ -992,12 +1037,12 @@ function createVideoItem(video, index, isUnlocked, isNew, videoPath) {
         const videoEl = document.createElement('video');
         videoEl.className = 'content-video';
         videoEl.controls = true;
-        videoEl.poster = FALLBACK_SVG;
+        videoEl.poster = FALLBACK_IMAGE;
         videoEl.preload = 'metadata';
         
         if (state.autoPlay) {
             videoEl.autoplay = true;
-            videoEl.muted = true; // Required for autoplay
+            videoEl.muted = true;
         }
         
         const source = document.createElement('source');
@@ -1006,7 +1051,6 @@ function createVideoItem(video, index, isUnlocked, isNew, videoPath) {
         
         videoEl.appendChild(source);
         
-        // Event listeners para analytics
         videoEl.addEventListener('play', () => {
             trackContentView(video, 'video');
             trackEvent('video_play', { video_id: video });
@@ -1019,9 +1063,10 @@ function createVideoItem(video, index, isUnlocked, isNew, videoPath) {
         wrapper.appendChild(videoEl);
     } else {
         const thumb = document.createElement('img');
-        thumb.src = FALLBACK_SVG;
+        thumb.src = FALLBACK_IMAGE;
         thumb.alt = 'Video Premium ' + (index + 1);
         thumb.className = 'video-thumb';
+        thumb.onerror = function() { handleImageError(this); };
         
         thumb.addEventListener('click', () => {
             trackInteraction('video_thumb_click', video);
@@ -1047,7 +1092,7 @@ function createVideoItem(video, index, isUnlocked, isNew, videoPath) {
     
     if (isNew) {
         const newBadge = document.createElement('span');
-        newBadge.className = 'badge-new';
+        newBadge.className = 'new-badge';
         newBadge.textContent = TRANSLATIONS[state.language].new_today;
         wrapper.appendChild(newBadge);
     }
@@ -1093,9 +1138,7 @@ function renderTeaserCarousel() {
         teaserItem.appendChild(overlay);
         carousel.appendChild(teaserItem);
     });
-}
-
-// ============================
+}// ============================
 // MODALES AVANZADOS
 // ============================
 
@@ -1104,7 +1147,7 @@ function showVIPModal() {
     
     const modal = document.getElementById('vipModal');
     if (modal) {
-        modal.style.display = 'flex';
+        modal.classList.add('active');
         state.currentModal = 'vip';
         
         // Inicializar PayPal después de mostrar el modal
@@ -1124,7 +1167,7 @@ function showPackModal() {
     
     const modal = document.getElementById('packModal');
     if (modal) {
-        modal.style.display = 'flex';
+        modal.classList.add('active');
         state.currentModal = 'pack';
         
         // Inicializar PayPal después de mostrar el modal
@@ -1157,7 +1200,7 @@ function showPPVModal(contentId, type) {
             price.textContent = '€' + CONFIG.PRICES.PPV.toFixed(2);
         }
         
-        modal.style.display = 'flex';
+        modal.classList.add('active');
         state.currentModal = 'ppv';
         
         // Inicializar PayPal PPV
@@ -1184,7 +1227,7 @@ function showUnlockModal(contentId, type) {
 
 function closeModal() {
     document.querySelectorAll('.modal').forEach(modal => {
-        modal.style.display = 'none';
+        modal.classList.remove('active');
     });
     
     // Limpiar botones PayPal activos
@@ -1297,43 +1340,6 @@ function showNotification(message, type = 'info') {
     notification.appendChild(closeBtn);
     document.body.appendChild(notification);
     
-    // Agregar estilos mejorados si no existen
-    if (!document.getElementById('notification-styles')) {
-        const style = document.createElement('style');
-        style.id = 'notification-styles';
-        style.textContent = `
-        .notification{position:fixed;top:20px;right:20px;background:white;padding:15px 20px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.2);display:flex;align-items:center;gap:15px;z-index:10001;transform:translateX(400px);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);max-width:350px;border-left:4px solid #ccc}
-        .notification.show{transform:translateX(0)}
-        .notification.success{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border-left-color:#4ade80}
-        .notification.error{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:white;border-left-color:#ef4444}
-        .notification.info{background:linear-gradient(135deg,#89f7fe 0%,#66a6ff 100%);color:white;border-left-color:#3b82f6}
-        .notification-close{background:rgba(255,255,255,0.2);border:none;color:inherit;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1;transition:background 0.2s}
-        .notification-close:hover{background:rgba(255,255,255,0.3)}
-        .loading-message{text-align:center;padding:40px;color:#999;font-size:18px}
-        .content-item.loaded{animation:fadeInUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards}
-        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-        .content-wrapper{position:relative;width:100%;height:100%;overflow:hidden;border-radius:12px}
-        .content-img,.content-video,.video-thumb{width:100%;height:100%;object-fit:cover;transition:transform 0.3s ease}
-        .content-item:hover .content-img{transform:scale(1.05)}
-        .badge-new{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#00ff88,#4ade80);color:#001f3f;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:700;z-index:2;animation:pulse 2s infinite}
-        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-        .video-badge{position:absolute;bottom:10px;right:10px;display:flex;gap:5px;z-index:2}
-        .video-badge span{background:rgba(0,0,0,0.8);color:white;padding:3px 8px;border-radius:5px;font-size:0.75rem;font-weight:600;backdrop-filter:blur(5px)}
-        .lock-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:3;transition:background 0.3s ease}
-        .content-item:hover .lock-overlay{background:rgba(0,0,0,0.85)}
-        .lock-content{text-align:center;color:white}
-        .lock-icon{font-size:3rem;margin-bottom:15px;animation:lockFloat 2s ease-in-out infinite}
-        @keyframes lockFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-        .unlock-buttons{display:flex;flex-direction:column;gap:10px}
-        .unlock-btn{background:linear-gradient(135deg,#ffd700,#ff6b35);color:#001f3f;border:none;padding:12px 20px;border-radius:25px;font-weight:700;cursor:pointer;transition:all 0.3s ease;font-size:0.9rem;min-width:140px}
-        .unlock-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(255,215,0,0.4)}
-        .credit-btn{background:linear-gradient(135deg,#4ade80,#22c55e)}
-        .ppv-btn{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
-        .unlock-text{margin-right:5px}
-        `;
-        document.head.appendChild(style);
-    }
-    
     setTimeout(() => notification.classList.add('show'), 100);
     
     // Auto-hide después de 5 segundos
@@ -1406,13 +1412,13 @@ class IsabellaBot {
         if (!window) return;
         
         this.isOpen = !this.isOpen;
-        window.style.display = this.isOpen ? 'block' : 'none';
-        
         if (this.isOpen) {
+            window.classList.add('active');
             this.showWelcomeMessage();
             this.markNotificationAsRead();
             trackInteraction('isabella_open', 'chat_bubble');
         } else {
+            window.classList.remove('active');
             trackInteraction('isabella_close', 'chat_bubble');
         }
     }
@@ -1454,15 +1460,6 @@ class IsabellaBot {
         
         messagesContainer.appendChild(messageDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        
-        // Animación de escritura
-        messageDiv.style.opacity = '0';
-        messageDiv.style.transform = 'translateY(20px)';
-        setTimeout(() => {
-            messageDiv.style.transition = 'all 0.3s ease';
-            messageDiv.style.opacity = '1';
-            messageDiv.style.transform = 'translateY(0)';
-        }, 100);
         
         this.messages.push({ text, sender, timestamp: Date.now() });
     }
@@ -1654,7 +1651,7 @@ async function requestNotificationPermission() {
             if (registration) {
                 const subscription = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY') // Reemplazar con tu clave VAPID
+                    applicationServerKey: urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY')
                 });
                 
                 // Enviar suscripción al servidor
@@ -1700,183 +1697,6 @@ async function sendSubscriptionToServer(subscription) {
     } catch (error) {
         console.warn('Failed to send subscription to server:', error);
     }
-}
-
-// ============================
-// MODO OFFLINE
-// ============================
-
-function handleOfflineMode() {
-    if (!CONFIG.FEATURES.OFFLINE_MODE) return;
-    
-    window.addEventListener('online', () => {
-        state.offlineMode = false;
-        showNotification(TRANSLATIONS[state.language].connection_restored, 'success');
-        trackEvent('connection_restored');
-    });
-    
-    window.addEventListener('offline', () => {
-        state.offlineMode = true;
-        showNotification(TRANSLATIONS[state.language].offline_mode, 'info');
-        trackEvent('connection_lost');
-    });
-}
-
-// ============================
-// AUTO-SAVE SISTEMA
-// ============================
-
-function setupAutoSave() {
-    if (!CONFIG.FEATURES.AUTO_SAVE) return;
-    
-    const saveState = debounce(() => {
-        const stateToSave = {
-            language: state.language,
-            credits: state.credits,
-            isVIP: state.isVIP,
-            unlockedPhotos: [...state.unlockedPhotos],
-            unlockedVideos: [...state.unlockedVideos],
-            preferences: {
-                autoPlay: state.autoPlay,
-                qualityPreference: state.qualityPreference,
-                notifications: state.notifications
-            },
-            timestamp: Date.now()
-        };
-        
-        localStorage.setItem('autoSaveState', JSON.stringify(stateToSave));
-        console.log('💾 State auto-saved');
-    }, 1000);
-    
-    // Auto-save cuando cambie el estado
-    const originalSetItem = localStorage.setItem;
-    localStorage.setItem = function(key, value) {
-        originalSetItem.call(this, key, value);
-        if (['credits', 'isVIP', 'unlockedPhotos', 'unlockedVideos'].includes(key)) {
-            saveState();
-        }
-    };
-}
-
-// ============================
-// BÚSQUEDA AVANZADA
-// ============================
-
-function setupAdvancedSearch() {
-    if (!CONFIG.FEATURES.ADVANCED_SEARCH) return;
-    
-    // Crear interfaz de búsqueda
-    const searchContainer = document.createElement('div');
-    searchContainer.className = 'advanced-search-container';
-    searchContainer.style.cssText = `
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        background: rgba(0, 33, 66, 0.95);
-        backdrop-filter: blur(20px);
-        border-radius: 15px;
-        padding: 20px;
-        z-index: 1000;
-        display: none;
-        min-width: 300px;
-        border: 1px solid rgba(127, 219, 255, 0.3);
-    `;
-    
-    const searchInput = document.createElement('input');
-    searchInput.type = 'text';
-    searchInput.placeholder = TRANSLATIONS[state.language].advanced_search;
-    searchInput.style.cssText = `
-        width: 100%;
-        padding: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        margin-bottom: 15px;
-    `;
-    
-    const filterContainer = document.createElement('div');
-    filterContainer.innerHTML = `
-        <label style="color: white; display: block; margin-bottom: 10px;">
-            ${TRANSLATIONS[state.language].filter_by}:
-            <select style="width: 100%; padding: 5px; margin-top: 5px; border-radius: 5px;">
-                <option value="all">Todo</option>
-                <option value="photos">Fotos</option>
-                <option value="videos">Videos</option>
-                <option value="new">Nuevo</option>
-                <option value="unlocked">Desbloqueado</option>
-            </select>
-        </label>
-        <label style="color: white; display: block;">
-            ${TRANSLATIONS[state.language].sort_by}:
-            <select style="width: 100%; padding: 5px; margin-top: 5px; border-radius: 5px;">
-                <option value="newest">${TRANSLATIONS[state.language].newest}</option>
-                <option value="popular">${TRANSLATIONS[state.language].popular}</option>
-                <option value="random">${TRANSLATIONS[state.language].random}</option>
-            </select>
-        </label>
-    `;
-    
-    searchContainer.appendChild(searchInput);
-    searchContainer.appendChild(filterContainer);
-    document.body.appendChild(searchContainer);
-    
-    // Toggle search
-    const toggleSearch = () => {
-        const isVisible = searchContainer.style.display === 'block';
-        searchContainer.style.display = isVisible ? 'none' : 'block';
-        if (!isVisible) {
-            searchInput.focus();
-        }
-    };
-    
-    // Agregar botón de búsqueda al header si no existe
-    const headerButtons = document.querySelector('.header-buttons');
-    if (headerButtons && !document.getElementById('searchBtn')) {
-        const searchBtn = document.createElement('button');
-        searchBtn.id = 'searchBtn';
-        searchBtn.className = 'header-btn';
-        searchBtn.innerHTML = '🔍 Buscar';
-        searchBtn.onclick = toggleSearch;
-        headerButtons.appendChild(searchBtn);
-    }
-    
-    // Implementar búsqueda en tiempo real
-    searchInput.addEventListener('input', debounce((e) => {
-        const query = e.target.value.toLowerCase();
-        performSearch(query);
-    }, 300));
-}
-
-function performSearch(query) {
-    if (!query) {
-        initializeGallery(); // Restaurar vista completa
-        return;
-    }
-    
-    const allPhotos = [...window.ALL_PHOTOS_POOL, ...window.ALL_UNCENSORED_PHOTOS_POOL];
-    const allVideos = [...window.ALL_VIDEOS_POOL];
-    
-    // Filtrar contenido basado en la búsqueda
-    const filteredPhotos = allPhotos.filter(photo => 
-        photo.toLowerCase().includes(query) ||
-        (state.unlockedPhotos.has(photo) && query.includes('unlock'))
-    );
-    
-    const filteredVideos = allVideos.filter(video => 
-        video.toLowerCase().includes(query) ||
-        (state.unlockedVideos.has(video) && query.includes('unlock'))
-    );
-    
-    // Renderizar resultados filtrados
-    renderPhotosProgressive(document.getElementById('photosGrid'), filteredPhotos.slice(0, 50));
-    renderVideosProgressive(document.getElementById('videosGrid'), filteredVideos.slice(0, 20));
-    
-    trackEvent('search_performed', { 
-        query: query, 
-        results_photos: filteredPhotos.length,
-        results_videos: filteredVideos.length
-    });
 }
 
 // ============================
@@ -1996,20 +1816,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('🚀 DOM Content Loaded - Starting initialization...');
     
     try {
-        // Configurar sistemas principales
-        setupAutoSave();
-        handleOfflineMode();
-        setupAdvancedSearch();
-        
         // Ocultar pantalla de carga con efecto
         setTimeout(() => {
             const loadingScreen = document.getElementById('loadingScreen');
             if (loadingScreen) {
-                loadingScreen.style.transition = 'opacity 0.5s ease';
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
+                loadingScreen.classList.add('hidden');
             }
         }, 1500);
         
@@ -2174,40 +1985,33 @@ window.galleryDebug = {
             localStorage.clear();
             location.reload();
         }
+    }
+};
+
+// Debug PayPal locale issues
+window.debugPayPal = {
+    testLocales: function() {
+        const validLocales = [
+            'en-US', 'es-ES', 'fr-FR', 'de-DE', 'it-IT', 'pt-BR',
+            'en-GB', 'en-AU', 'en-CA', 'es-MX', 'es-AR', 'fr-CA'
+        ];
+        
+        console.log('Valid PayPal locales:', validLocales);
+        console.log('Current language:', state.language);
+        console.log('Current locale would be:', state.language === 'es' ? 'es-ES' : 'en-US');
+        
+        return validLocales;
     },
     
-    enableAllFeatures: () => {
-        Object.keys(CONFIG.FEATURES).forEach(feature => {
-            CONFIG.FEATURES[feature] = true;
-        });
-        console.log('✅ Debug: Todas las características habilitadas');
-        showNotification('🎉 Debug: Todas las características habilitadas', 'success');
-    },
-    
-    testNotification: (message = 'Test notification', type = 'info') => {
-        showNotification(message, type);
-    },
-    
-    exportState: () => {
-        const exportData = {
-            state: state,
-            config: CONFIG,
-            timestamp: new Date().toISOString(),
-            version: CONFIG.VERSION
-        };
-        console.log('📊 Estado exportado:', exportData);
-        return exportData;
-    },
-    
-    analytics: {
-        viewedContent: () => [...state.viewedContent],
-        interactions: () => state.interactions,
-        sessionDuration: () => Date.now() - state.sessionStart,
-        performance: () => ({
-            averageLoadTime: state.averageLoadTime,
-            failedLoads: state.failedLoads,
-            imageLoadTimes: state.imageLoadTimes.slice(-10) // Últimas 10
-        })
+    checkSDK: function() {
+        if (typeof paypal !== 'undefined') {
+            console.log('✅ PayPal SDK loaded');
+            console.log('PayPal version:', paypal.version);
+            return true;
+        } else {
+            console.error('❌ PayPal SDK not loaded');
+            return false;
+        }
     }
 };
 
