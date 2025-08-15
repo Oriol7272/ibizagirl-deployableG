@@ -1,5 +1,5 @@
 /* ============================
-   BEACHGIRL.PICS STYLES v2.0
+   IBIZAGIRL.PICS STYLES v2.0
    Ocean Paradise Theme
    ============================ */
 
@@ -200,17 +200,153 @@ body {
     left: -100%;
     width: 200%;
     height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: all 0.5s;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
 }
 
 .header-btn:hover::before {
     left: 100%;
 }
+/* Isabella Window */
+.isabella-window {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    background: rgba(0, 33, 66, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    overflow: hidden;
+    z-index: 999;
+    animation: imagePop 0.3s ease;
+    display: none;
+}
 
-.header-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 168, 204, 0.4);
+.isabella-window.active {
+    display: block;
+}
+
+.isabella-header {
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--ocean-dark), var(--ocean-medium));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.isabella-title {
+    font-size: 1.2rem;
+    color: var(--sunset-pink);
+}
+
+.isabella-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.isabella-messages {
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.isabella-message {
+    background: var(--glass-bg);
+    padding: 0.8rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes imagePop {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.isabella-actions {
+    padding: 1rem;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.isabella-btn {
+    flex: 1;
+    padding: 0.5rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.isabella-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: var(--aqua-light);
+}
+
+/* Footer */
+.main-footer {
+    background: rgba(0, 33, 66, 0.95);
+    border-top: 1px solid var(--glass-border);
+    padding: 3rem 2rem 2rem;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.footer-section h3 {
+    margin-bottom: 1rem;
+    color: var(--sunset-gold);
+}
+
+.footer-section p {
+    color: var(--text-secondary);
+    margin-top: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--aqua-light);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
 }
 
 /* Credits Display */
@@ -249,483 +385,114 @@ body {
     margin-top: 0.3rem;
 }
 
-/* Welcome Section */
-.welcome-section {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8rem 2rem 4rem;
-    position: relative;
+/* Notification Toast */
+.notification-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--update-green), var(--update-pulse));
+    color: var(--ocean-deep);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    z-index: 10001;
+    animation: notificationSlide 0.5s ease;
+    box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
 }
 
-.welcome-content {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
+@keyframes notificationSlide {
+    from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0); opacity: 1; }
 }
 
-.banner-carousel {
-    position: relative;
-    margin-bottom: 2rem;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-}
-
-.banner-carousel img {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: opacity 0.5s ease;
-}
-
-.banner-title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--aqua-light), var(--sunset-pink));
-    -webkit-background-clip: text;
-    -webkit-text-fill Primero, el usuario quiere todos los scripts con correcciones, uno por uno, para copiar y pegar en GitHub. Todo hardcoded a "beachgirl.pics".
-
-Los archivos proporcionados en el contexto inicial son:
-
-- sw.js
-
-- main.html
-
-- manifest.json
-
-- seo-enhancements.js
-
-- README.md
-
-- robots.txt
-
-- sitemap.xml
-
-- styles.css
-
-- main-script.js
-
-Necesito aplicar las correcciones que mencioné en mi respuesta anterior:
-
-- Cambiar todos los "ibizagirl.pics" y referencias a "IbizaGirl" por "beachgirl.pics" y "BeachGirl".
-
-- Ajustar branding: Cambiar "Ibiza" a algo como "Beach Paradise" o similar, pero como el usuario dijo "beachgirl.pics", asumiré rebrand a "BeachGirl.pics" con tema de playa genérico. Para mantener consistencia, cambiaré "Ibiza" a "Beach" donde sea relevante.
-
-- Otras correcciones: Por ejemplo, en PayPal, sugerí cambiar a live, pero como no hay ID live, dejaré como está o asumir test.
-
-- Archivos grandes: Si son grandes, dividir en partes. main-script.js es muy grande (truncado en 96899 chars), seo-enhancements.js y styles.css también truncados. Debo pasarlos divididos si es necesario.
-
-Estructura de respuesta:
-
-- Pasar uno por uno: Empezar con el nombre del archivo, luego el contenido corregido.
-
-- Si grande, dividir: Por ejemplo, "Parte 1 de main-script.js", luego "Parte 2", etc.
-
-- No usar tools: El usuario no pregunta nada que requiera tools; es directo.
-
-- Final response: Interweave render components if appropriate, but here none needed.
-
-Hardcode to beachgirl.pics:
-
-- Buscar y reemplazar:
-
-  - ibizagirl.pics -> beachgirl.pics
-
-  - IbizaGirl -> BeachGirl
-
-  - Ibiza -> Beach (e.g., "IbizaGirl.pics - Galería Premium Ibiza" -> "BeachGirl.pics - Galería Premium Beach")
-
-  - En descripciones: "paraíso mediterráneo" -> "paraíso de playa" o similar, pero para simplicidad, cambiar "Ibiza" a "Beach".
-
-En sitemap.xml, cambiar fechas a current date: August 15, 2025? El mensaje dice "The current date is August 15, 2025." y en sitemap hay "2025-01-15", pero probablemente actualizar a 2025-08-15.
-
-En sitemap: Cambiar fechas a 2025-08-15.
-
-En copyright: "© 2025" -> OK, pero actual si necesario.
-
-Para archivos truncados: Como están truncados en el prompt, asumiré que proporciono versiones corregidas basadas en lo visible, y notar "truncated" si es el caso, pero el usuario quiere "todos los scripts", así que proporcionar completos donde posible.
-
-El prompt tiene "<DOCUMENT filename="..." truncated ... characters>...", así que para respuesta, generar versiones corregidas completas basadas en lo dado.### sw.js (Corregido)
-```javascript
-// ============================
-// BEACHGIRL.PICS SERVICE WORKER v1.3.0
-// PWA + Performance + SEO Optimized
-// ============================
-
-const CACHE_VERSION = '1.3.0';
-const CACHE_NAME = `beachgirl-v${CACHE_VERSION}`;
-const STATIC_CACHE = `beachgirl-static-v${CACHE_VERSION}`;
-const DYNAMIC_CACHE = `beachgirl-dynamic-v${CACHE_VERSION}`;
-const IMAGE_CACHE = `beachgirl-images-v${CACHE_VERSION}`;
-
-// Archivos críticos para cachear
-const STATIC_ASSETS = [
-    '/',
-    '/index.html',
-    '/main.html',
-    '/main-script.js',
-    '/seo-enhancements.js',
-    '/manifest.json',
-    
-    // Imágenes críticas para SEO
-    '/public/assets/full/bikini.jpg',
-    '/public/assets/full/bikbanner.jpg',
-    '/public/assets/full/bikbanner2.jpg',
-    '/public/assets/full/backbikini.jpg',
-    '/public/assets/full/bikini3.jpg',
-    '/public/assets/full/bikini5.jpg'
-];
-
-// External scripts to cache
-const EXTERNAL_SCRIPTS = [
-    'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'
-];
-
-// URLs que no deben cachearse
-const EXCLUDED_URLS = [
-    '/public/assets/uncensored/',
-    '/public/assets/uncensored-videos/',
-    '/admin',
-    'chrome-extension://',
-    'extension://',
-    'paypal.com',
-    'paypalobjects.com'
-];
-
-// ============================
-// INSTALACIÓN DEL SERVICE WORKER
-// ============================
-
-self.addEventListener('install', event => {
-    console.log('🔧 Service Worker: Installing version', CACHE_VERSION);
-    
-    event.waitUntil(
-        Promise.all([
-            // Cache static assets
-            caches.open(STATIC_CACHE).then(cache => {
-                console.log('📦 Service Worker: Caching static assets...');
-                return Promise.all(
-                    STATIC_ASSETS.map(url => {
-                        return cache.add(url).catch(err => {
-                            console.warn(`Failed to cache ${url}:`, err);
-                        });
-                    })
-                );
-            }),
-            // Cache external scripts
-            caches.open(STATIC_CACHE).then(cache => {
-                return Promise.all(
-                    EXTERNAL_SCRIPTS.map(url => {
-                        return fetch(url)
-                            .then(response => {
-                                if (response.ok) {
-                                    return cache.put(url, response);
-                                }
-                            })
-                            .catch(err => {
-                                console.warn(`Failed to cache external script ${url}:`, err);
-                            });
-                    })
-                );
-            })
-        ]).then(() => {
-            console.log('✅ Service Worker: Installation complete');
-            return self.skipWaiting();
-        }).catch(error => {
-            console.error('❌ Service Worker: Installation failed', error);
-        })
-    );
-});
-
-// ============================
-// ACTIVACIÓN DEL SERVICE WORKER
-// ============================
-
-self.addEventListener('activate', event => {
-    console.log('🚀 Service Worker: Activating version', CACHE_VERSION);
-    
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            // Limpiar caches antiguos
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (!cacheName.includes(CACHE_VERSION)) {
-                        console.log('🗑️ Service Worker: Deleting old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        }).then(() => {
-            console.log('✅ Service Worker: Activation complete');
-            return self.clients.claim();
-        })
-    );
-});
-
-// ============================
-// ESTRATEGIAS DE CACHE
-// ============================
-
-// Estrategia: Cache First con timeout
-async function cacheFirstWithTimeout(request, timeout = 3000) {
-    try {
-        const cachePromise = caches.match(request);
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Cache timeout')), timeout)
-        );
-        
-        const cached = await Promise.race([cachePromise, timeoutPromise]);
-        if (cached) {
-            return cached;
-        }
-    } catch (error) {
-        console.log('Cache timeout, fetching from network');
+/* Responsive Design */
+@media (max-width: 768px) {
+    .content-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 0.8rem;
     }
-    
-    const response = await fetch(request);
-    if (response.ok) {
-        const cache = await caches.open(STATIC_CACHE);
-        cache.put(request, response.clone());
-    }
-    return response;
-}
 
-// Estrategia: Network First con fallback
-async function networkFirstWithFallback(request) {
-    try {
-        const response = await fetch(request);
-        if (response.ok) {
-            const cache = await caches.open(DYNAMIC_CACHE);
-            cache.put(request, response.clone());
-        }
-        return response;
-    } catch (error) {
-        const cached = await caches.match(request);
-        if (cached) {
-            return cached;
-        }
-        
-        // Fallback para páginas HTML
-        if (request.headers.get('accept')?.includes('text/html')) {
-            return caches.match('/index.html');
-        }
-        
-        throw error;
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .header-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .language-selector {
+        top: 5px;
+        right: 5px;
+    }
+
+    .banner-title {
+        font-size: 2rem;
+    }
+
+    .stats-section {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .isabella-window {
+        width: 90%;
+        max-width: 350px;
+        right: 5%;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .plans-container {
+        grid-template-columns: 1fr;
+    }
+
+    .packs-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .teaser-carousel-container {
+        padding: 1rem;
+    }
+
+    .teaser-item {
+        flex: 0 0 200px;
+        height: 280px;
+    }
+
+    .banner-cta {
+        flex-direction: column;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .credits-display {
+        top: auto;
+        bottom: 80px;
+        left: 10px;
+        right: 10px;
     }
 }
 
-// Estrategia: Stale While Revalidate
-async function staleWhileRevalidate(request) {
-    const cached = await caches.match(request);
-    
-    // Fetch en background
-    const fetchPromise = fetch(request).then(response => {
-        if (response.ok) {
-            const cache = caches.open(IMAGE_CACHE);
-            cache.then(c => c.put(request, response.clone()));
-        }
-        return response;
-    }).catch(() => cached);
-    
-    return cached || fetchPromise;
+/* Lazy Loading */
+.lazy {
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-// ============================
-// INTERCEPTAR REQUESTS
-// ============================
-
-self.addEventListener('fetch', event => {
-    const { request } = event;
-    const url = new URL(request.url);
-    
-    // Ignorar URLs excluidas
-    if (EXCLUDED_URLS.some(excludedUrl => url.href.includes(excludedUrl))) {
-        return;
-    }
-    
-    // Ignorar requests que no sean GET
-    if (request.method !== 'GET') {
-        return;
-    }
-    
-    // Ignorar chrome-extension y extension requests
-    if (url.protocol === 'chrome-extension:' || url.protocol === 'extension:') {
-        return;
-    }
-    
-    event.respondWith(handleFetch(request, url));
-});
-
-async function handleFetch(request, url) {
-    try {
-        // Para HTML - Network First
-        if (request.headers.get('accept')?.includes('text/html')) {
-            return await networkFirstWithFallback(request);
-        }
-        
-        // Para imágenes - Stale While Revalidate
-        if (request.headers.get('accept')?.includes('image/') || 
-            url.pathname.includes('/public/assets/') ||
-            url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
-            return await staleWhileRevalidate(request);
-        }
-        
-        // Para JavaScript/CSS - Cache First con timeout
-        if (url.pathname.includes('.js') || 
-            url.pathname.includes('.css') ||
-            url.hostname === 'cdn.jsdelivr.net') {
-            return await cacheFirstWithTimeout(request);
-        }
-        
-        // Para PayPal y APIs externas - Network Only
-        if (url.hostname.includes('paypal') || 
-            url.hostname !== location.hostname) {
-            return await fetch(request);
-        }
-        
-        // Default: Network First
-        return await networkFirstWithFallback(request);
-        
-    } catch (error) {
-        console.error('🚨 Service Worker: Fetch error', error);
-        
-        // Retornar respuesta de error
-        return new Response('Network error occurred', {
-            status: 408,
-            statusText: 'Request Timeout',
-            headers: { 'Content-Type': 'text/plain' }
-        });
-    }
+.loaded {
+    opacity: 1;
 }
 
-// ============================
-// MENSAJES DEL CLIENTE
-// ============================
-
-self.addEventListener('message', event => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-        self.skipWaiting();
-    }
-    
-    if (event.data && event.data.type === 'GET_VERSION') {
-        event.ports[0].postMessage({
-            version: CACHE_VERSION,
-            caches: {
-                static: STATIC_CACHE,
-                dynamic: DYNAMIC_CACHE,
-                images: IMAGE_CACHE
-            }
-        });
-    }
-    
-    if (event.data && event.data.type === 'CLEAR_CACHE') {
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => caches.delete(cacheName))
-            );
-        }).then(() => {
-            if (event.ports[0]) {
-                event.ports[0].postMessage({ success: true });
-            }
-        });
-    }
-});
-
-// ============================
-// SINCRONIZACIÓN EN BACKGROUND
-// ============================
-
-self.addEventListener('sync', event => {
-    console.log('📡 Background sync triggered:', event.tag);
-    
-    if (event.tag === 'content-preload') {
-        event.waitUntil(preloadContent());
-    }
-});
-
-// Función para precargar contenido
-async function preloadContent() {
-    try {
-        console.log('🔄 Service Worker: Preloading content...');
-        
-        const imagesToPreload = [
-            '/public/assets/full/bikini.jpg',
-            '/public/assets/full/bikbanner.jpg',
-            '/public/assets/full/bikini3.jpg'
-        ];
-        
-        const cache = await caches.open(IMAGE_CACHE);
-        
-        await Promise.all(
-            imagesToPreload.map(async url => {
-                try {
-                    const response = await fetch(url);
-                    if (response.ok) {
-                        await cache.put(url, response);
-                    }
-                } catch (err) {
-                    console.warn(`Failed to preload ${url}:`, err);
-                }
-            })
-        );
-        
-        console.log('✅ Service Worker: Content preloaded');
-    } catch (error) {
-        console.error('❌ Service Worker: Preload failed', error);
-    }
+/* Error State */
+.error {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
 }
-
-// ============================
-// NOTIFICACIONES PUSH (Preparado para futuro)
-// ============================
-
-self.addEventListener('push', event => {
-    if (!event.data) return;
-    
-    const data = event.data.json();
-    
-    const options = {
-        body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
-        icon: '/public/assets/full/bikini.jpg',
-        badge: '/public/assets/full/bikini.jpg',
-        image: data.image || '/public/assets/full/bikbanner.jpg',
-        tag: 'beach-update',
-        requireInteraction: false,
-        data: {
-            url: data.url || '/main.html'
-        },
-        actions: [
-            {
-                action: 'view',
-                title: 'Ver galería',
-                icon: '/public/assets/full/bikini.jpg'
-            },
-            {
-                action: 'close',
-                title: 'Cerrar'
-            }
-        ]
-    };
-    
-    event.waitUntil(
-        self.registration.showNotification(
-            data.title || 'BeachGirl.pics - Nuevo contenido',
-            options
-        )
-    );
-});
-
-self.addEventListener('notificationclick', event => {
-    event.notification.close();
-    
-    if (event.action === 'view' || !event.action) {
-        const urlToOpen = event.notification.data?.url || '/main.html';
-        event.waitUntil(
-            clients.openWindow(`https://beachgirl.pics${urlToOpen}`)
-        );
-    }
-});
-
-console.log(`🌊 BeachGirl.pics Service Worker v${CACHE_VERSION} loaded successfully`);
