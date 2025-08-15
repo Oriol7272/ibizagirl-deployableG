@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favicon Generator for BeachGirl.pics</title>
+</head>
+<body>
+    <h1>📄 Favicon.ico Necesario</h1>
+    
+    <p>Para resolver el error 404 del favicon, necesitas crear un archivo <code>favicon.ico</code> en la raíz de tu sitio.</p>
+    
+    <h2>🎨 Opciones para crear el favicon:</h2>
+    
+    <h3>1. Usar un generador online:</h3>
+    <ul>
+        <li><a href="https://favicon.io/favicon-generator/" target="_blank">favicon.io/favicon-generator/</a></li>
+        <li><a href="https://realfavicongenerator.net/" target="_blank">realfavicongenerator.net</a></li>
+    </ul>
+    
+    <h3>2. Convertir imagen existente:</h3>
+    <p>Usa alguna de tus imágenes como <code>bikini.webp</code> y conviértela a .ico</p>
+    
+    <h3>3. SVG Favicon simple (alternativa):</h3>
+    <p>Crea un archivo <code>favicon.svg</code> con este contenido:</p>
+    
+    <pre><code>&lt;svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"&gt;
+  &lt;rect width="32" height="32" fill="#0077be"/&gt;
+  &lt;text x="16" y="22" font-family="Arial" font-size="20" fill="white" text-anchor="middle"&gt;🌊&lt;/text&gt;
+&lt;/svg&gt;</code></pre>
+
+    <h3>4. Actualizar el HTML:</h3>
+    <p>Añade estas líneas en el <code>&lt;head&gt;</code> de tu <code>main.html</code>:</p>
+    
+    <pre><code>&lt;link rel="icon" type="image/x-icon" href="/favicon.ico"&gt;
+&lt;link rel="icon" type="image/svg+xml" href="/favicon.svg"&gt;
+&lt;link rel="apple-touch-icon" href="/full/bikini.webp"&gt;</code></pre>
+
+    <h2>🔧 Solución rápida temporal:</h2>
+    <p>Para una solución inmediata, puedes crear un favicon vacío:</p>
+    <ol>
+        <li>Crea un archivo llamado <code>favicon.ico</code></li>
+        <li>Súbelo a la raíz de tu sitio web</li>
+        <li>Puede ser una imagen pequeña de 16x16 o 32x32 píxeles</li>
+    </ol>
+
+    <script>
+        // Generar un favicon base64 simple
+        function generateSimpleFavicon() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 32;
+            canvas.height = 32;
+            const ctx = canvas.getContext('2d');
+            
+            // Fondo azul
+            ctx.fillStyle = '#0077be';
+            ctx.fillRect(0, 0, 32, 32);
+            
+            // Emoji de ola
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'center';
+            ctx.fillText('🌊', 16, 22);
+            
+            // Convertir a base64
+            const dataURL = canvas.toDataURL('image/png');
+            console.log('Favicon generado:', dataURL);
+            
+            // Crear enlace de descarga
+            const link = document.createElement('a');
+            link.download = 'favicon.png';
+            link.href = dataURL;
+            link.textContent = 'Descargar favicon.png';
+            document.body.appendChild(link);
+        }
+        
+        // Llamar la función al cargar
+        generateSimpleFavicon();
+    </script>
+</body>
+</html>
