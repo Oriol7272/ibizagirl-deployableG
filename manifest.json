@@ -2,7 +2,8 @@
   "name": "IbizaGirl.pics - Galería Premium Ibiza",
   "short_name": "IbizaGirl",
   "description": "Galería premium de Ibiza con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo español.",
-  "id": "/?homescreen=1",
+  "version": "1.2.0",
+  "manifest_version": 3,
   "start_url": "/?utm_source=pwa",
   "scope": "/",
   "display": "standalone",
@@ -11,6 +12,7 @@
   "background_color": "#001f3f",
   "lang": "es-ES",
   "dir": "ltr",
+  
   "icons": [
     {
       "src": "/public/assets/full/bikini.jpg",
@@ -43,6 +45,7 @@
       "purpose": "any"
     }
   ],
+  
   "screenshots": [
     {
       "src": "/public/assets/full/bikbanner.jpg",
@@ -59,12 +62,14 @@
       "label": "Vista móvil de la galería Ibiza"
     }
   ],
+  
   "categories": [
     "photo",
     "entertainment",
     "travel",
     "lifestyle"
   ],
+  
   "shortcuts": [
     {
       "name": "Ver Galería",
@@ -106,14 +111,17 @@
       ]
     }
   ],
+  
   "related_applications": [],
   "prefer_related_applications": false,
+  
   "protocol_handlers": [
     {
       "protocol": "web+ibizagirl",
       "url": "/?url=%s"
     }
   ],
+  
   "share_target": {
     "action": "/share",
     "method": "POST",
@@ -124,6 +132,7 @@
       "url": "url"
     }
   },
+  
   "file_handlers": [
     {
       "action": "/handle-image",
@@ -132,9 +141,11 @@
       }
     }
   ],
+  
   "edge_side_panel": {
     "preferred_width": 350
   },
+  
   "launch_handler": {
     "client_mode": ["focus-existing", "auto"]
   }
