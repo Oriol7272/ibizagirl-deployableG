@@ -1,6 +1,6 @@
 // ============================
-// BeachGirl.pics Gallery Script v14.1.0
-// Con detección automática de rutas
+// BeachGirl.pics Gallery Script v14.2.0
+// Con detección automática de rutas corregida
 // ============================
 
 'use strict';
@@ -16,17 +16,13 @@ const PathDetector = {
     async detectBasePath() {
         console.log('🔍 Detectando estructura de archivos...');
         
-        // Posibles estructuras de carpetas
+        // Ya no hay carpeta public/assets, todo está en la raíz
         const possiblePaths = [
-            '', // Raíz
-            '/public/assets',
-            'public/assets',
-            '/beachgirl-pics', // Por si es GitHub Pages
-            '/ibizagirl-deployable2' // Nombre del repo en GitHub
+            '' // Raíz - las carpetas están directamente aquí
         ];
         
-        // Imagen de prueba que sabemos que existe
-        const testImage = '/full/bikini.jpg';
+        // Imagen de prueba que sabemos que existe (ahora es .webp)
+        const testImage = '/full/bikini.webp';
         
         for (const basePath of possiblePaths) {
             const testUrl = basePath + testImage;
@@ -46,7 +42,9 @@ const PathDetector = {
             }
         }
         
-        console.warn('⚠️ No se encontró ruta base, usando rutas por defecto');
+        // Si no encuentra nada, asumimos que las carpetas están en la raíz
+        console.log('✅ Usando rutas por defecto (raíz)');
+        this.basePathFound = '';
         return '';
     },
     
@@ -69,7 +67,7 @@ const PathDetector = {
 // ============================
 
 const CONFIG = {
-    VERSION: '14.1.0',
+    VERSION: '14.2.0',
     CONTENT: {
         DAILY_PHOTOS: 200,
         DAILY_VIDEOS: 40,
@@ -85,12 +83,13 @@ const CONFIG = {
         LIFETIME: 100,
         PACKS: {
             10: 10,
-            20: 15,
-            50: 25,
-            100: 50
+            25: 20,
+            50: 35,
+            100: 60
         }
     },
-    FALLBACK_IMAGE: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzY2N2VlYSIvPgogIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+8J+MiiBCZWFjaEdpcmwucGljczwvdGV4dD4KPC9zdmc+'
+    FALLBACK_IMAGE: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzY2N2VlYSIvPgogIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+🌊 BeachGirl.pics</text>
+</svg>'
 };
 
 // ============================
@@ -109,7 +108,7 @@ const state = {
     isabellaOpen: false,
     currentModal: null,
     selectedPlan: 'lifetime',
-    selectedPack: null,
+    selectedPack: 50, // Default silver pack
     initialized: false
 };
 
@@ -125,18 +124,19 @@ const TRANSLATIONS = {
         view_gallery: '📸 Ver Galería',
         loading: 'Cargando el paraíso...',
         subtitle: 'Contenido Exclusivo del Paraíso',
-        teaser_title: '🔥 Vista Previa Exclusiva',
-        photos_paradise: '📸 Fotos del Paraíso',
+        preview_gallery: '🔥 Vista Previa Exclusiva',
+        paradise_photos: '📸 Fotos del Paraíso',
         new_today: '¡NUEVO HOY!',
-        videos_exclusive: '🎬 Videos Exclusivos',
+        exclusive_videos: '🎬 Videos Exclusivos',
         fresh_content: '¡CONTENIDO FRESCO!',
-        photos_today: '200 Fotos de Hoy',
-        videos_hd: '40 Videos HD',
-        total_views: '25.8M Vistas Totales',
-        updates: '24/7 Actualizaciones',
+        photos_today: 'Fotos de Hoy',
+        videos_hd: 'Videos HD',
+        total_views: 'Vistas Totales',
+        updates: 'Actualizaciones',
+        always_fresh: 'SIEMPRE FRESCO',
         vip_unlimited: '👑 Acceso VIP Ilimitado',
-        monthly: '📅 Mensual',
-        lifetime: '♾️ Lifetime',
+        plan_monthly: '📅 Mensual',
+        plan_lifetime: '♾️ Lifetime',
         megapack: '📦 MEGA PACKS -70%',
         credits_available: 'Créditos Disponibles',
         unlock_credit: 'Desbloquear (1 crédito)',
@@ -151,18 +151,19 @@ const TRANSLATIONS = {
         view_gallery: '📸 View Gallery',
         loading: 'Loading paradise...',
         subtitle: 'Exclusive Paradise Content',
-        teaser_title: '🔥 Exclusive Preview',
-        photos_paradise: '📸 Paradise Photos',
+        preview_gallery: '🔥 Exclusive Preview',
+        paradise_photos: '📸 Paradise Photos',
         new_today: 'NEW TODAY!',
-        videos_exclusive: '🎬 Exclusive Videos',
+        exclusive_videos: '🎬 Exclusive Videos',
         fresh_content: 'FRESH CONTENT!',
-        photos_today: '200 Photos Today',
-        videos_hd: '40 HD Videos',
-        total_views: '25.8M Total Views',
-        updates: '24/7 Updates',
+        photos_today: 'Photos Today',
+        videos_hd: 'HD Videos',
+        total_views: 'Total Views',
+        updates: 'Updates',
+        always_fresh: 'ALWAYS FRESH',
         vip_unlimited: '👑 Unlimited VIP Access',
-        monthly: '📅 Monthly',
-        lifetime: '♾️ Lifetime',
+        plan_monthly: '📅 Monthly',
+        plan_lifetime: '♾️ Lifetime',
         megapack: '📦 MEGA PACKS -70%',
         credits_available: 'Credits Available',
         unlock_credit: 'Unlock (1 credit)',
@@ -464,7 +465,7 @@ function showNotification(message, type = 'info') {
             .loading-message {
                 text-align: center;
                 padding: 40px;
-                color: #666;
+                color: #999;
                 font-size: 18px;
             }
             .content-item.loaded {
@@ -473,6 +474,77 @@ function showNotification(message, type = 'info') {
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(20px); }
                 to { opacity: 1; transform: translateY(0); }
+            }
+            .content-wrapper {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            .content-img, .content-video, .video-thumb {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .badge-new {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                background: linear-gradient(135deg, #00ff88, #4ade80);
+                color: #001f3f;
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 700;
+                z-index: 2;
+            }
+            .video-badge {
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                display: flex;
+                gap: 5px;
+                z-index: 2;
+            }
+            .video-badge span {
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 3px 8px;
+                border-radius: 5px;
+                font-size: 0.75rem;
+                font-weight: 600;
+            }
+            .lock-overlay {
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(3px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 3;
+            }
+            .lock-content {
+                text-align: center;
+            }
+            .lock-icon, .play-icon {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+            .unlock-btn {
+                background: linear-gradient(135deg, #ffd700, #ff6b35);
+                color: #001f3f;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 25px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            }
+            .unlock-btn:hover {
+                transform: scale(1.05);
+            }
+            .unlock-text {
+                margin-right: 5px;
             }
         `;
         document.head.appendChild(style);
@@ -491,8 +563,14 @@ function showNotification(message, type = 'info') {
 
 function updateCreditsDisplay() {
     const creditsNumber = document.getElementById('creditsNumber');
+    const creditsDisplay = document.getElementById('creditsDisplay');
+    
     if (creditsNumber) {
         creditsNumber.textContent = state.credits;
+    }
+    
+    if (creditsDisplay && state.credits > 0) {
+        creditsDisplay.classList.add('active');
     }
 }
 
@@ -540,18 +618,24 @@ function selectPlan(plan) {
     document.querySelectorAll('.plan-card').forEach(card => {
         card.classList.remove('selected');
     });
-    const card = document.getElementById(plan + 'Plan');
-    if (card) card.classList.add('selected');
+    event?.currentTarget?.classList.add('selected');
 }
 
-function selectPack(credits) {
-    state.selectedPack = credits;
+function selectPack(pack) {
+    // Mapear el nombre del pack al número de créditos
+    const packMap = {
+        'starter': 10,
+        'bronze': 25,
+        'silver': 50,
+        'gold': 100
+    };
+    
+    state.selectedPack = packMap[pack] || 50;
+    
     document.querySelectorAll('.pack-card').forEach(card => {
         card.classList.remove('selected');
     });
-    if (event?.currentTarget) {
-        event.currentTarget.classList.add('selected');
-    }
+    event?.currentTarget?.classList.add('selected');
 }
 
 // ============================
@@ -562,7 +646,7 @@ function initializePayPal() {
     if (typeof paypal === 'undefined') return;
     
     const vipContainer = document.getElementById('paypal-button-container-vip');
-    if (vipContainer && !vipContainer.hasChildNodes()) {
+    if (vipContainer && !vipContainer.hasChildNodes() && state.currentModal === 'vip') {
         paypal.Buttons({
             createOrder: (data, actions) => {
                 const price = state.selectedPlan === 'monthly' ? CONFIG.PRICES.MONTHLY : CONFIG.PRICES.LIFETIME;
@@ -586,7 +670,7 @@ function initializePayPal() {
     }
     
     const packContainer = document.getElementById('paypal-button-container-pack');
-    if (packContainer && !packContainer.hasChildNodes()) {
+    if (packContainer && !packContainer.hasChildNodes() && state.currentModal === 'pack') {
         paypal.Buttons({
             createOrder: (data, actions) => {
                 if (!state.selectedPack) return;
@@ -641,6 +725,17 @@ function toggleIsabella() {
     if (window) {
         state.isabellaOpen = !state.isabellaOpen;
         window.style.display = state.isabellaOpen ? 'block' : 'none';
+        
+        // Si es la primera vez que se abre, mostrar mensaje de bienvenida
+        if (state.isabellaOpen) {
+            const messages = document.getElementById('isabellaMessages');
+            if (messages && messages.children.length === 0) {
+                const welcomeDiv = document.createElement('div');
+                welcomeDiv.className = 'isabella-message';
+                welcomeDiv.innerHTML = `<span class="message-avatar">💕</span><span>¡Hola! Soy Isabella, tu guía VIP. ¿En qué puedo ayudarte?</span>`;
+                messages.appendChild(welcomeDiv);
+            }
+        }
     }
 }
 
@@ -651,14 +746,14 @@ function isabellaAction(action) {
     let message = '';
     switch(action) {
         case 'vip':
-            message = '💎 ¡Hazte VIP y desbloquea TODO! Solo €15/mes o €100 lifetime.';
+            message = '💎 ¡Hazte VIP y desbloquea TODO! Solo €15/mes o €100 lifetime. Acceso ilimitado a todo el contenido actual y futuro.';
             setTimeout(() => showVIPModal(), 1000);
             break;
         case 'daily':
-            message = `📅 Hoy tenemos ${CONFIG.CONTENT.DAILY_PHOTOS} fotos y ${CONFIG.CONTENT.DAILY_VIDEOS} videos nuevos!`;
+            message = `📅 Hoy tenemos ${CONFIG.CONTENT.DAILY_PHOTOS} fotos y ${CONFIG.CONTENT.DAILY_VIDEOS} videos nuevos! Actualizamos contenido todos los días a las 3:00 AM.`;
             break;
         case 'help':
-            message = '❓ Compra créditos o hazte VIP para desbloquear contenido.';
+            message = '❓ Puedes comprar créditos para desbloquear contenido individual (1 crédito = 1 contenido) o hacerte VIP para acceso ilimitado. ¿Qué prefieres?';
             break;
     }
     
@@ -667,6 +762,21 @@ function isabellaAction(action) {
     messageDiv.innerHTML = `<span class="message-avatar">💕</span><span>${message}</span>`;
     messages.appendChild(messageDiv);
     messages.scrollTop = messages.scrollHeight;
+}
+
+// ============================
+// SCROLL CAROUSEL
+// ============================
+
+function scrollCarousel(direction) {
+    const carousel = document.getElementById('teaserCarousel');
+    if (carousel) {
+        const scrollAmount = 300;
+        carousel.scrollBy({
+            left: scrollAmount * direction,
+            behavior: 'smooth'
+        });
+    }
 }
 
 // ============================
@@ -699,10 +809,17 @@ async function initializeGallery() {
     updateCreditsDisplay();
     changeLanguage(state.language);
     
+    // Actualizar contadores
+    const photoCount = document.getElementById('photoCount');
+    const videoCount = document.getElementById('videoCount');
+    
+    if (photoCount) photoCount.textContent = state.dailyPhotos.length;
+    if (videoCount) videoCount.textContent = state.dailyVideos.length;
+    
     console.log(`✅ Galería inicializada:
     - ${state.dailyPhotos.length} fotos del día
     - ${state.dailyVideos.length} videos del día
-    - Ruta base: ${PathDetector.basePathFound || 'default'}
+    - Ruta base: ${PathDetector.basePathFound || 'raíz'}
     - VIP: ${state.isVIP}
     - Créditos: ${state.credits}`);
 }
@@ -736,6 +853,18 @@ document.addEventListener('DOMContentLoaded', () => {
             slides[currentSlide]?.classList.add('active');
         }, 5000);
     }
+    
+    // Verificar expiración VIP mensual
+    const vipExpiry = localStorage.getItem('vipExpiry');
+    if (vipExpiry && vipExpiry !== 'lifetime') {
+        const expiryDate = new Date(vipExpiry);
+        if (expiryDate < new Date()) {
+            state.isVIP = false;
+            localStorage.setItem('isVIP', 'false');
+            localStorage.removeItem('vipExpiry');
+            showNotification('Tu suscripción VIP ha expirado', 'info');
+        }
+    }
 });
 
 // ============================
@@ -752,23 +881,7 @@ window.isabellaAction = isabellaAction;
 window.unlockContent = unlockContent;
 window.selectPlan = selectPlan;
 window.selectPack = selectPack;
-window.moveCarousel = (dir) => {
-    const carousel = document.getElementById('teaserCarousel');
-    if (carousel) carousel.scrollBy({ left: 300 * dir, behavior: 'smooth' });
-};
-window.loadMorePhotos = () => {
-    showNotification('Hazte VIP para ver todas las fotos', 'info');
-    showVIPModal();
-};
-window.loadMoreVideos = () => {
-    showNotification('Hazte VIP para ver todos los videos', 'info');
-    showVIPModal();
-};
-window.subscribeNewsletter = (e) => {
-    e.preventDefault();
-    showNotification('¡Suscrito! 📧', 'success');
-    e.target.reset();
-};
+window.scrollCarousel = scrollCarousel;
 
 // ============================
 // DEBUG
@@ -776,17 +889,20 @@ window.subscribeNewsletter = (e) => {
 
 window.galleryDebug = {
     stats: () => ({
-        totalPhotos: window.ALL_PHOTOS_POOL?.length + window.ALL_UNCENSORED_PHOTOS_POOL?.length,
-        totalVideos: window.ALL_VIDEOS_POOL?.length,
+        totalPhotos: (window.ALL_PHOTOS_POOL?.length || 0) + (window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0),
+        totalVideos: window.ALL_VIDEOS_POOL?.length || 0,
         dailyPhotos: state.dailyPhotos.length,
         dailyVideos: state.dailyVideos.length,
         basePath: PathDetector.basePathFound,
         credits: state.credits,
-        isVIP: state.isVIP
+        isVIP: state.isVIP,
+        unlockedPhotos: state.unlockedPhotos.size,
+        unlockedVideos: state.unlockedVideos.size
     }),
     unlockAll: () => {
         state.isVIP = true;
         localStorage.setItem('isVIP', 'true');
+        localStorage.setItem('vipExpiry', 'lifetime');
         initializeGallery();
         console.log('✅ Todo desbloqueado');
     },
