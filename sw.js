@@ -1,354 +1,801 @@
-// ============================
-// BEACHGIRL.PICS SERVICE WORKER v1.3.0
-// PWA + Performance + SEO Optimized
-// ============================
+/* ============================
+   BEACHGIRL.PICS STYLES v2.0
+   Ocean Paradise Theme
+   ============================ */
 
-const CACHE_VERSION = '1.3.0';
-const CACHE_NAME = `beachgirl-v${CACHE_VERSION}`;
-const STATIC_CACHE = `beachgirl-static-v${CACHE_VERSION}`;
-const DYNAMIC_CACHE = `beachgirl-dynamic-v${CACHE_VERSION}`;
-const IMAGE_CACHE = `beachgirl-images-v${CACHE_VERSION}`;
-
-// Archivos críticos para cachear
-const STATIC_ASSETS = [
-    '/',
-    '/index.html',
-    '/main.html',
-    '/main-script.js',
-    '/seo-enhancements.js',
-    '/manifest.json',
-    
-    // Imágenes críticas para SEO
-    '/full/bikini.jpg',
-    '/full/bikbanner.jpg',
-    '/full/bikbanner2.jpg',
-    '/full/backbikini.jpg',
-    '/full/bikini3.jpg',
-    '/full/bikini5.jpg'
-];
-
-// External scripts to cache
-const EXTERNAL_SCRIPTS = [
-    'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'
-];
-
-// URLs que no deben cachearse
-const EXCLUDED_URLS = [
-    '/uncensored/',
-    '/uncensored-videos/',
-    '/admin',
-    'chrome-extension://',
-    'extension://',
-    'paypal.com',
-    'paypalobjects.com'
-];
-
-// ============================
-// INSTALACIÓN DEL SERVICE WORKER
-// ============================
-
-self.addEventListener('install', event => {
-    console.log('🔧 Service Worker: Installing version', CACHE_VERSION);
-    
-    event.waitUntil(
-        Promise.all([
-            // Cache static assets
-            caches.open(STATIC_CACHE).then(cache => {
-                console.log('📦 Service Worker: Caching static assets...');
-                return Promise.all(
-                    STATIC_ASSETS.map(url => {
-                        return cache.add(url).catch(err => {
-                            console.warn(`Failed to cache ${url}:`, err);
-                        });
-                    })
-                );
-            }),
-            // Cache external scripts
-            caches.open(STATIC_CACHE).then(cache => {
-                return Promise.all(
-                    EXTERNAL_SCRIPTS.map(url => {
-                        return fetch(url)
-                            .then(response => {
-                                if (response.ok) {
-                                    return cache.put(url, response);
-                                }
-                            })
-                            .catch(err => {
-                                console.warn(`Failed to cache external script ${url}:`, err);
-                            });
-                    })
-                );
-            })
-        ]).then(() => {
-            console.log('✅ Service Worker: Installation complete');
-            return self.skipWaiting();
-        }).catch(error => {
-            console.error('❌ Service Worker: Installation failed', error);
-        })
-    );
-};
-
-// ============================
-// ACTIVACIÓN DEL SERVICE WORKER
-// ============================
-
-self.addEventListener('activate', event => {
-    console.log('🚀 Service Worker: Activating version', CACHE_VERSION);
-    
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            // Limpiar caches antiguos
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (!cacheName.includes(CACHE_VERSION)) {
-                        console.log('🗑️ Service Worker: Deleting old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        }).then(() => {
-            console.log('✅ Service Worker: Activation complete');
-            return self.clients.claim();
-        })
-    );
-};
-
-// ============================
-// ESTRATEGIAS DE CACHE
-// ============================
-
-// Estrategia: Cache First con timeout
-async function cacheFirstWithTimeout(request, timeout = 3000) {
-    try {
-        const cachePromise = caches.match(request);
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Cache timeout')), timeout)
-        );
-        
-        const cached = await Promise.race([cachePromise, timeoutPromise]);
-        if (cached) {
-            return cached;
-        }
-    } catch (error) {
-        console.log('Cache timeout, fetching from network');
-    }
-    
-    const response = await fetch(request);
-    if (response.ok) {
-        const cache = await caches.open(STATIC_CACHE);
-        cache.put(request, response.clone());
-    }
-    return response;
+:root {
+    --ocean-deep: #001f3f;
+    --ocean-dark: #003366;
+    --ocean-medium: #005588;
+    --ocean-light: #0077be;
+    --ocean-bright: #00a8cc;
+    --aqua-light: #00d4ff;
+    --sea-foam: #7fdbff;
+    --sunset-gold: #ffd700;
+    --sunset-orange: #ff6b35;
+    --sunset-pink: #ff69b4;
+    --sand-light: #f4e4c1;
+    --text-primary: #ffffff;
+    --text-secondary: #b8d4e3;
+    --glass-bg: rgba(0, 119, 190, 0.1);
+    --glass-border: rgba(127, 219, 255, 0.3);
+    --update-green: #00ff88;
+    --update-pulse: #4ade80;
+    --isabella-pink: #ff69b4;
 }
 
-// Estrategia: Network First con fallback
-async function networkFirstWithFallback(request) {
-    try {
-        const response = await fetch(request);
-        if (response.ok) {
-            const cache = await caches.open(DYNAMIC_CACHE);
-            cache.put(request, response.clone());
-        }
-        return response;
-    } catch (error) {
-        const cached = await caches.match(request);
-        if (cached) return cached;
-        
-        return new Response('Offline fallback content', {
-            status: 200,
-            headers: { 'Content-Type': 'text/plain' }
-        });
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: linear-gradient(180deg, var(--ocean-deep) 0%, var(--ocean-dark) 50%, var(--ocean-medium) 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Language Selector */
+.language-selector {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 10001;
+    background: rgba(0, 33, 66, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 0.3rem;
+    border: 1px solid var(--glass-border);
+}
+
+.language-selector select {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.language-selector option {
+    background: var(--ocean-dark);
+    color: var(--text-primary);
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.5s ease;
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-logo {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--aqua-light), var(--sunset-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+.loading-bar {
+    width: 200px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin: 2rem auto;
+    overflow: hidden;
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--aqua-light), var(--sunset-pink));
+    animation: loading 2s ease infinite;
+}
+
+@keyframes loading {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+}
+
+/* Main Header */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 33, 66, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 1rem 2rem;
+    z-index: 1000;
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+}
+
+.main-header.scrolled {
+    padding: 0.5rem 2rem;
+    background: rgba(0, 33, 66, 0.98);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header-logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--aqua-light), var(--sunset-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.header-button {
+    background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink));
+    color: var(--text-primary);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+}
+
+.header-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+}
+
+.language-selector select {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.language-selector option {
+    background: var(--ocean-dark);
+    color: var(--text-primary);
+}
+
+/* Banner Section */
+.banner-section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 2rem;
+    background: linear-gradient(rgba(0, 31, 63, 0.7), rgba(0, 31, 63, 0.7)), url('full/bikbanner.jpg') center/cover no-repeat;
+}
+
+.banner-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--aqua-light), var(--sea-foam));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.banner-desc {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.banner-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.banner-button {
+    background: linear-gradient(135deg, var(--sunset-gold), var(--sunset-orange));
+    color: var(--ocean-deep);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+}
+
+.banner-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+}
+
+/* Teaser Carousel */
+.teaser-carousel-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.teaser-carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    scroll-snap-type: x mandatory;
+}
+
+.teaser-item {
+    flex: 0 0 250px;
+    height: 350px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    cursor: pointer;
+    scroll-snap-align: center;
+}
+
+.teaser-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.teaser-item:hover img {
+    transform: scale(1.05);
+}
+
+.teaser-label {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background: rgba(0, 33, 66, 0.8);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+}
+
+/* Stats Section */
+.stats-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.stat-item {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.stat-item span {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.stat-item h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-item p {
+    opacity: 0.8;
+}
+
+/* Content Grid */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.content-item {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    cursor: pointer;
+}
+
+.content-item img, .content-item video {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.content-item:hover img, .content-item:hover video {
+    transform: scale(1.05);
+}
+
+.content-label {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--update-green);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    animation: pulse 1.5s infinite;
+}
+
+/* VIP Section */
+.vip-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.plans-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.plan-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.plan-card.best-value {
+    border: 2px solid var(--sunset-gold);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.plan-card span {
+    background: linear-gradient(135deg, var(--sunset-gold), var(--sunset-orange));
+    color: var(--ocean-deep);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.plan-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.plan-card .price {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.plan-card ul {
+    list-style: none;
+    margin-bottom: 1rem;
+}
+
+.plan-card li {
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+
+.plan-card button {
+    background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink));
+    color: var(--text-primary);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    border: none;
+}
+
+.plan-card button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+}
+
+/* Packs Section */
+.packs-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.packs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.pack-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.pack-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.pack-card p {
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+
+.pack-card .price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.pack-card button {
+    background: linear-gradient(135deg, var(--aqua-light), var(--sea-foam));
+    color: var(--ocean-deep);
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+    border: none;
+}
+
+.pack-card button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 31, 63, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: modalFade 0.3s ease;
+}
+
+@keyframes modalFade {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.close-modal:hover {
+    opacity: 1;
+}
+
+/* Isabella Window */
+.isabella-window {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 900;
+    animation: isabellaSlide 0.5s ease;
+}
+
+@keyframes isabellaSlide {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.isabella-header {
+    background: linear-gradient(135deg, var(--sunset-pink), var(--sunset-orange));
+    color: var(--text-primary);
+    padding: 1rem;
+    text-align: center;
+    font-weight: 700;
+}
+
+.isabella-chat {
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.isabella-message {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 15px;
+    margin-bottom: 1rem;
+    animation: messageFade 0.3s ease;
+}
+
+@keyframes messageFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Footer */
+.main-footer {
+    background: var(--ocean-dark);
+    padding: 3rem 2rem;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--aqua-light), var(--sunset-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.footer-columns {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-top: 2rem;
+}
+
+.footer-column h4 {
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--aqua-light);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Credits Display */
+.credits-display {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    background: rgba(0, 33, 66, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    border: 1px solid var(--glass-border);
+    display: none;
+    z-index: 900;
+    animation: slideIn 0.3s ease;
+}
+
+.credits-display.active {
+    display: block;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.credits-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--sunset-gold);
+}
+
+.credits-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.3rem;
+}
+
+/* Notification Toast */
+.notification-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--update-green), var(--update-pulse));
+    color: var(--ocean-deep);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    z-index: 10001;
+    animation: notificationSlide 0.5s ease;
+    box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+}
+
+@keyframes notificationSlide {
+    from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .content-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 0.8rem;
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .header-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .language-selector {
+        top: 5px;
+        right: 5px;
+    }
+
+    .banner-title {
+        font-size: 2rem;
+    }
+
+    .stats-section {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .isabella-window {
+        width: 90%;
+        max-width: 350px;
+        right: 5%;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .plans-container {
+        grid-template-columns: 1fr;
+    }
+
+    .packs-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .teaser-carousel-container {
+        padding: 1rem;
+    }
+
+    .teaser-item {
+        flex: 0 0 200px;
+        height: 280px;
+    }
+
+    .banner-cta {
+        flex-direction: column;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .credits-display {
+        top: auto;
+        bottom: 80px;
+        left: 10px;
+        right: 10px;
     }
 }
 
-// Estrategia: Stale While Revalidate
-async function staleWhileRevalidate(request) {
-    const cached = await caches.match(request);
-    const fetchPromise = fetch(request).then(response => {
-        if (response.ok) {
-            const cache = caches.open(DYNAMIC_CACHE);
-            cache.put(request, response.clone());
-        }
-        return response;
-    }).catch(() => cached);
-    
-    return cached || fetchPromise;
+/* Lazy Loading */
+.lazy {
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-// ============================
-// FETCH HANDLER
-// ============================
-
-self.addEventListener('fetch', event => {
-    const url = new URL(event.request.url);
-    
-    // Skip non-HTTP requests
-    if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
-    
-    // Skip excluded URLs
-    if (EXCLUDED_URLS.some(excluded => url.pathname.startsWith(excluded))) {
-        return event.respondWith(fetch(event.request));
-    }
-    
-    event.respondWith(
-        (async () => {
-            // Para imágenes - Stale While Revalidate
-            if (event.request.headers.get('accept')?.includes('image/') || 
-                url.pathname.includes('/full/') || 
-                url.pathname.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i)) {
-                return await staleWhileRevalidate(event.request);
-            }
-            
-            // Para videos - Stale While Revalidate
-            if (event.request.headers.get('accept')?.includes('video/') || url.pathname.includes('/uncensored-videos/')) {
-                return await staleWhileRevalidate(event.request);
-            }
-            
-            // Para JavaScript/CSS - Cache First con timeout
-            if (url.pathname.includes('.js') || 
-                url.pathname.includes('.css') ||
-                url.hostname === 'cdn.jsdelivr.net') {
-                return await cacheFirstWithTimeout(event.request);
-            }
-            
-            // Para PayPal y APIs externas - Network Only
-            if (url.hostname.includes('paypal') || 
-                url.hostname !== location.hostname) {
-                return await fetch(event.request);
-            }
-            
-            // Default: Network First
-            return await networkFirstWithFallback(event.request);
-        })()
-    );
+.loaded {
+    opacity: 1;
 }
 
-// ============================
-// MENSAJES DEL CLIENTE
-// ============================
-
-self.addEventListener('message', event => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-        self.skipWaiting();
-    }
-    
-    if (event.data && event.data.type === 'GET_VERSION') {
-        event.ports[0].postMessage({
-            version: CACHE_VERSION,
-            caches: {
-                static: STATIC_CACHE,
-                dynamic: DYNAMIC_CACHE,
-                images: IMAGE_CACHE
-            }
-        });
-    }
-    
-    if (event.data && event.data.type === 'CLEAR_CACHE') {
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => caches.delete(cacheName))
-            );
-        }).then(() => {
-            if (event.ports[0]) {
-                event.ports[0].postMessage({ success: true });
-            }
-        });
-    }
-});
-
-// ============================
-// SINCRONIZACIÓN EN BACKGROUND
-// ============================
-
-self.addEventListener('sync', event => {
-    console.log('📡 Background sync triggered:', event.tag);
-    
-    if (event.tag === 'content-preload') {
-        event.waitUntil(preloadContent());
-    }
-});
-
-// Función para precargar contenido
-async function preloadContent() {
-    try {
-        console.log('🔄 Service Worker: Preloading content...');
-        
-        const imagesToPreload = [
-            '/full/bikini.jpg',
-            '/full/bikbanner.jpg',
-            '/full/bikini3.jpg'
-        ];
-        
-        const cache = await caches.open(IMAGE_CACHE);
-        
-        await Promise.all(
-            imagesToPreload.map(async url => {
-                try {
-                    const response = await fetch(url);
-                    if (response.ok) {
-                        await cache.put(url, response);
-                    }
-                } catch (err) {
-                    console.warn(`Failed to preload ${url}:`, err);
-                }
-            })
-        );
-        
-        console.log('✅ Service Worker: Content preloaded');
-    } catch (error) {
-        console.error('❌ Service Worker: Preload failed', error);
-    }
+/* Error State */
+.error {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
 }
-
-// ============================
-// NOTIFICACIONES PUSH (Preparado para futuro)
-// ============================
-
-self.addEventListener('push', event => {
-    if (!event.data) return;
-    
-    const data = event.data.json();
-    
-    const options = {
-        body: data.body || 'Nuevo contenido disponible en BeachGirl.pics',
-        icon: '/full/bikini.jpg',
-        badge: '/full/bikini.jpg',
-        image: data.image || '/full/bikbanner.jpg',
-        tag: 'beachgirl-update',
-        requireInteraction: false,
-        data: {
-            url: data.url || '/main.html'
-        },
-        actions: [
-            {
-                action: 'view',
-                title: 'Ver galería',
-                icon: '/full/bikini.jpg'
-            },
-            {
-                action: 'close',
-                title: 'Cerrar'
-            }
-        ]
-    };
-    
-    event.waitUntil(
-        self.registration.showNotification(
-            data.title || 'BeachGirl.pics - Nuevo contenido',
-            options
-        )
-    );
-});
-
-self.addEventListener('notificationclick', event => {
-    event.notification.close();
-    
-    if (event.action === 'view' || !event.action) {
-        const urlToOpen = event.notification.data?.url || '/main.html';
-        event.waitUntil(
-            clients.openWindow(`https://beachgirl.pics${urlToOpen}`)
-        );
-    }
-});
-
-console.log(`🌊 BeachGirl.pics Service Worker v${CACHE_VERSION} loaded successfully`);
