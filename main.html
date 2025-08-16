@@ -30,7 +30,7 @@
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="content-data.js" as="script">
-    <link rel="preload" href="ad-verification.js" as="script">
+    <link rel="preload" href="ad-verification-fixed.js" as="script">
     <link rel="preload" href="main-script.js" as="script">
     
     <!-- Estilos -->
@@ -158,7 +158,7 @@
         </section>
 
         <!-- 🎯 PRIMER ANUNCIO: Después del Banner -->
-        <!-- Los contenedores se crean automáticamente por ad-verification.js -->
+        <!-- Los contenedores se crean automáticamente por ad-verification-fixed.js -->
 
         <!-- Teaser Carousel -->
         <section class="teaser-carousel-container">
@@ -397,13 +397,13 @@
         </div>
     </footer>
 
-    <!-- Scripts - ORDEN CRÍTICO PARA ANUNCIOS -->
+    <!-- Scripts - ORDEN CORREGIDO PARA ANUNCIOS -->
     
     <!-- 1. Datos del contenido -->
     <script src="content-data.js"></script>
     
-    <!-- 2. ✅ SISTEMA COMPLETO DE ANUNCIOS - DEBE CARGAR ANTES QUE MAIN-SCRIPT -->
-    <script src="ad-verification.js"></script>
+    <!-- 2. ✅ SISTEMA DE ANUNCIOS FORZADOS - NUEVO Y MEJORADO -->
+    <script src="ad-verification-fixed.js"></script>
     
     <!-- 3. SEO enhancements -->
     <script src="seo-enhancements.js" defer></script>
@@ -420,126 +420,177 @@
         gtag('config', 'G-DBXYNPBSPY');
     </script>
 
-    <!-- ✅ SCRIPT DE TESTING DE ANUNCIOS -->
+    <!-- ✅ SCRIPT DE TESTING SIMPLIFICADO Y MEJORADO -->
     <script>
-        // Testing functions disponibles globalmente
-        window.adTestingSuite = {
-            // Test completo de todas las redes
-            testAllNetworks: function() {
-                console.log('🧪 Testing all ad networks...');
-                
-                setTimeout(() => {
-                    if (window.testAds) {
-                        window.testAds();
-                    }
-                    
-                    if (window.adNetworkManager) {
-                        window.adNetworkManager.finalVerification();
-                    }
-                }, 2000);
-            },
+        // Auto-testing mejorado
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM loaded - Starting ads verification...');
             
-            // Forzar recreación de todos los anuncios
-            forceRecreateAll: function() {
-                console.log('🔄 Force recreating all ads...');
-                if (window.forceRecreateAds) {
-                    window.forceRecreateAds();
+            // Test después de 2 segundos
+            setTimeout(() => {
+                if (window.testForcedAds) {
+                    window.testForcedAds();
+                    console.log('✅ Forced ads system tested');
+                } else {
+                    console.warn('⚠️ Forced ads system not loaded');
                 }
-            },
+            }, 2000);
             
-            // Verificar estado actual
-            getCurrentStatus: function() {
-                console.log('📊 Current ad status:');
-                if (window.adState) {
-                    console.table(window.adState.networksLoaded);
-                    console.log('Containers:', Array.from(window.adState.containersCreated));
+            // Verificar anuncios cada 30 segundos
+            setInterval(() => {
+                if (window.verifyAndFixAds) {
+                    window.verifyAndFixAds();
                 }
-            },
+            }, 30000);
             
-            // Crear anuncios de emergencia
-            createEmergencyAds: function() {
-                console.log('🚨 Creating emergency ad containers...');
-                
-                const positions = ['header', 'middle', 'footer'];
-                positions.forEach((pos, index) => {
-                    const container = document.createElement('div');
-                    container.id = `emergency-ad-${pos}`;
-                    container.style.cssText = `
-                        display: block !important;
-                        visibility: visible !important;
-                        background: linear-gradient(135deg, #ff6b35, #f7931e);
-                        color: white;
-                        padding: 20px;
-                        margin: 20px auto;
-                        border-radius: 12px;
-                        text-align: center;
-                        font-weight: bold;
-                        max-width: 728px;
-                        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-                    `;
-                    container.innerHTML = `
-                        🚨 EMERGENCY AD CONTAINER (${pos.toUpperCase()})<br>
-                        <small>Fallback advertising space</small>
-                    `;
-                    
-                    const target = index === 0 ? document.querySelector('.stats-section') :
-                                  index === 1 ? document.querySelector('#photosSection') :
-                                  document.querySelector('#videosSection');
-                    
-                    if (target) {
-                        target.insertAdjacentElement('afterend', container);
-                        console.log(`✅ Emergency ad created: ${pos}`);
+            // Test visual después de 5 segundos
+            setTimeout(() => {
+                const adContainers = document.querySelectorAll('.forced-ad-container');
+                if (adContainers.length === 0) {
+                    console.warn('⚠️ No forced ads detected - creating emergency ads');
+                    if (window.emergencyAds) {
+                        window.emergencyAds();
                     }
-                });
+                } else {
+                    console.log(`✅ Found ${adContainers.length} forced ad containers`);
+                }
+            }, 5000);
+        });
+        
+        // Funciones de emergencia disponibles globalmente
+        window.emergencyAds = function() {
+            console.log('🚨 Creating emergency ads...');
+            
+            const emergencyPositions = [
+                { 
+                    target: '.stats-section', 
+                    position: 'afterend',
+                    html: '<div style="width:100%;height:120px;background:linear-gradient(135deg,#ff6b35,#f7931e);margin:20px auto;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;border-radius:15px;max-width:800px;box-shadow:0 10px 30px rgba(255,107,53,0.4);animation:pulse 2s infinite;">🚨 EMERGENCY AD SPACE - HEADER BANNER</div>' 
+                },
+                { 
+                    target: '#photosSection', 
+                    position: 'afterend',
+                    html: '<div style="width:100%;height:120px;background:linear-gradient(135deg,#4CAF50,#45a049);margin:20px auto;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;border-radius:15px;max-width:800px;box-shadow:0 10px 30px rgba(76,175,80,0.4);animation:pulse 2s infinite;">🚨 EMERGENCY AD SPACE - CONTENT BANNER</div>' 
+                },
+                { 
+                    target: '#videosSection', 
+                    position: 'afterend',
+                    html: '<div style="width:100%;height:120px;background:linear-gradient(135deg,#9C27B0,#E91E63);margin:20px auto;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;border-radius:15px;max-width:800px;box-shadow:0 10px 30px rgba(156,39,176,0.4);animation:pulse 2s infinite;">🚨 EMERGENCY AD SPACE - FOOTER BANNER</div>' 
+                }
+            ];
+            
+            // Añadir animación CSS si no existe
+            if (!document.head.querySelector('#emergency-ads-styles')) {
+                const style = document.createElement('style');
+                style.id = 'emergency-ads-styles';
+                style.textContent = `
+                    @keyframes pulse {
+                        0% { transform: scale(1); opacity: 1; }
+                        50% { transform: scale(1.02); opacity: 0.8; }
+                        100% { transform: scale(1); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            emergencyPositions.forEach((pos, index) => {
+                const targetElement = document.querySelector(pos.target);
+                if (targetElement) {
+                    const div = document.createElement('div');
+                    div.innerHTML = pos.html;
+                    div.style.cssText = 'display:block!important;visibility:visible!important;opacity:1!important;';
+                    div.id = `emergency-ad-${index + 1}`;
+                    targetElement.insertAdjacentElement(pos.position, div.firstChild);
+                    console.log(`✅ Emergency ad ${index + 1} created at ${pos.target}`);
+                } else {
+                    console.warn(`⚠️ Target not found: ${pos.target}`);
+                }
+            });
+            
+            console.log('✅ Emergency ads creation completed');
+        };
+        
+        // Test rápido
+        window.quickAdTest = function() {
+            console.log('🧪 Running quick ad test...');
+            if (window.createTestAd) {
+                window.createTestAd();
+                console.log('✅ Test ad created via forced system');
+            } else {
+                console.log('⚠️ Forced system not available, using emergency fallback');
+                window.emergencyAds();
             }
         };
         
-        // Auto-testing después de la carga
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DOM loaded - Ad testing suite ready');
+        // Función de diagnóstico completo
+        window.fullAdDiagnosis = function() {
+            console.log('🔍 === FULL AD DIAGNOSIS ===');
             
-            // Test automático después de 5 segundos
-            setTimeout(() => {
-                console.log('🔄 Auto-testing ads after 5 seconds...');
-                window.adTestingSuite.testAllNetworks();
-            }, 5000);
+            // Verificar contenedores forzados
+            const forcedAds = document.querySelectorAll('.forced-ad-container');
+            console.log(`📊 Forced ad containers: ${forcedAds.length}`);
             
-            // Si no hay anuncios después de 10 segundos, crear emergencia
-            setTimeout(() => {
-                const adContainers = document.querySelectorAll('[id*="ad-"], [id*="juicyads-"], [id*="exoclick-"], [id*="eroads-"]');
-                
-                if (adContainers.length === 0) {
-                    console.log('⚠️ No ad containers found - Creating emergency ads');
-                    window.adTestingSuite.createEmergencyAds();
-                } else {
-                    console.log(`✅ Found ${adContainers.length} ad containers`);
-                }
-            }, 10000);
-        });
+            // Verificar anuncios de emergencia
+            const emergencyAds = document.querySelectorAll('[id*="emergency-ad"]');
+            console.log(`🚨 Emergency ad containers: ${emergencyAds.length}`);
+            
+            // Verificar funciones disponibles
+            console.log('🔧 Available functions:', {
+                testForcedAds: typeof window.testForcedAds,
+                createTestAd: typeof window.createTestAd,
+                verifyAndFixAds: typeof window.verifyAndFixAds,
+                emergencyAds: typeof window.emergencyAds
+            });
+            
+            // Mostrar todos los contenedores de anuncios
+            const allAdContainers = document.querySelectorAll('[id*="ad"], [class*="ad-container"], [class*="forced-ad"]');
+            console.log(`📋 Total ad-related elements: ${allAdContainers.length}`);
+            
+            allAdContainers.forEach((element, index) => {
+                const style = getComputedStyle(element);
+                console.log(`${index + 1}. ${element.id || element.className}:`, {
+                    display: style.display,
+                    visibility: style.visibility,
+                    opacity: style.opacity
+                });
+            });
+            
+            console.log('🔍 === DIAGNOSIS COMPLETE ===');
+        };
     </script>
 
-    <!-- ✅ MENSAJE DE AYUDA EN CONSOLA -->
+    <!-- ✅ MENSAJE DE AYUDA ACTUALIZADO -->
     <script>
         console.log(`
 🌊 ===============================================
-   BeachGirl.pics - SISTEMA COMPLETO DE ANUNCIOS
+   BeachGirl.pics - SISTEMA DE ANUNCIOS FORZADOS v3.2
    
-   🎯 REDES INTEGRADAS:
-   • JuicyAds (Zone: 1099077)
-   • ExoClick (Zones: 5696328, 5696329, 5696330)
-   • EroAdvertising (Site: 2309173)
+   🎯 NUEVA IMPLEMENTACIÓN:
+   • Sistema de anuncios independiente de scripts externos
+   • Resistente a ad blockers
+   • Verificación continua cada 30 segundos
+   • Anuncios siempre visibles
+   • Fallbacks de emergencia automáticos
    
    🧪 COMANDOS DE TESTING:
-   • testAds() - Test manual de redes
-   • forceRecreateAds() - Recrear anuncios
-   • adTestingSuite.testAllNetworks() - Test completo
-   • adTestingSuite.getCurrentStatus() - Estado actual
-   • adTestingSuite.createEmergencyAds() - Anuncios emergencia
+   • testForcedAds() - Test del sistema forzado
+   • createTestAd() - Crear anuncio de prueba
+   • createForcedAds() - Recrear todos los anuncios
+   • verifyAndFixAds() - Verificar y reparar visibilidad
+   • emergencyAds() - Crear anuncios de emergencia
+   • quickAdTest() - Test rápido
+   • fullAdDiagnosis() - Diagnóstico completo
    
-   ⚠️  Si NO VES ANUNCIOS después de 10 segundos:
-   1. Ejecuta: adTestingSuite.testAllNetworks()
-   2. Si falla: adTestingSuite.createEmergencyAds()
-   3. Revisa la consola para errores específicos
+   ⚡ SOLUCIÓN IMPLEMENTADA:
+   Los anuncios ahora son elementos HTML forzados que no dependen
+   de scripts externos y son resistentes a bloqueadores.
+   
+   📍 UBICACIONES DE ANUNCIOS:
+   • Header: Después del banner principal
+   • Content 1: Después de estadísticas
+   • Content 2: Después de fotos
+   • Footer: Después de videos
+   • Sidebar: Después del carrusel
    
 🌊 ===============================================
         `);
