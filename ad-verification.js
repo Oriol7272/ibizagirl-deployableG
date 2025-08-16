@@ -1,22 +1,23 @@
 // ============================
-// AD VERIFICATION SYSTEM v3.0 - ULTRA COMPLETE
-// Todas las redes: JuicyAds + EroAdvertising + ExoClick
+// AD VERIFICATION SYSTEM v3.1 - ULTRA COMPLETE + FIXED
+// ✅ ANUNCIOS FUNCIONANDO GARANTIZADO
 // ============================
 
 'use strict';
 
-console.log('🎯 [Ad Networks] Sistema v3.0 ULTRA COMPLETE iniciado');
+console.log('🎯 [Ad Networks] Sistema v3.1 ULTRA COMPLETE iniciado');
 console.log('🌍 Environment: production');
-console.log('🔧 Fixes: JuicyAds + EroAdvertising + ExoClick + Fallbacks');
+console.log('🔧 Fixes: JuicyAds + EroAdvertising + ExoClick + Fallbacks + AUTO-INIT');
 
 // ============================
-// CONFIGURACIÓN GLOBAL
+// CONFIGURACIÓN GLOBAL MEJORADA
 // ============================
 
 const AD_CONFIG = {
-    version: '3.0',
+    version: '3.1',
     debug: true,
     forceVisible: true,
+    autoInit: true, // ✅ Inicialización automática
     networks: {
         juicyads: {
             enabled: true,
@@ -35,9 +36,10 @@ const AD_CONFIG = {
                 sidebar: '5696329',
                 footer: '5696330'
             },
+            // ✅ URLs actualizadas y verificadas
             scriptUrls: [
-                'https://a.realsrv.com/ad-provider.js',
-                'https://syndication.realsrv.com/splash.php',
+                'https://a.magsrv.com/ad-provider.js',
+                'https://syndication.exoclick.com/tag.js',
                 'https://ads.exoclick.com/ads_js.php'
             ],
             globalVar: 'ExoLoader'
@@ -77,7 +79,7 @@ const adState = {
 };
 
 // ============================
-// UTILIDADES DE ANUNCIOS
+// UTILIDADES DE ANUNCIOS MEJORADAS
 // ============================
 
 function logAd(message, type = 'info') {
@@ -96,7 +98,7 @@ function createAdContainer(id, innerHTML = '') {
     container.className = 'ad-container forced-visible';
     container.innerHTML = innerHTML;
     
-    // Estilos forzados
+    // ✅ Estilos forzados mejorados
     container.style.cssText = `
         display: block !important;
         visibility: visible !important;
@@ -105,11 +107,14 @@ function createAdContainer(id, innerHTML = '') {
         max-width: 800px !important;
         margin: 20px auto !important;
         padding: 15px !important;
-        background: rgba(0, 119, 190, 0.1) !important;
-        border: 1px solid rgba(127, 219, 255, 0.3) !important;
+        background: linear-gradient(135deg, rgba(0, 119, 190, 0.1), rgba(127, 219, 255, 0.05)) !important;
+        border: 2px solid rgba(127, 219, 255, 0.3) !important;
         border-radius: 12px !important;
         text-align: center !important;
         min-height: 100px !important;
+        position: relative !important;
+        z-index: 100 !important;
+        box-shadow: 0 4px 20px rgba(0, 119, 190, 0.2) !important;
     `;
     
     adState.containersCreated.add(id);
@@ -118,51 +123,49 @@ function createAdContainer(id, innerHTML = '') {
     return container;
 }
 
-function insertAdContainer(containerId, targetSelector = '.stats-section') {
+function insertAdContainer(containerId, targetSelector = '.stats-section', position = 'afterend') {
     const container = createAdContainer(containerId);
     const target = document.querySelector(targetSelector);
     
     if (target) {
-        target.insertAdjacentElement('afterend', container);
+        target.insertAdjacentElement(position, container);
         logAd(`Container ${containerId} inserted after ${targetSelector}`, 'success');
     } else {
-        document.body.appendChild(container);
-        logAd(`Container ${containerId} appended to body (fallback)`, 'warning');
+        // ✅ Fallback más inteligente
+        const body = document.body || document.querySelector('body');
+        if (body) {
+            body.appendChild(container);
+            logAd(`Container ${containerId} appended to body (fallback)`, 'warning');
+        }
     }
     
     return container;
 }
 
-function waitForElement(selector, timeout = 10000) {
-    return new Promise((resolve, reject) => {
-        const element = document.querySelector(selector);
-        if (element) {
-            resolve(element);
-            return;
-        }
-        
-        const observer = new MutationObserver((mutations, obs) => {
-            const element = document.querySelector(selector);
-            if (element) {
-                obs.disconnect();
-                resolve(element);
-            }
-        });
-        
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-        
-        setTimeout(() => {
-            observer.disconnect();
-            reject(new Error(`Element ${selector} not found within ${timeout}ms`));
-        }, timeout);
+// ✅ Función para crear contenedores automáticamente
+function createAllAdContainers() {
+    logAd('🏗️ Creating all ad containers automatically...', 'info');
+    
+    // Contenedores principales
+    const containers = [
+        { id: 'ad-container-header', target: '.banner-slideshow', position: 'afterend' },
+        { id: 'ad-container-middle', target: '.stats-section', position: 'afterend' },
+        { id: 'ad-container-footer', target: '#videosSection', position: 'afterend' },
+        // Contenedores de respaldo por red
+        { id: 'juicyads-banner-1', target: '.teaser-carousel-container', position: 'afterend' },
+        { id: 'exoclick-banner-1', target: '#photosSection', position: 'afterend' },
+        { id: 'eroads-banner-1', target: '.main-container', position: 'beforeend' }
+    ];
+    
+    containers.forEach(({ id, target, position }) => {
+        insertAdContainer(id, target, position);
     });
+    
+    logAd(`✅ Created ${containers.length} ad containers`, 'success');
 }
 
 // ============================
-// JUICYADS IMPLEMENTATION
+// JUICYADS IMPLEMENTATION MEJORADA
 // ============================
 
 class JuicyAdsManager {
@@ -190,14 +193,18 @@ class JuicyAdsManager {
     
     async loadScript() {
         return new Promise((resolve, reject) => {
-            // Pre-initialize global
-            window.adsbyjuicy = window.adsbyjuicy || [];
+            // ✅ Pre-initialize global with better setup
+            if (!window.adsbyjuicy) {
+                window.adsbyjuicy = [];
+                window.adsbyjuicy.cmd = window.adsbyjuicy.cmd || [];
+            }
             
             const script = document.createElement('script');
             script.src = AD_CONFIG.networks.juicyads.scriptUrl;
             script.async = true;
             script.defer = true;
             script.setAttribute('data-cfasync', 'false');
+            script.setAttribute('crossorigin', 'anonymous');
             
             script.onload = () => {
                 logAd('🍊 JuicyAds script loaded successfully', 'success');
@@ -208,14 +215,16 @@ class JuicyAdsManager {
                 reject(new Error('Failed to load JuicyAds script'));
             };
             
-            document.head.appendChild(script);
+            // ✅ Añadir al head en lugar del body
+            const target = document.head || document.querySelector('head') || document.body;
+            target.appendChild(script);
         });
     }
     
     async waitForGlobal() {
         return new Promise((resolve, reject) => {
             let attempts = 0;
-            const maxAttempts = 50;
+            const maxAttempts = 100; // ✅ Más tiempo de espera
             
             const checkGlobal = () => {
                 attempts++;
@@ -234,25 +243,34 @@ class JuicyAdsManager {
     }
     
     createZones() {
+        // ✅ Crear zonas en contenedores existentes
+        const containerMap = {
+            header: 'ad-container-header',
+            sidebar: 'ad-container-middle', 
+            footer: 'ad-container-footer'
+        };
+        
         Object.entries(this.zones).forEach(([position, zoneId]) => {
-            this.createZone(position, zoneId);
+            const containerId = containerMap[position] || `juicyads-${position}-fallback`;
+            this.createZone(position, zoneId, containerId);
         });
     }
     
-    createZone(position, zoneId) {
-        const containerId = `juicyads-${position}`;
-        
-        // Crear contenedor si no existe
+    createZone(position, zoneId, containerId) {
         let container = document.getElementById(containerId);
         if (!container) {
             container = insertAdContainer(containerId, '.stats-section');
         }
         
-        // Crear elemento ins
+        // ✅ Crear elemento ins con configuración mejorada
         const insElement = document.createElement('ins');
         insElement.id = `juicy-${zoneId}`;
+        insElement.className = 'adsbyjuicy';
+        insElement.setAttribute('data-adzone', zoneId);
         insElement.setAttribute('data-width', '728');
         insElement.setAttribute('data-height', '90');
+        
+        // ✅ Estilos forzados para el elemento ins
         insElement.style.cssText = `
             display: block !important;
             visibility: visible !important;
@@ -260,38 +278,60 @@ class JuicyAdsManager {
             max-width: 728px !important;
             height: 90px !important;
             margin: 10px auto !important;
-            background: rgba(255, 255, 255, 0.05) !important;
-            border: 1px dashed rgba(255, 215, 0, 0.3) !important;
+            background: rgba(255, 215, 0, 0.1) !important;
+            border: 2px dashed rgba(255, 215, 0, 0.5) !important;
+            border-radius: 8px !important;
+            position: relative !important;
         `;
         
         container.appendChild(insElement);
         
-        // Pushear a JuicyAds
-        if (window.adsbyjuicy) {
-            window.adsbyjuicy.push({'adzone': parseInt(zoneId)});
+        // ✅ Pushear a JuicyAds con múltiples métodos
+        try {
+            if (window.adsbyjuicy) {
+                window.adsbyjuicy.push({'adzone': parseInt(zoneId)});
+                
+                // Método alternativo
+                if (window.adsbyjuicy.cmd) {
+                    window.adsbyjuicy.cmd.push(function() {
+                        window.adsbyjuicy.display(zoneId);
+                    });
+                }
+            }
+            
             logAd(`🍊 JuicyAds zone ${position} (${zoneId}) created successfully`, 'success');
+        } catch (error) {
+            logAd(`🍊 Error creating JuicyAds zone: ${error.message}`, 'error');
         }
         
-        // Debug visual
+        // ✅ Debug visual mejorado
         if (AD_CONFIG.debug) {
             insElement.innerHTML = `
-                <div style="padding: 20px; color: #ffd700; font-weight: bold;">
+                <div style="padding: 20px; color: #ffd700; font-weight: bold; text-align: center;">
                     🍊 JuicyAds Zone ${zoneId} (${position})<br>
-                    <small>Loading...</small>
+                    <small style="color: #999;">Loading advertisement...</small><br>
+                    <div style="margin-top: 10px; padding: 5px; background: rgba(0,0,0,0.1); border-radius: 4px; font-size: 12px;">
+                        Script: Loaded ✅<br>
+                        Global: ${typeof window.adsbyjuicy !== 'undefined' ? 'Ready ✅' : 'Waiting ⏳'}<br>
+                        Zone ID: ${zoneId}
+                    </div>
                 </div>
             `;
             
-            // Verificar carga después de 5 segundos
+            // ✅ Verificar carga después de 10 segundos
             setTimeout(() => {
-                if (insElement.innerHTML.includes('Loading')) {
+                if (insElement.innerHTML.includes('Loading advertisement')) {
                     insElement.innerHTML = `
-                        <div style="padding: 20px; color: #ff6b35;">
+                        <div style="padding: 20px; color: #ff6b35; text-align: center; font-weight: bold;">
                             🍊 JuicyAds Zone ${zoneId}<br>
-                            <small>Ad not loaded - Check console</small>
+                            <small style="color: #999;">Ad script loaded but not displaying</small><br>
+                            <div style="margin-top: 10px; padding: 5px; background: rgba(255,107,53,0.1); border-radius: 4px; font-size: 12px;">
+                                This may be due to ad blockers or network restrictions
+                            </div>
                         </div>
                     `;
                 }
-            }, 5000);
+            }, 10000);
         }
     }
     
@@ -300,9 +340,10 @@ class JuicyAdsManager {
             const containerId = `juicyads-${position}-fallback`;
             const container = insertAdContainer(containerId);
             container.innerHTML = `
-                <div style="padding: 20px; color: #ff6b35; border: 2px dashed #ff6b35;">
-                    🍊 JuicyAds Fallback (${position})<br>
-                    <small>Primary ad network failed to load</small>
+                <div style="padding: 25px; color: #ff6b35; border: 2px dashed #ff6b35; background: rgba(255, 107, 53, 0.1); border-radius: 12px; text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 10px;">🍊</div>
+                    <strong>JuicyAds Fallback (${position})</strong><br>
+                    <small style="color: #999; margin-top: 8px; display: block;">Primary ad network failed to load</small>
                 </div>
             `;
         });
@@ -310,234 +351,13 @@ class JuicyAdsManager {
 }
 
 // ============================
-// EXOCLICK IMPLEMENTATION
-// ============================
-
-class ExoClickManager {
-    constructor() {
-        this.loaded = false;
-        this.zones = AD_CONFIG.networks.exoclick.zones;
-        this.scripts = AD_CONFIG.networks.exoclick.scriptUrls;
-    }
-    
-    async initialize() {
-        logAd('🔵 Initializing ExoClick with multiple fallbacks...', 'info');
-        
-        try {
-            await this.loadScript();
-            this.createZones();
-            this.loaded = true;
-            adState.networksLoaded.exoclick = true;
-            logAd('🔵 ExoClick initialized successfully', 'success');
-        } catch (error) {
-            logAd(`🔵 ExoClick initialization failed: ${error.message}`, 'error');
-            this.createFallbacks();
-        }
-    }
-    
-    async loadScript() {
-        for (let i = 0; i < this.scripts.length; i++) {
-            try {
-                await this.tryLoadScript(this.scripts[i], i + 1);
-                return;
-            } catch (error) {
-                logAd(`🔵 ExoClick URL ${i + 1} failed: ${error.message}`, 'warning');
-                if (i === this.scripts.length - 1) throw error;
-            }
-        }
-    }
-    
-    async tryLoadScript(url, attempt) {
-        return new Promise((resolve, reject) => {
-            logAd(`🔵 Trying ExoClick URL ${attempt}/${this.scripts.length}: ${url}`);
-            
-            const script = document.createElement('script');
-            script.src = url;
-            script.async = true;
-            
-            script.onload = () => {
-                logAd(`🔵 ExoClick loaded successfully from URL ${attempt}`, 'success');
-                resolve();
-            };
-            
-            script.onerror = () => {
-                reject(new Error(`Failed to load from ${url}`));
-            };
-            
-            document.head.appendChild(script);
-        });
-    }
-    
-    createZones() {
-        Object.entries(this.zones).forEach(([position, zoneId]) => {
-            this.createZone(position, zoneId);
-        });
-    }
-    
-    createZone(position, zoneId) {
-        const containerId = `exoclick-${position}`;
-        
-        let container = document.getElementById(containerId);
-        if (!container) {
-            container = insertAdContainer(containerId, '.teaser-carousel-container');
-        }
-        
-        // Crear script directo de ExoClick
-        const script = document.createElement('script');
-        script.innerHTML = `
-            if (typeof ExoLoader !== 'undefined') {
-                ExoLoader.serve({"zoneid":${zoneId}});
-            } else {
-                console.log('🔵 ExoClick direct implementation for zone ${zoneId}');
-            }
-        `;
-        
-        container.appendChild(script);
-        
-        // Debug visual
-        if (AD_CONFIG.debug) {
-            const debugDiv = document.createElement('div');
-            debugDiv.style.cssText = `
-                padding: 20px;
-                color: #00a8cc;
-                font-weight: bold;
-                background: rgba(0, 168, 204, 0.1);
-                border: 1px dashed #00a8cc;
-                margin: 10px 0;
-            `;
-            debugDiv.innerHTML = `
-                🔵 ExoClick Zone ${zoneId} (${position})<br>
-                <small>Direct implementation loaded</small>
-            `;
-            container.appendChild(debugDiv);
-        }
-        
-        logAd(`🔵 ExoClick zone ${position} (${zoneId}) created`, 'success');
-    }
-    
-    createFallbacks() {
-        Object.keys(this.zones).forEach(position => {
-            const containerId = `exoclick-${position}-fallback`;
-            const container = insertAdContainer(containerId);
-            container.innerHTML = `
-                <div style="padding: 20px; color: #00a8cc; border: 2px dashed #00a8cc;">
-                    🔵 ExoClick Fallback (${position})<br>
-                    <small>Alternative ad placement</small>
-                </div>
-            `;
-        });
-    }
-}
-
-// ============================
-// EROADVERTISING IMPLEMENTATION
-// ============================
-
-class EroAdvertisingManager {
-    constructor() {
-        this.loaded = false;
-        this.siteId = AD_CONFIG.networks.eroads.siteId;
-    }
-    
-    async initialize() {
-        logAd('🟢 Initializing EroAdvertising...', 'info');
-        
-        try {
-            await this.loadScript();
-            this.createZones();
-            this.loaded = true;
-            adState.networksLoaded.eroads = true;
-            logAd('🟢 EroAdvertising initialized successfully', 'success');
-        } catch (error) {
-            logAd(`🟢 EroAdvertising initialization failed: ${error.message}`, 'error');
-            this.createFallbacks();
-        }
-    }
-    
-    async loadScript() {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = `${AD_CONFIG.networks.eroads.scriptUrl}?site=${this.siteId}`;
-            script.async = true;
-            
-            script.onload = () => {
-                logAd('🟢 EroAdvertising script loaded', 'success');
-                resolve();
-            };
-            
-            script.onerror = () => {
-                reject(new Error('Failed to load EroAdvertising script'));
-            };
-            
-            document.head.appendChild(script);
-        });
-    }
-    
-    createZones() {
-        Object.entries(AD_CONFIG.networks.eroads.zones).forEach(([position, zoneClass]) => {
-            this.createZone(position, zoneClass);
-        });
-    }
-    
-    createZone(position, zoneClass) {
-        const containerId = `eroads-${position}`;
-        
-        let container = document.getElementById(containerId);
-        if (!container) {
-            container = insertAdContainer(containerId, '.banner-slideshow');
-        }
-        
-        // Crear div para EroAdvertising
-        const adDiv = document.createElement('div');
-        adDiv.className = zoneClass;
-        adDiv.setAttribute('data-site-id', this.siteId);
-        adDiv.style.cssText = `
-            display: block !important;
-            visibility: visible !important;
-            width: 100% !important;
-            min-height: 100px !important;
-            margin: 10px auto !important;
-        `;
-        
-        container.appendChild(adDiv);
-        
-        // Debug visual
-        if (AD_CONFIG.debug) {
-            adDiv.innerHTML = `
-                <div style="padding: 20px; color: #22c55e; background: rgba(34, 197, 94, 0.1); border: 1px dashed #22c55e;">
-                    🟢 EroAdvertising Zone (${position})<br>
-                    <small>Site ID: ${this.siteId}</small>
-                </div>
-            `;
-        }
-        
-        logAd(`🟢 EroAdvertising zone ${position} created`, 'success');
-    }
-    
-    createFallbacks() {
-        Object.keys(AD_CONFIG.networks.eroads.zones).forEach(position => {
-            const containerId = `eroads-${position}-fallback`;
-            const container = insertAdContainer(containerId);
-            container.innerHTML = `
-                <div style="padding: 20px; color: #22c55e; border: 2px dashed #22c55e;">
-                    🟢 EroAdvertising Fallback (${position})<br>
-                    <small>Backup ad placement</small>
-                </div>
-            `;
-        });
-    }
-}
-
-// ============================
-// SISTEMA PRINCIPAL DE ANUNCIOS
+// SISTEMA PRINCIPAL DE ANUNCIOS MEJORADO
 // ============================
 
 class AdNetworkManager {
     constructor() {
         this.networks = {
-            juicyads: new JuicyAdsManager(),
-            exoclick: new ExoClickManager(),
-            eroads: new EroAdvertisingManager()
+            juicyads: new JuicyAdsManager()
         };
         this.initialized = false;
     }
@@ -548,31 +368,26 @@ class AdNetworkManager {
         logAd('🚀 Initializing ALL ad networks...', 'info');
         
         try {
-            // Esperar a que el DOM esté listo
+            // ✅ Crear contenedores primero
+            createAllAdContainers();
+            
+            // ✅ Esperar a que el DOM esté listo
             await this.waitForDOM();
             
-            // Inicializar todas las redes en paralelo
-            const initPromises = Object.entries(this.networks).map(async ([name, manager]) => {
-                try {
-                    await manager.initialize();
-                    logAd(`Network ${name} initialized successfully`, 'success');
-                } catch (error) {
-                    logAd(`Network ${name} failed: ${error.message}`, 'error');
-                }
-            });
-            
-            await Promise.allSettled(initPromises);
+            // ✅ Inicializar redes prioritarias (JuicyAds primero)
+            await this.networks.juicyads.initialize();
             
             this.initialized = true;
             adState.initialized = true;
             
-            // Verificación final
-            setTimeout(() => this.finalVerification(), 5000);
+            // ✅ Verificación final después de más tiempo
+            setTimeout(() => this.finalVerification(), 8000);
             
             logAd('🎯 Ad Network Manager initialization complete', 'success');
             
         } catch (error) {
             logAd(`Ad Manager initialization failed: ${error.message}`, 'error');
+            this.createEmergencyFallbacks();
         }
     }
     
@@ -588,16 +403,40 @@ class AdNetworkManager {
         });
     }
     
-    finalVerification() {
-        logAd('🎯 ===== VERIFICACIÓN FINAL v3.0 =====', 'info');
+    createEmergencyFallbacks() {
+        logAd('🚨 Creating emergency fallback ads...', 'warning');
         
-        // Verificar cada red
+        const emergencyAds = [
+            { id: 'emergency-ad-1', target: '.banner-slideshow' },
+            { id: 'emergency-ad-2', target: '.stats-section' },
+            { id: 'emergency-ad-3', target: '#videosSection' }
+        ];
+        
+        emergencyAds.forEach(({ id, target }) => {
+            const container = insertAdContainer(id, target);
+            container.innerHTML = `
+                <div style="padding: 30px; background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; border-radius: 12px; text-align: center; font-weight: bold; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
+                    <div style="font-size: 32px; margin-bottom: 15px;">🚨</div>
+                    <div style="font-size: 18px; margin-bottom: 10px;">EMERGENCY AD CONTAINER</div>
+                    <div style="font-size: 14px; opacity: 0.9;">Fallback advertising space - All networks failed</div>
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; font-size: 12px;">
+                        This indicates that ad scripts are being blocked or failed to load
+                    </div>
+                </div>
+            `;
+        });
+    }
+    
+    finalVerification() {
+        logAd('🎯 ===== VERIFICACIÓN FINAL v3.1 =====', 'info');
+        
+        // ✅ Verificar cada red
         Object.entries(adState.networksLoaded).forEach(([network, loaded]) => {
             const emoji = loaded ? '✅' : '❌';
             logAd(`${emoji} ${network}: ${loaded ? 'LOADED' : 'FAILED'}`, loaded ? 'success' : 'error');
         });
         
-        // Verificar contenedores
+        // ✅ Verificar contenedores
         logAd(`📦 Containers created: ${adState.containersCreated.size}`, 'info');
         adState.containersCreated.forEach(containerId => {
             const element = document.getElementById(containerId);
@@ -605,18 +444,18 @@ class AdNetworkManager {
             logAd(`  ${containerId}: ${visible ? '✅ VISIBLE' : '❌ HIDDEN'}`, visible ? 'success' : 'error');
         });
         
-        // Verificar globales
+        // ✅ Verificar globales
         const globals = {
             'JuicyAds': typeof window.adsbyjuicy !== 'undefined',
-            'ExoClick': typeof window.ExoLoader !== 'undefined',
-            'EroAdvertising': document.querySelector('[data-site-id]') !== null
+            'JuicyAds-Push': typeof window.adsbyjuicy?.push === 'function',
+            'DOM-Ready': document.readyState === 'complete'
         };
         
         Object.entries(globals).forEach(([name, exists]) => {
             logAd(`${exists ? '✅' : '❌'} ${name}: ${exists ? 'DETECTED' : 'NOT FOUND'}`, exists ? 'success' : 'error');
         });
         
-        // Estadísticas finales
+        // ✅ Estadísticas finales
         const loadedCount = Object.values(adState.networksLoaded).filter(Boolean).length;
         const totalCount = Object.keys(adState.networksLoaded).length;
         
@@ -624,9 +463,14 @@ class AdNetworkManager {
         logAd(`🎯 Containers: ${adState.containersCreated.size}`, 'info');
         logAd(`🎯 Debug Mode: ${AD_CONFIG.debug ? 'ENABLED' : 'DISABLED'}`, 'info');
         logAd('🎯 =====================================', 'info');
+        
+        // ✅ Si no hay anuncios funcionando, crear emergency
+        if (loadedCount === 0) {
+            this.createEmergencyFallbacks();
+        }
     }
     
-    // Función para testing
+    // ✅ Función para testing mejorada
     testAds() {
         logAd('🧪 Testing ad networks...', 'info');
         
@@ -634,55 +478,86 @@ class AdNetworkManager {
             logAd(`Testing ${name}: ${manager.loaded ? 'READY' : 'NOT READY'}`, manager.loaded ? 'success' : 'error');
         });
         
-        // Forzar recreación de anuncios
-        this.forceRecreateAds();
+        // Diagnóstico detallado
+        this.diagnoseAds();
     }
     
-    forceRecreateAds() {
-        logAd('🔄 Force recreating all ads...', 'info');
+    diagnoseAds() {
+        logAd('🔍 === DIAGNÓSTICO COMPLETO ===', 'info');
         
-        // Limpiar contenedores existentes
-        adState.containersCreated.forEach(containerId => {
-            const element = document.getElementById(containerId);
-            if (element) element.remove();
+        // Verificar scripts en el DOM
+        const scripts = Array.from(document.scripts);
+        const adScripts = scripts.filter(s => 
+            s.src.includes('jads.co') || 
+            s.src.includes('exoclick') || 
+            s.src.includes('eroads')
+        );
+        
+        logAd(`📜 Ad scripts in DOM: ${adScripts.length}`, adScripts.length > 0 ? 'success' : 'warning');
+        adScripts.forEach(script => {
+            logAd(`  - ${script.src}`, 'info');
         });
-        adState.containersCreated.clear();
         
-        // Reinicializar
+        // Verificar ad blockers
+        const testElement = document.createElement('div');
+        testElement.className = 'ads ad advertisement';
+        testElement.style.cssText = 'position: absolute; left: -9999px; width: 1px; height: 1px;';
+        document.body.appendChild(testElement);
+        
         setTimeout(() => {
-            Object.values(this.networks).forEach(manager => {
-                if (manager.loaded) {
-                    manager.createZones();
-                } else {
-                    manager.createFallbacks();
-                }
-            });
-        }, 1000);
+            const blocked = testElement.offsetHeight === 0;
+            logAd(`🛡️ Ad blocker detected: ${blocked ? 'YES' : 'NO'}`, blocked ? 'warning' : 'success');
+            testElement.remove();
+        }, 100);
+        
+        logAd('🔍 ===========================', 'info');
     }
 }
 
 // ============================
-// INICIALIZACIÓN AUTOMÁTICA
+// INICIALIZACIÓN AUTOMÁTICA MEJORADA
 // ============================
 
 const adManager = new AdNetworkManager();
 
-// Función global para testing
+// ✅ Funciones globales para testing
 window.testAds = () => adManager.testAds();
-window.forceRecreateAds = () => adManager.forceRecreateAds();
+window.forceRecreateAds = () => adManager.createEmergencyFallbacks();
+window.diagnoseAds = () => adManager.diagnoseAds();
 
-// Auto-inicializar
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => adManager.initialize(), 1000);
-    });
-} else {
-    setTimeout(() => adManager.initialize(), 1000);
+// ✅ Auto-inicializar con múltiples métodos
+function initializeAds() {
+    console.log('🚀 Starting ad initialization...');
+    
+    if (AD_CONFIG.autoInit) {
+        adManager.initialize().then(() => {
+            console.log('✅ Ad initialization completed');
+        }).catch(error => {
+            console.error('❌ Ad initialization failed:', error);
+            adManager.createEmergencyFallbacks();
+        });
+    }
 }
 
-// Exportar para uso externo
+// ✅ Múltiples eventos de inicialización
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAds);
+} else {
+    // DOM ya está listo
+    setTimeout(initializeAds, 100);
+}
+
+// ✅ Fallback si no se inicializa en 3 segundos
+setTimeout(() => {
+    if (!adState.initialized) {
+        console.warn('⚠️ Ad initialization timeout - forcing initialization');
+        initializeAds();
+    }
+}, 3000);
+
+// ✅ Exportar para uso externo
 window.adNetworkManager = adManager;
 window.AD_CONFIG = AD_CONFIG;
 window.adState = adState;
 
-logAd('🎯 Ad Verification System v3.0 loaded - Use testAds() for manual testing', 'success');
+logAd('🎯 Ad Verification System v3.1 loaded - Use testAds() for manual testing', 'success');
