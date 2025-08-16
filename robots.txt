@@ -1,5 +1,5 @@
 # BeachGirl.pics - Robots.txt Optimizado SEO
-# Última actualización: 2025-01-15
+# Última actualización: 2025-01-16
 
 User-agent: *
 Allow: /
@@ -21,7 +21,8 @@ Disallow: /*.json$
 Disallow: /*?*
 Disallow: /search
 
-# Google Search Console verification
+# Archivos de verificación permitidos
+Allow: /73c5396a9a013aa880c101961c55b1bd.html
 Allow: /google2e40209785af1244.html
 
 # Ad network verification files
