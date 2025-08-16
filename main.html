@@ -1,409 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeachGirl.pics - Galería Premium</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Galería premium con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo.">
-    <meta name="keywords" content="fotos playa, galería premium, contenido exclusivo, paraíso mediterráneo">
-    
-    <!-- VERIFICATION META TAGS - TODAS LAS REDES -->
-    <meta name="google-site-verification" content="8X6z4G2uDlqxoV6RU42Gpv8XCP4LHCDuXO2fxg9LhoM">
-    <meta name="juicyads-site-verification" content="ff59beb7a1c1adcc95907f68b821605e">
-    <meta name="exoclick-site-verification" content="your-exoclick-verification-code">
-    <meta name="eroads-site-verification" content="your-eroads-verification-code">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="BeachGirl.pics - Galería Premium del Paraíso">
-    <meta property="og:description" content="400+ fotos y 80+ videos HD actualizados diariamente">
-    <meta property="og:image" content="https://beachgirl.pics/full/bikini.webp">
-    <meta property="og:url" content="https://beachgirl.pics/main.html">
-    
-    <!-- Preconnect para optimizar carga de anuncios -->
-    <link rel="preconnect" href="https://poweredby.jads.co">
-    <link rel="preconnect" href="https://a.realsrv.com">
-    <link rel="preconnect" href="https://ads.eroads.com">
-    <link rel="preconnect" href="https://www.paypal.com">
-    
-    <!-- Preload de recursos críticos -->
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="content-data.js" as="script">
-    <link rel="preload" href="ad-verification-fixed.js" as="script">
-    <link rel="preload" href="main-script.js" as="script">
-    
-    <!-- Estilos -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Canvas Confetti con múltiples CDNs de respaldo -->
-    <script>
-        // Función para cargar Canvas Confetti con fallback
-        (function loadConfetti() {
-            const confettiUrls = [
-                'https://unpkg.com/canvas-confetti@1.9.3/dist/confetti.module.mjs',
-                'https://unpkg.com/canvas-confetti@1.9.3/dist/confetti.browser.min.js',
-                'https://cdn.skypack.dev/canvas-confetti@1.9.3',
-                'https://esm.sh/canvas-confetti@1.9.3'
-            ];
-            
-            let currentIndex = 0;
-            
-            function tryLoadConfetti() {
-                if (currentIndex >= confettiUrls.length) {
-                    console.warn('⚠️ Canvas Confetti no pudo cargarse, usando fallback');
-                    window.confetti = function() {
-                        console.log('🎉 Confetti effect (fallback)');
-                    };
-                    return;
-                }
-                
-                const script = document.createElement('script');
-                const url = confettiUrls[currentIndex];
-                
-                if (url.includes('.mjs') || url.includes('skypack') || url.includes('esm.sh')) {
-                    script.type = 'module';
-                    script.innerHTML = `
-                        import confetti from '${url}';
-                        window.confetti = confetti;
-                    `;
-                } else {
-                    script.src = url;
-                }
-                
-                script.onload = function() {
-                    console.log('✅ Canvas Confetti loaded from:', url);
-                };
-                
-                script.onerror = function() {
-                    console.warn('❌ Failed to load confetti from:', url);
-                    currentIndex++;
-                    tryLoadConfetti();
-                };
-                
-                document.head.appendChild(script);
-            }
-            
-            tryLoadConfetti();
-        })();
-    </script>
-    
-    <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
-</head>
-<body>
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <select id="languageSelect" onchange="changeLanguage(this.value)">
-            <option value="es">🇪🇸 Español</option>
-            <option value="en">🇬🇧 English</option>
-            <option value="de">🇩🇪 Deutsch</option>
-            <option value="it">🇮🇹 Italiano</option>
-            <option value="fr">🇫🇷 Français</option>
-            <option value="pt">🇵🇹 Português</option>
-        </select>
-    </div>
-
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-content">
-            <div class="loading-logo">🌊 BeachGirl.pics</div>
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
-            </div>
-            <p data-translate="loading">Cargando el paraíso...</p>
-        </div>
-    </div>
-
-    <!-- Main Header -->
-    <header class="main-header" id="mainHeader">
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="logo">🌊 BeachGirl.pics</div>
-                <div class="logo-subtitle" data-translate="subtitle">Contenido Exclusivo del Paraíso</div>
-            </div>
-            
-            <div class="header-buttons">
-                <button class="header-btn" onclick="showPackModal()" data-translate="megapack">📦 MEGA PACKS -70%</button>
-                <button class="header-btn" onclick="showVIPModal()" data-translate="monthly">💳 €15/Mes</button>
-                <button class="header-btn vip" onclick="showVIPModal()" data-translate="lifetime">👑 Lifetime €100</button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Credits Display -->
-    <div class="credits-display" id="creditsDisplay">
-        <div class="credits-number" id="creditsNumber">0</div>
-        <div class="credits-label" data-translate="credits_available">Créditos disponibles</div>
-    </div>
-
-    <!-- Main Container -->
-    <div class="main-container">
-        <!-- Banner Slideshow -->
-        <section class="banner-slideshow">
-            <div class="banner-slide active">
-                <img src="full/bikbanner.webp" alt="Paradise Banner" loading="eager">
-            </div>
-            <div class="banner-slide">
-                <img src="full/bikbanner2.webp" alt="Paradise Banner 2" loading="eager">
-            </div>
-            <div class="banner-overlay">
-                <h1 class="banner-title" data-translate="welcome">Bienvenida al Paraíso 🌴</h1>
-                <p class="banner-subtitle" data-translate="daily_content">200+ fotos y 40+ videos actualizados DIARIAMENTE</p>
-                <div class="banner-cta">
-                    <button class="header-btn cta-primary" onclick="showVIPModal()" data-translate="unlock_all">🔓 Desbloquear Todo</button>
-                    <button class="header-btn cta-secondary" onclick="document.getElementById('photosSection').scrollIntoView({behavior: 'smooth'})" data-translate="view_gallery">📸 Ver Galería</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 🎯 PRIMER ANUNCIO: Después del Banner -->
-        <!-- Los contenedores se crean automáticamente por ad-verification-fixed.js -->
-
-        <!-- Teaser Carousel -->
-        <section class="teaser-carousel-container">
-            <h2 class="teaser-title" data-translate="preview_gallery">🔥 Vista Previa Exclusiva</h2>
-            <div class="teaser-carousel" id="teaserCarousel"></div>
-            <div class="carousel-nav">
-                <button class="carousel-btn" onclick="scrollCarousel(-1)">‹</button>
-                <button class="carousel-btn" onclick="scrollCarousel(1)">›</button>
-            </div>
-        </section>
-
-        <!-- Stats Section -->
-        <section class="stats-section">
-            <div class="stat-card">
-                <div class="stat-icon">📸</div>
-                <div class="stat-number" id="photoCount">200</div>
-                <div class="stat-label" data-translate="photos_today">Fotos de Hoy</div>
-                <div class="stat-update">
-                    <span data-translate="updated_at">Actualizado a las</span>
-                    <time id="updateHour">3:00 AM</time>
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">🎬</div>
-                <div class="stat-number" id="videoCount">40</div>
-                <div class="stat-label" data-translate="videos_hd">Videos HD</div>
-                <div class="stat-update" data-translate="new_content">¡NUEVO CONTENIDO!</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">👁</div>
-                <div class="stat-number" id="totalViews">25.8M</div>
-                <div class="stat-label" data-translate="total_views">Vistas Totales</div>
-                <div class="stat-update">+120K <span data-translate="today">hoy</span></div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">🔥</div>
-                <div class="stat-number">24/7</div>
-                <div class="stat-label" data-translate="updates">Actualizaciones</div>
-                <div class="stat-update" data-translate="always_fresh">SIEMPRE FRESCO</div>
-            </div>
-        </section>
-
-        <!-- 🎯 SEGUNDO ANUNCIO: Después de Stats -->
-        <!-- Los contenedores se crean automáticamente aquí -->
-
-        <!-- Photos Section -->
-        <section class="content-section" id="photosSection">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span data-translate="paradise_photos">📸 Fotos del Paraíso</span>
-                    <span class="section-badge" data-translate="new_today">¡NUEVO HOY!</span>
-                </h2>
-            </div>
-            <div class="content-grid" id="photosGrid">
-                <!-- Photos will be dynamically loaded here -->
-            </div>
-        </section>
-
-        <!-- 🎯 TERCER ANUNCIO: Entre Fotos y Videos -->
-        <!-- Los contenedores se crean automáticamente aquí -->
-
-        <!-- Videos Section -->
-        <section class="content-section" id="videosSection">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span data-translate="exclusive_videos">🎬 Videos Exclusivos</span>
-                    <span class="section-badge" data-translate="fresh_content">¡CONTENIDO FRESCO!</span>
-                </h2>
-            </div>
-            <div class="content-grid" id="videosGrid">
-                <!-- Videos will be dynamically loaded here -->
-            </div>
-        </section>
-
-        <!-- 🎯 CUARTO ANUNCIO: Después de Videos -->
-        <!-- Los contenedores se crean automáticamente aquí -->
-    </div>
-
-    <!-- Isabella Chat Bot -->
-    <div class="isabella-chat">
-        <div class="isabella-bubble" onclick="toggleIsabella()">
-            <span class="isabella-avatar">💕</span>
-            <div class="isabella-notification">1</div>
-        </div>
-        
-        <div class="isabella-window" id="isabellaWindow">
-            <div class="isabella-header">
-                <div class="isabella-title">
-                    <span>💕</span>
-                    <span data-translate="isabella_title">Isabella - Tu Guía VIP</span>
-                </div>
-                <button class="isabella-close" onclick="toggleIsabella()">×</button>
-            </div>
-            <div class="isabella-messages" id="isabellaMessages"></div>
-            <div class="isabella-actions">
-                <button class="isabella-btn" onclick="isabellaAction('vip')" data-translate="vip_info">💎 VIP Info</button>
-                <button class="isabella-btn" onclick="isabellaAction('daily')" data-translate="news">📅 Novedades</button>
-                <button class="isabella-btn" onclick="isabellaAction('help')" data-translate="help">❓ Ayuda</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- VIP Modal -->
-    <div class="modal" id="vipModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" data-translate="vip_unlimited">👑 Acceso VIP Ilimitado</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
-            
-            <div class="plans-container">
-                <div class="plan-card" onclick="selectPlan('monthly')">
-                    <div class="plan-type" data-translate="plan_monthly">📅 Mensual</div>
-                    <div class="plan-price">€15</div>
-                    <div class="plan-period" data-translate="per_month">/mes</div>
-                    <ul class="plan-features">
-                        <li data-translate="unlimited_access">Acceso ilimitado</li>
-                        <li data-translate="photos_hd">200+ fotos HD</li>
-                        <li data-translate="videos_hd">40+ videos HD</li>
-                        <li data-translate="no_ads">Sin publicidad</li>
-                    </ul>
-                </div>
-                
-                <div class="plan-card selected" onclick="selectPlan('lifetime')">
-                    <div class="best-value" data-translate="best_value">MEJOR VALOR</div>
-                    <div class="plan-type" data-translate="plan_lifetime">♾️ Lifetime</div>
-                    <div class="plan-price">€100</div>
-                    <div class="plan-period" data-translate="save_yearly">¡Ahorra €80 al año!</div>
-                    <ul class="plan-features">
-                        <li data-translate="unlimited_access">Acceso ilimitado de por vida</li>
-                        <li data-translate="all_content">Todo el contenido actual y futuro</li>
-                        <li data-translate="priority_support">Soporte prioritario</li>
-                        <li data-translate="exclusive_content">Contenido exclusivo VIP</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div id="paypal-button-container-vip" class="paypal-button-container"></div>
-        </div>
-    </div>
-
-    <!-- Pack Modal -->
-    <div class="modal" id="packModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" data-translate="pack_selection">📦 MEGA PACKS - Ahorra 70%</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
-            
-            <div class="packs-container">
-                <div class="pack-card" onclick="selectPack('starter')">
-                    <div class="pack-title" data-translate="pack_starter">Starter Pack</div>
-                    <div class="pack-items">10</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
-                    <div class="pack-price">€10</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 33%</div>
-                </div>
-                
-                <div class="pack-card" onclick="selectPack('bronze')">
-                    <div class="pack-title" data-translate="pack_bronze">Bronze Pack</div>
-                    <div class="pack-items">25</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
-                    <div class="pack-price">€20</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 50%</div>
-                </div>
-                
-                <div class="pack-card selected" onclick="selectPack('silver')">
-                    <div class="pack-title" data-translate="pack_silver">Silver Pack</div>
-                    <div class="pack-items">50</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
-                    <div class="pack-price">€35</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 65%</div>
-                </div>
-                
-                <div class="pack-card" onclick="selectPack('gold')">
-                    <div class="pack-title" data-translate="pack_gold">Gold Pack</div>
-                    <div class="pack-items">100</div>
-                    <div class="pack-label" data-translate="items">contenidos</div>
-                    <div class="pack-price">€60</div>
-                    <div class="pack-savings"><span data-translate="save">Ahorra</span> 70%</div>
-                </div>
-            </div>
-            
-            <div id="paypal-button-container-pack" class="paypal-button-container"></div>
-        </div>
-    </div>
-
-    <!-- PPV Modal -->
-    <div class="modal" id="ppvModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="ppvTitle" data-translate="unlock_content">🔓 Desbloquear Contenido</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
-            <div class="ppv-price" id="ppvPrice">€0.10</div>
-            <p style="text-align: center; margin: 1rem 0; color: #999;">
-                <span data-translate="use_credit">Usa 1 crédito para desbloquear</span>
-            </p>
-            <div id="paypal-button-container-ppv" class="paypal-button-container"></div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>BeachGirl.pics</h3>
-                <p data-translate="footer_desc">Tu destino diario para contenido exclusivo del paraíso mediterráneo.</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3 data-translate="quick_links">Enlaces Rápidos</h3>
-                <ul class="footer-links">
-                    <li><a href="#photosSection" data-translate="photos">Fotos</a></li>
-                    <li><a href="#videosSection" data-translate="videos">Videos</a></li>
-                    <li><a href="#" onclick="showVIPModal(); return false;" data-translate="vip_subscription">Suscripción VIP</a></li>
-                    <li><a href="#" onclick="showPackModal(); return false;" data-translate="mega_packs">Mega Packs</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-section">
-                <h3 data-translate="support">Soporte</h3>
-                <ul class="footer-links">
-                    <li><a href="#" data-translate="terms">Términos de Servicio</a></li>
-                    <li><a href="#" data-translate="privacy">Política de Privacidad</a></li>
-                    <li><a href="#" data-translate="contact">Contacto</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p data-translate="copyright">© 2025 BeachGirl.pics - Todos los derechos reservados | 18+ Solo Adultos</p>
-        </div>
-    </footer>
-
-    <!-- Scripts - ORDEN CORREGIDO PARA ANUNCIOS -->
+<!-- Scripts - ORDEN PARA ANUNCIOS REALES -->
     
     <!-- 1. Datos del contenido -->
     <script src="content-data.js"></script>
     
-    <!-- 2. ✅ SISTEMA DE ANUNCIOS FORZADOS - NUEVO Y MEJORADO -->
-    <script src="ad-verification-fixed.js"></script>
+    <!-- 2. ✅ SISTEMA DE ANUNCIOS REALES v4.0 -->
+    <script src="ad-verification-real.js"></script>
     
     <!-- 3. SEO enhancements -->
     <script src="seo-enhancements.js" defer></script>
@@ -420,44 +21,107 @@
         gtag('config', 'G-DBXYNPBSPY');
     </script>
 
-    <!-- ✅ SCRIPT DE TESTING SIMPLIFICADO Y MEJORADO -->
+    <!-- ✅ SISTEMA DE TESTING PARA ANUNCIOS REALES -->
     <script>
-        // Auto-testing mejorado
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DOM loaded - Starting ads verification...');
+            console.log('🚀 DOM loaded - Real Ads System starting...');
             
-            // Test después de 2 segundos
+            // Test después de 5 segundos (dar tiempo a las redes)
             setTimeout(() => {
-                if (window.testForcedAds) {
-                    window.testForcedAds();
-                    console.log('✅ Forced ads system tested');
+                if (window.testRealAds) {
+                    window.testRealAds();
+                    console.log('✅ Real ads system tested');
                 } else {
-                    console.warn('⚠️ Forced ads system not loaded');
+                    console.warn('⚠️ Real ads system not loaded');
                 }
-            }, 2000);
+            }, 5000);
             
-            // Verificar anuncios cada 30 segundos
+            // Verificar anuncios cada 60 segundos
             setInterval(() => {
-                if (window.verifyAndFixAds) {
-                    window.verifyAndFixAds();
+                if (window.verifyRealAds) {
+                    window.verifyRealAds();
                 }
-            }, 30000);
+            }, 60000);
             
-            // Test visual después de 5 segundos
+            // Verificación visual después de 10 segundos
             setTimeout(() => {
-                const adContainers = document.querySelectorAll('.forced-ad-container');
-                if (adContainers.length === 0) {
-                    console.warn('⚠️ No forced ads detected - creating emergency ads');
+                const realContainers = document.querySelectorAll('.real-ad-container');
+                const adSlots = document.querySelectorAll('.ad-slot');
+                
+                console.log(`📊 Real ad containers: ${realContainers.length}`);
+                console.log(`📊 Ad slots: ${adSlots.length}`);
+                
+                if (realContainers.length === 0) {
+                    console.warn('⚠️ No real ads detected');
                     if (window.emergencyAds) {
+                        console.log('🚨 Creating emergency fallback');
                         window.emergencyAds();
                     }
                 } else {
-                    console.log(`✅ Found ${adContainers.length} forced ad containers`);
+                    console.log('✅ Real ads system working');
                 }
-            }, 5000);
+            }, 10000);
         });
         
-        // Funciones de emergencia disponibles globalmente
+        // Funciones de testing mejoradas
+        window.adSystemStatus = function() {
+            console.log('📊 === AD SYSTEM STATUS ===');
+            
+            // Verificar manager
+            if (window.realAdsManager) {
+                console.log('✅ Real Ads Manager: Loaded');
+                console.log('Networks:', window.realAdsManager.networksLoaded);
+                console.log('Containers:', window.realAdsManager.adContainers.size);
+            } else {
+                console.log('❌ Real Ads Manager: Not loaded');
+            }
+            
+            // Verificar contenedores
+            const realContainers = document.querySelectorAll('.real-ad-container');
+            console.log(`📦 Real containers: ${realContainers.length}`);
+            
+            // Verificar slots por red
+            const networks = ['juicyads', 'exoclick', 'eroads'];
+            networks.forEach(network => {
+                const slots = document.querySelectorAll(`.${network}-slot`);
+                console.log(`🎯 ${network} slots: ${slots.length}`);
+            });
+            
+            // Verificar elementos específicos de anuncios
+            const juicyElements = document.querySelectorAll('.adsbyjuicy, ins[data-adzone]');
+            console.log(`🍊 JuicyAds elements: ${juicyElements.length}`);
+            
+            // Verificar scripts cargados
+            const adScripts = Array.from(document.scripts).filter(s => 
+                s.src.includes('jads.co') || 
+                s.src.includes('exoclick') || 
+                s.src.includes('eroads') ||
+                s.src.includes('magsrv')
+            );
+            console.log(`📜 Ad scripts loaded: ${adScripts.length}`);
+            adScripts.forEach(script => console.log(`  - ${script.src}`));
+            
+            // Verificar globales
+            console.log('🌐 Globals:', {
+                adsbyjuicy: typeof window.adsbyjuicy,
+                ExoLoader: typeof window.ExoLoader,
+                realAdsManager: typeof window.realAdsManager
+            });
+            
+            console.log('📊 === STATUS COMPLETE ===');
+        };
+        
+        // Función para forzar recreación de anuncios
+        window.recreateRealAds = function() {
+            console.log('🔄 Recreating real ads...');
+            if (window.realAdsManager) {
+                window.realAdsManager.initialize();
+            } else {
+                console.warn('❌ Real ads manager not available');
+            }
+        };
+        
+        // Función de emergencia
         window.emergencyAds = function() {
             console.log('🚨 Creating emergency ads...');
             
@@ -465,33 +129,19 @@
                 { 
                     target: '.stats-section', 
                     position: 'afterend',
-                    html: '<div style="width:100%;height:120px;background:linear-gradient(135deg,#ff6b35,#f7931e);margin:20px auto;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;border-radius:15px;max-width:800px;box-shadow:0 10px 30px rgba(255,107,53,0.4);animation:pulse 2s infinite;">🚨 EMERGENCY AD SPACE - HEADER BANNER</div>' 
+                    html: '<div style="width:100%;height:90px;background:linear-gradient(135deg,#ff6b35,#f7931e);margin:20px auto;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:18px;border-radius:10px;max-width:800px;box-shadow:0 8px 25px rgba(255,107,53,0.4);">🎯 HEADER AD SPACE - Premium Placement</div>' 
                 },
                 { 
                     target: '#photosSection', 
                     position: 'afterend',
-                    html: '<div style="width:100%;height:120px;background:linear-gradient(135deg,#4CAF50,#45a049);margin:20px auto;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;border-radius:15px;max-width:800px;box-shadow:0 10px 30px rgba(76,175,80,0.4);animation:pulse 2s infinite;">🚨 EMERGENCY AD SPACE - CONTENT BANNER</div>' 
+                    html: '<div style="width:100%;height:250px;background:linear-gradient(135deg,#4CAF50,#45a049);margin:20px auto;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:18px;border-radius:10px;max-width:800px;box-shadow:0 8px 25px rgba(76,175,80,0.4);">🎯 CONTENT AD SPACE - Medium Rectangle</div>' 
                 },
                 { 
                     target: '#videosSection', 
                     position: 'afterend',
-                    html: '<div style="width:100%;height:120px;background:linear-gradient(135deg,#9C27B0,#E91E63);margin:20px auto;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;border-radius:15px;max-width:800px;box-shadow:0 10px 30px rgba(156,39,176,0.4);animation:pulse 2s infinite;">🚨 EMERGENCY AD SPACE - FOOTER BANNER</div>' 
+                    html: '<div style="width:100%;height:90px;background:linear-gradient(135deg,#9C27B0,#E91E63);margin:20px auto;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:18px;border-radius:10px;max-width:800px;box-shadow:0 8px 25px rgba(156,39,176,0.4);">🎯 FOOTER AD SPACE - Bottom Banner</div>' 
                 }
             ];
-            
-            // Añadir animación CSS si no existe
-            if (!document.head.querySelector('#emergency-ads-styles')) {
-                const style = document.createElement('style');
-                style.id = 'emergency-ads-styles';
-                style.textContent = `
-                    @keyframes pulse {
-                        0% { transform: scale(1); opacity: 1; }
-                        50% { transform: scale(1.02); opacity: 0.8; }
-                        100% { transform: scale(1); opacity: 1; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
             
             emergencyPositions.forEach((pos, index) => {
                 const targetElement = document.querySelector(pos.target);
@@ -499,98 +149,47 @@
                     const div = document.createElement('div');
                     div.innerHTML = pos.html;
                     div.style.cssText = 'display:block!important;visibility:visible!important;opacity:1!important;';
-                    div.id = `emergency-ad-${index + 1}`;
+                    div.id = `emergency-real-ad-${index + 1}`;
+                    div.className = 'emergency-ad-fallback';
                     targetElement.insertAdjacentElement(pos.position, div.firstChild);
-                    console.log(`✅ Emergency ad ${index + 1} created at ${pos.target}`);
-                } else {
-                    console.warn(`⚠️ Target not found: ${pos.target}`);
+                    console.log(`✅ Emergency ad ${index + 1} created`);
                 }
             });
             
-            console.log('✅ Emergency ads creation completed');
-        };
-        
-        // Test rápido
-        window.quickAdTest = function() {
-            console.log('🧪 Running quick ad test...');
-            if (window.createTestAd) {
-                window.createTestAd();
-                console.log('✅ Test ad created via forced system');
-            } else {
-                console.log('⚠️ Forced system not available, using emergency fallback');
-                window.emergencyAds();
-            }
-        };
-        
-        // Función de diagnóstico completo
-        window.fullAdDiagnosis = function() {
-            console.log('🔍 === FULL AD DIAGNOSIS ===');
-            
-            // Verificar contenedores forzados
-            const forcedAds = document.querySelectorAll('.forced-ad-container');
-            console.log(`📊 Forced ad containers: ${forcedAds.length}`);
-            
-            // Verificar anuncios de emergencia
-            const emergencyAds = document.querySelectorAll('[id*="emergency-ad"]');
-            console.log(`🚨 Emergency ad containers: ${emergencyAds.length}`);
-            
-            // Verificar funciones disponibles
-            console.log('🔧 Available functions:', {
-                testForcedAds: typeof window.testForcedAds,
-                createTestAd: typeof window.createTestAd,
-                verifyAndFixAds: typeof window.verifyAndFixAds,
-                emergencyAds: typeof window.emergencyAds
-            });
-            
-            // Mostrar todos los contenedores de anuncios
-            const allAdContainers = document.querySelectorAll('[id*="ad"], [class*="ad-container"], [class*="forced-ad"]');
-            console.log(`📋 Total ad-related elements: ${allAdContainers.length}`);
-            
-            allAdContainers.forEach((element, index) => {
-                const style = getComputedStyle(element);
-                console.log(`${index + 1}. ${element.id || element.className}:`, {
-                    display: style.display,
-                    visibility: style.visibility,
-                    opacity: style.opacity
-                });
-            });
-            
-            console.log('🔍 === DIAGNOSIS COMPLETE ===');
+            console.log('✅ Emergency ads created');
         };
     </script>
 
-    <!-- ✅ MENSAJE DE AYUDA ACTUALIZADO -->
+    <!-- ✅ MENSAJE DE AYUDA PARA ANUNCIOS REALES -->
     <script>
         console.log(`
 🌊 ===============================================
-   BeachGirl.pics - SISTEMA DE ANUNCIOS FORZADOS v3.2
+   BeachGirl.pics - SISTEMA DE ANUNCIOS REALES v4.0
    
-   🎯 NUEVA IMPLEMENTACIÓN:
-   • Sistema de anuncios independiente de scripts externos
-   • Resistente a ad blockers
-   • Verificación continua cada 30 segundos
-   • Anuncios siempre visibles
-   • Fallbacks de emergencia automáticos
+   🎯 REDES PUBLICITARIAS REALES:
+   • JuicyAds (Zones: 1099077-1099081)
+   • ExoClick (Zones: 5696328-5696332)  
+   • EroAdvertising (Site: 2309173)
    
    🧪 COMANDOS DE TESTING:
-   • testForcedAds() - Test del sistema forzado
-   • createTestAd() - Crear anuncio de prueba
-   • createForcedAds() - Recrear todos los anuncios
-   • verifyAndFixAds() - Verificar y reparar visibilidad
-   • emergencyAds() - Crear anuncios de emergencia
-   • quickAdTest() - Test rápido
-   • fullAdDiagnosis() - Diagnóstico completo
+   • testRealAds() - Test del sistema real
+   • adSystemStatus() - Estado completo del sistema
+   • verifyRealAds() - Verificar visibilidad
+   • recreateRealAds() - Recrear anuncios
+   • emergencyAds() - Fallback de emergencia
    
-   ⚡ SOLUCIÓN IMPLEMENTADA:
-   Los anuncios ahora son elementos HTML forzados que no dependen
-   de scripts externos y son resistentes a bloqueadores.
+   📍 UBICACIONES DE ANUNCIOS REALES:
+   • Header: Banner 728x90 (JuicyAds + ExoClick)
+   • Content 1: Banner 728x90 (JuicyAds + EroAdvertising)
+   • Content 2: Medium 300x250 (ExoClick + JuicyAds)
+   • Footer: Banner 728x90 (JuicyAds + ExoClick)
+   • Sidebar: Skyscraper 300x600 (EroAdvertising + ExoClick)
    
-   📍 UBICACIONES DE ANUNCIOS:
-   • Header: Después del banner principal
-   • Content 1: Después de estadísticas
-   • Content 2: Después de fotos
-   • Footer: Después de videos
-   • Sidebar: Después del carrusel
+   ⚡ CARACTERÍSTICAS:
+   • Múltiples redes por posición (fallback automático)
+   • Timeouts de 10 segundos por red
+   • Verificación continua cada 60 segundos
+   • Fallbacks automáticos si falla carga
    
 🌊 ===============================================
         `);
