@@ -1,6 +1,6 @@
 // ============================
-// BeachGirl.pics Gallery Script v15.0.0 - COMPLETE EDITION FIXED
-// PayPal + Todas las mejoras + Sistema completo
+// BeachGirl.pics Gallery Script v15.0.1 - ANUNCIOS CORREGIDOS
+// PayPal + Todas las mejoras + Sistema completo + AD FIX
 // ============================
 
 'use strict';
@@ -10,7 +10,7 @@
 // ============================
 
 const CONFIG = {
-    VERSION: '15.0.0',
+    VERSION: '15.0.1', // ✅ Incrementada por fix de anuncios
     CONTENT: {
         DAILY_PHOTOS: 200,
         DAILY_VIDEOS: 40,
@@ -53,6 +53,12 @@ const CONFIG = {
         OFFLINE_MODE: true,
         AUTO_SAVE: true,
         ADVANCED_SEARCH: true
+    },
+    // ✅ NUEVA CONFIGURACIÓN PARA ANUNCIOS
+    ADS: {
+        DEBUG_MODE: true, // ✅ Modo debug - siempre mostrar anuncios
+        FORCE_VISIBLE: true, // ✅ Forzar visibilidad
+        VIP_HIDES_ADS: false // ✅ Por ahora deshabilitado para debug
     }
 };
 
@@ -87,6 +93,11 @@ const state = {
     selectedPack: 'silver',
     selectedContent: null,
     isabellaOpen: false,
+    
+    // ✅ ESTADO DE ANUNCIOS
+    adsVisible: false,
+    adsInitialized: false,
+    adsDebugMode: CONFIG.ADS.DEBUG_MODE,
     
     // Features state
     offlineMode: false,
@@ -315,6 +326,162 @@ const TRANSLATIONS = {
 };
 
 // ============================
+// ✅ SISTEMA DE ANUNCIOS MEJORADO
+// ============================
+
+class AdManager {
+    constructor() {
+        this.initialized = false;
+        this.debugMode = CONFIG.ADS.DEBUG_MODE;
+        this.containers = new Map();
+        this.networks = {
+            juicyads: {
+                loaded: false,
+                zones: ['1099077'],
+                globalVar: 'adsbyjuicy'
+            },
+            exoclick: {
+                loaded: false,
+                zones: [],
+                globalVar: 'ExoLoader'
+            }
+        };
+    }
+    
+    initialize() {
+        console.log('🎯 AdManager v2.0 initializing...');
+        
+        if (this.debugMode) {
+            console.log('🔧 DEBUG MODE: Ads will always be visible');
+        }
+        
+        this.setupContainers();
+        this.checkNetworks();
+        this.forceVisibility();
+        
+        this.initialized = true;
+        state.adsInitialized = true;
+        
+        console.log('✅ AdManager initialized successfully');
+    }
+    
+    setupContainers() {
+        const containers = [
+            'ad-container-banner',
+            'ad-container-sidebar',
+            'ad-container-footer'
+        ];
+        
+        containers.forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) {
+                this.containers.set(containerId, container);
+                console.log(`📦 Ad container found: ${containerId}`);
+            }
+        });
+    }
+    
+    checkNetworks() {
+        // Verificar JuicyAds
+        if (typeof window.adsbyjuicy !== 'undefined') {
+            this.networks.juicyads.loaded = true;
+            console.log('✅ JuicyAds detected');
+        } else {
+            console.log('⏳ JuicyAds loading...');
+            // Recheck en 2 segundos
+            setTimeout(() => this.checkNetworks(), 2000);
+        }
+        
+        // Verificar ExoClick
+        if (typeof window.ExoLoader !== 'undefined') {
+            this.networks.exoclick.loaded = true;
+            console.log('✅ ExoClick detected');
+        }
+    }
+    
+    forceVisibility() {
+        this.containers.forEach((container, id) => {
+            if (this.debugMode || CONFIG.ADS.FORCE_VISIBLE) {
+                container.style.display = 'block';
+                container.style.visibility = 'visible';
+                container.style.opacity = '1';
+                
+                // También forzar los elementos ins dentro
+                const insElements = container.querySelectorAll('ins');
+                insElements.forEach(ins => {
+                    ins.style.display = 'block';
+                    ins.style.visibility = 'visible';
+                    ins.style.opacity = '1';
+                });
+                
+                console.log(`👁️ Forced visible: ${id}`);
+            }
+        });
+    }
+    
+    toggleByVIPStatus(isVIP) {
+        if (this.debugMode) {
+            console.log('🔧 DEBUG: Ignoring VIP status, keeping ads visible');
+            this.forceVisibility();
+            return;
+        }
+        
+        // Lógica normal de VIP (deshabilitada en debug)
+        if (CONFIG.ADS.VIP_HIDES_ADS && isVIP) {
+            this.hideAll();
+        } else {
+            this.showAll();
+        }
+    }
+    
+    showAll() {
+        this.containers.forEach((container, id) => {
+            container.style.display = 'block';
+            container.style.visibility = 'visible';
+            state.adsVisible = true;
+            console.log(`👁️ Showing ads: ${id}`);
+        });
+    }
+    
+    hideAll() {
+        this.containers.forEach((container, id) => {
+            container.style.display = 'none';
+            state.adsVisible = false;
+            console.log(`🙈 Hiding ads: ${id}`);
+        });
+    }
+    
+    diagnose() {
+        console.log('🔍 === AD DIAGNOSIS ===');
+        console.log('Initialized:', this.initialized);
+        console.log('Debug Mode:', this.debugMode);
+        console.log('Containers found:', this.containers.size);
+        console.log('VIP Status:', state.isVIP);
+        console.log('Ads Visible:', state.adsVisible);
+        
+        console.log('Network Status:');
+        Object.entries(this.networks).forEach(([name, network]) => {
+            console.log(`  ${name}:`, network.loaded ? '✅' : '❌');
+        });
+        
+        console.log('Container Status:');
+        this.containers.forEach((container, id) => {
+            const computed = getComputedStyle(container);
+            console.log(`  ${id}:`, {
+                display: computed.display,
+                visibility: computed.visibility,
+                opacity: computed.opacity
+            });
+        });
+        
+        console.log('===================');
+    }
+}
+
+// Instancia global del Ad Manager
+const adManager = new AdManager();
+
+// ============================
 // DETECCIÓN DE RUTAS MEJORADA
 // ============================
 
@@ -432,7 +599,9 @@ function throttle(func, limit) {
             setTimeout(() => inThrottle = false, limit);
         }
     };
-}// ============================
+}
+
+// ============================
 // ANALYTICS Y TRACKING
 // ============================
 
@@ -551,7 +720,6 @@ class PayPalManager {
                     }],
                     application_context: {
                         brand_name: 'BeachGirl.pics',
-                        // CORRECCIÓN: Usar locale válido con guión
                         locale: state.language === 'es' ? 'es-ES' : 
                                state.language === 'en' ? 'en-US' :
                                state.language === 'de' ? 'de-DE' :
@@ -643,7 +811,6 @@ class PayPalManager {
                     }],
                     application_context: {
                         brand_name: 'BeachGirl.pics',
-                        // CORRECCIÓN: Usar locale válido
                         locale: state.language === 'es' ? 'es-ES' : 
                                state.language === 'en' ? 'en-US' :
                                state.language === 'de' ? 'de-DE' :
@@ -723,7 +890,6 @@ class PayPalManager {
                     }],
                     application_context: {
                         brand_name: 'BeachGirl.pics',
-                        // CORRECCIÓN: Usar locale válido sin guión bajo
                         locale: state.language === 'es' ? 'es-ES' : 
                                state.language === 'en' ? 'en-US' :
                                state.language === 'de' ? 'de-DE' :
@@ -787,6 +953,9 @@ class PayPalManager {
             amount: orderData.purchase_units[0].amount.value
         };
         localStorage.setItem('vipPaymentInfo', JSON.stringify(paymentInfo));
+        
+        // ✅ Actualizar anuncios según nuevo estado VIP
+        adManager.toggleByVIPStatus(state.isVIP);
         
         // Reinicializar galería con acceso VIP
         await initializeGallery();
@@ -1138,7 +1307,9 @@ function renderTeaserCarousel() {
         teaserItem.appendChild(overlay);
         carousel.appendChild(teaserItem);
     });
-}// ============================
+}
+
+// ============================
 // MODALES AVANZADOS
 // ============================
 
@@ -1737,6 +1908,9 @@ async function initializeGallery() {
         // Verificar expiración VIP
         checkVIPExpiry();
         
+        // ✅ Inicializar sistema de anuncios
+        adManager.initialize();
+        
         // Inicializar PayPal
         await paypalManager.initialize();
         
@@ -1748,7 +1922,8 @@ async function initializeGallery() {
             daily_photos: state.dailyPhotos.length,
             daily_videos: state.dailyVideos.length,
             is_vip: state.isVIP,
-            credits: state.credits
+            credits: state.credits,
+            ads_debug: CONFIG.ADS.DEBUG_MODE
         });
         
         console.log(`✅ Gallery initialized successfully:
@@ -1756,6 +1931,7 @@ async function initializeGallery() {
         - ${state.dailyVideos.length} daily videos  
         - VIP: ${state.isVIP}
         - Credits: ${state.credits}
+        - Ads Debug: ${CONFIG.ADS.DEBUG_MODE}
         - Total content: ${allPhotos.length + window.ALL_VIDEOS_POOL.length}`);
         
     } catch (error) {
@@ -1804,6 +1980,9 @@ function checkVIPExpiry() {
             localStorage.removeItem('vipExpiry');
             showNotification('Tu suscripción VIP ha expirado', 'info');
             trackEvent('vip_expired');
+            
+            // ✅ Actualizar anuncios al expirar VIP
+            adManager.toggleByVIPStatus(state.isVIP);
         }
     }
 }
@@ -1847,6 +2026,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             is_vip: state.isVIP,
             credits: state.credits,
             language: state.language,
+            ads_debug: CONFIG.ADS.DEBUG_MODE,
             user_agent: navigator.userAgent,
             viewport: {
                 width: window.innerWidth,
@@ -1918,13 +2098,16 @@ window.TRANSLATIONS = TRANSLATIONS;
 window.paypalManager = paypalManager;
 window.isabella = isabella;
 
+// ✅ Exportar Ad Manager
+window.adManager = adManager;
+
 // Funciones de utilidad
 window.trackEvent = trackEvent;
 window.showNotification = showNotification;
 window.openImageViewer = openImageViewer;
 
 // ============================
-// DEBUG Y HERRAMIENTAS DE DESARROLLO
+// DEBUG Y HERRAMIENTAS DE DESARROLLO - MEJORADAS
 // ============================
 
 window.galleryDebug = {
@@ -1944,7 +2127,11 @@ window.galleryDebug = {
         interactions: state.interactions,
         viewedContent: state.viewedContent.size,
         averageLoadTime: state.averageLoadTime + 'ms',
-        failedLoads: state.failedLoads
+        failedLoads: state.failedLoads,
+        // ✅ Stats de anuncios
+        adsVisible: state.adsVisible,
+        adsInitialized: state.adsInitialized,
+        adsDebugMode: state.adsDebugMode
     }),
     
     unlockAll: () => {
@@ -1978,6 +2165,39 @@ window.galleryDebug = {
             });
             showNotification('🎉 Debug: 50 créditos añadidos', 'success');
         }
+    },
+    
+    // ✅ NUEVAS FUNCIONES DE DEBUG PARA ANUNCIOS
+    resetVIP: () => {
+        localStorage.setItem('isVIP', 'false');
+        localStorage.removeItem('vipExpiry');
+        state.isVIP = false;
+        adManager.toggleByVIPStatus(false);
+        showNotification('✅ VIP status reset', 'success');
+        console.log('✅ VIP status reset to false');
+    },
+    
+    forceShowAds: () => {
+        adManager.forceVisibility();
+        showNotification('✅ Anuncios forzados a mostrarse', 'success');
+        console.log('✅ Ads forced visible');
+    },
+    
+    toggleAdsDebug: () => {
+        CONFIG.ADS.DEBUG_MODE = !CONFIG.ADS.DEBUG_MODE;
+        state.adsDebugMode = CONFIG.ADS.DEBUG_MODE;
+        adManager.debugMode = CONFIG.ADS.DEBUG_MODE;
+        
+        if (CONFIG.ADS.DEBUG_MODE) {
+            adManager.forceVisibility();
+        }
+        
+        showNotification(`🔧 Debug mode: ${CONFIG.ADS.DEBUG_MODE ? 'ON' : 'OFF'}`, 'info');
+        console.log(`🔧 Ads debug mode: ${CONFIG.ADS.DEBUG_MODE}`);
+    },
+    
+    diagnoseAds: () => {
+        adManager.diagnose();
     },
     
     resetAll: () => {
@@ -2015,11 +2235,16 @@ window.debugPayPal = {
     }
 };
 
-// Mensaje de bienvenida en consola
+// ✅ FUNCIONES DE DEBUG RÁPIDO PARA ANUNCIOS
+window.resetVIPStatus = () => galleryDebug.resetVIP();
+window.forceShowAds = () => galleryDebug.forceShowAds();
+window.diagnosticarAnuncios = () => galleryDebug.diagnoseAds();
+
+// Mensaje de bienvenida en consola - ACTUALIZADO
 console.log(`
 🌊 ===============================================
    BeachGirl.pics Gallery v${CONFIG.VERSION}
-   COMPLETE EDITION with PayPal Integration
+   COMPLETE EDITION with PayPal + ADS FIXED
    
    📊 Estadísticas:
    • ${(window.ALL_PHOTOS_POOL?.length || 0) + (window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0)} fotos totales
@@ -2034,10 +2259,17 @@ console.log(`
    • galleryDebug.simulatePayment('vip') - Simular pago VIP
    • galleryDebug.resetAll() - Resetear todo
    
+   🎯 Debug Anuncios:
+   • resetVIPStatus() - Resetear VIP status
+   • forceShowAds() - Forzar mostrar anuncios
+   • diagnosticarAnuncios() - Diagnóstico completo
+   • galleryDebug.toggleAdsDebug() - Toggle debug mode
+   
    💳 PayPal: Configurado y listo
    🤖 Isabella: Bot activo
    📊 Analytics: Habilitado
    🔔 Notificaciones: Disponibles
+   🎯 Ads Debug: ${CONFIG.ADS.DEBUG_MODE ? 'ENABLED' : 'DISABLED'}
    
 🌊 ===============================================
 `);
