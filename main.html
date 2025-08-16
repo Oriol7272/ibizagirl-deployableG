@@ -9,9 +9,11 @@
     <meta name="description" content="Galería premium con 400+ fotos y 80+ videos HD actualizados diariamente. Contenido exclusivo del paraíso mediterráneo.">
     <meta name="keywords" content="fotos playa, galería premium, contenido exclusivo, paraíso mediterráneo">
     
-    <!-- VERIFICATION META TAGS -->
+    <!-- VERIFICATION META TAGS - TODAS LAS REDES -->
     <meta name="google-site-verification" content="8X6z4G2uDlqxoV6RU42Gpv8XCP4LHCDuXO2fxg9LhoM">
     <meta name="juicyads-site-verification" content="ff59beb7a1c1adcc95907f68b821605e">
+    <meta name="exoclick-site-verification" content="your-exoclick-verification-code">
+    <meta name="eroads-site-verification" content="your-eroads-verification-code">
     
     <!-- Open Graph -->
     <meta property="og:title" content="BeachGirl.pics - Galería Premium del Paraíso">
@@ -19,13 +21,16 @@
     <meta property="og:image" content="https://beachgirl.pics/full/bikini.webp">
     <meta property="og:url" content="https://beachgirl.pics/main.html">
     
-    <!-- Preconnect para optimizar carga -->
-    <link rel="preconnect" href="https://unpkg.com">
+    <!-- Preconnect para optimizar carga de anuncios -->
+    <link rel="preconnect" href="https://poweredby.jads.co">
+    <link rel="preconnect" href="https://a.realsrv.com">
+    <link rel="preconnect" href="https://ads.eroads.com">
     <link rel="preconnect" href="https://www.paypal.com">
     
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="content-data.js" as="script">
+    <link rel="preload" href="ad-verification.js" as="script">
     <link rel="preload" href="main-script.js" as="script">
     
     <!-- Estilos -->
@@ -47,7 +52,6 @@
             function tryLoadConfetti() {
                 if (currentIndex >= confettiUrls.length) {
                     console.warn('⚠️ Canvas Confetti no pudo cargarse, usando fallback');
-                    // Crear función confetti básica como fallback
                     window.confetti = function() {
                         console.log('🎉 Confetti effect (fallback)');
                     };
@@ -57,7 +61,6 @@
                 const script = document.createElement('script');
                 const url = confettiUrls[currentIndex];
                 
-                // Configurar según el tipo de URL
                 if (url.includes('.mjs') || url.includes('skypack') || url.includes('esm.sh')) {
                     script.type = 'module';
                     script.innerHTML = `
@@ -154,6 +157,9 @@
             </div>
         </section>
 
+        <!-- 🎯 PRIMER ANUNCIO: Después del Banner -->
+        <!-- Los contenedores se crean automáticamente por ad-verification.js -->
+
         <!-- Teaser Carousel -->
         <section class="teaser-carousel-container">
             <h2 class="teaser-title" data-translate="preview_gallery">🔥 Vista Previa Exclusiva</h2>
@@ -198,29 +204,8 @@
             </div>
         </section>
 
-        <!-- ✅ ANUNCIOS JUICYADS - CORREGIDO PARA SIEMPRE VISIBLE -->
-        <div id="ad-container-banner" class="ad-container" style="display: block !important; visibility: visible !important;">
-            <div class="ad-label">Publicidad</div>
-            <!-- JuicyAds v3.0 - MEJORADO -->
-            <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
-            <ins id="1099077" data-width="728" data-height="90" style="display: block !important;"></ins>
-            <script type="text/javascript" data-cfasync="false" async>
-                (adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1099077});
-                console.log('🎯 JuicyAds zone 1099077 initialized - FORCED VISIBLE');
-                
-                // Debug adicional
-                setTimeout(() => {
-                    const adElement = document.getElementById('1099077');
-                    if (adElement) {
-                        console.log('✅ JuicyAds element found:', adElement);
-                        console.log('Element display:', getComputedStyle(adElement).display);
-                        console.log('Element visibility:', getComputedStyle(adElement).visibility);
-                    } else {
-                        console.warn('⚠️ JuicyAds element not found!');
-                    }
-                }, 2000);
-            </script>
-        </div>
+        <!-- 🎯 SEGUNDO ANUNCIO: Después de Stats -->
+        <!-- Los contenedores se crean automáticamente aquí -->
 
         <!-- Photos Section -->
         <section class="content-section" id="photosSection">
@@ -235,6 +220,9 @@
             </div>
         </section>
 
+        <!-- 🎯 TERCER ANUNCIO: Entre Fotos y Videos -->
+        <!-- Los contenedores se crean automáticamente aquí -->
+
         <!-- Videos Section -->
         <section class="content-section" id="videosSection">
             <div class="section-header">
@@ -247,6 +235,9 @@
                 <!-- Videos will be dynamically loaded here -->
             </div>
         </section>
+
+        <!-- 🎯 CUARTO ANUNCIO: Después de Videos -->
+        <!-- Los contenedores se crean automáticamente aquí -->
     </div>
 
     <!-- Isabella Chat Bot -->
@@ -406,15 +397,18 @@
         </div>
     </footer>
 
-    <!-- Scripts - ORDEN IMPORTANTE: content-data.js debe cargar ANTES que main-script.js -->
+    <!-- Scripts - ORDEN CRÍTICO PARA ANUNCIOS -->
     
-    <!-- 1. Primero cargamos los datos del contenido -->
+    <!-- 1. Datos del contenido -->
     <script src="content-data.js"></script>
     
-    <!-- 2. Luego el script de mejoras SEO (opcional) -->
+    <!-- 2. ✅ SISTEMA COMPLETO DE ANUNCIOS - DEBE CARGAR ANTES QUE MAIN-SCRIPT -->
+    <script src="ad-verification.js"></script>
+    
+    <!-- 3. SEO enhancements -->
     <script src="seo-enhancements.js" defer></script>
     
-    <!-- 3. Finalmente el script principal que usa los datos -->
+    <!-- 4. Script principal -->
     <script src="main-script.js" defer></script>
     
     <!-- Google Analytics -->
@@ -426,142 +420,126 @@
         gtag('config', 'G-DBXYNPBSPY');
     </script>
 
-    <!-- ✅ SCRIPT DE ANUNCIOS CORREGIDO - NO OCULTA AUTOMÁTICAMENTE -->
+    <!-- ✅ SCRIPT DE TESTING DE ANUNCIOS -->
     <script>
-        // EroAdvertising ID: 2309173
-        window.eroAdvertisingId = 2309173;
-        
-        // ✅ FUNCIÓN CORREGIDA - PARA DEBUG SIEMPRE MUESTRA ANUNCIOS
-        function toggleAds() {
-            const isVIP = localStorage.getItem('isVIP') === 'true';
-            const adContainer = document.getElementById('ad-container-banner');
+        // Testing functions disponibles globalmente
+        window.adTestingSuite = {
+            // Test completo de todas las redes
+            testAllNetworks: function() {
+                console.log('🧪 Testing all ad networks...');
+                
+                setTimeout(() => {
+                    if (window.testAds) {
+                        window.testAds();
+                    }
+                    
+                    if (window.adNetworkManager) {
+                        window.adNetworkManager.finalVerification();
+                    }
+                }, 2000);
+            },
             
-            if (adContainer) {
-                // ✅ PARA DEBUG: SIEMPRE MOSTRAR ANUNCIOS
-                adContainer.style.display = 'block';
-                adContainer.style.visibility = 'visible';
-                
-                console.log('🎯 DEBUG MODE - Ads forced visible');
-                console.log('VIP Status detected:', isVIP);
-                console.log('Ad container display:', getComputedStyle(adContainer).display);
-                
-                // Verificar que JuicyAds esté cargado
-                if (typeof adsbyjuicy !== 'undefined') {
-                    console.log('✅ JuicyAds global variable loaded');
-                } else {
-                    console.warn('⚠️ JuicyAds not loaded yet');
+            // Forzar recreación de todos los anuncios
+            forceRecreateAll: function() {
+                console.log('🔄 Force recreating all ads...');
+                if (window.forceRecreateAds) {
+                    window.forceRecreateAds();
                 }
-            } else {
-                console.error('❌ Ad container not found!');
+            },
+            
+            // Verificar estado actual
+            getCurrentStatus: function() {
+                console.log('📊 Current ad status:');
+                if (window.adState) {
+                    console.table(window.adState.networksLoaded);
+                    console.log('Containers:', Array.from(window.adState.containersCreated));
+                }
+            },
+            
+            // Crear anuncios de emergencia
+            createEmergencyAds: function() {
+                console.log('🚨 Creating emergency ad containers...');
+                
+                const positions = ['header', 'middle', 'footer'];
+                positions.forEach((pos, index) => {
+                    const container = document.createElement('div');
+                    container.id = `emergency-ad-${pos}`;
+                    container.style.cssText = `
+                        display: block !important;
+                        visibility: visible !important;
+                        background: linear-gradient(135deg, #ff6b35, #f7931e);
+                        color: white;
+                        padding: 20px;
+                        margin: 20px auto;
+                        border-radius: 12px;
+                        text-align: center;
+                        font-weight: bold;
+                        max-width: 728px;
+                        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                    `;
+                    container.innerHTML = `
+                        🚨 EMERGENCY AD CONTAINER (${pos.toUpperCase()})<br>
+                        <small>Fallback advertising space</small>
+                    `;
+                    
+                    const target = index === 0 ? document.querySelector('.stats-section') :
+                                  index === 1 ? document.querySelector('#photosSection') :
+                                  document.querySelector('#videosSection');
+                    
+                    if (target) {
+                        target.insertAdjacentElement('afterend', container);
+                        console.log(`✅ Emergency ad created: ${pos}`);
+                    }
+                });
             }
-        }
+        };
         
-        // ✅ DIAGNÓSTICO COMPLETO DE ANUNCIOS
-        function diagnosticarAnuncios() {
-            console.log('=== 🔍 DIAGNÓSTICO COMPLETO DE ANUNCIOS ===');
-            console.log('1. Estado VIP:', localStorage.getItem('isVIP'));
-            console.log('2. Contenedor ads existe:', !!document.getElementById('ad-container-banner'));
-            console.log('3. Contenedor visible:', document.getElementById('ad-container-banner')?.style.display);
-            console.log('4. JuicyAds global:', typeof adsbyjuicy);
-            console.log('5. Script JuicyAds cargado:', !!document.querySelector('script[src*="jads.co"]'));
-            console.log('6. Elemento ins existe:', !!document.getElementById('1099077'));
-            console.log('7. Elemento ins visible:', document.getElementById('1099077')?.style.display);
-            console.log('8. URL actual:', window.location.href);
-            console.log('9. User Agent:', navigator.userAgent.substring(0, 50) + '...');
-            console.log('================================================');
-            
-            // Forzar visibilidad si está oculto
-            const adContainer = document.getElementById('ad-container-banner');
-            const adElement = document.getElementById('1099077');
-            
-            if (adContainer) {
-                adContainer.style.display = 'block';
-                adContainer.style.visibility = 'visible';
-            }
-            
-            if (adElement) {
-                adElement.style.display = 'block';
-                adElement.style.visibility = 'visible';
-            }
-        }
-        
-        // ✅ EJECUTAR AL CARGAR LA PÁGINA
+        // Auto-testing después de la carga
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Página cargada - Inicializando anuncios...');
+            console.log('🚀 DOM loaded - Ad testing suite ready');
             
-            // Esperar un poco y luego ejecutar
+            // Test automático después de 5 segundos
             setTimeout(() => {
-                toggleAds();
-                diagnosticarAnuncios();
-            }, 1000);
-            
-            // Ejecutar diagnóstico cada 5 segundos por un minuto (para debug)
-            let debugCounter = 0;
-            const debugInterval = setInterval(() => {
-                debugCounter++;
-                console.log(`🔄 Debug check #${debugCounter}`);
-                diagnosticarAnuncios();
-                
-                if (debugCounter >= 12) { // 12 * 5 segundos = 1 minuto
-                    clearInterval(debugInterval);
-                    console.log('✅ Debug de anuncios completado');
-                }
+                console.log('🔄 Auto-testing ads after 5 seconds...');
+                window.adTestingSuite.testAllNetworks();
             }, 5000);
+            
+            // Si no hay anuncios después de 10 segundos, crear emergencia
+            setTimeout(() => {
+                const adContainers = document.querySelectorAll('[id*="ad-"], [id*="juicyads-"], [id*="exoclick-"], [id*="eroads-"]');
+                
+                if (adContainers.length === 0) {
+                    console.log('⚠️ No ad containers found - Creating emergency ads');
+                    window.adTestingSuite.createEmergencyAds();
+                } else {
+                    console.log(`✅ Found ${adContainers.length} ad containers`);
+                }
+            }, 10000);
         });
-        
-        // ✅ TAMBIÉN EJECUTAR CUANDO CAMBIE EL ESTADO VIP
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'isVIP') {
-                console.log('🔄 VIP status changed, updating ads...');
-                toggleAds();
-            }
-        });
-        
-        // ✅ FUNCIÓN PARA RESETEAR ESTADO VIP (ÚTIL PARA DEBUG)
-        window.resetVIPStatus = function() {
-            localStorage.setItem('isVIP', 'false');
-            localStorage.removeItem('vipExpiry');
-            console.log('✅ VIP status reset to false');
-            toggleAds();
-        };
-        
-        // ✅ FUNCIÓN PARA FORZAR MOSTRAR ANUNCIOS
-        window.forceShowAds = function() {
-            const adContainer = document.getElementById('ad-container-banner');
-            const adElement = document.getElementById('1099077');
-            
-            if (adContainer) {
-                adContainer.style.display = 'block !important';
-                adContainer.style.visibility = 'visible !important';
-                adContainer.style.opacity = '1';
-                adContainer.style.height = 'auto';
-            }
-            
-            if (adElement) {
-                adElement.style.display = 'block !important';
-                adElement.style.visibility = 'visible !important';
-                adElement.style.opacity = '1';
-            }
-            
-            console.log('✅ Anuncios forzados a mostrarse');
-            diagnosticarAnuncios();
-        };
     </script>
 
     <!-- ✅ MENSAJE DE AYUDA EN CONSOLA -->
     <script>
         console.log(`
 🌊 ===============================================
-   BeachGirl.pics - DIAGNÓSTICO DE ANUNCIOS
+   BeachGirl.pics - SISTEMA COMPLETO DE ANUNCIOS
    
-   🔧 Comandos disponibles en consola:
-   • diagnosticarAnuncios() - Diagnóstico completo
-   • resetVIPStatus() - Resetear estado VIP
-   • forceShowAds() - Forzar mostrar anuncios
-   • toggleAds() - Toggle manual de anuncios
+   🎯 REDES INTEGRADAS:
+   • JuicyAds (Zone: 1099077)
+   • ExoClick (Zones: 5696328, 5696329, 5696330)
+   • EroAdvertising (Site: 2309173)
    
-   ⚠️  Si no ves anuncios, ejecuta:
-   resetVIPStatus() seguido de forceShowAds()
+   🧪 COMANDOS DE TESTING:
+   • testAds() - Test manual de redes
+   • forceRecreateAds() - Recrear anuncios
+   • adTestingSuite.testAllNetworks() - Test completo
+   • adTestingSuite.getCurrentStatus() - Estado actual
+   • adTestingSuite.createEmergencyAds() - Anuncios emergencia
+   
+   ⚠️  Si NO VES ANUNCIOS después de 10 segundos:
+   1. Ejecuta: adTestingSuite.testAllNetworks()
+   2. Si falla: adTestingSuite.createEmergencyAds()
+   3. Revisa la consola para errores específicos
    
 🌊 ===============================================
         `);
