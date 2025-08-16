@@ -1,6 +1,6 @@
 // ============================
-// BeachGirl.pics Gallery Script v15.0.1 - ANUNCIOS CORREGIDOS
-// PayPal + Todas las mejoras + Sistema completo + AD FIX
+// BeachGirl.pics Gallery Script v15.1.0 - ANUNCIOS ULTRA CORREGIDOS
+// PayPal + Todas las mejoras + Sistema completo + AD FIX DEFINITIVO
 // ============================
 
 'use strict';
@@ -10,7 +10,7 @@
 // ============================
 
 const CONFIG = {
-    VERSION: '15.0.1', // ✅ Incrementada por fix de anuncios
+    VERSION: '15.1.0', // ✅ Incrementada por fix definitivo de anuncios
     CONTENT: {
         DAILY_PHOTOS: 200,
         DAILY_VIDEOS: 40,
@@ -54,11 +54,14 @@ const CONFIG = {
         AUTO_SAVE: true,
         ADVANCED_SEARCH: true
     },
-    // ✅ NUEVA CONFIGURACIÓN PARA ANUNCIOS
+    // ✅ CONFIGURACIÓN MEJORADA PARA ANUNCIOS
     ADS: {
         DEBUG_MODE: true, // ✅ Modo debug - siempre mostrar anuncios
         FORCE_VISIBLE: true, // ✅ Forzar visibilidad
-        VIP_HIDES_ADS: false // ✅ Por ahora deshabilitado para debug
+        VIP_HIDES_ADS: false, // ✅ VIP no oculta anuncios en debug
+        AUTO_CREATE_CONTAINERS: true, // ✅ Crear contenedores automáticamente
+        INIT_DELAY: 1000, // ✅ Delay de inicialización
+        VERIFICATION_DELAY: 8000 // ✅ Delay para verificación final
     }
 };
 
@@ -94,10 +97,16 @@ const state = {
     selectedContent: null,
     isabellaOpen: false,
     
-    // ✅ ESTADO DE ANUNCIOS
+    // ✅ ESTADO DE ANUNCIOS MEJORADO
     adsVisible: false,
     adsInitialized: false,
     adsDebugMode: CONFIG.ADS.DEBUG_MODE,
+    adsContainersCreated: new Set(),
+    adsNetworksLoaded: {
+        juicyads: false,
+        exoclick: false,
+        eroads: false
+    },
     
     // Features state
     offlineMode: false,
@@ -326,10 +335,10 @@ const TRANSLATIONS = {
 };
 
 // ============================
-// ✅ SISTEMA DE ANUNCIOS MEJORADO
+// ✅ SISTEMA DE ANUNCIOS ULTRA MEJORADO v2.0
 // ============================
 
-class AdManager {
+class UltraAdManager {
     constructor() {
         this.initialized = false;
         this.debugMode = CONFIG.ADS.DEBUG_MODE;
@@ -337,92 +346,652 @@ class AdManager {
         this.networks = {
             juicyads: {
                 loaded: false,
-                zones: ['1099077'],
+                zones: ['1099077', '1099078', '1099079'],
                 globalVar: 'adsbyjuicy'
             },
             exoclick: {
                 loaded: false,
-                zones: [],
+                zones: ['5696328', '5696329', '5696330'],
                 globalVar: 'ExoLoader'
+            },
+            eroads: {
+                loaded: false,
+                siteId: '2309173',
+                globalVar: 'eroads'
             }
         };
+        
+        console.log('🎯 UltraAdManager v2.0 initializing...');
     }
     
-    initialize() {
-        console.log('🎯 AdManager v2.0 initializing...');
-        
-        if (this.debugMode) {
-            console.log('🔧 DEBUG MODE: Ads will always be visible');
+    async initialize() {
+        if (this.initialized) {
+            console.log('⚠️ AdManager already initialized');
+            return;
         }
         
-        this.setupContainers();
-        this.checkNetworks();
-        this.forceVisibility();
+        console.log('🚀 Starting UltraAdManager initialization...');
         
-        this.initialized = true;
-        state.adsInitialized = true;
-        
-        console.log('✅ AdManager initialized successfully');
+        try {
+            // ✅ Paso 1: Crear contenedores inmediatamente
+            this.createAllContainers();
+            
+            // ✅ Paso 2: Esperar a que el DOM esté completamente listo
+            await this.waitForDOMComplete();
+            
+            // ✅ Paso 3: Inicializar redes de anuncios
+            await this.initializeAdNetworks();
+            
+            // ✅ Paso 4: Forzar visibilidad
+            this.forceAllVisible();
+            
+            // ✅ Paso 5: Configurar verificación continua
+            this.setupContinuousVerification();
+            
+            this.initialized = true;
+            state.adsInitialized = true;
+            
+            console.log('✅ UltraAdManager initialization complete');
+            
+        } catch (error) {
+            console.error('❌ UltraAdManager initialization failed:', error);
+            this.createEmergencyFallbacks();
+        }
     }
     
-    setupContainers() {
-        const containers = [
-            'ad-container-banner',
-            'ad-container-sidebar',
-            'ad-container-footer'
+    createAllContainers() {
+        console.log('🏗️ Creating all ad containers...');
+        
+        const containerConfigs = [
+            {
+                id: 'ultra-ad-header',
+                target: '.banner-slideshow',
+                position: 'afterend',
+                type: 'header',
+                priority: 'high'
+            },
+            {
+                id: 'ultra-ad-middle-1',
+                target: '.stats-section',
+                position: 'afterend',
+                type: 'content',
+                priority: 'high'
+            },
+            {
+                id: 'ultra-ad-middle-2',
+                target: '#photosSection',
+                position: 'afterend',
+                type: 'content',
+                priority: 'medium'
+            },
+            {
+                id: 'ultra-ad-footer',
+                target: '#videosSection',
+                position: 'afterend',
+                type: 'footer',
+                priority: 'high'
+            },
+            {
+                id: 'ultra-ad-sidebar',
+                target: '.teaser-carousel-container',
+                position: 'afterend',
+                type: 'sidebar',
+                priority: 'low'
+            }
         ];
         
-        containers.forEach(containerId => {
-            const container = document.getElementById(containerId);
-            if (container) {
-                this.containers.set(containerId, container);
-                console.log(`📦 Ad container found: ${containerId}`);
-            }
+        containerConfigs.forEach(config => {
+            this.createSingleContainer(config);
         });
+        
+        // ✅ Añadir contenedores específicos para JuicyAds
+        this.createJuicyAdsContainers();
+        
+        console.log(`✅ Created ${this.containers.size} ad containers`);
     }
     
-    checkNetworks() {
-        // Verificar JuicyAds
-        if (typeof window.adsbyjuicy !== 'undefined') {
-            this.networks.juicyads.loaded = true;
-            console.log('✅ JuicyAds detected');
-        } else {
-            console.log('⏳ JuicyAds loading...');
-            // Recheck en 2 segundos
-            setTimeout(() => this.checkNetworks(), 2000);
+    createSingleContainer(config) {
+        const { id, target, position, type, priority } = config;
+        
+        // Buscar elemento objetivo
+        const targetElement = document.querySelector(target);
+        if (!targetElement) {
+            console.warn(`⚠️ Target not found for ${id}: ${target}`);
+            return null;
         }
         
-        // Verificar ExoClick
-        if (typeof window.ExoLoader !== 'undefined') {
-            this.networks.exoclick.loaded = true;
-            console.log('✅ ExoClick detected');
+        // Crear contenedor si no existe
+        if (document.getElementById(id)) {
+            console.log(`📋 Container ${id} already exists`);
+            return document.getElementById(id);
         }
+        
+        const container = document.createElement('div');
+        container.id = id;
+        container.className = `ultra-ad-container ad-${type} priority-${priority}`;
+        container.setAttribute('data-ad-type', type);
+        container.setAttribute('data-priority', priority);
+        
+        // ✅ Estilos ultra forzados
+        container.style.cssText = `
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            width: 100% !important;
+            max-width: 800px !important;
+            margin: 25px auto !important;
+            padding: 20px !important;
+            background: linear-gradient(135deg, 
+                rgba(0, 119, 190, 0.15) 0%, 
+                rgba(127, 219, 255, 0.08) 50%, 
+                rgba(0, 168, 204, 0.12) 100%) !important;
+            border: 2px solid rgba(127, 219, 255, 0.4) !important;
+            border-radius: 15px !important;
+            box-shadow: 
+                0 8px 32px rgba(0, 119, 190, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+            text-align: center !important;
+            min-height: 120px !important;
+            z-index: 100 !important;
+            backdrop-filter: blur(10px) !important;
+        `;
+        
+        // ✅ Contenido inicial
+        container.innerHTML = this.getContainerHTML(id, type, priority);
+        
+        // ✅ Insertar en DOM
+        targetElement.insertAdjacentElement(position, container);
+        
+        // ✅ Guardar referencia
+        this.containers.set(id, {
+            element: container,
+            config: config,
+            created: Date.now()
+        });
+        
+        state.adsContainersCreated.add(id);
+        console.log(`✅ Created container: ${id} (${type})`);
+        
+        return container;
     }
     
-    forceVisibility() {
-        this.containers.forEach((container, id) => {
-            if (this.debugMode || CONFIG.ADS.FORCE_VISIBLE) {
-                container.style.display = 'block';
-                container.style.visibility = 'visible';
-                container.style.opacity = '1';
+    getContainerHTML(id, type, priority) {
+        const typeEmojis = {
+            header: '🎯',
+            content: '📢',
+            footer: '🌟',
+            sidebar: '📋'
+        };
+        
+        const priorityColors = {
+            high: '#00ff88',
+            medium: '#ffd700',
+            low: '#7fdbff'
+        };
+        
+        return `
+            <div style="padding: 20px; color: ${priorityColors[priority]}; font-weight: bold;">
+                <div style="font-size: 32px; margin-bottom: 15px;">${typeEmojis[type]}</div>
+                <div style="font-size: 18px; margin-bottom: 10px;">ESPACIO PUBLICITARIO ${type.toUpperCase()}</div>
+                <div style="font-size: 14px; opacity: 0.8; margin-bottom: 15px;">
+                    Contenedor: ${id} | Prioridad: ${priority}
+                </div>
+                <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; font-size: 12px; line-height: 1.4;">
+                    <div>🔄 Inicializando redes publicitarias...</div>
+                    <div style="margin-top: 5px;">⏱️ ${new Date().toLocaleTimeString()}</div>
+                </div>
+            </div>
+        `;
+    }
+    
+    createJuicyAdsContainers() {
+        console.log('🍊 Creating specific JuicyAds containers...');
+        
+        const juicyConfigs = [
+            { id: 'juicyads-zone-1099077', zone: '1099077', target: 'ultra-ad-header' },
+            { id: 'juicyads-zone-1099078', zone: '1099078', target: 'ultra-ad-middle-1' },
+            { id: 'juicyads-zone-1099079', zone: '1099079', target: 'ultra-ad-footer' }
+        ];
+        
+        juicyConfigs.forEach(({ id, zone, target }) => {
+            const targetContainer = document.getElementById(target);
+            if (targetContainer) {
+                const juicyContainer = document.createElement('div');
+                juicyContainer.id = id;
+                juicyContainer.className = 'juicyads-container';
+                juicyContainer.setAttribute('data-zone', zone);
                 
-                // También forzar los elementos ins dentro
-                const insElements = container.querySelectorAll('ins');
-                insElements.forEach(ins => {
-                    ins.style.display = 'block';
-                    ins.style.visibility = 'visible';
-                    ins.style.opacity = '1';
+                juicyContainer.style.cssText = `
+                    display: block !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    width: 100% !important;
+                    margin: 15px auto !important;
+                    padding: 15px !important;
+                    background: rgba(255, 215, 0, 0.1) !important;
+                    border: 2px dashed rgba(255, 215, 0, 0.6) !important;
+                    border-radius: 10px !important;
+                    min-height: 90px !important;
+                `;
+                
+                juicyContainer.innerHTML = `
+                    <div style="padding: 15px; color: #ffd700; font-weight: bold; text-align: center;">
+                        🍊 JuicyAds Zone ${zone}<br>
+                        <small style="color: #999;">Esperando inicialización...</small>
+                    </div>
+                `;
+                
+                targetContainer.appendChild(juicyContainer);
+                
+                this.containers.set(id, {
+                    element: juicyContainer,
+                    zone: zone,
+                    network: 'juicyads',
+                    created: Date.now()
                 });
                 
-                console.log(`👁️ Forced visible: ${id}`);
+                console.log(`🍊 Created JuicyAds container: ${id} (Zone: ${zone})`);
             }
         });
     }
     
+    async waitForDOMComplete() {
+        return new Promise(resolve => {
+            if (document.readyState === 'complete') {
+                resolve();
+            } else {
+                const handler = () => {
+                    if (document.readyState === 'complete') {
+                        document.removeEventListener('readystatechange', handler);
+                        resolve();
+                    }
+                };
+                document.addEventListener('readystatechange', handler);
+            }
+        });
+    }
+    
+    async initializeAdNetworks() {
+        console.log('🌐 Initializing ad networks...');
+        
+        // ✅ Verificar si ya están disponibles los managers externos
+        if (window.adNetworkManager) {
+            console.log('🔗 External ad manager detected');
+            try {
+                await window.adNetworkManager.initialize();
+                this.networks.juicyads.loaded = window.adState?.networksLoaded?.juicyads || false;
+            } catch (error) {
+                console.warn('⚠️ External ad manager failed:', error);
+            }
+        }
+        
+        // ✅ Intentar cargar JuicyAds directamente
+        await this.initializeJuicyAdsDirect();
+        
+        // ✅ Actualizar estado
+        this.updateNetworkStatus();
+    }
+    
+    async initializeJuicyAdsDirect() {
+        console.log('🍊 Initializing JuicyAds directly...');
+        
+        try {
+            // ✅ Preparar global
+            if (!window.adsbyjuicy) {
+                window.adsbyjuicy = [];
+                window.adsbyjuicy.cmd = window.adsbyjuicy.cmd || [];
+            }
+            
+            // ✅ Cargar script si no está
+            if (!document.querySelector('script[src*="jads.co"]')) {
+                await this.loadJuicyAdsScript();
+            }
+            
+            // ✅ Esperar a que esté listo
+            await this.waitForJuicyAdsReady();
+            
+            // ✅ Crear anuncios
+            this.createJuicyAdsUnits();
+            
+            this.networks.juicyads.loaded = true;
+            state.adsNetworksLoaded.juicyads = true;
+            
+            console.log('✅ JuicyAds direct initialization complete');
+            
+        } catch (error) {
+            console.error('❌ JuicyAds direct initialization failed:', error);
+        }
+    }
+    
+    async loadJuicyAdsScript() {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://poweredby.jads.co/js/jads.js';
+            script.async = true;
+            script.defer = true;
+            script.setAttribute('data-cfasync', 'false');
+            script.setAttribute('crossorigin', 'anonymous');
+            
+            script.onload = () => {
+                console.log('🍊 JuicyAds script loaded');
+                resolve();
+            };
+            
+            script.onerror = (error) => {
+                console.error('❌ JuicyAds script failed to load:', error);
+                reject(error);
+            };
+            
+            (document.head || document.documentElement).appendChild(script);
+        });
+    }
+    
+    async waitForJuicyAdsReady() {
+        return new Promise((resolve, reject) => {
+            let attempts = 0;
+            const maxAttempts = 50;
+            
+            const checkReady = () => {
+                attempts++;
+                
+                if (window.adsbyjuicy && typeof window.adsbyjuicy.push === 'function') {
+                    console.log('🍊 JuicyAds global ready');
+                    resolve();
+                } else if (attempts >= maxAttempts) {
+                    reject(new Error('JuicyAds global timeout'));
+                } else {
+                    setTimeout(checkReady, 200);
+                }
+            };
+            
+            checkReady();
+        });
+    }
+    
+    createJuicyAdsUnits() {
+        console.log('🍊 Creating JuicyAds units...');
+        
+        const zones = ['1099077', '1099078', '1099079'];
+        
+        zones.forEach((zoneId, index) => {
+            const containerId = `juicyads-zone-${zoneId}`;
+            const container = document.getElementById(containerId);
+            
+            if (container) {
+                // ✅ Crear elemento ins
+                const insElement = document.createElement('ins');
+                insElement.id = `juicy-ins-${zoneId}`;
+                insElement.className = 'adsbyjuicy';
+                insElement.setAttribute('data-adzone', zoneId);
+                insElement.setAttribute('data-width', '728');
+                insElement.setAttribute('data-height', '90');
+                
+                insElement.style.cssText = `
+                    display: block !important;
+                    visibility: visible !important;
+                    width: 100% !important;
+                    max-width: 728px !important;
+                    height: auto !important;
+                    margin: 0 auto !important;
+                `;
+                
+                // ✅ Limpiar contenido anterior y añadir ins
+                container.innerHTML = '';
+                container.appendChild(insElement);
+                
+                // ✅ Activar zona
+                try {
+                    if (window.adsbyjuicy) {
+                        window.adsbyjuicy.push({'adzone': parseInt(zoneId)});
+                        console.log(`🍊 Activated JuicyAds zone: ${zoneId}`);
+                        
+                        // ✅ Método alternativo con cmd
+                        if (window.adsbyjuicy.cmd) {
+                            window.adsbyjuicy.cmd.push(() => {
+                                if (window.adsbyjuicy.display) {
+                                    window.adsbyjuicy.display(zoneId);
+                                }
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error(`❌ Error activating zone ${zoneId}:`, error);
+                }
+                
+                // ✅ Verificación después de 5 segundos
+                setTimeout(() => {
+                    if (insElement.innerHTML.trim() === '') {
+                        insElement.innerHTML = `
+                            <div style="padding: 20px; color: #ff9500; text-align: center; font-weight: bold;">
+                                🍊 JuicyAds Zone ${zoneId}<br>
+                                <small style="color: #999;">Script cargado pero anuncio no mostrado</small><br>
+                                <div style="margin-top: 10px; font-size: 12px; opacity: 0.7;">
+                                    Posibles causas: Ad blocker, configuración de zona, o restricciones de red
+                                </div>
+                            </div>
+                        `;
+                    }
+                }, 5000);
+            }
+        });
+    }
+    
+    updateNetworkStatus() {
+        // ✅ Actualizar estado en objeto global
+        Object.keys(this.networks).forEach(network => {
+            state.adsNetworksLoaded[network] = this.networks[network].loaded;
+        });
+        
+        const loadedCount = Object.values(this.networks).filter(n => n.loaded).length;
+        const totalCount = Object.keys(this.networks).length;
+        
+        console.log(`📊 Networks status: ${loadedCount}/${totalCount} loaded`);
+        state.adsVisible = loadedCount > 0;
+    }
+    
+    forceAllVisible() {
+        console.log('👁️ Forcing all ad containers visible...');
+        
+        this.containers.forEach((containerData, id) => {
+            const element = containerData.element;
+            if (element) {
+                element.style.display = 'block';
+                element.style.visibility = 'visible';
+                element.style.opacity = '1';
+                
+                // ✅ También forzar elementos hijos
+                const children = element.querySelectorAll('*');
+                children.forEach(child => {
+                    if (child.tagName === 'INS' || child.className.includes('ads')) {
+                        child.style.display = 'block';
+                        child.style.visibility = 'visible';
+                        child.style.opacity = '1';
+                    }
+                });
+            }
+        });
+        
+        console.log(`👁️ Forced ${this.containers.size} containers visible`);
+    }
+    
+    setupContinuousVerification() {
+        console.log('🔄 Setting up continuous verification...');
+        
+        // ✅ Verificación cada 30 segundos
+        setInterval(() => {
+            this.forceAllVisible();
+        }, 30000);
+        
+        // ✅ Verificación cuando cambia la visibilidad de la página
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                setTimeout(() => this.forceAllVisible(), 1000);
+            }
+        });
+        
+        // ✅ Verificación en scroll (throttled)
+        let scrollTimeout;
+        document.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => this.forceAllVisible(), 2000);
+        });
+    }
+    
+    createEmergencyFallbacks() {
+        console.log('🚨 Creating emergency fallback ads...');
+        
+        const emergencyTargets = [
+            { selector: '.banner-slideshow', name: 'Emergency Header' },
+            { selector: '.stats-section', name: 'Emergency Content' },
+            { selector: '#videosSection', name: 'Emergency Footer' }
+        ];
+        
+        emergencyTargets.forEach(({ selector, name }, index) => {
+            const target = document.querySelector(selector);
+            if (target) {
+                const emergency = document.createElement('div');
+                emergency.id = `emergency-fallback-${index + 1}`;
+                emergency.className = 'emergency-ad-container';
+                
+                emergency.style.cssText = `
+                    display: block !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    width: 100% !important;
+                    max-width: 800px !important;
+                    margin: 30px auto !important;
+                    padding: 35px !important;
+                    background: linear-gradient(135deg, #ff4757, #ff6b7a) !important;
+                    color: white !important;
+                    border-radius: 20px !important;
+                    text-align: center !important;
+                    font-weight: bold !important;
+                    box-shadow: 0 10px 40px rgba(255, 71, 87, 0.4) !important;
+                    position: relative !important;
+                    z-index: 1000 !important;
+                `;
+                
+                emergency.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 20px;">🚨</div>
+                    <div style="font-size: 24px; margin-bottom: 15px;">EMERGENCY AD SPACE</div>
+                    <div style="font-size: 16px; margin-bottom: 20px; opacity: 0.9;">
+                        ${name} - All networks failed to initialize
+                    </div>
+                    <div style="padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; font-size: 14px; line-height: 1.5;">
+                        <div>🛡️ Possible ad blocker interference</div>
+                        <div>🌐 Network connectivity issues</div>
+                        <div>⚙️ Script initialization failure</div>
+                    </div>
+                `;
+                
+                target.insertAdjacentElement('afterend', emergency);
+                console.log(`🚨 Created emergency fallback: ${name}`);
+            }
+        });
+    }
+    
+    // ✅ Funciones de diagnóstico avanzado
+    diagnose() {
+        console.log('🔍 === ULTRA AD DIAGNOSIS ===');
+        console.log('Initialized:', this.initialized);
+        console.log('Debug Mode:', this.debugMode);
+        console.log('Containers:', this.containers.size);
+        console.log('VIP Status:', state.isVIP);
+        
+        console.log('Network Status:');
+        Object.entries(this.networks).forEach(([name, network]) => {
+            console.log(`  ${name}:`, network.loaded ? '✅' : '❌');
+        });
+        
+        console.log('Container Details:');
+        this.containers.forEach((data, id) => {
+            const element = data.element;
+            const computed = getComputedStyle(element);
+            console.log(`  ${id}:`, {
+                exists: !!element,
+                display: computed.display,
+                visibility: computed.visibility,
+                opacity: computed.opacity,
+                zIndex: computed.zIndex
+            });
+        });
+        
+        console.log('Global Variables:');
+        console.log('  adsbyjuicy:', typeof window.adsbyjuicy);
+        console.log('  ExoLoader:', typeof window.ExoLoader);
+        console.log('  adNetworkManager:', typeof window.adNetworkManager);
+        
+        console.log('Scripts in DOM:');
+        const adScripts = Array.from(document.scripts).filter(s => 
+            s.src.includes('jads.co') || 
+            s.src.includes('exoclick') || 
+            s.src.includes('eroads')
+        );
+        console.log(`  Found ${adScripts.length} ad scripts`);
+        adScripts.forEach(script => console.log(`    ${script.src}`));
+        
+        console.log('===========================');
+    }
+    
+    // ✅ Función para testing rápido
+    quickTest() {
+        console.log('🧪 Running quick ad test...');
+        
+        const testContainer = document.createElement('div');
+        testContainer.id = 'ultra-test-ad';
+        testContainer.style.cssText = `
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: fixed !important;
+            top: 20px !important;
+            right: 20px !important;
+            width: 300px !important;
+            padding: 20px !important;
+            background: linear-gradient(135deg, #4CAF50, #45a049) !important;
+            color: white !important;
+            border-radius: 15px !important;
+            text-align: center !important;
+            font-weight: bold !important;
+            z-index: 9999 !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important;
+        `;
+        
+        testContainer.innerHTML = `
+            <div style="font-size: 24px; margin-bottom: 10px;">✅</div>
+            <div>ULTRA TEST AD</div>
+            <div style="font-size: 12px; margin-top: 10px; opacity: 0.9;">
+                CSS is working correctly
+            </div>
+            <button onclick="this.parentElement.remove()" style="
+                margin-top: 15px;
+                padding: 8px 15px;
+                background: rgba(255,255,255,0.2);
+                border: none;
+                border-radius: 8px;
+                color: white;
+                cursor: pointer;
+            ">Close</button>
+        `;
+        
+        document.body.appendChild(testContainer);
+        
+        setTimeout(() => {
+            if (testContainer.parentElement) {
+                testContainer.remove();
+            }
+        }, 10000);
+        
+        console.log('✅ Test ad created (will auto-remove in 10s)');
+        return testContainer;
+    }
+    
+    // ✅ Función para alternar modo VIP
     toggleByVIPStatus(isVIP) {
         if (this.debugMode) {
             console.log('🔧 DEBUG: Ignoring VIP status, keeping ads visible');
-            this.forceVisibility();
+            this.forceAllVisible();
             return;
         }
         
@@ -435,51 +1004,28 @@ class AdManager {
     }
     
     showAll() {
-        this.containers.forEach((container, id) => {
-            container.style.display = 'block';
-            container.style.visibility = 'visible';
-            state.adsVisible = true;
-            console.log(`👁️ Showing ads: ${id}`);
+        this.containers.forEach((data, id) => {
+            const element = data.element;
+            element.style.display = 'block';
+            element.style.visibility = 'visible';
+            element.style.opacity = '1';
         });
+        state.adsVisible = true;
+        console.log('👁️ All ads shown');
     }
     
     hideAll() {
-        this.containers.forEach((container, id) => {
-            container.style.display = 'none';
-            state.adsVisible = false;
-            console.log(`🙈 Hiding ads: ${id}`);
+        this.containers.forEach((data, id) => {
+            const element = data.element;
+            element.style.display = 'none';
         });
-    }
-    
-    diagnose() {
-        console.log('🔍 === AD DIAGNOSIS ===');
-        console.log('Initialized:', this.initialized);
-        console.log('Debug Mode:', this.debugMode);
-        console.log('Containers found:', this.containers.size);
-        console.log('VIP Status:', state.isVIP);
-        console.log('Ads Visible:', state.adsVisible);
-        
-        console.log('Network Status:');
-        Object.entries(this.networks).forEach(([name, network]) => {
-            console.log(`  ${name}:`, network.loaded ? '✅' : '❌');
-        });
-        
-        console.log('Container Status:');
-        this.containers.forEach((container, id) => {
-            const computed = getComputedStyle(container);
-            console.log(`  ${id}:`, {
-                display: computed.display,
-                visibility: computed.visibility,
-                opacity: computed.opacity
-            });
-        });
-        
-        console.log('===================');
+        state.adsVisible = false;
+        console.log('🙈 All ads hidden');
     }
 }
 
-// Instancia global del Ad Manager
-const adManager = new AdManager();
+// ✅ Instancia global del Ultra Ad Manager
+const ultraAdManager = new UltraAdManager();
 
 // ============================
 // DETECCIÓN DE RUTAS MEJORADA
@@ -955,7 +1501,7 @@ class PayPalManager {
         localStorage.setItem('vipPaymentInfo', JSON.stringify(paymentInfo));
         
         // ✅ Actualizar anuncios según nuevo estado VIP
-        adManager.toggleByVIPStatus(state.isVIP);
+        ultraAdManager.toggleByVIPStatus(state.isVIP);
         
         // Reinicializar galería con acceso VIP
         await initializeGallery();
@@ -1908,8 +2454,8 @@ async function initializeGallery() {
         // Verificar expiración VIP
         checkVIPExpiry();
         
-        // ✅ Inicializar sistema de anuncios
-        adManager.initialize();
+        // ✅ Inicializar sistema de anuncios ultra mejorado
+        await ultraAdManager.initialize();
         
         // Inicializar PayPal
         await paypalManager.initialize();
@@ -1923,7 +2469,8 @@ async function initializeGallery() {
             daily_videos: state.dailyVideos.length,
             is_vip: state.isVIP,
             credits: state.credits,
-            ads_debug: CONFIG.ADS.DEBUG_MODE
+            ads_debug: CONFIG.ADS.DEBUG_MODE,
+            ads_initialized: state.adsInitialized
         });
         
         console.log(`✅ Gallery initialized successfully:
@@ -1932,6 +2479,7 @@ async function initializeGallery() {
         - VIP: ${state.isVIP}
         - Credits: ${state.credits}
         - Ads Debug: ${CONFIG.ADS.DEBUG_MODE}
+        - Ads Initialized: ${state.adsInitialized}
         - Total content: ${allPhotos.length + window.ALL_VIDEOS_POOL.length}`);
         
     } catch (error) {
@@ -1982,7 +2530,7 @@ function checkVIPExpiry() {
             trackEvent('vip_expired');
             
             // ✅ Actualizar anuncios al expirar VIP
-            adManager.toggleByVIPStatus(state.isVIP);
+            ultraAdManager.toggleByVIPStatus(state.isVIP);
         }
     }
 }
@@ -1995,6 +2543,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('🚀 DOM Content Loaded - Starting initialization...');
     
     try {
+        // ✅ Inicializar anuncios ANTES que la galería
+        console.log('🎯 Pre-initializing ad system...');
+        setTimeout(() => {
+            ultraAdManager.initialize();
+        }, CONFIG.ADS.INIT_DELAY);
+        
         // Ocultar pantalla de carga con efecto
         setTimeout(() => {
             const loadingScreen = document.getElementById('loadingScreen');
@@ -2098,8 +2652,8 @@ window.TRANSLATIONS = TRANSLATIONS;
 window.paypalManager = paypalManager;
 window.isabella = isabella;
 
-// ✅ Exportar Ad Manager
-window.adManager = adManager;
+// ✅ Exportar Ultra Ad Manager
+window.ultraAdManager = ultraAdManager;
 
 // Funciones de utilidad
 window.trackEvent = trackEvent;
@@ -2107,7 +2661,7 @@ window.showNotification = showNotification;
 window.openImageViewer = openImageViewer;
 
 // ============================
-// DEBUG Y HERRAMIENTAS DE DESARROLLO - MEJORADAS
+// DEBUG Y HERRAMIENTAS DE DESARROLLO - ULTRA MEJORADAS
 // ============================
 
 window.galleryDebug = {
@@ -2128,10 +2682,12 @@ window.galleryDebug = {
         viewedContent: state.viewedContent.size,
         averageLoadTime: state.averageLoadTime + 'ms',
         failedLoads: state.failedLoads,
-        // ✅ Stats de anuncios
+        // ✅ Stats de anuncios ultra
         adsVisible: state.adsVisible,
         adsInitialized: state.adsInitialized,
-        adsDebugMode: state.adsDebugMode
+        adsDebugMode: state.adsDebugMode,
+        adsContainers: state.adsContainersCreated.size,
+        adsNetworks: state.adsNetworksLoaded
     }),
     
     unlockAll: () => {
@@ -2167,18 +2723,18 @@ window.galleryDebug = {
         }
     },
     
-    // ✅ NUEVAS FUNCIONES DE DEBUG PARA ANUNCIOS
+    // ✅ NUEVAS FUNCIONES DE DEBUG ULTRA PARA ANUNCIOS
     resetVIP: () => {
         localStorage.setItem('isVIP', 'false');
         localStorage.removeItem('vipExpiry');
         state.isVIP = false;
-        adManager.toggleByVIPStatus(false);
+        ultraAdManager.toggleByVIPStatus(false);
         showNotification('✅ VIP status reset', 'success');
         console.log('✅ VIP status reset to false');
     },
     
     forceShowAds: () => {
-        adManager.forceVisibility();
+        ultraAdManager.forceAllVisible();
         showNotification('✅ Anuncios forzados a mostrarse', 'success');
         console.log('✅ Ads forced visible');
     },
@@ -2186,10 +2742,10 @@ window.galleryDebug = {
     toggleAdsDebug: () => {
         CONFIG.ADS.DEBUG_MODE = !CONFIG.ADS.DEBUG_MODE;
         state.adsDebugMode = CONFIG.ADS.DEBUG_MODE;
-        adManager.debugMode = CONFIG.ADS.DEBUG_MODE;
+        ultraAdManager.debugMode = CONFIG.ADS.DEBUG_MODE;
         
         if (CONFIG.ADS.DEBUG_MODE) {
-            adManager.forceVisibility();
+            ultraAdManager.forceAllVisible();
         }
         
         showNotification(`🔧 Debug mode: ${CONFIG.ADS.DEBUG_MODE ? 'ON' : 'OFF'}`, 'info');
@@ -2197,7 +2753,31 @@ window.galleryDebug = {
     },
     
     diagnoseAds: () => {
-        adManager.diagnose();
+        ultraAdManager.diagnose();
+    },
+    
+    testAds: () => {
+        ultraAdManager.quickTest();
+    },
+    
+    createEmergencyAds: () => {
+        ultraAdManager.createEmergencyFallbacks();
+        showNotification('🚨 Emergency ads created', 'warning');
+    },
+    
+    initAds: () => {
+        console.log('🔄 Force re-initializing ads...');
+        ultraAdManager.initialize();
+    },
+    
+    showAdContainers: () => {
+        const containers = document.querySelectorAll('[id*="ad"], [id*="juicy"], [id*="ultra"], [id*="emergency"]');
+        console.log(`📊 Found ${containers.length} ad-related containers:`);
+        containers.forEach(c => {
+            const style = getComputedStyle(c);
+            console.log(`  ${c.id}: ${style.display} / ${style.visibility} / ${style.opacity}`);
+        });
+        return containers;
     },
     
     resetAll: () => {
@@ -2208,43 +2788,18 @@ window.galleryDebug = {
     }
 };
 
-// Debug PayPal locale issues
-window.debugPayPal = {
-    testLocales: function() {
-        const validLocales = [
-            'en-US', 'es-ES', 'fr-FR', 'de-DE', 'it-IT', 'pt-BR',
-            'en-GB', 'en-AU', 'en-CA', 'es-MX', 'es-AR', 'fr-CA'
-        ];
-        
-        console.log('Valid PayPal locales:', validLocales);
-        console.log('Current language:', state.language);
-        console.log('Current locale would be:', state.language === 'es' ? 'es-ES' : 'en-US');
-        
-        return validLocales;
-    },
-    
-    checkSDK: function() {
-        if (typeof paypal !== 'undefined') {
-            console.log('✅ PayPal SDK loaded');
-            console.log('PayPal version:', paypal.version);
-            return true;
-        } else {
-            console.error('❌ PayPal SDK not loaded');
-            return false;
-        }
-    }
-};
-
 // ✅ FUNCIONES DE DEBUG RÁPIDO PARA ANUNCIOS
 window.resetVIPStatus = () => galleryDebug.resetVIP();
 window.forceShowAds = () => galleryDebug.forceShowAds();
 window.diagnosticarAnuncios = () => galleryDebug.diagnoseAds();
+window.testearAnuncios = () => galleryDebug.testAds();
+window.mostrarContenedoresAds = () => galleryDebug.showAdContainers();
 
-// Mensaje de bienvenida en consola - ACTUALIZADO
+// ✅ MENSAJE DE BIENVENIDA EN CONSOLA - ACTUALIZADO ULTRA
 console.log(`
 🌊 ===============================================
    BeachGirl.pics Gallery v${CONFIG.VERSION}
-   COMPLETE EDITION with PayPal + ADS FIXED
+   ULTRA COMPLETE EDITION + ANUNCIOS ULTRA CORREGIDOS
    
    📊 Estadísticas:
    • ${(window.ALL_PHOTOS_POOL?.length || 0) + (window.ALL_UNCENSORED_PHOTOS_POOL?.length || 0)} fotos totales
@@ -2259,17 +2814,21 @@ console.log(`
    • galleryDebug.simulatePayment('vip') - Simular pago VIP
    • galleryDebug.resetAll() - Resetear todo
    
-   🎯 Debug Anuncios:
+   🎯 Debug Anuncios ULTRA:
    • resetVIPStatus() - Resetear VIP status
    • forceShowAds() - Forzar mostrar anuncios
    • diagnosticarAnuncios() - Diagnóstico completo
+   • testearAnuncios() - Crear anuncio de prueba
+   • mostrarContenedoresAds() - Ver todos los contenedores
    • galleryDebug.toggleAdsDebug() - Toggle debug mode
+   • galleryDebug.initAds() - Re-inicializar anuncios
+   • galleryDebug.createEmergencyAds() - Anuncios de emergencia
    
    💳 PayPal: Configurado y listo
    🤖 Isabella: Bot activo
    📊 Analytics: Habilitado
    🔔 Notificaciones: Disponibles
-   🎯 Ads Debug: ${CONFIG.ADS.DEBUG_MODE ? 'ENABLED' : 'DISABLED'}
+   🎯 Ads Ultra System: ${CONFIG.ADS.DEBUG_MODE ? 'ENABLED' : 'DISABLED'}
    
 🌊 ===============================================
 `);
