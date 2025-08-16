@@ -198,14 +198,28 @@
             </div>
         </section>
 
-        <!-- JuicyAds Banner - Solo para no-VIP -->
-        <div id="ad-container-banner" class="ad-container" style="display: none;">
+        <!-- ✅ ANUNCIOS JUICYADS - CORREGIDO PARA SIEMPRE VISIBLE -->
+        <div id="ad-container-banner" class="ad-container" style="display: block !important; visibility: visible !important;">
             <div class="ad-label">Publicidad</div>
-            <!-- JuicyAds v3.0 -->
+            <!-- JuicyAds v3.0 - MEJORADO -->
             <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
-            <ins id="1099077" data-width="728" data-height="90"></ins>
-            <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1099077});</script>
-            <!--JuicyAds END-->
+            <ins id="1099077" data-width="728" data-height="90" style="display: block !important;"></ins>
+            <script type="text/javascript" data-cfasync="false" async>
+                (adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1099077});
+                console.log('🎯 JuicyAds zone 1099077 initialized - FORCED VISIBLE');
+                
+                // Debug adicional
+                setTimeout(() => {
+                    const adElement = document.getElementById('1099077');
+                    if (adElement) {
+                        console.log('✅ JuicyAds element found:', adElement);
+                        console.log('Element display:', getComputedStyle(adElement).display);
+                        console.log('Element visibility:', getComputedStyle(adElement).visibility);
+                    } else {
+                        console.warn('⚠️ JuicyAds element not found!');
+                    }
+                }, 2000);
+            </script>
         </div>
 
         <!-- Photos Section -->
@@ -412,36 +426,145 @@
         gtag('config', 'G-DBXYNPBSPY');
     </script>
 
-    <!-- Ad Network Scripts -->
+    <!-- ✅ SCRIPT DE ANUNCIOS CORREGIDO - NO OCULTA AUTOMÁTICAMENTE -->
     <script>
         // EroAdvertising ID: 2309173
         window.eroAdvertisingId = 2309173;
         
-        // Mostrar/ocultar anuncios basado en estado VIP
+        // ✅ FUNCIÓN CORREGIDA - PARA DEBUG SIEMPRE MUESTRA ANUNCIOS
         function toggleAds() {
             const isVIP = localStorage.getItem('isVIP') === 'true';
             const adContainer = document.getElementById('ad-container-banner');
             
             if (adContainer) {
-                if (isVIP) {
-                    adContainer.style.display = 'none';
-                    console.log('👑 VIP user - Ads hidden');
+                // ✅ PARA DEBUG: SIEMPRE MOSTRAR ANUNCIOS
+                adContainer.style.display = 'block';
+                adContainer.style.visibility = 'visible';
+                
+                console.log('🎯 DEBUG MODE - Ads forced visible');
+                console.log('VIP Status detected:', isVIP);
+                console.log('Ad container display:', getComputedStyle(adContainer).display);
+                
+                // Verificar que JuicyAds esté cargado
+                if (typeof adsbyjuicy !== 'undefined') {
+                    console.log('✅ JuicyAds global variable loaded');
                 } else {
-                    adContainer.style.display = 'block';
-                    console.log('🎯 Non-VIP user - Ads displayed');
+                    console.warn('⚠️ JuicyAds not loaded yet');
                 }
+            } else {
+                console.error('❌ Ad container not found!');
             }
         }
         
-        // Ejecutar cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', toggleAds);
+        // ✅ DIAGNÓSTICO COMPLETO DE ANUNCIOS
+        function diagnosticarAnuncios() {
+            console.log('=== 🔍 DIAGNÓSTICO COMPLETO DE ANUNCIOS ===');
+            console.log('1. Estado VIP:', localStorage.getItem('isVIP'));
+            console.log('2. Contenedor ads existe:', !!document.getElementById('ad-container-banner'));
+            console.log('3. Contenedor visible:', document.getElementById('ad-container-banner')?.style.display);
+            console.log('4. JuicyAds global:', typeof adsbyjuicy);
+            console.log('5. Script JuicyAds cargado:', !!document.querySelector('script[src*="jads.co"]'));
+            console.log('6. Elemento ins existe:', !!document.getElementById('1099077'));
+            console.log('7. Elemento ins visible:', document.getElementById('1099077')?.style.display);
+            console.log('8. URL actual:', window.location.href);
+            console.log('9. User Agent:', navigator.userAgent.substring(0, 50) + '...');
+            console.log('================================================');
+            
+            // Forzar visibilidad si está oculto
+            const adContainer = document.getElementById('ad-container-banner');
+            const adElement = document.getElementById('1099077');
+            
+            if (adContainer) {
+                adContainer.style.display = 'block';
+                adContainer.style.visibility = 'visible';
+            }
+            
+            if (adElement) {
+                adElement.style.display = 'block';
+                adElement.style.visibility = 'visible';
+            }
+        }
         
-        // También ejecutar cuando cambie el estado VIP
+        // ✅ EJECUTAR AL CARGAR LA PÁGINA
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página cargada - Inicializando anuncios...');
+            
+            // Esperar un poco y luego ejecutar
+            setTimeout(() => {
+                toggleAds();
+                diagnosticarAnuncios();
+            }, 1000);
+            
+            // Ejecutar diagnóstico cada 5 segundos por un minuto (para debug)
+            let debugCounter = 0;
+            const debugInterval = setInterval(() => {
+                debugCounter++;
+                console.log(`🔄 Debug check #${debugCounter}`);
+                diagnosticarAnuncios();
+                
+                if (debugCounter >= 12) { // 12 * 5 segundos = 1 minuto
+                    clearInterval(debugInterval);
+                    console.log('✅ Debug de anuncios completado');
+                }
+            }, 5000);
+        });
+        
+        // ✅ TAMBIÉN EJECUTAR CUANDO CAMBIE EL ESTADO VIP
         window.addEventListener('storage', function(e) {
             if (e.key === 'isVIP') {
+                console.log('🔄 VIP status changed, updating ads...');
                 toggleAds();
             }
         });
+        
+        // ✅ FUNCIÓN PARA RESETEAR ESTADO VIP (ÚTIL PARA DEBUG)
+        window.resetVIPStatus = function() {
+            localStorage.setItem('isVIP', 'false');
+            localStorage.removeItem('vipExpiry');
+            console.log('✅ VIP status reset to false');
+            toggleAds();
+        };
+        
+        // ✅ FUNCIÓN PARA FORZAR MOSTRAR ANUNCIOS
+        window.forceShowAds = function() {
+            const adContainer = document.getElementById('ad-container-banner');
+            const adElement = document.getElementById('1099077');
+            
+            if (adContainer) {
+                adContainer.style.display = 'block !important';
+                adContainer.style.visibility = 'visible !important';
+                adContainer.style.opacity = '1';
+                adContainer.style.height = 'auto';
+            }
+            
+            if (adElement) {
+                adElement.style.display = 'block !important';
+                adElement.style.visibility = 'visible !important';
+                adElement.style.opacity = '1';
+            }
+            
+            console.log('✅ Anuncios forzados a mostrarse');
+            diagnosticarAnuncios();
+        };
+    </script>
+
+    <!-- ✅ MENSAJE DE AYUDA EN CONSOLA -->
+    <script>
+        console.log(`
+🌊 ===============================================
+   BeachGirl.pics - DIAGNÓSTICO DE ANUNCIOS
+   
+   🔧 Comandos disponibles en consola:
+   • diagnosticarAnuncios() - Diagnóstico completo
+   • resetVIPStatus() - Resetear estado VIP
+   • forceShowAds() - Forzar mostrar anuncios
+   • toggleAds() - Toggle manual de anuncios
+   
+   ⚠️  Si no ves anuncios, ejecuta:
+   resetVIPStatus() seguido de forceShowAds()
+   
+🌊 ===============================================
+        `);
     </script>
 </body>
 </html>
