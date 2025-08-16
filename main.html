@@ -198,6 +198,16 @@
             </div>
         </section>
 
+        <!-- JuicyAds Banner - Solo para no-VIP -->
+        <div id="ad-container-banner" class="ad-container" style="display: none;">
+            <div class="ad-label">Publicidad</div>
+            <!-- JuicyAds v3.0 -->
+            <script type="text/javascript" data-cfasync="false" async src="https://poweredby.jads.co/js/jads.js"></script>
+            <ins id="1099077" data-width="728" data-height="90"></ins>
+            <script type="text/javascript" data-cfasync="false" async>(adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1099077});</script>
+            <!--JuicyAds END-->
+        </div>
+
         <!-- Photos Section -->
         <section class="content-section" id="photosSection">
             <div class="section-header">
@@ -407,11 +417,31 @@
         // EroAdvertising ID: 2309173
         window.eroAdvertisingId = 2309173;
         
-        // JuicyAds - Solo cargar si no es VIP
-        if (!localStorage.getItem('isVIP')) {
-            // JuicyAds initialization can go here
-            console.log('🎯 Ad networks ready for non-VIP users');
+        // Mostrar/ocultar anuncios basado en estado VIP
+        function toggleAds() {
+            const isVIP = localStorage.getItem('isVIP') === 'true';
+            const adContainer = document.getElementById('ad-container-banner');
+            
+            if (adContainer) {
+                if (isVIP) {
+                    adContainer.style.display = 'none';
+                    console.log('👑 VIP user - Ads hidden');
+                } else {
+                    adContainer.style.display = 'block';
+                    console.log('🎯 Non-VIP user - Ads displayed');
+                }
+            }
         }
+        
+        // Ejecutar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', toggleAds);
+        
+        // También ejecutar cuando cambie el estado VIP
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'isVIP') {
+                toggleAds();
+            }
+        });
     </script>
 </body>
 </html>
