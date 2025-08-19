@@ -189,7 +189,7 @@
             opacity: 0.8;
         }
         
-        /* Floating tropical elements MEJORADOS */
+        /* Static tropical decorative elements */
         .floating-elements {
             position: fixed;
             top: 0;
@@ -202,38 +202,41 @@
         
         .floating-palm {
             position: absolute;
-            font-size: 3em;
-            opacity: 0.6;
-            animation: float 8s ease-in-out infinite;
+            opacity: 0.7;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         .floating-palm:nth-child(1) { 
-            top: 15%; left: 8%; animation-delay: 0s; 
+            top: 15%; left: 8%; 
             transform: rotate(-15deg);
+            background: url('/decorative-images/decoration4.png') no-repeat center;
+            background-size: 80px 80px;
+            width: 80px;
+            height: 80px;
         }
         .floating-palm:nth-child(2) { 
-            top: 65%; right: 12%; animation-delay: -3s; 
+            top: 65%; right: 12%; 
             transform: rotate(15deg);
+            background: url('/decorative-images/decoration5.png') no-repeat center;
+            background-size: 60px 60px;
+            width: 60px;
+            height: 60px;
         }
         .floating-palm:nth-child(3) { 
-            bottom: 25%; left: 15%; animation-delay: -6s; 
+            bottom: 25%; left: 15%; 
             transform: rotate(-10deg);
+            background: url('/decorative-images/decoration6.png') no-repeat center;
+            background-size: 70px 70px;
+            width: 70px;
+            height: 70px;
         }
         .floating-palm:nth-child(4) { 
-            top: 40%; right: 25%; animation-delay: -1.5s; 
+            top: 40%; right: 25%; 
             font-size: 2em;
         }
         .floating-palm:nth-child(5) { 
-            bottom: 60%; left: 40%; animation-delay: -4.5s; 
+            bottom: 60%; left: 40%; 
             font-size: 2.5em;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(var(--rotation, 0deg)); }
-            25% { transform: translateY(-15px) rotate(calc(var(--rotation, 0deg) + 3deg)); }
-            50% { transform: translateY(-25px) rotate(var(--rotation, 0deg)); }
-            75% { transform: translateY(-10px) rotate(calc(var(--rotation, 0deg) - 3deg)); }
         }
         
         /* Hero Banner Section MEJORADO */
