@@ -231,14 +231,28 @@
         <!-- Mobile Bottom Ad (300x50) -->
         <div class="ad-container ad-mobile-bottom">
             <script type="text/javascript">
-                jads('2092471','300','50');
+                if (typeof jads !== 'undefined') {
+                    jads('2092471','300','50');
+                } else {
+                    setTimeout(() => {
+                        if (typeof jads !== 'undefined') jads('2092471','300','50');
+                    }, 1000);
+                }
             </script>
         </div>
         
         <!-- Additional Square Ad (125x125) -->
         <div class="ad-container ad-square-footer">
             <script type="text/javascript">
-                jads('2092470','125','125');
+                if (typeof jads !== 'undefined') {
+                    jads('2092470','125','125');
+                } else {
+                    setTimeout(() => {
+                        if (typeof jads !== 'undefined') jads('2092470','125','125');
+                    }, 1000);
+                }
+            </script>
+        </div>
             </script>
         </div>
     </div>
