@@ -46,9 +46,14 @@
             // Load initial content
             loadInitialContent();
             
+            // Hide loading screen
+            hideLoadingScreen();
+            
             console.log('✅ Aplicación inicializada correctamente');
         } catch (error) {
             console.error('❌ Error inicializando aplicación:', error);
+            // Hide loading screen even on error
+            hideLoadingScreen();
         }
     }
 
