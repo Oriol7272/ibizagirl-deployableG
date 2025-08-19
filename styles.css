@@ -330,8 +330,8 @@ body {
    ============================ */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
     margin: 40px 0;
 }
 
@@ -344,6 +344,8 @@ body {
     aspect-ratio: 3/4;
     background: var(--card-bg);
     box-shadow: var(--box-shadow);
+    max-width: 250px;
+    margin: 0 auto;
 }
 
 .gallery-item img {
@@ -351,6 +353,8 @@ body {
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
+    max-width: 100%;
+    display: block;
 }
 
 .gallery-item:hover {
@@ -359,7 +363,7 @@ body {
 }
 
 .gallery-item:hover img {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .gallery-overlay {
