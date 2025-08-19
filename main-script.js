@@ -345,7 +345,7 @@
         console.log('✅ Contenido inicial cargado completamente');
     }
 
-    // Display photos
+    // Display photos (teasers from "full" folder - NO blur, daily randomized)
     function displayPhotos(photos) {
         console.log('📷 Mostrando fotos públicas:', photos.length);
         const container = document.getElementById('teaser-gallery');
@@ -354,10 +354,11 @@
             return;
         }
         
+        // These are teasers from "full" folder - never blurred, never premium
         container.innerHTML = photos.map(photo => createPhotoCard(photo, false)).join('');
     }
 
-    // Display premium photos
+    // Display premium photos (from "uncensored" folder - blurred without access)
     function displayPremiumPhotos(photos) {
         console.log('💎 Mostrando fotos premium:', photos.length);
         const container = document.getElementById('main-gallery');
@@ -366,10 +367,11 @@
             return;
         }
         
+        // These are from "uncensored" folder - blurred without access
         container.innerHTML = photos.map(photo => createPhotoCard(photo, true)).join('');
     }
 
-    // Display videos
+    // Display videos (from "uncensored-videos" folder - always premium)
     function displayVideos(videos) {
         console.log('🎥 Mostrando videos:', videos.length);
         const container = document.getElementById('video-gallery');
@@ -378,6 +380,7 @@
             return;
         }
         
+        // All videos are premium from "uncensored-videos" folder
         container.innerHTML = videos.map(video => createVideoCard(video)).join('');
     }
 
