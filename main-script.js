@@ -365,16 +365,24 @@
     }
 
     // Create photo card
-    function createPhotoCard(photo) {
+    function createPhotoCard(photo, isPremium = false) {
+        const imagePath = isPremium ? `uncensored/${photo}` : `full/${photo}`;
+        const blurClass = isPremium ? 'blurred' : '';
+        const premiumOverlay = isPremium ? `
+            <div class="premium-overlay">
+                <div class="premium-price">€0.10</div>
+                <button class="unlock-btn">Desbloquear</button>
+            </div>
+        ` : '';
+        
         return `
-            <div class="content-card photo-card ${photo.isNew ? 'new' : ''}">
-                ${photo.isNew ? '<span class="badge-new">NUEVO</span>' : ''}
+            <div class="content-card photo-card">
                 <div class="card-image">
-                    <img data-src="${photo.thumbnail}" alt="${photo.title || 'Photo'}" />
+                    <img src="${imagePath}" alt="Photo" class="${blurClass}" />
+                    ${premiumOverlay}
                 </div>
                 <div class="card-info">
-                    <h4>${photo.title || 'Sin título'}</h4>
-                    ${photo.model ? `<p class="model">Modelo: ${photo.model}</p>` : ''}
+                    <h4>${isPremium ? 'Premium Photo' : 'Photo'}</h4>
                 </div>
             </div>
         `;
