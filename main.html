@@ -784,7 +784,7 @@
             const input = document.getElementById('chat-input');
             const messages = document.getElementById('chat-messages');
             
-            if (input?.value.trim()) {
+            if (input && input.value.trim()) {
                 const userMessage = document.createElement('div');
                 userMessage.className = 'message user-message';
                 userMessage.textContent = input.value;
