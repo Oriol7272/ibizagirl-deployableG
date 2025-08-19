@@ -334,10 +334,26 @@
 
     // Display photos
     function displayPhotos(photos) {
+        console.log('📷 Mostrando fotos públicas:', photos.length);
         const container = document.getElementById('photosGrid');
-        if (!container) return;
+        if (!container) {
+            console.warn('⚠️ No se encontró container photosGrid');
+            return;
+        }
         
-        container.innerHTML = photos.map(photo => createPhotoCard(photo)).join('');
+        container.innerHTML = photos.map(photo => createPhotoCard(photo, false)).join('');
+    }
+
+    // Display premium photos
+    function displayPremiumPhotos(photos) {
+        console.log('💎 Mostrando fotos premium:', photos.length);
+        const container = document.getElementById('premiumPhotosGrid');
+        if (!container) {
+            console.warn('⚠️ No se encontró container premiumPhotosGrid');
+            return;
+        }
+        
+        container.innerHTML = photos.map(photo => createPhotoCard(photo, true)).join('');
     }
 
     // Display videos
