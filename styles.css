@@ -528,6 +528,8 @@ body {
     border: 2px solid transparent;
     transition: var(--transition);
     position: relative;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--box-shadow);
 }
 
 .pricing-card:hover {
