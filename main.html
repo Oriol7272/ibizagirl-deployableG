@@ -214,7 +214,13 @@
             <!-- Ad Zone: 125x125 (ID: 2092251) -->
             <div class="ad-container ad-square">
                 <script type="text/javascript">
-                    jads('2092251','125','125');
+                    if (typeof jads !== 'undefined') {
+                        jads('2092251','125','125');
+                    } else {
+                        setTimeout(() => {
+                            if (typeof jads !== 'undefined') jads('2092251','125','125');
+                        }, 1000);
+                    }
                 </script>
             </div>
         </div>
