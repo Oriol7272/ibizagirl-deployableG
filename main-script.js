@@ -374,20 +374,21 @@
 
     // Create photo card
     function createPhotoCard(photo, isPremium = false) {
-        // photo ya incluye la carpeta, no agregar duplicada
-        const imagePath = isPremium ? photo : photo;
-        const blurClass = isPremium ? 'blurred' : '';
+        const imagePath = photo;
+        const blurClass = isPremium ? 'premium-blur' : '';
         const premiumOverlay = isPremium ? `
             <div class="premium-overlay">
-                <div class="premium-price">€0.10</div>
-                <button class="unlock-btn">Desbloquear</button>
+                <div class="premium-badge">
+                    <span class="price">€0.10</span>
+                    <span class="unlock-text" data-i18n="unlock">Desbloquear</span>
+                </div>
             </div>
         ` : '';
         
         return `
             <div class="content-card photo-card">
                 <div class="card-image">
-                    <img src="${imagePath}" alt="Photo" class="${blurClass}" />
+                    <img src="${imagePath}" alt="Photo" class="${blurClass}" loading="lazy" />
                     ${premiumOverlay}
                 </div>
                 <div class="card-info">
@@ -399,20 +400,22 @@
 
     // Create video card
     function createVideoCard(video) {
-        // video ya incluye la carpeta, no agregar duplicada
         const videoPath = video;
         
         return `
             <div class="content-card video-card">
                 <div class="card-image">
-                    <video class="blurred" preload="metadata">
+                    <video class="premium-blur" preload="metadata" poster="${videoPath.replace('.mp4', '_thumb.jpg')}">
                         <source src="${videoPath}" type="video/mp4">
                     </video>
                     <div class="premium-overlay">
-                        <div class="premium-price">€0.30</div>
-                        <button class="unlock-btn">Desbloquear</button>
-                        <div class="play-icon">▶</div>
+                        <div class="premium-badge">
+                            <span class="price">€0.30</span>
+                            <span class="unlock-text" data-i18n="unlock">Desbloquear</span>
+                        </div>
+                        <div class="video-play-btn">▶</div>
                     </div>
+                    <div class="video-duration">2:30</div>
                 </div>
                 <div class="card-info">
                     <h4>Premium Video</h4>
