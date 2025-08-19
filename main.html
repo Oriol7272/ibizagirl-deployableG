@@ -375,7 +375,7 @@
             const dailyPhotos = shuffleArrayWithSeed(UNCENSORED_IMAGES, seed + 2).slice(0, 200);
             const dailyVideos = shuffleArrayWithSeed(VIDEOS, seed + 3).slice(0, 40);
             
-            console.log(`📊 Contenido diario generado: ${dailyBanners.length} banners, ${dailyTeasers.length} teasers, ${dailyPhotos.length} fotos, ${dailyVideos.length} videos`);
+            console.log('Contenido diario generado: ' + dailyBanners.length + ' banners, ' + dailyTeasers.length + ' teasers, ' + dailyPhotos.length + ' fotos, ' + dailyVideos.length + ' videos');
             
             return { dailyBanners, dailyTeasers, dailyPhotos, dailyVideos };
         }
