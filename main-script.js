@@ -394,16 +394,22 @@
 
     // Create video card
     function createVideoCard(video) {
+        const videoPath = `uncensored-videos/${video}`;
+        
         return `
-            <div class="content-card video-card ${video.isNew ? 'new' : ''}">
-                ${video.isNew ? '<span class="badge-new">NUEVO</span>' : ''}
+            <div class="content-card video-card">
                 <div class="card-image">
-                    <img data-src="${video.thumbnail}" alt="${video.title || 'Video'}" />
-                    <span class="duration">${video.duration || '00:00'}</span>
+                    <video class="blurred" preload="metadata">
+                        <source src="${videoPath}" type="video/mp4">
+                    </video>
+                    <div class="premium-overlay">
+                        <div class="premium-price">€0.30</div>
+                        <button class="unlock-btn">Desbloquear</button>
+                        <div class="play-icon">▶</div>
+                    </div>
                 </div>
                 <div class="card-info">
-                    <h4>${video.title || 'Sin título'}</h4>
-                    ${video.model ? `<p class="model">Modelo: ${video.model}</p>` : ''}
+                    <h4>Premium Video</h4>
                 </div>
             </div>
         `;
