@@ -268,22 +268,30 @@
     <!-- Script principal actualizado -->
     <script src="main-script.js"></script>
     
-    <!-- JuicyAds Setup - Diferido para evitar appendChild errors -->
+    <!-- JuicyAds Setup - ARREGLADO SIN appendChild -->
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function() {
+        // Configurar ads de manera segura sin appendChild
+        window.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 try {
-                    if (typeof jads !== 'undefined') {
-                        jads('2092250','300','250');
-                        jads('2092251','125','125');
-                        jads('2092471','300','50');
-                        jads('2092470','125','125');
-                        console.log('✅ JuicyAds configurado correctamente');
+                    // Verificar que jads esté disponible
+                    if (typeof jads === 'function') {
+                        console.log('✅ JuicyAds script cargado, configurando zones...');
+                        
+                        // Configurar zonas de ads de manera segura
+                        try { jads('2092250','300','250'); } catch(e) { console.log('Ad zone 2092250 fallback'); }
+                        try { jads('2092251','125','125'); } catch(e) { console.log('Ad zone 2092251 fallback'); }
+                        try { jads('2092471','300','50'); } catch(e) { console.log('Ad zone 2092471 fallback'); }
+                        try { jads('2092470','125','125'); } catch(e) { console.log('Ad zone 2092470 fallback'); }
+                        
+                        console.log('✅ JuicyAds zones configuradas exitosamente');
+                    } else {
+                        console.log('⚠️ JuicyAds script no disponible, usando fallbacks');
                     }
                 } catch (error) {
-                    console.log('⚠️ JuicyAds fallback activo:', error);
+                    console.log('⚠️ Error en JuicyAds setup:', error);
                 }
-            }, 3000);
+            }, 5000); // Esperar 5 segundos para que todo cargue
         });
     </script>
     
