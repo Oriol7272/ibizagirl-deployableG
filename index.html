@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IbizaGirl.pics - Premium Content</title>
-    <meta name="description" content="Premium photos and videos from Ibiza. Daily updates, exclusive content.">
+    <title>IbizaGirl.pics - Bienvenido al Paraíso</title>
+    <meta name="description" content="Premium content from the paradise of Ibiza. Daily updates, exclusive photos and videos.">
     
     <!-- PayPal SDK -->
     <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -17,99 +20,429 @@
         }
         
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        /* Hero Banner Section */
+        .hero-banner {
+            height: 60vh;
+            position: relative;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            animation: fadeSlide 8s ease-in-out infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes fadeSlide {
+            0%, 20% { opacity: 0.3; transform: scale(1); }
+            10% { opacity: 0.6; transform: scale(1.05); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
             padding: 20px;
         }
         
-        .header {
-            text-align: center;
-            padding: 40px 0;
-        }
-        
-        .logo {
-            font-size: 3em;
-            font-weight: bold;
+        .hero-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 6em;
+            font-weight: 700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
             margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite alternate;
         }
         
-        .tagline {
-            font-size: 1.2em;
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(255,255,255,0.8)); }
+        }
+        
+        .hero-subtitle {
+            font-size: 1.8em;
+            font-weight: 300;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             opacity: 0.9;
         }
         
-        .content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+        /* Tropical decorations */
+        .waves-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,60L40,55C80,50,160,40,240,45C320,50,400,70,480,75C560,80,640,70,720,65C800,60,880,60,960,65C1040,70,1120,80,1160,85L1200,90L1200,120L1160,120C1120,120,1040,120,960,120C880,120,800,120,720,120C640,120,560,120,480,120C400,120,320,120,240,120C160,120,80,120,40,120L0,120Z" fill="%23ffffff" fill-opacity="0.3"></path></svg>') repeat-x;
+            animation: wave 6s ease-in-out infinite;
         }
         
-        .section {
+        @keyframes wave {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(-50px); }
+        }
+        
+        /* Navigation */
+        .nav-bar {
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
             background: rgba(255,255,255,0.1);
-            padding: 30px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Gallery Carousel */
+        .section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 60px;
+        }
+        
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-item {
+            min-width: 250px;
+            height: 300px;
+            margin-right: 15px;
             border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .carousel-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .carousel-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 15px;
             text-align: center;
         }
         
-        .section h3 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
+        /* Premium Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
         }
         
-        .btn {
+        .content-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .content-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .content-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            filter: blur(3px);
+        }
+        
+        .content-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .new-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             background: #ff4757;
             color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .unlock-price {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        /* Video Items */
+        .video-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
             cursor: pointer;
-            font-size: 1em;
-            margin: 10px;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
         
-        .btn:hover {
-            background: #ff3742;
+        .video-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            position: relative;
+        }
+        
+        .play-button {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0.8;
+        }
+        
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.9em;
+        }
+        
+        /* Language Selector */
         .language-selector {
             position: fixed;
             top: 20px;
             right: 20px;
+            z-index: 1000;
         }
         
         .language-selector select {
-            padding: 8px;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border-radius: 20px;
             border: none;
+            background: rgba(255,255,255,0.9);
+            font-size: 14px;
         }
         
-        .loading {
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+        
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+        }
+        
+        .chatbot-header {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
             text-align: center;
+            font-weight: bold;
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            color: #333;
+        }
+        
+        .chatbot-input {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+        
+        .chatbot-input button {
+            padding: 10px 15px;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        /* Ad Zones */
+        .ad-zone {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
             padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
         }
         
         .spinner {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border: 4px solid rgba(255,255,255,0.3);
             border-top: 4px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3em; }
+            .hero-subtitle { font-size: 1.2em; }
+            .nav-links { flex-direction: column; gap: 10px; }
+            .content-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
         }
     </style>
 </head>
@@ -117,49 +450,112 @@
     <!-- Language Selector -->
     <div class="language-selector">
         <select id="languageSelect">
-            <option value="es">Español</option>
-            <option value="en">English</option>
-            <option value="de">Deutsch</option>
-            <option value="it">Italiano</option>
-            <option value="fr">Français</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="en">🇺🇸 English</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="fr">🇫🇷 Français</option>
         </select>
     </div>
 
-    <div class="container">
-        <div class="header">
-            <div class="logo">🌴 IbizaGirl.pics 🌴</div>
-            <div class="tagline" id="tagline">Premium Content from Paradise</div>
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">IBIZAGIRL</h1>
+            <p class="hero-subtitle" id="heroSubtitle">Bienvenido al Paraíso</p>
         </div>
+        <div class="waves-decoration"></div>
+    </div>
 
-        <div class="content">
-            <div class="section">
-                <h3 id="galleryTitle">📸 Free Gallery</h3>
-                <p id="galleryDesc">Daily updated photos from beautiful Ibiza</p>
-                <button class="btn" onclick="showGallery()" id="galleryBtn">View Gallery</button>
-            </div>
-
-            <div class="section">
-                <h3 id="premiumTitle">💎 Premium Photos</h3>
-                <p id="premiumDesc">200+ exclusive photos - €0.10 each</p>
-                <button class="btn" onclick="showPremium()" id="premiumBtn">View Premium</button>
-            </div>
-
-            <div class="section">
-                <h3 id="videosTitle">🎬 Premium Videos</h3>
-                <p id="videosDesc">40+ HD videos - €0.30 each</p>
-                <button class="btn" onclick="showVideos()" id="videosBtn">Watch Videos</button>
-            </div>
-
-            <div class="section">
-                <h3 id="subscriptionTitle">⭐ Subscription</h3>
-                <p id="subscriptionDesc">Monthly €19.99 or Lifetime €100</p>
-                <button class="btn" onclick="showSubscription()" id="subscriptionBtn">Subscribe</button>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="#gallery" id="navGallery">🏖️ Gallery</a>
+                <a href="#premium" id="navPremium">💎 Premium</a>
+                <a href="#videos" id="navVideos">🎬 Videos</a>
+                <a href="/subscription.html" id="navSubscription">⭐ Subscribe</a>
             </div>
         </div>
+    </nav>
 
-        <div id="loadingSection" class="loading" style="display: none;">
+    <!-- Gallery Carousel Section -->
+    <div class="section" id="gallery">
+        <h2 class="section-title" id="galleryTitle">🏖️ Paradise Gallery</h2>
+        <div class="carousel-container">
+            <div class="carousel" id="galleryCarousel">
+                <!-- Carousel items will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Ad Zone -->
+        <div class="ad-zone" id="adZone1">
+            <div id="juicyads-banner"></div>
+        </div>
+    </div>
+
+    <!-- Premium Photos Section -->
+    <div class="section" id="premium">
+        <h2 class="section-title" id="premiumTitle">💎 Premium Photos Collection</h2>
+        <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px;" id="premiumDesc">
+            Exclusive high-quality photos • €0.10 each • 30% marked as NEW!
+        </p>
+        
+        <div class="loading" id="premiumLoading">
             <div class="spinner"></div>
-            <p>Loading content...</p>
+        </div>
+        
+        <div class="content-grid" id="premiumGrid" style="display: none;">
+            <!-- Premium photos will be loaded here -->
+        </div>
+        
+        <!-- Ad Zone -->
+        <div class="ad-zone" id="adZone2">
+            <div id="exoclick-banner"></div>
+        </div>
+    </div>
+
+    <!-- Premium Videos Section -->
+    <div class="section" id="videos">
+        <h2 class="section-title" id="videosTitle">🎬 Premium Videos Collection</h2>
+        <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px;" id="videosDesc">
+            Exclusive HD videos • €0.30 each • 30% marked as NEW!
+        </p>
+        
+        <div class="loading" id="videosLoading">
+            <div class="spinner"></div>
+        </div>
+        
+        <div class="content-grid" id="videosGrid" style="display: none;">
+            <!-- Premium videos will be loaded here -->
+        </div>
+        
+        <!-- Ad Zone -->
+        <div class="ad-zone" id="adZone3">
+            <div id="popads-zone"></div>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" onclick="toggleChatbot()" id="chatToggle">
+            💬
+        </button>
+        <div class="chatbot-window" id="chatWindow">
+            <div class="chatbot-header">
+                <span id="chatHeader">Isabella - Tu Asistente</span>
+                <button onclick="toggleChatbot()" style="float: right; background: none; border: none; color: white; font-size: 18px;">×</button>
+            </div>
+            <div class="chatbot-messages" id="chatMessages">
+                <div style="background: #f0f0f0; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+                    <strong>Isabella:</strong> <span id="welcomeMsg">¡Hola! Soy Isabella, tu asistente personal. ¿En qué puedo ayudarte?</span>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Escribe tu mensaje..." onkeypress="handleChatKeyPress(event)">
+                <button onclick="sendChatMessage()" id="sendBtn">Enviar</button>
+            </div>
         </div>
     </div>
 
@@ -171,102 +567,410 @@
     </script>
 
     <script>
+        // Global variables
+        let currentLanguage = 'es';
+        let fullImages = [];
+        let uncensoredImages = [];
+        let premiumVideos = [];
+        let carouselIndex = 0;
+        let chatbotOpen = false;
+
         // Translations
         const translations = {
             es: {
-                tagline: "Contenido Premium desde el Paraíso",
-                galleryTitle: "📸 Galería Gratuita",
-                galleryDesc: "Fotos actualizadas diariamente desde la hermosa Ibiza",
-                galleryBtn: "Ver Galería",
-                premiumTitle: "💎 Fotos Premium",
-                premiumDesc: "200+ fotos exclusivas - €0.10 cada una",
-                premiumBtn: "Ver Premium",
-                videosTitle: "🎬 Videos Premium",
-                videosDesc: "40+ videos HD - €0.30 cada uno",
-                videosBtn: "Ver Videos",
-                subscriptionTitle: "⭐ Suscripción",
-                subscriptionDesc: "Mensual €19.99 o Vitalicia €100",
-                subscriptionBtn: "Suscribirse"
+                heroSubtitle: "Bienvenido al Paraíso",
+                navGallery: "🏖️ Galería",
+                navPremium: "💎 Premium",
+                navVideos: "🎬 Videos",
+                navSubscription: "⭐ Suscripción",
+                galleryTitle: "🏖️ Paradise Gallery",
+                premiumTitle: "💎 Premium Photos Collection",
+                premiumDesc: "Fotos exclusivas de alta calidad • €0.10 c/u • ¡30% marcadas como NUEVAS!",
+                videosTitle: "🎬 Premium Videos Collection",
+                videosDesc: "Videos HD exclusivos • €0.30 c/u • ¡30% marcados como NUEVOS!",
+                chatHeader: "Isabella - Tu Asistente",
+                welcomeMsg: "¡Hola! Soy Isabella, tu asistente personal. ¿En qué puedo ayudarte?",
+                sendBtn: "Enviar",
+                newLabel: "¡NUEVO!",
+                unlockText: "Desbloquear"
             },
             en: {
-                tagline: "Premium Content from Paradise",
-                galleryTitle: "📸 Free Gallery",
-                galleryDesc: "Daily updated photos from beautiful Ibiza",
-                galleryBtn: "View Gallery",
-                premiumTitle: "💎 Premium Photos",
-                premiumDesc: "200+ exclusive photos - €0.10 each",
-                premiumBtn: "View Premium",
-                videosTitle: "🎬 Premium Videos",
-                videosDesc: "40+ HD videos - €0.30 each",
-                videosBtn: "Watch Videos",
-                subscriptionTitle: "⭐ Subscription",
-                subscriptionDesc: "Monthly €19.99 or Lifetime €100",
-                subscriptionBtn: "Subscribe"
+                heroSubtitle: "Welcome to Paradise",
+                navGallery: "🏖️ Gallery",
+                navPremium: "💎 Premium",
+                navVideos: "🎬 Videos", 
+                navSubscription: "⭐ Subscribe",
+                galleryTitle: "🏖️ Paradise Gallery",
+                premiumTitle: "💎 Premium Photos Collection",
+                premiumDesc: "Exclusive high-quality photos • €0.10 each • 30% marked as NEW!",
+                videosTitle: "🎬 Premium Videos Collection",
+                videosDesc: "Exclusive HD videos • €0.30 each • 30% marked as NEW!",
+                chatHeader: "Isabella - Your Assistant",
+                welcomeMsg: "Hello! I'm Isabella, your personal assistant. How can I help you?",
+                sendBtn: "Send",
+                newLabel: "NEW!",
+                unlockText: "Unlock"
             }
         };
 
+        // Initialize real content from folders
+        function initializeContent() {
+            // Generate real file arrays based on actual files
+            const fullImagesList = [
+                'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+                'full/0Tc8Vtd0mEIvNHZwYGBq.webp',
+                'full/0lySugcO4Pp4pEZKvz9U.webp',
+                'full/0nSaCJQxbVw4BDrhnhHO.webp',
+                'full/13TXvyRVZ7LtvAOx7kme.webp',
+                'full/18VQaczW5kdfdiqUVasH.webp',
+                'full/1dEu25K0mS3zxRlXRjHR.webp',
+                'full/1qEBcg9QbkZRRdLt0Chc.webp',
+                'full/1tt8H4fX3XzyV90HjNG3.webp',
+                'full/27bGIzFFpej5ubUkvykD.webp',
+                'full/2gjqH68H586TKLDK9lh9.webp',
+                'full/2yw4sowPh3Tyln5oxRdw.webp',
+                'full/39GYGt3bticS0Mjbud0p.webp',
+                'full/3IWka3fnP9b8yz6j5l91.webp',
+                'full/3ZYL4GCUOs3rfq3iTPJ7.webp',
+                'full/4GN6i0Db2hl4Ck9vf0LE.webp',
+                'full/4YhoIAWSbVaOqBhAOGqR.webp',
+                'full/82KxJ9daxf9MpK019L5I.webp',
+                'full/83cSC4eRnYGZUNo9AoqD.webp',
+                'full/85158b64-4168-45fa-9cb4-0b40634f7fa1.webp',
+                'full/8faf42TRuGOU4ZW9KS9W.webp',
+                'full/92Ck0v3g8gZLEQ5vOmpd.webp',
+                'full/993acHdsWLzG80gAFZQs.webp',
+                'full/9D5U5fKXT72xnpqsgUaD.webp',
+                'full/9v20KsJFZoAv2WQ8m3o2.webp',
+                'full/ANhHtA0GivBfeAo6dvJG.webp',
+                'full/AHKAq0biFDUtkxlx7TCu.webp',
+                'full/AwKXjDqrJMTKNvB84iRy.webp'
+                // Add more real files here
+            ];
+
+            const uncensoredImagesList = [
+                'uncensored/Vxm8ZimCcJVYL4fuaX2C.webp',
+                'uncensored/GfKCNq1M1XRsuyZCSr46.webp',
+                'uncensored/SyWKyUgFoMmXtcTCGRcD.webp',
+                'uncensored/46TvCsW1KG6wcG0OWRc7.webp',
+                'uncensored/bS5wI3lzdj9uBSaLxw4s.webp',
+                'uncensored/nTNsF9TsXAR57edrOwt7.webp',
+                'uncensored/j6QQvBGsx56JEmd2x6Lb.webp',
+                'uncensored/5UaQChlNIlRegwT0Ze2S.webp',
+                'uncensored/8phioNKwTe78kkBxfQxv.webp',
+                'uncensored/xRSeg3ANfcjoJX8N4o2B.webp'
+                // Add more real files here
+            ];
+
+            const premiumVideosList = [
+                'uncensored-videos/GK3wKGkNYhO4YyFDAg8x.mp4',
+                'uncensored-videos/T6auQxu1yZKCGPqVJ7ue.mp4',
+                'uncensored-videos/r14kVENgyJthsXKP4ckJ.mp4',
+                'uncensored-videos/zX53TSjhlQj4Gy76iK0H.mp4',
+                'uncensored-videos/kfDFWczYHsZXjtwmMsP4.mp4',
+                'uncensored-videos/M6TEA1f8hNdjol3Wi1se.mp4',
+                'uncensored-videos/n4DaX8Nwj1glWI1Oe9vj.mp4',
+                'uncensored-videos/XRCoUfkNLzwUepShH19v.mp4',
+                'uncensored-videos/8yE2nxCwV2QcJsdXGf32.mp4',
+                'uncensored-videos/0xXK6PxXSv6cpYxvI7HX.mp4'
+                // Add more real files here
+            ];
+
+            fullImages = fullImagesList;
+            uncensoredImages = uncensoredImagesList;
+            premiumVideos = premiumVideosList;
+
+            // Randomize daily
+            const today = new Date().toDateString();
+            const savedDate = localStorage.getItem('contentDate');
+            
+            if (savedDate !== today) {
+                shuffleArray(fullImages);
+                shuffleArray(uncensoredImages); 
+                shuffleArray(premiumVideos);
+                localStorage.setItem('contentDate', today);
+                console.log('🔄 Daily content shuffled');
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Hero banner rotation
+        function initHeroBanner() {
+            const heroBg = document.getElementById('heroBg');
+            let currentBg = 0;
+            
+            function changeBg() {
+                if (fullImages.length > 0) {
+                    heroBg.style.backgroundImage = `url(${fullImages[currentBg % fullImages.length]})`;
+                    currentBg++;
+                }
+            }
+            
+            changeBg();
+            setInterval(changeBg, 8000);
+        }
+
+        // Load gallery carousel
+        function loadGalleryCarousel() {
+            const carousel = document.getElementById('galleryCarousel');
+            const carouselItems = fullImages.slice(0, 25);
+            
+            carousel.innerHTML = '';
+            
+            carouselItems.forEach((image, index) => {
+                const item = document.createElement('div');
+                item.className = 'carousel-item';
+                
+                item.innerHTML = `
+                    <img src="${image}" alt="Gallery ${index + 1}" loading="lazy">
+                    <div class="carousel-overlay">
+                        <strong>Paradise ${index + 1}</strong>
+                    </div>
+                `;
+                
+                carousel.appendChild(item);
+            });
+
+            // Auto-scroll carousel
+            setInterval(() => {
+                carouselIndex = (carouselIndex + 1) % carouselItems.length;
+                const scrollAmount = carouselIndex * 265;
+                carousel.style.transform = `translateX(-${scrollAmount}px)`;
+            }, 3000);
+        }
+
+        // Load premium photos
+        function loadPremiumPhotos() {
+            setTimeout(() => {
+                const grid = document.getElementById('premiumGrid');
+                const loading = document.getElementById('premiumLoading');
+                const t = translations[currentLanguage];
+                
+                const photos = uncensoredImages.slice(0, 100);
+                
+                grid.innerHTML = '';
+                
+                photos.forEach((photo, index) => {
+                    const isNew = index < Math.floor(photos.length * 0.3); // 30% marked as new
+                    
+                    const item = document.createElement('div');
+                    item.className = 'content-item';
+                    
+                    item.innerHTML = `
+                        <img src="${photo}" alt="Premium ${index + 1}" loading="lazy">
+                        ${isNew ? `<div class="new-badge">${t.newLabel}</div>` : ''}
+                        <div class="content-overlay">
+                            <div style="font-size: 2em;">🔒</div>
+                            <div class="unlock-price">€0.10</div>
+                            <div style="margin-top: 10px; font-size: 0.9em;">${t.unlockText}</div>
+                        </div>
+                    `;
+                    
+                    item.onclick = () => openPremiumModal(photo, '0.10', 'photo');
+                    
+                    grid.appendChild(item);
+                });
+                
+                loading.style.display = 'none';
+                grid.style.display = 'grid';
+                console.log(`💎 Loaded ${photos.length} premium photos`);
+            }, 2000);
+        }
+
+        // Load premium videos
+        function loadPremiumVideos() {
+            setTimeout(() => {
+                const grid = document.getElementById('videosGrid');
+                const loading = document.getElementById('videosLoading');
+                const t = translations[currentLanguage];
+                
+                const videos = premiumVideos.slice(0, 20);
+                
+                grid.innerHTML = '';
+                
+                videos.forEach((video, index) => {
+                    const isNew = index < Math.floor(videos.length * 0.3); // 30% marked as new
+                    const duration = Math.floor(Math.random() * 10) + 2;
+                    
+                    const item = document.createElement('div');
+                    item.className = 'video-item';
+                    
+                    item.innerHTML = `
+                        <div class="video-thumbnail">
+                            🎬
+                            <div class="play-button">▶️</div>
+                            <div class="video-duration">${duration}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}</div>
+                        </div>
+                        ${isNew ? `<div class="new-badge">${t.newLabel}</div>` : ''}
+                        <div class="content-overlay">
+                            <div style="font-size: 2em;">🔒</div>
+                            <div class="unlock-price">€0.30</div>
+                            <div style="margin-top: 10px; font-size: 0.9em;">${t.unlockText}</div>
+                        </div>
+                    `;
+                    
+                    item.onclick = () => openPremiumModal(video, '0.30', 'video');
+                    
+                    grid.appendChild(item);
+                });
+                
+                loading.style.display = 'none';
+                grid.style.display = 'grid';
+                console.log(`🎬 Loaded ${videos.length} premium videos`);
+            }, 3000);
+        }
+
+        // Premium content modal
+        function openPremiumModal(content, price, type) {
+            // Redirect to dedicated pages for now
+            if (type === 'photo') {
+                window.location.href = '/premium.html';
+            } else {
+                window.location.href = '/videos.html';
+            }
+        }
+
+        // Chatbot functionality
+        function toggleChatbot() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatbotOpen = !chatbotOpen;
+            chatWindow.style.display = chatbotOpen ? 'flex' : 'none';
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.style.cssText = 'text-align: right; margin: 10px 0;';
+            userMsg.innerHTML = `<span style="background: #4ecdc4; color: white; padding: 10px; border-radius: 10px; display: inline-block;"><strong>Tú:</strong> ${message}</span>`;
+            messages.appendChild(userMsg);
+            
+            input.value = '';
+            
+            // Add bot response (simplified)
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.style.cssText = 'margin: 10px 0;';
+                
+                let response = "¡Gracias por tu mensaje! Te ayudo con cualquier duda sobre el contenido premium. ¿Te interesa saber más sobre nuestras suscripciones?";
+                
+                if (message.toLowerCase().includes('precio')) {
+                    response = "Los precios son: Fotos premium €0.10 c/u, Videos €0.30 c/u, Suscripción mensual €19.99 o vitalicia €100. 🌴";
+                } else if (message.toLowerCase().includes('ayuda')) {
+                    response = "Estoy aquí para ayudarte. Puedes preguntar sobre precios, contenido, suscripciones o cualquier duda. ¿En qué más puedo ayudarte? 😊";
+                }
+                
+                botMsg.innerHTML = `<span style="background: #f0f0f0; padding: 10px; border-radius: 10px; display: inline-block;"><strong>Isabella:</strong> ${response}</span>`;
+                messages.appendChild(botMsg);
+                
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+            
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
         // Language functions
         function changeLanguage() {
-            const lang = document.getElementById('languageSelect').value;
-            const t = translations[lang] || translations.en;
+            currentLanguage = document.getElementById('languageSelect').value;
+            const t = translations[currentLanguage] || translations.en;
             
-            document.getElementById('tagline').textContent = t.tagline;
+            document.getElementById('heroSubtitle').textContent = t.heroSubtitle;
+            document.getElementById('navGallery').textContent = t.navGallery;
+            document.getElementById('navPremium').textContent = t.navPremium;
+            document.getElementById('navVideos').textContent = t.navVideos;
+            document.getElementById('navSubscription').textContent = t.navSubscription;
             document.getElementById('galleryTitle').textContent = t.galleryTitle;
-            document.getElementById('galleryDesc').textContent = t.galleryDesc;
-            document.getElementById('galleryBtn').textContent = t.galleryBtn;
             document.getElementById('premiumTitle').textContent = t.premiumTitle;
             document.getElementById('premiumDesc').textContent = t.premiumDesc;
-            document.getElementById('premiumBtn').textContent = t.premiumBtn;
             document.getElementById('videosTitle').textContent = t.videosTitle;
             document.getElementById('videosDesc').textContent = t.videosDesc;
-            document.getElementById('videosBtn').textContent = t.videosBtn;
-            document.getElementById('subscriptionTitle').textContent = t.subscriptionTitle;
-            document.getElementById('subscriptionDesc').textContent = t.subscriptionDesc;
-            document.getElementById('subscriptionBtn').textContent = t.subscriptionBtn;
+            document.getElementById('chatHeader').textContent = t.chatHeader;
+            document.getElementById('welcomeMsg').textContent = t.welcomeMsg;
+            document.getElementById('sendBtn').textContent = t.sendBtn;
             
-            localStorage.setItem('preferred-language', lang);
+            localStorage.setItem('preferred-language', currentLanguage);
+            
+            // Reload content with new language
+            loadPremiumPhotos();
+            loadPremiumVideos();
         }
 
-        // Navigation functions
-        function showGallery() {
-            showLoading();
-            setTimeout(() => {
-                window.location.href = '/gallery.html';
-            }, 1000);
+        // Initialize ads
+        function initializeAds() {
+            // JuicyAds
+            const juicyScript = document.createElement('script');
+            juicyScript.src = 'https://poweredby.jads.co/js/jads.js';
+            juicyScript.async = true;
+            document.head.appendChild(juicyScript);
+            
+            // ExoClick
+            const exoScript = document.createElement('script');
+            exoScript.src = 'https://a.exdynsrv.com/ad-provider.js';
+            exoScript.async = true;
+            document.head.appendChild(exoScript);
         }
 
-        function showPremium() {
-            showLoading();
-            setTimeout(() => {
-                window.location.href = '/premium.html';
-            }, 1000);
+        // Check age verification
+        function checkAgeVerification() {
+            const verified = localStorage.getItem('ageVerified');
+            const verificationDate = localStorage.getItem('ageVerificationDate');
+            
+            if (!verified || verified !== 'true') {
+                window.location.href = '/age-verification.html';
+                return false;
+            }
+            
+            if (verificationDate) {
+                const verifyTime = new Date(verificationDate);
+                const now = new Date();
+                const hoursDiff = (now - verifyTime) / (1000 * 60 * 60);
+                
+                // Re-verify after 24 hours
+                if (hoursDiff > 24) {
+                    window.location.href = '/age-verification.html';
+                    return false;
+                }
+            }
+            
+            return true;
         }
 
-        function showVideos() {
-            showLoading();
-            setTimeout(() => {
-                window.location.href = '/videos.html';
-            }, 1000);
-        }
-
-        function showSubscription() {
-            showLoading();
-            setTimeout(() => {
-                window.location.href = '/subscription.html';
-            }, 1000);
-        }
-
-        function showLoading() {
-            document.getElementById('loadingSection').style.display = 'block';
-        }
-
-        // Initialize
+        // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
+            // Check age verification first
+            if (!checkAgeVerification()) return;
+            
+            // Initialize language
             const savedLang = localStorage.getItem('preferred-language') || 'es';
             document.getElementById('languageSelect').value = savedLang;
             changeLanguage();
             
             document.getElementById('languageSelect').addEventListener('change', changeLanguage);
+            
+            // Initialize content and features
+            initializeContent();
+            initHeroBanner();
+            loadGalleryCarousel();
+            loadPremiumPhotos();
+            loadPremiumVideos();
+            initializeAds();
             
             console.log('🌴 IbizaGirl.pics loaded successfully');
         });
