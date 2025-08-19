@@ -76,31 +76,35 @@
 
     // Setup navigation
     function setupNavigation() {
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', handleNavigation);
+        const navButtons = document.querySelectorAll('.nav-btn');
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                const targetView = e.currentTarget.getAttribute('data-view');
+                if (targetView) {
+                    showView(targetView);
+                    
+                    // Update active button
+                    navButtons.forEach(b => b.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                }
+            });
         });
     }
-
-    // Handle navigation
-    function handleNavigation(e) {
-        e.preventDefault();
-        const target = e.target.getAttribute('data-target');
-        
-        // Update active nav
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
-        e.target.classList.add('active');
-        
-        // Show target section
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.classList.remove('active');
+    
+    // Show specific view
+    function showView(viewName) {
+        // Hide all views
+        document.querySelectorAll('.content-view').forEach(view => {
+            view.classList.remove('active');
         });
         
-        const targetSection = document.getElementById(target);
-        if (targetSection) {
-            targetSection.classList.add('active');
+        // Show target view
+        const targetView = document.getElementById(viewName + 'View');
+        if (targetView) {
+            targetView.classList.add('active');
+            console.log(`📄 Vista ${viewName} activada`);
         }
     }
 
