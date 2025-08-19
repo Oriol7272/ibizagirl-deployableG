@@ -359,9 +359,9 @@
     // Display videos
     function displayVideos(videos) {
         console.log('🎥 Mostrando videos:', videos.length);
-        const container = document.getElementById('videosGrid');
+        const container = document.getElementById('video-gallery');
         if (!container) {
-            console.warn('⚠️ No se encontró container videosGrid');
+            console.warn('⚠️ No se encontró container video-gallery');
             return;
         }
         
