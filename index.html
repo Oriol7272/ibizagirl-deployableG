@@ -955,6 +955,120 @@
     </script>
 
     <script>
+        // Global functions for pricing and payments (must be in global scope)
+        
+        // Show premium pricing options modal
+        function showPremiumPricing() {
+            const modal = document.createElement('div');
+            modal.className = 'pricing-modal';
+            modal.innerHTML = `
+                <div class="modal-content" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 20px; text-align: center; max-width: 500px; color: white; position: relative;">
+                    <span class="close-modal" onclick="this.closest('.pricing-modal').remove()" style="position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer;">×</span>
+                    <h2>💎 Opciones de Compra Premium</h2>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 20px; margin: 30px 0;">
+                        <div class="price-option" style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 15px; border: 2px solid rgba(255,255,255,0.3);">
+                            <h3>📸 Foto Individual</h3>
+                            <div style="font-size: 2em; color: #ffd700; margin: 10px 0;">€0.10</div>
+                            <p>Acceso a 1 foto premium en HD</p>
+                            <button onclick="alert('PayPal individual - Función disponible en producción')" style="background: #0070ba; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold;">💳 Comprar Ahora</button>
+                        </div>
+                        
+                        <div class="price-option" style="background: rgba(255,223,0,0.15); padding: 20px; border-radius: 15px; border: 2px solid #ffd700;">
+                            <h3>🎁 Paquete 10 Fotos</h3>
+                            <div style="font-size: 2em; color: #ffd700; margin: 10px 0;">€0.80</div>
+                            <p style="color: #ffd700; font-weight: bold;">¡Ahorra €0.20! (Precio normal €1.00)</p>
+                            <button onclick="alert('PayPal paquete - Función disponible en producción')" style="background: #ffd700; color: #333; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold;">🎁 Comprar Paquete</button>
+                        </div>
+                        
+                        <div class="price-option" style="background: rgba(255,107,107,0.15); padding: 20px; border-radius: 15px; border: 2px solid #ff6b6b;">
+                            <h3>👑 VIP Premium</h3>
+                            <div style="font-size: 2em; color: #ff6b6b; margin: 10px 0;">€9.99/mes</div>
+                            <p><strong>✨ Acceso total sin anuncios</strong><br>• Todas las fotos y videos<br>• Sin publicidad<br>• Descargas ilimitadas</p>
+                            <button onclick="showVIPSubscription()" style="background: #ff6b6b; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold;">👑 Suscribirme VIP</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000;';
+            document.body.appendChild(modal);
+            
+            // Track event
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'view_pricing', {
+                    event_category: 'Premium',
+                    event_label: 'Pricing Modal Opened'
+                });
+            }
+        }
+        
+        // Show VIP subscription modal
+        function showVIPSubscription() {
+            const modal = document.createElement('div');
+            modal.className = 'vip-modal';
+            modal.innerHTML = `
+                <div class="modal-content" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 20px; text-align: center; max-width: 500px; color: white; position: relative;">
+                    <span class="close-modal" onclick="this.closest('.vip-modal').remove()" style="position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer;">×</span>
+                    <h2>👑 VIP Premium Subscription</h2>
+                    <div style="font-size: 3em; margin: 20px 0;">💎</div>
+                    
+                    <div style="background: rgba(255,255,255,0.15); padding: 25px; border-radius: 15px; margin: 20px 0;">
+                        <h3 style="font-size: 2.5em; color: #ffd700; margin-bottom: 15px;">€9.99/mes</h3>
+                        <div style="text-align: left; margin: 20px 0;">
+                            <p>✅ <strong>Acceso total</strong> a todas las fotos premium</p>
+                            <p>✅ <strong>Acceso total</strong> a todos los videos premium</p>
+                            <p>✅ <strong>Sin anuncios</strong> - Experiencia premium</p>
+                            <p>✅ <strong>Descargas ilimitadas</strong> en HD</p>
+                            <p>✅ <strong>Contenido nuevo</strong> antes que nadie</p>
+                            <p>✅ <strong>Cancela cuando quieras</strong></p>
+                        </div>
+                        
+                        <div style="margin: 25px 0;">
+                            <button onclick="alert('Suscripción VIP - PayPal disponible en producción')" style="background: #ffd700; color: #333; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.2em; width: 100%;">
+                                👑 Suscribirme Ahora €9.99/mes
+                            </button>
+                        </div>
+                        
+                        <p style="font-size: 0.9em; opacity: 0.8; margin-top: 15px;">
+                            Suscripción mensual recurrente. Cancela cuando quieras desde tu cuenta PayPal.
+                        </p>
+                    </div>
+                </div>
+            `;
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000;';
+            document.body.appendChild(modal);
+            
+            // Track event
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'view_subscription', {
+                    event_category: 'Premium',
+                    event_label: 'VIP Subscription Modal Opened'
+                });
+            }
+        }
+        
+        // Create PayPal payment - INDIVIDUAL PHOTOS
+        function createPayPalPayment(type, amount, description, contentUrl) {
+            console.log(`🔥 Creating PayPal payment: ${type} - ${amount} - ${description}`);
+            alert('PayPal payment integration - Available in production with real PayPal credentials');
+        }
+        
+        // Create bundle payment (10 photos for €0.80)
+        function createBundlePayment(type, amount, description) {
+            console.log(`🎁 Creating bundle payment: ${description} - €${amount}`);
+            alert('Bundle payment integration - Available in production with real PayPal credentials');
+        }
+        
+        // Create VIP subscription payment
+        function createSubscriptionPayment(type, amount, description) {
+            console.log(`👑 Creating VIP subscription: ${description} - €${amount}/mes`);
+            alert('VIP subscription integration - Available in production with real PayPal credentials');
+        }
+        
+        console.log('🎯 Global pricing functions loaded');
+    </script>
+    
+    <script>
         // Global variables
         let currentLanguage = 'es';
         let fullImages = [];
