@@ -570,7 +570,7 @@
     window.playVideo = playVideo;
     window.showPricingView = showPricingView;
 
-    // Setup banner
+    // Setup banner with daily randomized images from "full" folder
     function setupBanner(images) {
         console.log('🎠 Configurando banner con imágenes:', images);
         const banner = document.getElementById('banner-slider');
@@ -587,7 +587,7 @@
         let currentIndex = 0;
         
         function updateBanner() {
-            // Las imágenes ya incluyen la ruta completa
+            // Las imágenes ya incluyen la ruta completa y están randomizadas diariamente
             const imagePath = images[currentIndex];
             banner.style.backgroundImage = `url(${imagePath})`;
             banner.style.backgroundSize = 'cover';
