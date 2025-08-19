@@ -372,18 +372,92 @@
         container.innerHTML = videos.map(video => createVideoCard(video)).join('');
     }
 
-    // Create photo card
+    // Check VIP access status
+    function checkVIPAccess() {
+        // Check lifetime access
+        if (localStorage.getItem('ibiza_lifetime_access') === 'true') {
+            return 'lifetime';
+        }
+        
+        // Check monthly access
+        const monthlyAccess = localStorage.getItem('ibiza_monthly_access');
+        if (monthlyAccess) {
+            const expiryTime = parseInt(monthlyAccess);
+            if (Date.now() < expiryTime) {
+                return 'monthly';
+            } else {
+                // Expired monthly access
+                localStorage.removeItem('ibiza_monthly_access');
+                localStorage.removeItem('ibiza_access_type');
+            }
+        }
+        
+        // Check PPV access (valid for 1 hour)
+        const ppvAccess = localStorage.getItem('ibiza_ppv_access');
+        if (ppvAccess) {
+            const accessTime = parseInt(ppvAccess);
+            const oneHour = 60 * 60 * 1000;
+            if (Date.now() - accessTime < oneHour) {
+                return 'ppv';
+            } else {
+                // Expired PPV access
+                localStorage.removeItem('ibiza_ppv_access');
+            }
+        }
+        
+        return null;
+    }
+    
+    // Update VIP status display
+    function updateVIPStatus() {
+        const vipAccess = checkVIPAccess();
+        const statusElement = document.querySelector('.vip-status');
+        
+        if (statusElement) {
+            if (vipAccess) {
+                statusElement.innerHTML = `
+                    <div class="vip-badge active">
+                        <span class="vip-icon">👑</span>
+                        <span class="vip-text">VIP ${vipAccess.toUpperCase()}</span>
+                    </div>
+                `;
+            } else {
+                statusElement.innerHTML = `
+                    <div class="vip-badge inactive">
+                        <span class="vip-icon">🔒</span>
+                        <span class="vip-text">No Premium</span>
+                    </div>
+                `;
+            }
+        }
+    }
+    
+    // Enhanced create photo card with VIP check
     function createPhotoCard(photo, isPremium = false) {
+        const vipAccess = checkVIPAccess();
+        const hasAccess = vipAccess && (vipAccess === 'lifetime' || vipAccess === 'monthly' || vipAccess === 'ppv');
+        
         const imagePath = photo;
-        const blurClass = isPremium ? 'premium-blur' : '';
-        const premiumOverlay = isPremium ? `
-            <div class="premium-overlay">
-                <div class="premium-badge">
-                    <span class="price">€0.10</span>
-                    <span class="unlock-text" data-i18n="unlock">Desbloquear</span>
+        const blurClass = (isPremium && !hasAccess) ? 'premium-blur' : '';
+        
+        let premiumOverlay = '';
+        if (isPremium && !hasAccess) {
+            premiumOverlay = `
+                <div class="premium-overlay" onclick="showPricingView()">
+                    <div class="premium-badge">
+                        <span class="price">€0.10</span>
+                        <span class="unlock-text" data-i18n="unlock">Desbloquear</span>
+                    </div>
                 </div>
-            </div>
-        ` : '';
+            `;
+        } else if (isPremium && hasAccess) {
+            premiumOverlay = `
+                <div class="vip-access-badge">
+                    <span class="vip-icon">👑</span>
+                    <span class="vip-text">VIP ACCESS</span>
+                </div>
+            `;
+        }
         
         return `
             <div class="content-card photo-card">
@@ -393,36 +467,83 @@
                 </div>
                 <div class="card-info">
                     <h4>${isPremium ? 'Premium Photo' : 'Photo'}</h4>
+                    ${isPremium && hasAccess ? '<p class="access-granted">✅ Acceso Concedido</p>' : ''}
                 </div>
             </div>
         `;
     }
 
-    // Create video card
+    // Enhanced create video card with VIP check  
     function createVideoCard(video) {
+        const vipAccess = checkVIPAccess();
+        const hasAccess = vipAccess && (vipAccess === 'lifetime' || vipAccess === 'monthly' || vipAccess === 'ppv');
+        
         const videoPath = video;
+        
+        let premiumOverlay = '';
+        if (!hasAccess) {
+            premiumOverlay = `
+                <div class="premium-overlay" onclick="showPricingView()">
+                    <div class="premium-badge">
+                        <span class="price">€0.30</span>
+                        <span class="unlock-text" data-i18n="unlock">Desbloquear</span>
+                    </div>
+                    <div class="video-play-btn">▶</div>
+                </div>
+            `;
+        } else {
+            premiumOverlay = `
+                <div class="vip-access-badge">
+                    <span class="vip-icon">👑</span>
+                    <span class="vip-text">VIP ACCESS</span>
+                </div>
+                <div class="video-play-btn functional" onclick="playVideo('${videoPath}')">▶</div>
+            `;
+        }
         
         return `
             <div class="content-card video-card">
                 <div class="card-image">
-                    <video class="premium-blur" preload="metadata" poster="${videoPath.replace('.mp4', '_thumb.jpg')}">
+                    <video class="${!hasAccess ? 'premium-blur' : ''}" preload="metadata" poster="${videoPath.replace('.mp4', '_thumb.jpg')}">
                         <source src="${videoPath}" type="video/mp4">
                     </video>
-                    <div class="premium-overlay">
-                        <div class="premium-badge">
-                            <span class="price">€0.30</span>
-                            <span class="unlock-text" data-i18n="unlock">Desbloquear</span>
-                        </div>
-                        <div class="video-play-btn">▶</div>
-                    </div>
+                    ${premiumOverlay}
                     <div class="video-duration">2:30</div>
                 </div>
                 <div class="card-info">
                     <h4>Premium Video</h4>
+                    ${hasAccess ? '<p class="access-granted">✅ Acceso Concedido</p>' : ''}
                 </div>
             </div>
         `;
     }
+    
+    // Video player function
+    function playVideo(videoPath) {
+        const modal = document.createElement('div');
+        modal.className = 'video-modal';
+        modal.innerHTML = `
+            <div class="video-modal-content">
+                <span class="video-close" onclick="this.parentElement.parentElement.remove()">&times;</span>
+                <video controls autoplay style="width: 100%; max-width: 800px;">
+                    <source src="${videoPath}" type="video/mp4">
+                </video>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    // Show pricing view function
+    function showPricingView() {
+        showView('pricing');
+        // Update nav buttons
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('[data-view="pricing"]').classList.add('active');
+    }
+    
+    // Make functions globally available
+    window.playVideo = playVideo;
+    window.showPricingView = showPricingView;
 
     // Setup banner
     function setupBanner(images) {
