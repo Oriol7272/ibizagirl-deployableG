@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
@@ -6,5 +7,20 @@
     { "source": "/premium", "destination": "/premium.html" },
     { "source": "/videos", "destination": "/videos.html" },
     { "source": "/subscription", "destination": "/subscription.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options", 
+          "value": "SAMEORIGIN"
+        }
+      ]
+    }
   ]
 }
