@@ -681,5 +681,48 @@
             }
         }
     </script>
+
+    <!-- ============================
+         SISTEMA MODULAR DE CONTENIDO v4.1.0
+         Orden de carga CRÍTICO - NO MODIFICAR
+         ============================ -->
+    
+    <!-- 1. Configuración y utilidades base -->
+    <script src="content-data1.js"></script>
+    
+    <!-- 2. Imágenes públicas (127 archivos) -->
+    <script src="content-data2.js"></script>
+    
+    <!-- 3. Imágenes premium parte 1 (186 archivos) -->
+    <script src="content-data3.js"></script>
+    
+    <!-- 4. Imágenes premium parte 2 (204 archivos) -->
+    <script src="content-data4.js"></script>
+    
+    <!-- 5. Videos premium (67 archivos) -->
+    <script src="content-data5.js"></script>
+    
+    <!-- 6. API unificada -->
+    <script src="content-data6.js"></script>
+    
+    <!-- 7. Integrador de contenido -->
+    <script src="content-data-integration.js"></script>
+    
+    <!-- 8. Script de verificación (solo desarrollo) -->
+    <script src="verification.js"></script>
+    
+    <!-- 9. Script principal -->
+    <script src="main-script.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registrado:', reg))
+                    .catch(err => console.log('Service Worker error:', err));
+            });
+        }
+    </script>
 </body>
 </html>
