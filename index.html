@@ -2013,6 +2013,112 @@
                     });
             });
         }
+        
+        // Create PayPal payment - INDIVIDUAL PHOTOS
+        function createPayPalPayment(type, amount, description, contentUrl) {
+            console.log(`🔥 Creating PayPal payment: ${type} - ${amount} - ${description}`);
+            
+            // Show loading state  
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '⏳ Processing...';
+            button.disabled = true;
+            
+            // Create PayPal payment
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: amount,
+                                currency_code: 'EUR'
+                            },
+                            description: description
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        console.log('✅ PayPal payment successful:', details);
+                        
+                        // Payment successful - unlock content
+                        unlockContent(type, contentUrl, description);
+                        
+                        // Track payment
+                        trackPayment(amount, description);
+                        
+                        // Show success message
+                        showSuccessMessage('¡Pago completado! Contenido desbloqueado.');
+                        
+                        // Reset button
+                        button.innerHTML = '✅ Comprado';
+                        button.style.background = '#28a745';
+                        button.disabled = true;
+                    });
+                },
+                onError: function(err) {
+                    console.error('❌ PayPal payment error:', err);
+                    showErrorMessage('Error en el pago. Inténtalo de nuevo.');
+                    
+                    // Reset button
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            }).render(button.parentElement);
+        }
+        
+        // Unlock content after successful payment
+        function unlockContent(type, contentUrl, description) {
+            console.log(`🔓 Unlocking content: ${type} - ${contentUrl}`);
+            
+            // Store purchased content in localStorage
+            let purchased = JSON.parse(localStorage.getItem('purchasedContent') || '[]');
+            purchased.push({
+                type: type,
+                url: contentUrl,
+                description: description,
+                purchaseDate: new Date().toISOString()
+            });
+            localStorage.setItem('purchasedContent', JSON.stringify(purchased));
+            
+            // Show unlocked content in modal
+            showUnlockedContent(contentUrl, description);
+        }
+        
+        // Show unlocked content
+        function showUnlockedContent(contentUrl, description) {
+            const modal = document.createElement('div');
+            modal.className = 'unlock-modal';
+            modal.innerHTML = `
+                <div class="modal-content" style="background: rgba(0,0,0,0.9); padding: 20px; border-radius: 15px; text-align: center; max-width: 90%; max-height: 90%;">
+                    <h3>✅ ${description}</h3>
+                    <img src="${contentUrl}" style="max-width: 100%; max-height: 70vh; object-fit: contain; filter: none; border-radius: 10px;">
+                    <br><br>
+                    <button onclick="this.closest('.unlock-modal').remove()" style="background: #0070ba; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Cerrar</button>
+                </div>
+            `;
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000;';
+            
+            document.body.appendChild(modal);
+        }
+        
+        // Show success message
+        function showSuccessMessage(message) {
+            const toast = document.createElement('div');
+            toast.innerHTML = message;
+            toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 15px 20px; border-radius: 8px; z-index: 9999; font-weight: bold;';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Show error message
+        function showErrorMessage(message) {
+            const toast = document.createElement('div');
+            toast.innerHTML = message;
+            toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #dc3545; color: white; padding: 15px 20px; border-radius: 8px; z-index: 9999; font-weight: bold;';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
 
         console.log('🌴 IbizaGirl.pics loaded successfully');
         });
