@@ -607,6 +607,7 @@ body {
     padding: 20px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: var(--border-radius);
+    backdrop-filter: blur(10px);
 }
 
 .payment-trust img {
@@ -618,6 +619,47 @@ body {
     margin-top: 15px;
     color: var(--text-secondary);
     font-size: 0.9rem;
+}
+
+/* ============================
+   BUTTONS
+   ============================ */
+.load-more-btn {
+    display: block;
+    margin: 40px auto;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.load-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.premium-btn {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+    margin-top: 10px;
+}
+
+.premium-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4);
 }
 
 /* ============================
