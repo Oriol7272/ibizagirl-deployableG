@@ -370,7 +370,8 @@
 
     // Create photo card
     function createPhotoCard(photo, isPremium = false) {
-        const imagePath = isPremium ? `uncensored/${photo}` : `full/${photo}`;
+        // photo ya incluye la carpeta, no agregar duplicada
+        const imagePath = isPremium ? photo : photo;
         const blurClass = isPremium ? 'blurred' : '';
         const premiumOverlay = isPremium ? `
             <div class="premium-overlay">
