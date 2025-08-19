@@ -336,7 +336,7 @@
         
         .content-item {
             background: rgba(255,255,255,0.15);
-            border-radius: 25px;
+            border-radius: 10px; /* Slightly reduced border radius */
             overflow: hidden;
             position: relative;
             cursor: pointer;
@@ -344,6 +344,8 @@
             backdrop-filter: blur(15px);
             border: 2px solid rgba(255,255,255,0.25);
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            aspect-ratio: 1; /* Keep square aspect ratio */
+            min-height: 120px; /* Reduced from default */
         }
         
         .content-item:hover {
