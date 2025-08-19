@@ -459,6 +459,7 @@ body {
     transition: var(--transition);
     aspect-ratio: 16/9;
     background: var(--card-bg);
+    box-shadow: var(--box-shadow);
 }
 
 .video-item:hover {
