@@ -5,15 +5,19 @@
   "main": "index.html",
   "scripts": {
     "dev": "serve -s . -l 3000",
-    "start": "serve -s . -l 3000"
+    "start": "serve -s . -l 3000",
+    "build": "echo 'Static site - no build required'"
   },
   "keywords": [
     "ibiza",
-    "premium",
+    "premium", 
     "photos",
     "videos"
   ],
   "author": "IbizaGirl",
   "license": "ISC",
-  "homepage": "https://ibizagirl.pics"
+  "homepage": "https://ibizagirl.pics",
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }
