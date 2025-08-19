@@ -1,0 +1,28 @@
+{
+  "name": "ibizagirl-pics",
+  "version": "1.0.0",
+  "description": "Premium content from the paradise of Ibiza",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve -s .",
+    "build": "echo 'No build step required for static site'",
+    "dev": "serve -s ."
+  },
+  "keywords": [
+    "ibiza",
+    "premium",
+    "photos",
+    "videos",
+    "paradise"
+  ],
+  "author": "IbizaGirl",
+  "license": "ISC",
+  "homepage": "https://ibizagirl.pics",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/ibizagirl-pics.git"
+  },
+  "devDependencies": {
+    "serve": "^14.0.1"
+  }
+}
