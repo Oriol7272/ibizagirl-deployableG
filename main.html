@@ -762,14 +762,18 @@
                     isabellaChat.classList.toggle('active');
                 });
                 
-                closeChat?.addEventListener('click', () => {
-                    isabellaChat.classList.remove('active');
-                });
+                if (closeChat) {
+                    closeChat.addEventListener('click', () => {
+                        isabellaChat.classList.remove('active');
+                    });
+                }
                 
-                sendBtn?.addEventListener('click', sendMessage);
-                chatInput?.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') sendMessage();
-                });
+                if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+                if (chatInput) {
+                    chatInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') sendMessage();
+                    });
+                }
             }
         }
 
