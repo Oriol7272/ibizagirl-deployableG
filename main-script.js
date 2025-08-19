@@ -395,7 +395,8 @@
 
     // Create video card
     function createVideoCard(video) {
-        const videoPath = `uncensored-videos/${video}`;
+        // video ya incluye la carpeta, no agregar duplicada
+        const videoPath = video;
         
         return `
             <div class="content-card video-card">
