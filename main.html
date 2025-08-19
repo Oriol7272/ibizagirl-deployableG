@@ -908,19 +908,90 @@
         function setupAds() {
             console.log('📺 Configurando anuncios...');
             
+            // JUICYADS
             setTimeout(() => {
                 try {
                     if (typeof jads !== 'undefined') {
-                        jads('2092250','300','250');
-                        jads('2092251','125','125');
-                        jads('2092471','300','50');
-                        jads('2092470','125','125');
-                        console.log('✅ JuicyAds configurado');
+                        // Crear contenedores específicos para JuicyAds
+                        const adTop = document.getElementById('ad-mobile-top');
+                        const adSquare1 = document.getElementById('ad-square-1');
+                        const adBottom = document.getElementById('ad-mobile-bottom');
+                        const adSquareFooter = document.getElementById('ad-square-footer');
+                        
+                        if (adTop) {
+                            adTop.innerHTML = '<div id="jads-2092250"></div>';
+                            window.adsbyjuicy = window.adsbyjuicy || [];
+                            window.adsbyjuicy.push({'adzone': '2092250'});
+                        }
+                        
+                        if (adSquare1) {
+                            adSquare1.innerHTML = '<div id="jads-2092251"></div>';
+                            window.adsbyjuicy = window.adsbyjuicy || [];
+                            window.adsbyjuicy.push({'adzone': '2092251'});
+                        }
+                        
+                        if (adBottom) {
+                            adBottom.innerHTML = '<div id="jads-2092471"></div>';
+                            window.adsbyjuicy = window.adsbyjuicy || [];
+                            window.adsbyjuicy.push({'adzone': '2092471'});
+                        }
+                        
+                        if (adSquareFooter) {
+                            adSquareFooter.innerHTML = '<div id="jads-2092470"></div>';
+                            window.adsbyjuicy = window.adsbyjuicy || [];
+                            window.adsbyjuicy.push({'adzone': '2092470'});
+                        }
+                        
+                        console.log('✅ JuicyAds contenedores configurados');
                     }
                 } catch (error) {
-                    console.log('Ads fallback activo');
+                    console.log('⚠️ JuicyAds fallback activo:', error);
+                }
+            }, 2000);
+            
+            // EXOCLICK
+            setTimeout(() => {
+                try {
+                    // Banner 300x250
+                    const script1 = document.createElement('script');
+                    script1.type = 'text/javascript';
+                    script1.innerHTML = `
+                        var _pop = _pop || [];
+                        _pop.push(['siteId', 6006884]);
+                        _pop.push(['minBid', 0]);
+                        _pop.push(['popundersPerIP', 1]);
+                        _pop.push(['delayBetween', 0]);
+                        _pop.push(['default', false]);
+                        _pop.push(['defaultPerDay', 1]);
+                        _pop.push(['topmostLayer', false]);
+                        (function() {
+                            var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+                            var s = document.getElementsByTagName('script')[0]; 
+                            pa.src = '//c1.popads.net/pop.js';
+                            pa.onerror = function() { console.log('ExoClick fallback activo'); };
+                            s.parentNode.insertBefore(pa, s);
+                        })();
+                    `;
+                    document.head.appendChild(script1);
+                    console.log('✅ ExoClick/PopAds configurado');
+                } catch (error) {
+                    console.log('⚠️ ExoClick fallback activo:', error);
                 }
             }, 3000);
+            
+            // ERO-ADVERTISING
+            setTimeout(() => {
+                try {
+                    const script2 = document.createElement('script');
+                    script2.type = 'text/javascript';
+                    script2.src = '//ero-advertising.com/ads.js';
+                    script2.onerror = function() { console.log('Ero-Advertising fallback activo'); };
+                    document.head.appendChild(script2);
+                    console.log('✅ Ero-Advertising configurado');
+                } catch (error) {
+                    console.log('⚠️ Ero-Advertising fallback activo:', error);
+                }
+            }, 4000);
         }
 
         // ============================
