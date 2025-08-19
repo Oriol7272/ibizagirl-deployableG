@@ -1095,51 +1095,54 @@
             }, 2000);
         }
 
-        // Load premium videos (30 videos using REAL files with proper thumbnails)
+        // Load premium videos with improved thumbnails
         function loadPremiumVideos() {
             setTimeout(() => {
                 const grid = document.getElementById('videosGrid');
                 const loading = document.getElementById('videosLoading');
                 const t = translations[currentLanguage];
                 
-                const videos = premiumVideos.slice(0, 30);
+                const videosToShow = premiumVideos.slice(0, 30);
+                const newIndices = new Set([0, 1, 2, 5, 6, 7, 10, 11, 12]); // 30% marked as NEW
                 
-                grid.innerHTML = '';
-                
-                videos.forEach((video, index) => {
-                    const isNew = index < Math.floor(videos.length * 0.3); // 30% marked as new
-                    const minutes = Math.floor(Math.random() * 12) + 3; // 3-15 minutes
-                    const seconds = String(Math.floor(Math.random() * 60)).padStart(2, '0');
-                    
+                videosToShow.forEach((video, index) => {
                     const item = document.createElement('div');
                     item.className = 'video-item';
                     
-                    // Use a related image from uncensored as background
-                    const backgroundImage = uncensoredImages[index % uncensoredImages.length];
+                    const isNew = newIndices.has(index);
+                    const price = '€0.30';
+                    
+                    // Extract video filename for thumbnail attempt
+                    const videoFileName = video.split('/').pop().replace('.mp4', '');
                     
                     item.innerHTML = `
                         <div class="video-thumbnail">
-                            <div class="video-bg" style="background-image: url('${backgroundImage}');"></div>
+                            <video muted preload="metadata" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;" onloadedmetadata="this.currentTime = 3;">
+                                <source src="${video}" type="video/mp4">
+                            </video>
                             <div class="play-button">▶️</div>
-                            <div class="video-duration">${minutes}:${seconds}</div>
+                            <div class="video-duration">2:30</div>
+                            ${isNew ? '<div class="new-badge">' + (t.newLabel || '¡NUEVO!') + '</div>' : ''}
                         </div>
-                        ${isNew ? `<div class="new-badge">${t.newLabel}</div>` : ''}
                         <div class="content-overlay">
-                            <div style="font-size: 3em;">🔒</div>
-                            <div class="unlock-price">€0.30</div>
-                            <div style="margin-top: 15px; font-size: 1em;">${t.unlockText}</div>
+                            <h4>Premium Video ${index + 1}</h4>
+                            <div class="unlock-price">${t.unlockText || 'Desbloquear'} ${price}</div>
                         </div>
                     `;
                     
-                    item.onclick = () => openPremiumModal(video, '0.30', 'video');
+                    // Add click handler for video unlock
+                    item.addEventListener('click', () => {
+                        showPayPalPayment('video', price, `Premium Video ${index + 1}`);
+                    });
                     
                     grid.appendChild(item);
                 });
                 
                 loading.style.display = 'none';
                 grid.style.display = 'grid';
-                console.log(`🎬 Loaded ${videos.length} premium videos`);
-            }, 3000);
+                
+                console.log(`🎬 Loaded ${videosToShow.length} premium videos with enhanced thumbnails`);
+            }, 2000);
         }
 
         // Open premium content modal
