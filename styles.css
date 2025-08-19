@@ -864,33 +864,6 @@ body {
 }
 
 /* ============================
-   UTILITY CLASSES
-   ============================ */
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
-
-.mb-10 { margin-bottom: 10px; }
-.mb-20 { margin-bottom: 20px; }
-.mb-30 { margin-bottom: 30px; }
-
-.mt-10 { margin-top: 10px; }
-.mt-20 { margin-top: 20px; }
-.mt-30 { margin-top: 30px; }
-
-.hidden { display: none !important; }
-.show { display: block !important; }
-
-.fade-in {
-    animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ============================
    RESPONSIVE DESIGN
    ============================ */
 @media (max-width: 768px) {
@@ -898,6 +871,7 @@ body {
         flex-direction: column;
         gap: 20px;
         text-align: center;
+        padding: 15px;
     }
     
     .site-title {
@@ -939,6 +913,11 @@ body {
         flex-direction: column;
         gap: 15px;
     }
+    
+    .teaser-gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -966,4 +945,46 @@ body {
     .price {
         font-size: 2rem;
     }
+    
+    .teaser-gallery {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================
+   UTILITY CLASSES
+   ============================ */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-10 { margin-bottom: 10px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-30 { margin-bottom: 30px; }
+
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+.mt-30 { margin-top: 30px; }
+
+.hidden { display: none !important; }
+.show { display: block !important; }
+
+/* ============================
+   SCROLLBAR STYLING
+   ============================ */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
 }
