@@ -39,6 +39,7 @@
         try {
             // Initialize UI components
             initializeUI();
+            updateVIPStatus(); // Initialize VIP status display
             
             // Setup event handlers
             setupEventHandlers();
