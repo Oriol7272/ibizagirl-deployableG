@@ -269,6 +269,25 @@
     <!-- Script principal actualizado -->
     <script src="main-script-updated.js"></script>
     
+    <!-- JuicyAds Setup - Diferido para evitar appendChild errors -->
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                try {
+                    if (typeof jads !== 'undefined') {
+                        jads('2092250','300','250');
+                        jads('2092251','125','125');
+                        jads('2092471','300','50');
+                        jads('2092470','125','125');
+                        console.log('✅ JuicyAds configurado correctamente');
+                    }
+                } catch (error) {
+                    console.log('⚠️ JuicyAds fallback activo:', error);
+                }
+            }, 3000);
+        });
+    </script>
+    
     <!-- PayPal Initialization -->
     <script>
         // PayPal Configuration
