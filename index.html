@@ -284,19 +284,32 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: titleGlow 6s ease-in-out infinite alternate, gradientShift 8s ease-in-out infinite;
             letter-spacing: 3px;
+            position: relative;
         }
         
-        @keyframes titleGlow {
-            from { filter: drop-shadow(0 0 20px rgba(255,255,255,0.7)); }
-            to { filter: drop-shadow(0 0 35px rgba(255,255,255,1)); }
+        .hero-title::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: url('/decorative-images/decoration2.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.7;
         }
         
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -40px;
+            width: 80px;
+            height: 80px;
+            background: url('/decorative-images/decoration3.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.6;
         }
         
         .hero-subtitle {
