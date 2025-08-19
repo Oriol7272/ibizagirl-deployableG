@@ -1734,49 +1734,151 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // Initialize ads with UPDATED CODES
+        // Initialize ads with UPDATED CODES and VIP check
         function initializeAds() {
-            console.log('🎯 Initializing ads with new codes...');
+            // Check VIP status first
+            const vipStatus = JSON.parse(localStorage.getItem('vipSubscription') || '{}');
+            if (vipStatus.active) {
+                console.log('👑 VIP user - ads disabled');
+                hideAllAds();
+                return;
+            }
             
-            // JuicyAds - Using zones: 2092250, 2092251, 208469, 209470, 209471
+            console.log('🎯 Initializing ads with rotation and optimization...');
+            
+            // JuicyAds with rotation - Using zones: 2092250, 2092251, 208469, 209470, 209471
             if (window.adsbyjuicy && window.juicyZones) {
-                window.juicyZones.forEach((zone, index) => {
-                    const adElement = document.querySelector(`[data-juicy-zone="${zone}"]`);
+                // Rotate through different zones every 30 seconds
+                let currentZoneIndex = 0;
+                
+                const rotateJuicyAds = () => {
+                    const zone = window.juicyZones[currentZoneIndex];
+                    const adElement = document.querySelector(`[data-juicy-zone]`);
                     if (adElement) {
+                        adElement.setAttribute('data-juicy-zone', zone);
+                        adElement.innerHTML = `🍊 Premium JuicyAds Space - Zone ${zone}`;
+                        
                         window.adsbyjuicy.cmd.push(function() {
                             window.adsbyjuicy.ads.push({
                                 adunit: zone,
                                 div: adElement.id
                             });
                         });
-                        console.log(`🍊 JuicyAds zone ${zone} initialized`);
+                        
+                        console.log(`🍊 JuicyAds rotated to zone ${zone}`);
+                        
+                        // Track ad impression
+                        gtag('event', 'ad_impression', {
+                            event_category: 'Advertising',
+                            event_label: 'JuicyAds - Zone: ' + zone,
+                            value: 1
+                        });
                     }
-                });
+                    
+                    currentZoneIndex = (currentZoneIndex + 1) % window.juicyZones.length;
+                };
+                
+                // Initial load and rotation
+                rotateJuicyAds();
+                setInterval(rotateJuicyAds, 30000); // Rotate every 30 seconds
             }
             
-            // ExoClick - Zone 5696328 with token
+            // ExoClick - Zone 5696328 with enhanced tracking
             if (window.AdProvider) {
                 const exoElements = document.querySelectorAll('.eas6a97888e2');
-                exoElements.forEach(element => {
+                exoElements.forEach((element, index) => {
                     element.setAttribute('data-zoneid', '5696328');
+                    element.addEventListener('click', () => {
+                        trackAdClick('ExoClick', '5696328');
+                    });
+                    
+                    // Add click tracking
+                    element.style.cursor = 'pointer';
                 });
-                console.log('🎯 ExoClick zone 5696328 configured');
+                console.log('🎯 ExoClick zone 5696328 configured with tracking');
+                
+                // Track impression
+                gtag('event', 'ad_impression', {
+                    event_category: 'Advertising',
+                    event_label: 'ExoClick - Zone: 5696328',
+                    value: 1
+                });
             }
             
-            // EroAdvertising - ID 8177575
+            // EroAdvertising - ID 8177575 with tracking
             if (window.eroAdId) {
                 const eroElements = document.querySelectorAll('[data-ero-ad]');
                 eroElements.forEach(element => {
                     element.setAttribute('data-ad-id', window.eroAdId);
                     element.setAttribute('data-website-id', window.eroWebsiteId);
+                    element.addEventListener('click', () => {
+                        trackAdClick('EroAdvertising', window.eroAdId);
+                    });
                 });
-                console.log(`💎 EroAdvertising ID ${window.eroAdId} configured`);
+                console.log(`💎 EroAdvertising ID ${window.eroAdId} configured with tracking`);
+                
+                // Track impression
+                gtag('event', 'ad_impression', {
+                    event_category: 'Advertising',
+                    event_label: 'EroAdvertising - ID: ' + window.eroAdId,
+                    value: 1
+                });
             }
             
-            // PopAds - Already initialized via script
-            console.log('🚀 PopAds initialized via script');
+            // PopAds - Already initialized via script with tracking
+            console.log('🚀 PopAds initialized with enhanced tracking');
             
-            console.log('✅ All ad networks initialized with new codes');
+            // Track total ad session
+            gtag('event', 'ads_loaded', {
+                event_category: 'Advertising',
+                event_label: 'All Networks Loaded',
+                value: 4
+            });
+            
+            console.log('✅ All ad networks initialized with optimization and tracking');
+        }
+        
+        // Hide all ads for VIP users
+        function hideAllAds() {
+            const adElements = document.querySelectorAll('.ad-space, [data-juicy-zone], .eas6a97888e2, [data-ero-ad]');
+            adElements.forEach(element => {
+                element.style.display = 'none';
+            });
+            
+            // Show VIP badge instead
+            const vipBadge = document.createElement('div');
+            vipBadge.innerHTML = `
+                <div style="background: linear-gradient(45deg, #ffd700, #ffed4e); color: #333; padding: 15px 25px; border-radius: 10px; text-align: center; margin: 20px auto; max-width: 300px; font-weight: bold; box-shadow: 0 4px 15px rgba(255,215,0,0.3);">
+                    👑 VIP Premium - Sin Anuncios
+                    <div style="font-size: 0.9em; margin-top: 5px;">Disfruta de la experiencia completa</div>
+                </div>
+            `;
+            
+            // Add VIP badge to main sections
+            const sections = document.querySelectorAll('#gallery, #premium, #videos');
+            sections.forEach(section => {
+                section.appendChild(vipBadge.cloneNode(true));
+            });
+            
+            console.log('👑 VIP mode activated - ads hidden');
+        }
+        
+        // Enhanced ad click tracking
+        function trackAdClick(network, zone) {
+            gtag('event', 'ad_click', {
+                event_category: 'Advertising',
+                event_label: network + ' - Zone: ' + zone,
+                value: 1
+            });
+            
+            // Additional tracking for optimization
+            gtag('event', 'monetization', {
+                event_category: 'Revenue',
+                event_label: 'Ad Click - ' + network,
+                value: 1
+            });
+            
+            console.log(`📊 Ad click tracked: ${network} - ${zone}`);
         }
 
         // Chatbot functionality
