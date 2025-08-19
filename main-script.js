@@ -306,31 +306,39 @@
     function loadInitialContent() {
         console.log('📦 Cargando contenido inicial...');
         
-        // Load daily photos using ContentAPI
+        // Load public photos (teasers from "full" folder - NO blur, daily randomized)
         if (window.ContentAPI && window.ContentAPI.getPublicImages) {
             console.log('📸 Cargando fotos públicas...');
-            const publicPhotos = window.ContentAPI.getPublicImages(12);
+            let publicPhotos = window.ContentAPI.getPublicImages(24);
+            
+            // Apply daily randomization for teasers/banners from "full" folder
+            publicPhotos = getDailyRandomImages(publicPhotos, 12);
+            
             displayPhotos(publicPhotos);
         }
         
-        // Load premium photos
+        // Load premium photos (from "uncensored" folder - blurred without access)
         if (window.ContentAPI && window.ContentAPI.getPremiumImages) {
             console.log('💎 Cargando fotos premium...');
             const premiumPhotos = window.ContentAPI.getPremiumImages(12);
             displayPremiumPhotos(premiumPhotos);
         }
         
-        // Load daily videos using ContentAPI
+        // Load videos (from "uncensored-videos" folder - always premium)
         if (window.ContentAPI && window.ContentAPI.getVideos) {
             console.log('🎬 Cargando videos...');
             const videos = window.ContentAPI.getVideos(6);
             displayVideos(videos);
         }
         
-        // Load banner images using ContentAPI
+        // Load banner images with daily randomization from "full" folder
         if (window.ContentAPI && window.ContentAPI.getBanners) {
             console.log('🎠 Configurando banners...');
-            const bannerImages = window.ContentAPI.getBanners();
+            let bannerImages = window.ContentAPI.getBanners();
+            
+            // Apply daily randomization for banners
+            bannerImages = getDailyRandomImages(bannerImages, 6);
+            
             setupBanner(bannerImages);
         }
         
