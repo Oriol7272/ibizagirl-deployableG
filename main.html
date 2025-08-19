@@ -239,6 +239,48 @@
         </div>
     </div>
 
+    <!-- Isabella AI Chat Assistant -->
+    <div id="isabella-chat" class="isabella-chat-container">
+        <div id="isabella-button" class="isabella-button" onclick="toggleIsabella()">
+            <span class="isabella-icon">🌺</span>
+            <span class="isabella-name">Isabella</span>
+        </div>
+        
+        <div id="isabella-window" class="isabella-window">
+            <div class="isabella-header">
+                <div class="isabella-avatar">
+                    <span class="isabella-emoji">🌺</span>
+                    <div class="isabella-info">
+                        <h4>Isabella</h4>
+                        <p class="isabella-status">AI Assistant - Online</p>
+                    </div>
+                </div>
+                <button class="isabella-close" onclick="toggleIsabella()">&times;</button>
+            </div>
+            
+            <div id="isabella-messages" class="isabella-messages">
+                <div class="isabella-message ai-message">
+                    <div class="message-content">
+                        <p>¡Hola! Soy Isabella, tu asistente personal de IbizaGirl.pics 🌴</p>
+                        <p>¿En qué puedo ayudarte hoy?</p>
+                    </div>
+                    <div class="message-time">Ahora</div>
+                </div>
+            </div>
+            
+            <div class="isabella-quick-actions">
+                <button class="quick-btn" onclick="sendQuickMessage('¿Cómo funciona el acceso premium?')">💎 Acceso Premium</button>
+                <button class="quick-btn" onclick="sendQuickMessage('¿Qué métodos de pago aceptan?')">💳 Pagos</button>
+                <button class="quick-btn" onclick="sendQuickMessage('¿Cuánto contenido hay disponible?')">📊 Contenido</button>
+            </div>
+            
+            <div class="isabella-input-area">
+                <input type="text" id="isabella-input" placeholder="Escribe tu mensaje..." onkeypress="handleIsabellaEnter(event)">
+                <button onclick="sendIsabellaMessage()">📤</button>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript con CONTENIDO REAL -->
     <script>
         console.log('🚀 Inicializando IbizaGirl.pics...');
