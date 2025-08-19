@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IbizaGirl.pics - Premium Paradise Gallery | Daily Updates</title>
+    <meta name="description" content="200+ exclusive photos and 40+ HD videos from paradise. Daily updates with 30% new content. Paradise Mediterranean content.">
+    <meta name="keywords" content="Ibiza, gallery, premium, photos HD, exclusive videos, VIP content, paradise gallery, Mediterranean, Spanish beaches">
+    <meta name="author" content="IbizaGirl.pics">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="IbizaGirl.pics - Premium Paradise Gallery">
+    <meta property="og:description" content="200+ exclusive photos and 40+ HD videos from Ibiza. Daily updates.">
+    <meta property="og:image" content="/full/bikini.webp">
+    <meta property="og:url" content="https://ibizagirl.pics">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IbizaGirl.pics - Premium Gallery">
+    <meta name="twitter:description" content="Exclusive Ibiza content updated daily">
+    <meta name="twitter:image" content="/full/bikini.webp">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/full/bikini.webp" type="image/webp">
+    <link rel="apple-touch-icon" href="/full/bikini.webp">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ff1493">
+    
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- PayPal SDK REAL -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&intent=capture&components=buttons,funding-eligibility,messages"></script>
+    
+    <!-- JuicyAds Network -->
+    <script type="text/javascript" src="https://poweredby.jads.co/js/jads.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader-container">
+            <div class="spinner"></div>
+            <p>Loading Paradise Content...</p>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <h1 class="site-title">
+                    <span class="palm">🌴</span>
+                    IbizaGirl.pics
+                    <span class="palm">🌴</span>
+                </h1>
+                <p class="site-tagline">Premium Paradise Gallery</p>
+            </div>
+            
+            <nav class="main-nav">
+                <button class="nav-btn active" data-view="gallery">
+                    <span class="icon">📸</span>
+                    <span class="label">Gallery</span>
+                </button>
+                <button class="nav-btn" data-view="videos">
+                    <span class="icon">🎬</span>
+                    <span class="label">Videos</span>
+                </button>
+                <button class="nav-btn" data-view="pricing">
+                    <span class="icon">💎</span>
+                    <span class="label">Premium</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Banner Rotatorio Superior con fotos de carpeta full -->
+    <div class="banner-rotation" id="bannerRotation">
+        <div class="banner-slider" id="banner-slider">
+            <!-- Las imágenes del banner se cargarán dinámicamente desde la carpeta full -->
+        </div>
+        <div class="banner-indicators" id="banner-indicators"></div>
+    </div>
+    
+    <!-- Main Content Container -->
+    <main class="main-content">
+        <!-- Gallery View -->
+        <div id="galleryView" class="content-view active">
+            <div class="section-header">
+                <h2>🌴 Paradise Gallery Collection</h2>
+                <p class="section-subtitle">200 New Photos Daily - 30% Marked as NEW!</p>
+            </div>
+            
+            <!-- Ad Zone: 300x250 (ID: 2092250) -->
+            <div class="ad-container ad-mobile" id="ad-mobile-top">
+                <script type="text/javascript">
+                    jads('2092250','300','250');
+                </script>
+            </div>
+            
+            <!-- Teaser Gallery con fotos de carpeta full -->
+            <div class="teaser-section">
+                <h3>✨ Today's Highlights</h3>
+                <div class="teaser-gallery" id="teaser-gallery">
+                    <!-- Teaser images se cargarán dinámicamente -->
+                </div>
+            </div>
+            
+            <!-- Main Gallery Grid -->
+            <div class="gallery-grid" id="main-gallery">
+                <!-- Las 200 fotos diarias se cargarán aquí -->
+            </div>
+            
+            <!-- Load More Button -->
+            <div class="load-more-container">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    Load More Content
+                </button>
+            </div>
+        </div>
+        
+        <!-- Videos View -->
+        <div id="videosView" class="content-view">
+            <div class="section-header">
+                <h2>🎬 Premium Video Collection</h2>
+                <p class="section-subtitle">40 New Videos Daily!</p>
+            </div>
+            
+            <div class="video-grid" id="video-gallery">
+                <!-- Los 40 videos diarios se cargarán aquí -->
+            </div>
+        </div>
+        
+        <!-- Pricing View -->
+        <div id="pricingView" class="content-view">
+            <div class="pricing-header">
+                <h2>💎 Unlock Premium Access</h2>
+                <p>Get instant access to all content</p>
+            </div>
+            
+            <div class="pricing-cards">
+                <!-- PPV Option -->
+                <div class="pricing-card">
+                    <div class="card-header">
+                        <h3>Pay Per View</h3>
+                        <div class="price">€0.99</div>
+                        <span class="price-period">per item</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✓ Single photo or video</li>
+                        <li>✓ Instant access</li>
+                        <li>✓ HD quality</li>
+                        <li>✓ Download enabled</li>
+                        <li>✓ PayPal secure payment</li>
+                        <li>✓ No subscription needed</li>
+                    </ul>
+                    <div id="paypal-ppv-button" class="paypal-button-container"></div>
+                </div>
+                
+                <!-- Monthly Subscription -->
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="card-header">
+                        <h3>Monthly Access</h3>
+                        <div class="price">€9.99</div>
+                        <span class="price-period">per month</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✓ All 200 daily photos</li>
+                        <li>✓ All 40 daily videos</li>
+                        <li>✓ 30% new content daily</li>
+                        <li>✓ Priority updates</li>
+                        <li>✓ HD downloads</li>
+                        <li>✓ PayPal secure payment</li>
+                    </ul>
+                    <div id="paypal-monthly-button" class="paypal-button-container"></div>
+                </div>
+                
+                <!-- Lifetime Access -->
+                <div class="pricing-card">
+                    <div class="card-header">
+                        <h3>Lifetime Access</h3>
+                        <div class="price">€49.99</div>
+                        <span class="price-period">one time</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✓ Forever access</li>
+                        <li>✓ All current content</li>
+                        <li>✓ All future updates</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ Exclusive bonuses</li>
+                        <li>✓ PayPal secure payment</li>
+                    </ul>
+                    <div id="paypal-lifetime-button" class="paypal-button-container"></div>
+                </div>
+            </div>
+            
+            <!-- PayPal Trust Badges -->
+            <div class="payment-trust">
+                <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_100x26.png" alt="PayPal" style="height: 40px;">
+                <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/cc-badges-ppmcvdam.png" alt="Credit Cards" style="height: 40px;">
+                <p>🔒 Secure Payment Processing by PayPal</p>
+            </div>
+            
+            <!-- Ad Zone: 125x125 (ID: 2092251) -->
+            <div class="ad-container ad-square">
+                <script type="text/javascript">
+                    jads('2092251','125','125');
+                </script>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer Ads -->
+    <div class="footer-ads">
+        <!-- Mobile Bottom Ad (300x50) -->
+        <div class="ad-container ad-mobile-bottom">
+            <script type="text/javascript">
+                jads('2092471','300','50');
+            </script>
+        </div>
+        
+        <!-- Additional Square Ad (125x125) -->
+        <div class="ad-container ad-square-footer">
+            <script type="text/javascript">
+                jads('2092470','125','125');
+            </script>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+                <a href="/contact">Contact</a>
+                <a href="/dmca">DMCA</a>
+            </div>
+            <p>&copy; 2025 IbizaGirl.pics - All Rights Reserved</p>
+            <p class="footer-note">Content updated daily at 00:00 UTC</p>
+        </div>
+    </footer>
+    
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closePaymentModal()">&times;</span>
+            <h2>Processing Payment</h2>
+            <div class="loader"></div>
+            <p>Redirecting to PayPal...</p>
+        </div>
+    </div>
+    
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+        <div class="lightbox-nav">
+            <button onclick="prevImage()">‹</button>
+            <button onclick="nextImage()">›</button>
+        </div>
+    </div>
+    
+    <!-- Scripts de contenido -->
+    <script src="content-data1.js"></script>
+    <script src="content-data2.js"></script>
+    <script src="content-data3.js"></script>
+    <script src="content-data4.js"></script>
+    <script src="content-data5.js"></script>
+    <script src="content-data6.js"></script>
+    <script src="content-data-integration.js"></script>
+    
+    <!-- Script principal actualizado -->
+    <script src="main-script-updated.js"></script>
+    
+    <!-- PayPal Initialization -->
+    <script>
+        // PayPal Configuration
+        const PAYPAL_CONFIG = {
+            currency: 'EUR',
+            prices: {
+                ppv: '0.99',
+                monthly: '9.99',
+                lifetime: '49.99'
+            }
+        };
+        
+        // Initialize PayPal Buttons when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // PPV Button
+            if (document.getElementById('paypal-ppv-button')) {
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: PAYPAL_CONFIG.prices.ppv,
+                                    currency_code: PAYPAL_CONFIG.currency
+                                },
+                                description: 'Single Content Access - IbizaGirl.pics'
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            handlePaymentSuccess('ppv', details);
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('PayPal Error:', err);
+                        alert('Payment failed. Please try again.');
+                    }
+                }).render('#paypal-ppv-button');
+            }
+            
+            // Monthly Subscription Button
+            if (document.getElementById('paypal-monthly-button')) {
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: PAYPAL_CONFIG.prices.monthly,
+                                    currency_code: PAYPAL_CONFIG.currency
+                                },
+                                description: 'Monthly Access - IbizaGirl.pics'
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            handlePaymentSuccess('monthly', details);
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('PayPal Error:', err);
+                        alert('Payment failed. Please try again.');
+                    },
+                    style: {
+                        color: 'gold',
+                        shape: 'rect',
+                        label: 'subscribe'
+                    }
+                }).render('#paypal-monthly-button');
+            }
+            
+            // Lifetime Access Button
+            if (document.getElementById('paypal-lifetime-button')) {
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: PAYPAL_CONFIG.prices.lifetime,
+                                    currency_code: PAYPAL_CONFIG.currency
+                                },
+                                description: 'Lifetime Access - IbizaGirl.pics'
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            handlePaymentSuccess('lifetime', details);
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('PayPal Error:', err);
+                        alert('Payment failed. Please try again.');
+                    },
+                    style: {
+                        color: 'blue',
+                        shape: 'rect',
+                        label: 'pay'
+                    }
+                }).render('#paypal-lifetime-button');
+            }
+        });
+        
+        // Payment Success Handler
+        function handlePaymentSuccess(type, details) {
+            console.log('Payment successful:', type, details);
+            
+            // Store access in localStorage
+            const accessData = {
+                type: type,
+                purchaseDate: new Date().toISOString(),
+                transactionId: details.id,
+                payerEmail: details.payer.email_address
+            };
+            
+            localStorage.setItem('vipAccess', JSON.stringify(accessData));
+            
+            // Show success message
+            alert(`Payment successful! Welcome to VIP access, ${details.payer.name.given_name}!`);
+            
+            // Reload page to apply VIP access
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        }
+        
+        // Modal Functions
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+        
+        function prevImage() {
+            // Implemented in main-script-updated.js
+            if (window.navigateLightbox) {
+                window.navigateLightbox('prev');
+            }
+        }
+        
+        function nextImage() {
+            // Implemented in main-script-updated.js
+            if (window.navigateLightbox) {
+                window.navigateLightbox('next');
+            }
+        }
+    </script>
+</body>
+</html>

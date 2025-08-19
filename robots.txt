@@ -1,0 +1,178 @@
+# robots.txt - IbizaGirl.pics
+# Configuración SEO optimizada
+# Última actualización: Enero 2025
+
+# ============================
+# CONFIGURACIÓN GENERAL
+# ============================
+
+# Googlebot
+User-agent: Googlebot
+Allow: /
+Allow: /main.html
+Allow: /index.html
+Allow: /full/
+Allow: /uncensored/
+Allow: /uncensored-videos/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /content-data*.js
+Crawl-delay: 1
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Allow: /main.html
+Allow: /index.html
+Allow: /full/
+Disallow: /admin/
+Disallow: /api/
+Crawl-delay: 1
+
+# Google Images
+User-agent: Googlebot-Image
+Allow: /full/
+Allow: /uncensored/
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.png
+Allow: *.gif
+Allow: *.webp
+Disallow: /admin/
+
+# Google AdSense
+User-agent: Mediapartners-Google
+Allow: /
+
+# ============================
+# BOTS DE REDES SOCIALES
+# ============================
+
+# Facebook
+User-agent: facebookexternalhit
+Allow: /
+Allow: /main.html
+Allow: /full/
+
+# Twitter
+User-agent: Twitterbot
+Allow: /
+Allow: /main.html
+Allow: /full/
+
+# Pinterest
+User-agent: Pinterest
+Allow: /
+Allow: /full/
+
+# LinkedIn
+User-agent: LinkedInBot
+Allow: /
+Allow: /main.html
+
+# ============================
+# BOTS PERMITIDOS
+# ============================
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 2
+
+# Yandex
+User-agent: Yandex
+Allow: /
+Crawl-delay: 2
+
+# Archive.org
+User-agent: ia_archiver
+Allow: /
+Crawl-delay: 10
+
+# ============================
+# BOTS BLOQUEADOS
+# ============================
+
+# SEO Analysis Bots (Bloqueados)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: Rogerbot
+Disallow: /
+
+User-agent: SiteExplorer
+Disallow: /
+
+User-agent: MauiBot
+Disallow: /
+
+# Scrapers maliciosos
+User-agent: HTTrack
+Disallow: /
+
+User-agent: WebCopier
+Disallow: /
+
+User-agent: WebStripper
+Disallow: /
+
+User-agent: WebZIP
+Disallow: /
+
+User-agent: wget
+Disallow: /
+
+User-agent: SiteSnagger
+Disallow: /
+
+User-agent: ProWebWalker
+Disallow: /
+
+# ============================
+# DIRECTORIOS PROTEGIDOS
+# ============================
+
+# Todos los bots
+User-agent: *
+Allow: /
+Allow: /main.html
+Allow: /index.html
+Allow: /styles.css
+Allow: /main-script.js
+Allow: /manifest.json
+Allow: /full/*.webp
+Allow: /full/*.jpg
+Allow: /uncensored/*.webp
+Allow: /uncensored/*.jpg
+Allow: /uncensored-videos/*.mp4
+Disallow: /admin/
+Disallow: /api/admin/
+Disallow: /logs/
+Disallow: /data/
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /*.env
+Disallow: /*.log
+Disallow: /content-data*.js
+Disallow: /verification.js
+Crawl-delay: 2
+
+# ============================
+# SITEMAP
+# ============================
+
+Sitemap: https://www.ibizagirl.pics/sitemap.xml
+
+# ============================
+# FIN DE CONFIGURACIÓN
+# ============================
