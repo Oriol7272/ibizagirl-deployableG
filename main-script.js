@@ -358,8 +358,12 @@
 
     // Display videos
     function displayVideos(videos) {
+        console.log('🎥 Mostrando videos:', videos.length);
         const container = document.getElementById('videosGrid');
-        if (!container) return;
+        if (!container) {
+            console.warn('⚠️ No se encontró container videosGrid');
+            return;
+        }
         
         container.innerHTML = videos.map(video => createVideoCard(video)).join('');
     }
