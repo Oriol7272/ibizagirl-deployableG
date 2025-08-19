@@ -1,32 +1,19 @@
 {
   "name": "ibizagirl-pics",
   "version": "1.0.0",
-  "description": "Premium content from the paradise of Ibiza - Static Site",
+  "description": "Premium content from the paradise of Ibiza",
   "main": "index.html",
   "scripts": {
     "dev": "serve -s . -l 3000",
-    "start": "serve -s . -l 3000",
-    "build": "echo 'Static site - no build required'"
+    "start": "serve -s . -l 3000"
   },
   "keywords": [
     "ibiza",
     "premium",
     "photos",
-    "videos",
-    "paradise",
-    "static-site"
+    "videos"
   ],
   "author": "IbizaGirl",
   "license": "ISC",
-  "homepage": "https://ibizagirl.pics",
-  "type": "module",
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "devDependencies": {
-    "serve": "^14.0.1"
-  },
-  "vercel": {
-    "framework": "static"
-  }
+  "homepage": "https://ibizagirl.pics"
 }
