@@ -49,8 +49,11 @@ const ContentConfig = {
     
     // Precios
     pricing: {
-        monthly: 15,
-        lifetime: 100,
+        ppv: 0.99,      // Pay Per View individual
+        monthly: 9.99,   // Suscripción mensual
+        lifetime: 49.99, // Acceso de por vida
+        imagePrice: 0.10, // Precio por imagen premium
+        videoPrice: 0.30, // Precio por video premium
         packs: {
             small: 10,
             medium: 25,
