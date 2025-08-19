@@ -4,16 +4,17 @@
 
     console.log('🎯 main-script.js v5.0 iniciando...');
 
-    // Wait for all dependencies
+    // Wait for real dependencies that actually exist
     async function waitForDependencies() {
         const maxAttempts = 50;
         let attempts = 0;
         
         while (attempts < maxAttempts) {
-            if (window.UnifiedContentManager && 
-                window.PaymentSystem && 
-                window.AdSystem) {
-                console.log('✅ Todas las dependencias están listas');
+            if (window.BannerTeaserManager && 
+                window.PublicContentManager && 
+                window.VideoContentManager &&
+                window.EventManager) {
+                console.log('✅ Todas las dependencias reales están listas');
                 return true;
             }
             
@@ -21,7 +22,7 @@
             attempts++;
         }
         
-        console.error('❌ Timeout esperando dependencias');
+        console.error('❌ Timeout esperando dependencias reales');
         return false;
     }
 
