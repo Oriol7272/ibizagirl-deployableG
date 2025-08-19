@@ -784,7 +784,7 @@
                 const userMessage = document.createElement('div');
                 userMessage.className = 'message user-message';
                 userMessage.textContent = input.value;
-                messages?.appendChild(userMessage);
+                if (messages) messages.appendChild(userMessage);
                 
                 setTimeout(() => {
                     const botResponse = document.createElement('div');
