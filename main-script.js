@@ -335,9 +335,9 @@
     // Display photos
     function displayPhotos(photos) {
         console.log('📷 Mostrando fotos públicas:', photos.length);
-        const container = document.getElementById('photosGrid');
+        const container = document.getElementById('teaser-gallery');
         if (!container) {
-            console.warn('⚠️ No se encontró container photosGrid');
+            console.warn('⚠️ No se encontró container teaser-gallery');
             return;
         }
         
@@ -347,9 +347,9 @@
     // Display premium photos
     function displayPremiumPhotos(photos) {
         console.log('💎 Mostrando fotos premium:', photos.length);
-        const container = document.getElementById('premiumPhotosGrid');
+        const container = document.getElementById('main-gallery');
         if (!container) {
-            console.warn('⚠️ No se encontró container premiumPhotosGrid');
+            console.warn('⚠️ No se encontró container main-gallery');
             return;
         }
         
