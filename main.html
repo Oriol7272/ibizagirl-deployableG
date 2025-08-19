@@ -4,569 +4,304 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IbizaGirl.pics - Premium Paradise Gallery | Daily Updates</title>
-    <meta name="description" content="572+ exclusive photos and 93+ HD videos from paradise. Daily updates with new content.">
+    <meta name="description" content="200+ exclusive photos and 40+ HD videos from paradise. Daily updates with 30% new content. Paradise Mediterranean content.">
+    <meta name="keywords" content="Ibiza, gallery, premium, photos HD, exclusive videos, VIP content, paradise gallery, Mediterranean, Spanish beaches">
+    <meta name="author" content="IbizaGirl.pics">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="IbizaGirl.pics - Premium Paradise Gallery">
+    <meta property="og:description" content="200+ exclusive photos and 40+ HD videos from Ibiza. Daily updates.">
+    <meta property="og:image" content="/full/bikini.webp">
+    <meta property="og:url" content="https://ibizagirl.pics">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IbizaGirl.pics - Premium Gallery">
+    <meta name="twitter:description" content="Exclusive Ibiza content updated daily">
+    <meta name="twitter:image" content="/full/bikini.webp">
     
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌴</text></svg>">
+    <link rel="icon" href="/full/bikini.webp" type="image/webp">
+    <link rel="apple-touch-icon" href="/full/bikini.webp">
     
-    <!-- Preconnect to improve performance -->
-    <link rel="preconnect" href="https://www.paypal.com">
-    <link rel="preconnect" href="https://poweredby.jads.co">
-    
-    <!-- Site Verification Meta Tags -->
-    <meta name="juicyads-site-verification" content="f67a56f266e834d596c42122f88bb88d">
-    <meta name="eroads_" content="5f8afe77e5b70fec960d89b314e045a4">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="IbizaGirl.pics - Premium Paradise Gallery">
-    <meta property="og:description" content="572+ exclusive photos and 93+ HD videos from paradise">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ibizagirl.pics">
-    
-    <!-- PayPal SDK LIVE -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&intent=capture&components=buttons,funding-eligibility,messages"></script>
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ff1493">
     
     <!-- CSS Principal -->
     <link rel="stylesheet" href="styles.css">
     
-    <style>
-        /* Additional critical styles */
-        .loading-spinner {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            border: 4px solid #f3f3f3; border-top: 4px solid #ff69b4;
-            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-        
-        /* Ads containers */
-        .ad-container { margin: 20px auto; text-align: center; min-height: 250px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border: 2px dashed #ddd; border-radius: 8px; }
-        .ad-square { min-height: 125px; }
-        .ad-mobile-bottom { min-height: 50px; }
-        .ad-square-footer { min-height: 125px; }
-        
-        /* PayPal buttons fix */
-        .paypal-button-container { min-height: 50px; margin: 10px 0; }
-        .paypal-fallback { background: #0070ba; color: white; padding: 12px 24px; border-radius: 25px; cursor: pointer; display: inline-block; font-weight: bold; }
-    </style>
+    <!-- PayPal SDK REAL -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&intent=capture&components=buttons,funding-eligibility,messages"></script>
+    
+    <!-- JuicyAds Network -->
+    <script type="text/javascript" src="https://poweredby.jads.co/js/jads.js"></script>
 </head>
 <body>
-    <div id="loading" class="loading-spinner"></div>
-
-    <div class="header">
-        <div class="container">
-            <div class="brand">
-                <h1>🌴 IbizaGirl.pics</h1>
-                <p>Premium Paradise Gallery</p>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader-container">
+            <div class="spinner"></div>
+            <p>Loading Paradise Content...</p>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <h1 class="site-title">
+                    <span class="palm">🌴</span>
+                    IbizaGirl.pics
+                    <span class="palm">🌴</span>
+                </h1>
+                <p class="site-tagline">Premium Paradise Gallery</p>
             </div>
             
             <nav class="main-nav">
-                <button data-view="gallery" class="nav-btn active">Gallery</button>
-                <button data-view="videos" class="nav-btn">Videos</button>
-                <button data-view="pricing" class="nav-btn">Premium</button>
+                <button class="nav-btn active" data-view="gallery">
+                    <span class="icon">📸</span>
+                    <span class="label">Gallery</span>
+                </button>
+                <button class="nav-btn" data-view="videos">
+                    <span class="icon">🎬</span>
+                    <span class="label">Videos</span>
+                </button>
+                <button class="nav-btn" data-view="pricing">
+                    <span class="icon">💎</span>
+                    <span class="label">Premium</span>
+                </button>
             </nav>
         </div>
-    </div>
-
-    <div class="banner-container">
-        <div class="banner-slider" id="bannerSlider">
-            <div class="banner-item active">
-                <img src="full/bikini.webp" alt="Paradise" id="bannerImg">
-                <div class="banner-overlay">
-                    <h2>🌴 Welcome to Paradise</h2>
-                    <p>572+ exclusive photos • 93+ HD videos • Daily updates</p>
-                </div>
-            </div>
+    </header>
+    
+    <!-- Banner Rotatorio Superior con fotos de carpeta full -->
+    <div class="banner-rotation" id="bannerRotation">
+        <div class="banner-slider" id="banner-slider">
+            <!-- Las imágenes del banner se cargarán dinámicamente desde la carpeta full -->
         </div>
-        
-        <div class="banner-indicators" id="bannerIndicators">
-            <span class="indicator active" data-slide="0"></span>
-            <span class="indicator" data-slide="1"></span>
-            <span class="indicator" data-slide="2"></span>
-            <span class="indicator" data-slide="3"></span>
-            <span class="indicator" data-slide="4"></span>
-            <span class="indicator" data-slide="5"></span>
-        </div>
+        <div class="banner-indicators" id="banner-indicators"></div>
     </div>
-
+    
     <!-- Main Content Container -->
-    <div class="main-container">
-        
+    <main class="main-content">
         <!-- Gallery View -->
-        <div id="gallery-view" class="content-view active">
-            
-            <!-- Ad Zone: 300x250 (JuicyAds) -->
-            <div class="ad-container" id="juicyads-300x250">
-                <div id="jads_2092250"></div>
+        <div id="galleryView" class="content-view active">
+            <div class="section-header">
+                <h2>🌴 Paradise Gallery Collection</h2>
+                <p class="section-subtitle">200 New Photos Daily - 30% Marked as NEW!</p>
             </div>
             
-            <!-- Preview Gallery (Teasers) -->
-            <section class="teasers-section">
-                <h2>🔥 Preview Gallery</h2>
-                <div class="teasers-grid" id="teasersGrid">
-                    <!-- Teasers loaded by JavaScript -->
-                </div>
-            </section>
+            <!-- Ad Zone: 300x250 (ID: 2092250) -->
+            <div class="ad-container ad-mobile" id="ad-mobile-top">
+                <script type="text/javascript">
+                    jads('2092250','300','250');
+                </script>
+            </div>
             
-            <!-- Premium Photo Gallery -->
-            <section class="gallery-section">
-                <h2>📸 Premium Photo Gallery</h2>
-                <p class="gallery-description">200+ daily photos from 572+ exclusive collection - €0.10 each or unlimited access</p>
-                <div class="gallery-grid" id="galleryGrid">
-                    <!-- Photos loaded by JavaScript -->
+            <!-- Teaser Gallery con fotos de carpeta full -->
+            <div class="teaser-section">
+                <h3>✨ Today's Highlights</h3>
+                <div class="teaser-gallery" id="teaser-gallery">
+                    <!-- Teaser images se cargarán dinámicamente -->
                 </div>
-                <button id="loadMoreBtn" class="load-more-btn">Load More Photos</button>
-            </section>
+            </div>
             
-            <!-- Ad Zone: 125x125 -->
-            <div class="ad-container ad-square" id="juicyads-125x125-1">
-                <div id="jads_2092251"></div>
+            <!-- Main Gallery Grid -->
+            <div class="gallery-grid" id="main-gallery">
+                <!-- Las 200 fotos diarias se cargarán aquí -->
+            </div>
+            
+            <!-- Load More Button -->
+            <div class="load-more-container">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    Load More Content
+                </button>
             </div>
         </div>
-
-        <!-- Videos View -->  
-        <div id="videos-view" class="content-view">
+        
+        <!-- Videos View -->
+        <div id="videosView" class="content-view">
+            <div class="section-header">
+                <h2>🎬 Premium Video Collection</h2>
+                <p class="section-subtitle">40 New Videos Daily!</p>
+            </div>
             
-            <!-- Video Teasers -->
-            <section class="teasers-section">
-                <h2>🔥 Preview Gallery</h2>
-                <div class="teasers-grid" id="videoTeasersGrid">
-                    <!-- Video teasers loaded by JavaScript -->
-                </div>
-            </section>
-            
-            <!-- Premium Video Gallery -->
-            <section class="videos-section">
-                <h2>🎬 Premium Video Gallery</h2>
-                <p class="gallery-description">40+ daily videos from 93+ HD collection - €0.30 each or unlimited access</p>
-                <div class="videos-grid" id="videosGrid">
-                    <!-- Videos loaded by JavaScript -->
-                </div>
-            </section>
+            <div class="video-grid" id="video-gallery">
+                <!-- Los 40 videos diarios se cargarán aquí -->
+            </div>
         </div>
-
-        <!-- Premium/Pricing View -->
-        <div id="pricing-view" class="content-view">
+        
+        <!-- Pricing View -->
+        <div id="pricingView" class="content-view">
+            <div class="pricing-header">
+                <h2>💎 Unlock Premium Access</h2>
+                <p>Get instant access to all content</p>
+            </div>
             
-            <!-- Preview Teasers for Premium -->
-            <section class="teasers-section">
-                <h2>✨ What You Get</h2>
-                <div class="teasers-grid" id="pricingTeasersGrid">
-                    <!-- Pricing teasers loaded by JavaScript -->
-                </div>
-            </section>
-            
-            <!-- Pricing Cards -->
-            <section class="pricing-section">
-                <h2>💎 Premium Access</h2>
-                <p>Unlock all content with these options</p>
-                
-                <div class="pricing-grid">
-                    <!-- Pay Per View Card -->
-                    <div class="pricing-card">
+            <div class="pricing-cards">
+                <!-- PPV Option -->
+                <div class="pricing-card">
+                    <div class="card-header">
                         <h3>Pay Per View</h3>
-                        <div class="price">€0.99<span>one-time</span></div>
-                        <ul class="features">
-                            <li>✓ Single photo (€0.10) or video (€0.30)</li>
-                            <li>✓ Instant access</li>
-                            <li>✓ No subscription</li>
-                        </ul>
-                        <div id="paypal-ppv" class="paypal-button-container">
-                            <div class="paypal-fallback" onclick="simulatePayment('ppv')">
-                                💳 Pay €0.99 with PayPal
-                            </div>
-                        </div>
+                        <div class="price">€0.99</div>
+                        <span class="price-period">per item</span>
                     </div>
-
-                    <!-- Monthly Card -->
-                    <div class="pricing-card popular">
-                        <div class="popular-badge">Most Popular</div>
-                        <h3>Monthly Access</h3>
-                        <div class="price">€9.99<span>per month</span></div>
-                        <ul class="features">
-                            <li>✓ Unlimited photos & videos</li>
-                            <li>✓ 200+ daily photos</li>
-                            <li>✓ 40+ daily videos</li>
-                            <li>✓ All 572+ photos + 93+ videos</li>
-                        </ul>
-                        <div id="paypal-monthly" class="paypal-button-container">
-                            <div class="paypal-fallback" onclick="simulatePayment('monthly')">
-                                💳 Pay €9.99/month with PayPal
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lifetime Card -->
-                    <div class="pricing-card">
-                        <h3>Lifetime Access</h3>
-                        <div class="price">€49.99<span>forever</span></div>
-                        <ul class="features">
-                            <li>✓ Everything in Monthly</li>
-                            <li>✓ Lifetime updates</li>
-                            <li>✓ VIP support</li>
-                            <li>✓ Best value</li>
-                        </ul>
-                        <div id="paypal-lifetime" class="paypal-button-container">
-                            <div class="paypal-fallback" onclick="simulatePayment('lifetime')">
-                                💳 Pay €49.99 lifetime with PayPal
-                            </div>
-                        </div>
-                    </div>
+                    <ul class="features-list">
+                        <li>✓ Single photo or video</li>
+                        <li>✓ Instant access</li>
+                        <li>✓ HD quality</li>
+                        <li>✓ Download enabled</li>
+                        <li>✓ PayPal secure payment</li>
+                        <li>✓ No subscription needed</li>
+                    </ul>
+                    <div id="paypal-ppv-button" class="paypal-button-container"></div>
                 </div>
                 
-                <div class="payment-security">
-                    <p>🔒 <strong>Secure Payment Processing by PayPal</strong></p>
-                    <p>Payments processed securely through PayPal's encrypted system</p>
+                <!-- Monthly Subscription -->
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="card-header">
+                        <h3>Monthly Access</h3>
+                        <div class="price">€9.99</div>
+                        <span class="price-period">per month</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✓ All 200 daily photos</li>
+                        <li>✓ All 40 daily videos</li>
+                        <li>✓ 30% new content daily</li>
+                        <li>✓ Priority updates</li>
+                        <li>✓ HD downloads</li>
+                        <li>✓ PayPal secure payment</li>
+                    </ul>
+                    <div id="paypal-monthly-button" class="paypal-button-container"></div>
                 </div>
-            </section>
+                
+                <!-- Lifetime Access -->
+                <div class="pricing-card">
+                    <div class="card-header">
+                        <h3>Lifetime Access</h3>
+                        <div class="price">€49.99</div>
+                        <span class="price-period">one time</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✓ Forever access</li>
+                        <li>✓ All current content</li>
+                        <li>✓ All future updates</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ Exclusive bonuses</li>
+                        <li>✓ PayPal secure payment</li>
+                    </ul>
+                    <div id="paypal-lifetime-button" class="paypal-button-container"></div>
+                </div>
+            </div>
+            
+            <!-- PayPal Trust Badges -->
+            <div class="payment-trust">
+                <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_100x26.png" alt="PayPal" style="height: 40px;">
+                <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/cc-badges-ppmcvdam.png" alt="Credit Cards" style="height: 40px;">
+                <p>🔒 Secure Payment Processing by PayPal</p>
+            </div>
+            
+            <!-- Ad Zone: 125x125 (ID: 2092251) -->
+            <div class="ad-container ad-square">
+                <script type="text/javascript">
+                    jads('2092251','125','125');
+                </script>
+            </div>
         </div>
-    </div>
-
+    </main>
+    
     <!-- Footer Ads -->
     <div class="footer-ads">
         <!-- Mobile Bottom Ad (300x50) -->
-        <div class="ad-container ad-mobile-bottom" id="juicyads-300x50">
-            <div id="jads_2092471"></div>
+        <div class="ad-container ad-mobile-bottom">
+            <script type="text/javascript">
+                jads('2092471','300','50');
+            </script>
         </div>
         
         <!-- Additional Square Ad (125x125) -->
-        <div class="ad-container ad-square-footer" id="juicyads-125x125-2">
-            <div id="jads_2092470"></div>
+        <div class="ad-container ad-square-footer">
+            <script type="text/javascript">
+                jads('2092470','125','125');
+            </script>
         </div>
     </div>
-
-    <!-- Isabella AI Chatbot -->
-    <div id="isabella-container">
-        <div id="isabella-button" class="chat-button">
-            🌺<span>Isabella</span>🌺
+    
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+                <a href="/contact">Contact</a>
+                <a href="/dmca">DMCA</a>
+            </div>
+            <p>&copy; 2025 IbizaGirl.pics - All Rights Reserved</p>
+            <p class="footer-note">Content updated daily at 00:00 UTC</p>
         </div>
-        
-        <div id="isabella-chat" class="chat-window">
-            <div class="chat-header">
-                <h4>Isabella</h4>
-                <p>AI Assistant - Online</p>
-                <button id="close-chat" class="close-btn">×</button>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-                <div class="message bot-message">
-                    Hola! Soy Isabella, tu asistente personal de IbizaGirl.pics<br><br>En que puedo ayudarte hoy?
-                </div>
-                <div class="chat-timestamp">Ahora</div>
-            </div>
-            <div class="quick-actions">
-                <button onclick="insertQuickMessage('💎 Acceso Premium')">💎 Acceso Premium</button>
-                <button onclick="insertQuickMessage('💳 Pagos')">💳 Pagos</button>
-                <button onclick="insertQuickMessage('📊 Contenido')">📊 Contenido</button>
-            </div>
-            <div class="chat-input-container">
-                <input type="text" id="chat-input" placeholder="Escribe tu mensaje...">
-                <button id="send-btn">📤</button>
-            </div>
+    </footer>
+    
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closePaymentModal()">&times;</span>
+            <h2>Processing Payment</h2>
+            <div class="loader"></div>
+            <p>Redirecting to PayPal...</p>
         </div>
     </div>
-
-    <!-- Lightbox -->
+    
+    <!-- Lightbox Modal -->
     <div id="lightbox" class="lightbox">
-        <div class="lightbox-content">
-            <span class="lightbox-close">×</span>
-            <img id="lightbox-img" src="" alt="Full size image">
-            <div class="lightbox-nav">
-                <button id="lightbox-prev">❮</button>
-                <button id="lightbox-next">❯</button>
-            </div>
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+        <div class="lightbox-nav">
+            <button onclick="prevImage()">‹</button>
+            <button onclick="nextImage()">›</button>
         </div>
     </div>
-
+    
+    <!-- Scripts de contenido -->
+    <script src="content-data1.js"></script>
+    <script src="content-data2.js"></script>
+    <script src="content-data3.js"></script>
+    <script src="content-data4.js"></script>
+    <script src="content-data5.js"></script>
+    <script src="content-data6.js"></script>
+    <script src="content-data-integration.js"></script>
+    
+    <!-- Script principal actualizado -->
+    <script src="main-script-updated.js"></script>
+    
+    <!-- PayPal Initialization -->
     <script>
-        console.log('IbizaGirl.pics v5.0 CLEAN - Inicializando...');
+        // PayPal Configuration
+        const PAYPAL_CONFIG = {
+            currency: 'EUR',
+            prices: {
+                ppv: '0.99',
+                monthly: '9.99',
+                lifetime: '49.99'
+            }
+        };
         
-        // ============================
-        // CONFIGURACIÓN GLOBAL
-        // ============================
-        let currentView = 'gallery';
-        let currentPage = 1;
-        let bannerIndex = 0;
-        let bannerInterval;
-        
-        // ============================
-        // ARRAYS DE CONTENIDO REAL
-        // ============================
-        const FULL_IMAGES = [
-            '0456996c-b56e-42ef-9049-56b1a1ae2646.webp', '0Tc8Vtd0mEIvNHZwYGBq.webp', '0lySugcO4Pp4pEZKvz9U.webp', 
-            '0nSaCJQxbVw4BDrhnhHO.webp', '13TXvyRVZ7LtvAOx7kme.webp', '18VQaczW5kdfdiqUVasH.webp',
-            '1dEu25K0mS3zxRlXRjHR.webp', '1qEBcg9QbkZRRdLt0Chc.webp', '1tt8H4fX3XzyV90HjNG3.webp',
-            '27bGIzFFpej5ubUkvykD.webp', '2gjqH68H586TKLDK9lh9.webp', '2yw4sowPh3Tyln5oxRdw.webp',
-            '39GYGt3bticS0Mjbud0p.webp', '3IWka3fnP9b8yz6j5l91.webp', '3ZYL4GCUOs3rfq3iTPJ7.webp',
-            '4GN6i0Db2hl4Ck9vf0LE.webp', '4YhoIAWSbVaOqBhAOGqR.webp', '82KxJ9daxf9MpK019L5I.webp',
-            '83cSC4eRnYGZUNo9AoqD.webp', '85158b64-4168-45fa-9cb4-0b40634f7fa1.webp', '8faf42TRuGOU4ZW9KS9W.webp',
-            '92Ck0v3g8gZLEQ5vOmpd.webp', '993acHdsWLzG80gAFZQs.webp', '9D5U5fKXT72xnpqsgUaD.webp',
-            '9v20KsJFZoAv2WQ8m3o2.webp', 'AHKAq0biFDUtkxlx7TCu.webp', 'ANhHtA0GivBfeAo6dvJG.webp',
-            'AwKXjDqrJMTKNvB84iRy.webp', 'CTyCcna8JSPObRQpulKJ.webp', 'CmxJm1VLBBhvZoUwxWTJ.webp',
-            'bikini.webp', 'backbikini.webp', 'Sintulo.webp', 'Sinportada.webp', 'Sinoseup.webp',
-            'ya.webp', 'bikbanner.webp', 'bikbanner2.webp'
-        ];
-
-        const UNCENSORED_IMAGES = [
-            '00wd2wVE89BJnQVenuNP.webp', '01CTDHff9PmCsZqjjCoO.webp', '02gNvnd7bLJgBX7wvQ2r.webp',
-            '05mTzCtfbQ5McL31hk49.webp', '081YXXFwiGwFJpJCqkV9.webp', '08cuJR4dA17oVjLQcQd7.webp',
-            '09HFl7nAkIjFBFbg3SeA.webp', '0K7AtRh7U93R2VH9axxQ.webp', '0Scwe5oo0JuUEanBguCT.webp',
-            '0Tc8Vtd0mEIvNHZwYGBq.webp', '0VBC7iOXjVN2c89AngyH.webp', '0XOhygF9EVXZI4PEp1GG.webp',
-            '0iELEcoTlZgqxYoQG168.webp', '0ijarBbN0aKx6uXbanyP.webp', '0oN44NT2wHztAUYhV5bc.webp',
-            '0qvHNvqJU86FmxFEu8Fv.webp', '0yiMo3Hxx1iFQquiFJtX.webp', '0yj7DvfXP6ajqAXoac8A.webp',
-            '12IdAS832WEcngM0TmiU.webp', '15rRK9JyAaWsDxwVzCRM.webp', '17LWLAXi4sDIHDlFpdOg.webp',
-            '18VQaczW5kdfdiqUVasH.webp', '1DCEysi2B2gEWgZnDyqg.webp', '1G4FDSg9HpEVWWDhmpDO.webp',
-            '1bITefcv83TIA7idRrrO.webp', '1cCATxFagDwKacKPXz0S.webp', '1dsu1ynPOBgwxVIVMm98.webp',
-            '1nmCjq8qcYS5FI9j3hN6.webp', '1pMMHfrCT7WQEN3aJDsC.webp', '1xUbXQJILXBEBoXRvC5D.webp',
-            '2J6UGbexO5xfFKKhz32I.webp', '2R3uT1L7N7Q1iq7As9NX.webp', '2SRGCpe7oLwqRYHB4iTn.webp',
-            '2XaRIysrVi2K7cVPUKsT.webp', '2c1EDSm7ULtMHlm1TzmW.webp', '2fTpn1FbvDpznuZ5fIQd.webp',
-            '2oDBdtvtqAGojxJFhuR4.webp', '2q4lbVbHtmY9qfEqh1Ey.webp', '2uWScXgZ5pqb3NEtzrlz.webp',
-            '2wd4XakdNzeI9tCqIgiN.webp', '2yw4sowPh3Tyln5oxRdw.webp', '31vAZT8MZI5qtnuApW4W.webp',
-            '35H8tCgsszXQMJVMOC3l.webp', '3PclVfFD7nJ3InJVwttg.webp', '3WgVIdLpmtrHE84hkBfh.webp',
-            '3kZqhcfslBFziRb03SyP.webp', '3m9WiyhGocSOHasI9jNK.webp', '3n4MIVGQIB11aRmCBeoX.webp',
-            '3sVGyXMADBwgIntxAEZ3.webp'
-        ];
-
-        const VIDEOS = [
-            '0nF138CMxl1eGWUxaG2d.mp4', '0xXK6PxXSv6cpYxvI7HX.mp4', '1NYBqpy4q2GVCDCXmXDK.mp4',
-            '1SZsGxjFfrA7diW05Yvj.mp4', '2FO1Ra6RDA8FjGWmDv8d.mp4', '3W7GxdRyaPj0uAK9fD4I.mp4',
-            '3i61FDkL2wmF6RjQbZKR.mp4', '5qsmyiUv590ZBfrpct6G.mp4', '7gBpFJiLzDH9s5ukalLs.mp4',
-            '8RF2trrwvytHFkimtzDE.mp4', '8fQQnk9u7YAQQXDpfOW3.mp4', '8qfK5e4NbCYglU2WfMQ6.mp4',
-            '8yE2nxCwV2QcJsdXGf32.mp4', '99ACESTm9KLPGdLSh0J1.mp4', '9weRZL3KvPUd3qNQz0Mt.mp4',
-            'BA7Bvw9GHNCbsEKOruXh.mp4', 'Bg8z3Gk9SuxEAFGt1WBo.mp4', 'CzAtUvr9DPCv7JVMFNez.mp4',
-            'Fc6f8RSjO8QBTmjjppHO.mp4', 'G4LILz0eqoh4m3YOZ2WK.mp4'
-        ];
-
-        // ============================
-        // GENERACIÓN DE CONTENIDO DIARIO
-        // ============================
-        function getDailySeed() {
-            const today = new Date();
-            return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-        }
-
-        function shuffleArrayWithSeed(array, seed) {
-            const shuffled = [...array];
-            let currentIndex = shuffled.length;
-            let temporaryValue, randomIndex;
-            
-            // Crear un generador pseudo-aleatorio basado en seed
-            function seededRandom(seed) {
-                const x = Math.sin(seed++) * 10000;
-                return x - Math.floor(x);
-            }
-            
-            while (0 !== currentIndex) {
-                randomIndex = Math.floor(seededRandom(seed + currentIndex) * currentIndex);
-                currentIndex -= 1;
-                temporaryValue = shuffled[currentIndex];
-                shuffled[currentIndex] = shuffled[randomIndex];
-                shuffled[randomIndex] = temporaryValue;
-            }
-            
-            return shuffled;
-        }
-
-        function generateDailyContent() {
-            const seed = getDailySeed();
-            console.log('Generando contenido diario con seed: ' + seed);
-            
-            // Generar contenido aleatorio diario
-            const dailyBanners = shuffleArrayWithSeed(FULL_IMAGES, seed).slice(0, 6);
-            const dailyTeasers = shuffleArrayWithSeed(FULL_IMAGES, seed + 1).slice(0, 10);
-            const dailyPhotos = shuffleArrayWithSeed(UNCENSORED_IMAGES, seed + 2).slice(0, 200);
-            const dailyVideos = shuffleArrayWithSeed(VIDEOS, seed + 3).slice(0, 40);
-            
-            console.log('Contenido diario generado: ' + dailyBanners.length + ' banners, ' + dailyTeasers.length + ' teasers, ' + dailyPhotos.length + ' fotos, ' + dailyVideos.length + ' videos');
-            
-            return { dailyBanners, dailyTeasers, dailyPhotos, dailyVideos };
-        }
-
-        // ============================
-        // CAMBIO DE VISTAS
-        // ============================
-        function switchView(view) {
-            console.log('Cambiando a vista: ' + view);
-            currentView = view;
-            
-            // Actualizar botones de navegación
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.view === view);
-            });
-            
-            // Mostrar/ocultar vistas
-            document.querySelectorAll('.content-view').forEach(viewEl => {
-                viewEl.classList.toggle('active', viewEl.id === `${view}-view`);
-            });
-            
-            // Cargar contenido específico de la vista
-            if (view === 'gallery') {
-                loadGalleryContent();
-            } else if (view === 'videos') {
-                loadVideosContent();
-            } else if (view === 'pricing') {
-                loadPricingContent();
-            }
-        }
-
-        // ============================
-        // BANNER ROTATORIO
-        // ============================
-        function setupBanner() {
-            const { dailyBanners } = generateDailyContent();
-            const bannerImg = document.getElementById('bannerImg');
-            const indicators = document.querySelectorAll('.banner-indicators .indicator');
-            
-            function updateBanner() {
-                bannerImg.src = `full/${dailyBanners[bannerIndex]}`;
-                
-                indicators.forEach((indicator, index) => {
-                    indicator.classList.toggle('active', index === bannerIndex);
-                });
-                
-                bannerIndex = (bannerIndex + 1) % dailyBanners.length;
-            }
-            
-            // Actualizar banner inmediatamente
-            updateBanner();
-            
-            // Configurar rotación automática
-            bannerInterval = setInterval(updateBanner, 5000);
-            
-            // Navegación manual
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', () => {
-                    bannerIndex = index;
-                    updateBanner();
-                    clearInterval(bannerInterval);
-                    bannerInterval = setInterval(updateBanner, 5000);
-                });
-            });
-            
-            console.log('Banner rotatorio configurado con 6 imagenes');
-        }
-
-        // ============================
-        // CARGA DE CONTENIDO
-        // ============================
-        function loadTeasers(containerId) {
-            const { dailyTeasers } = generateDailyContent();
-            const container = document.getElementById(containerId);
-            
-            container.innerHTML = dailyTeasers.map((img, index) => `
-                <div class="teaser-item" onclick="openLightbox('full/${img}')">
-                    <img src="full/${img}" alt="Preview ${index + 1}">
-                    <div class="teaser-overlay">
-                        <h4>Preview ${index + 1}</h4>
-                        <p>Click para ampliar</p>
-                    </div>
-                </div>
-            `).join('');
-            
-            console.log('Teasers cargados: ' + dailyTeasers.length);
-        }
-
-        function loadGalleryContent() {
-            const { dailyPhotos } = generateDailyContent();
-            const container = document.getElementById('galleryGrid');
-            const imagesPerPage = 24;
-            const startIndex = (currentPage - 1) * imagesPerPage;
-            const endIndex = Math.min(startIndex + imagesPerPage, dailyPhotos.length);
-            
-            if (currentPage === 1) {
-                container.innerHTML = '';
-            }
-            
-            const isVip = localStorage.getItem('vip_access') === 'true';
-            
-            for (let i = startIndex; i < endIndex; i++) {
-                const img = dailyPhotos[i];
-                const photoElement = document.createElement('div');
-                photoElement.className = 'gallery-item';
-                photoElement.innerHTML = `
-                    <div class="photo-container">
-                        <img src="uncensored/${img}" alt="Photo ${i + 1}" class="${isVip ? '' : 'blurred'}">
-                        ${!isVip ? `
-                            <div class="premium-overlay" onclick="handlePremiumClick('photo', '${img}')">
-                                <h4>Photo ${i + 1}</h4>
-                                <p class="premium-price">Premium €0.10</p>
-                                <button class="unlock-btn">€0.10<br>Unlock</button>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-                container.appendChild(photoElement);
-            }
-            
-            // Mostrar/ocultar botón Load More
-            const loadMoreBtn = document.getElementById('loadMoreBtn');
-            if (loadMoreBtn) {
-                loadMoreBtn.style.display = endIndex >= dailyPhotos.length ? 'none' : 'block';
-            }
-            
-            console.log('Galeria cargada: ' + endIndex + '/' + dailyPhotos.length + ' imagenes');
-        }
-
-        function loadVideosContent() {
-            const { dailyTeasers, dailyVideos } = generateDailyContent();
-            
-            // Cargar teasers de videos
-            const teasersContainer = document.getElementById('videoTeasersGrid');
-            teasersContainer.innerHTML = dailyTeasers.slice(0, 10).map((img, index) => `
-                <div class="teaser-item" onclick="openLightbox('full/${img}')">
-                    <img src="full/${img}" alt="Video Preview ${index + 1}">
-                    <div class="teaser-overlay">
-                        <h4>Video Preview ${index + 1}</h4>
-                        <p>Click para ampliar</p>
-                    </div>
-                </div>
-            `).join('');
-            
-            // Cargar videos premium
-            const videosContainer = document.getElementById('videosGrid');
-            const isVip = localStorage.getItem('vip_access') === 'true';
-            
-            videosContainer.innerHTML = dailyVideos.slice(0, 24).map((video, index) => `
-                <div class="video-item">
-                    <div class="video-container">
-                        <video ${isVip ? 'controls' : ''} class="${isVip ? '' : 'blurred'}" preload="metadata">
-                            <source src="uncensored-videos/${video}" type="video/mp4">
-                        </video>
-                        ${!isVip ? `
-                            <div class="premium-overlay" onclick="handlePremiumClick('video', '${video}')">
-                                <h4>Video ${index + 1}</h4>
-                                <p class="premium-price">Premium €0.30</p>
-                                <button class="unlock-btn">€0.30<br>Unlock</button>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-            
-            console.log('Videos cargados: 24');
-        }
-
-        function loadPricingContent() {
-            loadTeasers('pricingTeasersGrid');
-        }
-
-        // ============================
-        // PAYPAL
-        // ============================
-        function setupPayPal() {
-            console.log('Intentando configurar PayPal...');
-            
-            if (typeof paypal === 'undefined') {
-                console.log('PayPal SDK no disponible, usando fallbacks');
-                return;
-            }
-            
-            try {
-                // Pay Per View - €0.99
+        // Initialize PayPal Buttons when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // PPV Button
+            if (document.getElementById('paypal-ppv-button')) {
                 paypal.Buttons({
                     createOrder: function(data, actions) {
                         return actions.order.create({
                             purchase_units: [{
-                                amount: { value: '0.99', currency_code: 'EUR' },
-                                description: 'IbizaGirl.pics - Single Purchase'
+                                amount: {
+                                    value: PAYPAL_CONFIG.prices.ppv,
+                                    currency_code: PAYPAL_CONFIG.currency
+                                },
+                                description: 'Single Content Access - IbizaGirl.pics'
                             }]
                         });
                     },
@@ -576,20 +311,23 @@
                         });
                     },
                     onError: function(err) {
-                        console.log('PayPal PPV error:', err);
-                    },
-                    style: { layout: 'vertical', color: 'blue', shape: 'rect', height: 40 }
-                }).render('#paypal-ppv').catch(err => {
-                    console.log('PayPal PPV render error:', err);
-                });
-
-                // Monthly - €9.99
+                        console.error('PayPal Error:', err);
+                        alert('Payment failed. Please try again.');
+                    }
+                }).render('#paypal-ppv-button');
+            }
+            
+            // Monthly Subscription Button
+            if (document.getElementById('paypal-monthly-button')) {
                 paypal.Buttons({
                     createOrder: function(data, actions) {
                         return actions.order.create({
                             purchase_units: [{
-                                amount: { value: '9.99', currency_code: 'EUR' },
-                                description: 'IbizaGirl.pics - Monthly Access'
+                                amount: {
+                                    value: PAYPAL_CONFIG.prices.monthly,
+                                    currency_code: PAYPAL_CONFIG.currency
+                                },
+                                description: 'Monthly Access - IbizaGirl.pics'
                             }]
                         });
                     },
@@ -599,20 +337,28 @@
                         });
                     },
                     onError: function(err) {
-                        console.log('PayPal Monthly error:', err);
+                        console.error('PayPal Error:', err);
+                        alert('Payment failed. Please try again.');
                     },
-                    style: { layout: 'vertical', color: 'gold', shape: 'rect', height: 40 }
-                }).render('#paypal-monthly').catch(err => {
-                    console.log('PayPal Monthly render error:', err);
-                });
-
-                // Lifetime - €49.99
+                    style: {
+                        color: 'gold',
+                        shape: 'rect',
+                        label: 'subscribe'
+                    }
+                }).render('#paypal-monthly-button');
+            }
+            
+            // Lifetime Access Button
+            if (document.getElementById('paypal-lifetime-button')) {
                 paypal.Buttons({
                     createOrder: function(data, actions) {
                         return actions.order.create({
                             purchase_units: [{
-                                amount: { value: '49.99', currency_code: 'EUR' },
-                                description: 'IbizaGirl.pics - Lifetime Access'
+                                amount: {
+                                    value: PAYPAL_CONFIG.prices.lifetime,
+                                    currency_code: PAYPAL_CONFIG.currency
+                                },
+                                description: 'Lifetime Access - IbizaGirl.pics'
                             }]
                         });
                     },
@@ -622,260 +368,63 @@
                         });
                     },
                     onError: function(err) {
-                        console.log('PayPal Lifetime error:', err);
+                        console.error('PayPal Error:', err);
+                        alert('Payment failed. Please try again.');
                     },
-                    style: { layout: 'vertical', color: 'gold', shape: 'rect', height: 40 }
-                }).render('#paypal-lifetime').catch(err => {
-                    console.log('PayPal Lifetime render error:', err);
-                });
-
-                console.log('PayPal configurado exitosamente');
-            } catch (error) {
-                console.log('PayPal setup error:', error);
-            }
-        }
-
-        function handlePaymentSuccess(type, details) {
-            localStorage.setItem('vip_access', 'true');
-            localStorage.setItem('vip_type', type);
-            
-            alert('Pago exitoso! Ya tienes acceso ' + type + '. La pagina se recargara para mostrar el contenido premium.');
-            window.location.reload();
-        }
-
-        function simulatePayment(type) {
-            const confirmed = confirm('Proceder con el pago para ' + type + '?');
-            if (confirmed) {
-                handlePaymentSuccess(type, { simulated: true });
-            }
-        }
-
-        function handlePremiumClick(contentType, filename) {
-            const price = contentType === 'photo' ? '€0.10' : '€0.30';
-            const confirmed = confirm('Desbloquear este ' + contentType + ' por ' + price + '?');
-            if (confirmed) {
-                localStorage.setItem('vip_access', 'true');
-                window.location.reload();
-            }
-        }
-
-        // ============================
-        // ANUNCIOS LIMPIOS
-        // ============================
-        function setupAds() {
-            console.log('Configurando anuncios...');
-            
-            // JuicyAds - Método corregido sin appendChild
-            setTimeout(() => {
-                try {
-                    window.adsbyjuicy = window.adsbyjuicy || [];
-                    window.adsbyjuicy.push({'adzone': 2092250});
-                    window.adsbyjuicy.push({'adzone': 2092251});
-                    window.adsbyjuicy.push({'adzone': 2092471});
-                    window.adsbyjuicy.push({'adzone': 2092470});
-                    
-                    const script = document.createElement('script');
-                    script.type = 'text/javascript';
-                    script.src = 'https://poweredby.jads.co/js/jads.js';
-                    script.onerror = () => console.log('JuicyAds fallback activo');
-                    document.head.appendChild(script);
-                    
-                    console.log('JuicyAds configurado');
-                } catch (error) {
-                    console.log('JuicyAds fallback activo:', error);
-                }
-            }, 2000);
-            
-            // ExoClick/PopAds
-            setTimeout(() => {
-                try {
-                    const script1 = document.createElement('script');
-                    script1.type = 'text/javascript';
-                    script1.innerHTML = `
-                        var _pop = _pop || [];
-                        _pop.push(['siteId', 6006884]);
-                        _pop.push(['minBid', 0]);
-                        _pop.push(['popundersPerIP', 1]);
-                        _pop.push(['delayBetween', 0]);
-                        _pop.push(['default', false]);
-                        _pop.push(['defaultPerDay', 1]);
-                        _pop.push(['topmostLayer', false]);
-                        (function() {
-                            var pa = document.createElement('script'); 
-                            pa.type = 'text/javascript'; 
-                            pa.async = true;
-                            pa.src = 'https://c1.popads.net/pop.js';
-                            pa.onerror = function() { console.log('ExoClick fallback activo'); };
-                            var s = document.getElementsByTagName('script')[0]; 
-                            s.parentNode.insertBefore(pa, s);
-                        })();
-                    `;
-                    document.head.appendChild(script1);
-                    console.log('ExoClick/PopAds configurado');
-                } catch (error) {
-                    console.log('ExoClick fallback activo:', error);
-                }
-            }, 3000);
-            
-            // Ero-Advertising
-            setTimeout(() => {
-                try {
-                    const script2 = document.createElement('script');
-                    script2.type = 'text/javascript';
-                    script2.src = 'https://ero-advertising.com/ads.js';
-                    script2.onerror = () => console.log('Ero-Advertising fallback activo');
-                    document.head.appendChild(script2);
-                    console.log('Ero-Advertising configurado');
-                } catch (error) {
-                    console.log('Ero-Advertising fallback activo:', error);
-                }
-            }, 4000);
-        }
-
-        // ============================
-        // EVENT LISTENERS
-        // ============================
-        function setupEventListeners() {
-            // Navigation
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', () => switchView(btn.dataset.view));
-            });
-            
-            // Load More Button
-            const loadMoreBtn = document.getElementById('loadMoreBtn');
-            if (loadMoreBtn) {
-                loadMoreBtn.addEventListener('click', () => {
-                    currentPage++;
-                    loadGalleryContent();
-                });
-            }
-            
-            // Isabella Chat
-            const isabellaButton = document.getElementById('isabella-button');
-            const isabellaChat = document.getElementById('isabella-chat');
-            const closeChat = document.getElementById('close-chat');
-            const sendBtn = document.getElementById('send-btn');
-            const chatInput = document.getElementById('chat-input');
-            
-            if (isabellaButton && isabellaChat) {
-                isabellaButton.addEventListener('click', () => {
-                    isabellaChat.classList.toggle('active');
-                });
-                
-                if (closeChat) {
-                    closeChat.addEventListener('click', () => {
-                        isabellaChat.classList.remove('active');
-                    });
-                }
-                
-                if (sendBtn) sendBtn.addEventListener('click', sendMessage);
-                if (chatInput) {
-                    chatInput.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter') sendMessage();
-                    });
-                }
-            }
-        }
-
-        // ============================
-        // CHAT FUNCTIONS
-        // ============================
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const messages = document.getElementById('chat-messages');
-            
-            if (input && input.value.trim()) {
-                const userMessage = document.createElement('div');
-                userMessage.className = 'message user-message';
-                userMessage.textContent = input.value;
-                if (messages) messages.appendChild(userMessage);
-                
-                setTimeout(() => {
-                    const botResponse = document.createElement('div');
-                    botResponse.className = 'message bot-message';
-                    botResponse.textContent = 'Gracias por tu mensaje! Te ayudo con cualquier duda sobre IbizaGirl.pics';
-                    if (messages) messages.appendChild(botResponse);
-                    if (messages) messages.scrollTop = messages.scrollHeight;
-                }, 1000);
-                
-                input.value = '';
-                if (messages) messages.scrollTop = messages.scrollHeight;
-            }
-        }
-
-        function insertQuickMessage(message) {
-            const input = document.getElementById('chat-input');
-            if (input) {
-                input.value = message;
-            }
-        }
-
-        // ============================
-        // LIGHTBOX
-        // ============================
-        function openLightbox(src) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            
-            if (lightbox && lightboxImg) {
-                lightboxImg.src = src;
-                lightbox.classList.add('active');
-            }
-        }
-
-        function setupLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            const closeBtn = document.querySelector('.lightbox-close');
-            
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    if (lightbox) lightbox.classList.remove('active');
-                });
-            }
-            
-            if (lightbox) {
-                lightbox.addEventListener('click', (e) => {
-                    if (e.target === lightbox) {
-                        lightbox.classList.remove('active');
+                    style: {
+                        color: 'blue',
+                        shape: 'rect',
+                        label: 'pay'
                     }
-                });
+                }).render('#paypal-lifetime-button');
+            }
+        });
+        
+        // Payment Success Handler
+        function handlePaymentSuccess(type, details) {
+            console.log('Payment successful:', type, details);
+            
+            // Store access in localStorage
+            const accessData = {
+                type: type,
+                purchaseDate: new Date().toISOString(),
+                transactionId: details.id,
+                payerEmail: details.payer.email_address
+            };
+            
+            localStorage.setItem('vipAccess', JSON.stringify(accessData));
+            
+            // Show success message
+            alert(`Payment successful! Welcome to VIP access, ${details.payer.name.given_name}!`);
+            
+            // Reload page to apply VIP access
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        }
+        
+        // Modal Functions
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+        
+        function prevImage() {
+            // Implemented in main-script-updated.js
+            if (window.navigateLightbox) {
+                window.navigateLightbox('prev');
             }
         }
-
-        // ============================
-        // INICIALIZACIÓN
-        // ============================
-        function init() {
-            console.log('Inicializando IbizaGirl.pics con contenido GARANTIZADO...');
-            
-            // Ocultar spinner
-            const loading = document.getElementById('loading');
-            if (loading) loading.style.display = 'none';
-            
-            // Configurar banner
-            setupBanner();
-            
-            // Cargar contenido inicial
-            loadTeasers('teasersGrid');
-            loadGalleryContent();
-            
-            // Configurar sistemas
-            setupEventListeners();
-            setupLightbox();
-            
-            // Configurar servicios externos
-            setTimeout(setupPayPal, 1000);
-            setTimeout(setupAds, 2000);
-            
-            console.log('Aplicacion inicializada correctamente');
-        }
-
-        // ============================
-        // INICIO
-        // ============================
-        document.addEventListener('DOMContentLoaded', init);
         
-        console.log('IbizaGirl.pics v5.0 CLEAN completamente cargado y funcional');
+        function nextImage() {
+            // Implemented in main-script-updated.js
+            if (window.navigateLightbox) {
+                window.navigateLightbox('next');
+            }
+        }
     </script>
 </body>
 </html>
