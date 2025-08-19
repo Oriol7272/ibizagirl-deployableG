@@ -418,9 +418,9 @@
     // Setup banner
     function setupBanner(images) {
         console.log('🎠 Configurando banner con imágenes:', images);
-        const banner = document.getElementById('heroBanner');
+        const banner = document.getElementById('banner-slider');
         if (!banner) {
-            console.warn('⚠️ No se encontró elemento heroBanner');
+            console.warn('⚠️ No se encontró elemento banner-slider');
             return;
         }
         
