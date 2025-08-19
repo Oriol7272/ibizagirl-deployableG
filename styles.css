@@ -746,6 +746,18 @@ body {
     margin: 20px auto;
 }
 
+.ad-skyscraper {
+    width: 160px;
+    height: 600px;
+    margin: 20px auto;
+}
+
+.ad-rectangle-footer {
+    width: 300px;
+    height: 250px;
+    margin: 0 auto;
+}
+
 .ads-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
