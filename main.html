@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IbizaGirl.pics - Premium Paradise Gallery | Daily Updates</title>
-    <meta name="description" content="200+ exclusive photos and 40+ HD videos from paradise. Daily updates with 30% new content. Paradise Mediterranean content.">
+    <meta name="description" content="572+ exclusive photos and 93+ HD videos from paradise. Daily updates with new content. Paradise Mediterranean content.">
     <meta name="keywords" content="Ibiza, gallery, premium, photos HD, exclusive videos, VIP content, paradise gallery, Mediterranean, Spanish beaches">
     <meta name="author" content="IbizaGirl.pics">
     <meta name="robots" content="index, follow">
@@ -15,8 +15,8 @@
     
     <!-- Open Graph -->
     <meta property="og:title" content="IbizaGirl.pics - Premium Paradise Gallery">
-    <meta property="og:description" content="200+ exclusive photos and 40+ HD videos from Ibiza. Daily updates.">
-    <meta property="og:image" content="/full/bikini.webp">
+    <meta property="og:description" content="572+ exclusive photos and 93+ HD videos from Ibiza. Daily updates.">
+    <meta property="og:image" content="/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp">
     <meta property="og:url" content="https://ibizagirl.pics">
     <meta property="og:type" content="website">
     
@@ -24,11 +24,11 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="IbizaGirl.pics - Premium Gallery">
     <meta name="twitter:description" content="Exclusive Ibiza content updated daily">
-    <meta name="twitter:image" content="/full/bikini.webp">
+    <meta name="twitter:image" content="/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp">
     
     <!-- Favicon -->
-    <link rel="icon" href="/full/bikini.webp" type="image/webp">
-    <link rel="apple-touch-icon" href="/full/bikini.webp">
+    <link rel="icon" href="/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp" type="image/webp">
+    <link rel="apple-touch-icon" href="/full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp">
     
     <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
@@ -77,12 +77,16 @@
             <div class="ad-container" id="ad-mobile-top">
                 <script type="text/javascript">
                     setTimeout(() => {
-                        if (typeof jads !== 'undefined') {
-                            jads('2092250','300','250');
-                        } else {
-                            document.getElementById('ad-mobile-top').innerHTML = '<div style="width:300px;height:250px;background:rgba(255,255,255,0.1);border:1px dashed #fff;display:flex;align-items:center;justify-content:center;color:#fff;">Ad Zone 300x250</div>';
+                        try {
+                            if (typeof jads !== 'undefined') {
+                                jads('2092250','300','250');
+                            } else {
+                                document.getElementById('ad-mobile-top').innerHTML = '<div style="width:300px;height:250px;background:linear-gradient(45deg,#ff1493,#ff69b4);border:1px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;border-radius:8px;font-size:14px;">🎯 Ad Zone 300x250<br>JuicyAds Loading...</div>';
+                            }
+                        } catch(e) {
+                            console.log('JuicyAds loading...');
                         }
-                    }, 3000);
+                    }, 2000);
                 </script>
             </div>
             
@@ -97,21 +101,25 @@
         <div id="galleryView" class="content-view active">
             <div class="section-header">
                 <h2>📸 Premium Photo Gallery</h2>
-                <p>572+ exclusive photos - €0.10 each or unlimited access</p>
+                <p>200+ daily photos from 572+ exclusive collection - €0.10 each or unlimited access</p>
             </div>
             <div id="main-gallery" class="gallery-grid"></div>
             <button id="loadMoreBtn" class="load-more-btn">Load More Photos</button>
             
             <!-- Ad Zone: 125x125 -->
-            <div class="ad-container ad-square">
+            <div class="ad-container ad-square" id="ad-square-1">
                 <script type="text/javascript">
                     setTimeout(() => {
-                        if (typeof jads !== 'undefined') {
-                            jads('2092251','125','125');
-                        } else {
-                            document.getElementById('ad-mobile-top').innerHTML = '<div style="width:125px;height:125px;background:rgba(255,255,255,0.1);border:1px dashed #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">Ad 125x125</div>';
+                        try {
+                            if (typeof jads !== 'undefined') {
+                                jads('2092251','125','125');
+                            } else {
+                                document.getElementById('ad-square-1').innerHTML = '<div style="width:125px;height:125px;background:linear-gradient(45deg,#ff1493,#ff69b4);border:1px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;border-radius:8px;font-size:11px;">🎯 Ad<br>125x125</div>';
+                            }
+                        } catch(e) {
+                            console.log('JuicyAds square loading...');
                         }
-                    }, 4000);
+                    }, 3000);
                 </script>
             </div>
         </div>
@@ -120,7 +128,7 @@
         <div id="videosView" class="content-view">
             <div class="section-header">
                 <h2>🎬 Premium Video Gallery</h2>
-                <p>93+ HD videos - €0.30 each or unlimited access</p>
+                <p>40+ daily videos from 93+ HD collection - €0.30 each or unlimited access</p>
             </div>
             <div id="video-gallery" class="video-grid"></div>
         </div>
@@ -158,9 +166,9 @@
                     </div>
                     <ul class="features-list">
                         <li>✓ Unlimited photos & videos</li>
-                        <li>✓ Daily new content</li>
-                        <li>✓ 572+ premium photos</li>
-                        <li>✓ 93+ HD videos</li>
+                        <li>✓ 200+ daily photos</li>
+                        <li>✓ 40+ daily videos</li>
+                        <li>✓ All 572+ photos + 93+ videos</li>
                     </ul>
                     <div id="paypal-monthly" class="paypal-button-container"></div>
                 </div>
@@ -194,24 +202,36 @@
     <!-- Footer Ads -->
     <div class="footer-ads">
         <!-- Mobile Bottom Ad (300x50) -->
-        <div class="ad-container ad-mobile-bottom">
+        <div class="ad-container ad-mobile-bottom" id="ad-mobile-bottom">
             <script type="text/javascript">
                 setTimeout(() => {
-                    if (typeof jads !== 'undefined') {
-                        jads('2092471','300','50');
+                    try {
+                        if (typeof jads !== 'undefined') {
+                            jads('2092471','300','50');
+                        } else {
+                            document.getElementById('ad-mobile-bottom').innerHTML = '<div style="width:300px;height:50px;background:linear-gradient(45deg,#ff1493,#ff69b4);border:1px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;border-radius:8px;font-size:12px;">🎯 Mobile Ad 300x50</div>';
+                        }
+                    } catch(e) {
+                        console.log('JuicyAds mobile loading...');
                     }
-                }, 5000);
+                }, 4000);
             </script>
         </div>
         
         <!-- Additional Square Ad (125x125) -->
-        <div class="ad-container ad-square-footer">
+        <div class="ad-container ad-square-footer" id="ad-square-footer">
             <script type="text/javascript">
                 setTimeout(() => {
-                    if (typeof jads !== 'undefined') {
-                        jads('2092470','125','125');
+                    try {
+                        if (typeof jads !== 'undefined') {
+                            jads('2092470','125','125');
+                        } else {
+                            document.getElementById('ad-square-footer').innerHTML = '<div style="width:125px;height:125px;background:linear-gradient(45deg,#ff1493,#ff69b4);border:1px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;border-radius:8px;font-size:11px;">🎯 Footer<br>125x125</div>';
+                        }
+                    } catch(e) {
+                        console.log('JuicyAds footer loading...');
                     }
-                }, 6000);
+                }, 5000);
             </script>
         </div>
     </div>
@@ -281,9 +301,9 @@
         </div>
     </div>
 
-    <!-- JavaScript con CONTENIDO REAL -->
+    <!-- JavaScript con ARCHIVOS REALES -->
     <script>
-        console.log('🚀 Inicializando IbizaGirl.pics...');
+        console.log('🚀 IbizaGirl.pics v3.0 - Inicializando con archivos REALES...');
         
         // Variables globales
         let currentPage = 1;
@@ -293,93 +313,111 @@
         let isVIP = false;
         let lightboxIndex = 0;
         let lightboxImages = [];
+        let dailyImages = [];
+        let dailyVideos = [];
 
-        // CONTENIDO REAL - Imágenes de uncensored/ (572 imágenes)
-        const premiumImages = [
+        // ARCHIVOS REALES obtenidos dinámicamente
+        const ALL_FULL_IMAGES = [
+            '0456996c-b56e-42ef-9049-56b1a1ae2646.webp', '0Tc8Vtd0mEIvNHZwYGBq.webp', '0lySugcO4Pp4pEZKvz9U.webp',
+            '0nSaCJQxbVw4BDrhnhHO.webp', '13TXvyRVZ7LtvAOx7kme.webp', '18VQaczW5kdfdiqUVasH.webp',
+            '1dEu25K0mS3zxRlXRjHR.webp', '1qEBcg9QbkZRRdLt0Chc.webp', '1tt8H4fX3XzyV90HjNG3.webp',
+            '27bGIzFFpej5ubUkvykD.webp', '2gjqH68H586TKLDK9lh9.webp', '2yw4sowPh3Tyln5oxRdw.webp',
+            '39GYGt3bticS0Mjbud0p.webp', '3IWka3fnP9b8yz6j5l91.webp', '3ZYL4GCUOs3rfq3iTPJ7.webp',
+            '4GN6i0Db2hl4Ck9vf0LE.webp', '4YhoIAWSbVaOqBhAOGqR.webp', '82KxJ9daxf9MpK019L5I.webp',
+            '83cSC4eRnYGZUNo9AoqD.webp', '85158b64-4168-45fa-9cb4-0b40634f7fa1.webp'
+        ];
+
+        const ALL_UNCENSORED_IMAGES = [
             '00wd2wVE89BJnQVenuNP.webp', '01CTDHff9PmCsZqjjCoO.webp', '02gNvnd7bLJgBX7wvQ2r.webp',
             '05mTzCtfbQ5McL31hk49.webp', '081YXXFwiGwFJpJCqkV9.webp', '08cuJR4dA17oVjLQcQd7.webp',
             '09HFl7nAkIjFBFbg3SeA.webp', '0K7AtRh7U93R2VH9axxQ.webp', '0Scwe5oo0JuUEanBguCT.webp',
-            '0Tc8Vtd0mEIvNHZwYGBq.webp', '0fEzN4rH1SyLy2B8QWKf.webp', '0oOGbWJuCnpW5HXK7rBH.webp',
-            '0qWIyTAiCKgHVZYMCTf6.webp', '0yKUhMUKNKN3TGMNn6gM.webp', '1FaXaxCMGHlFWGLmYFnx.webp',
-            '1FhWGKPiGKsrNcDLGRHq.webp', '1G3NfLGKlO3s1WKnzm6K.webp', '1KdGCl7d8KflqEwKmMQn.webp',
-            '1LdCf2AhsQvfP4FdVyYe.webp', '1LvKi5oLINojt7AHqtKw.webp', '1Mni3BH74vy3h7qGzE0A.webp',
-            '1N6D3VYGlzaTYGlZfGhx.webp', '1Ok1XnGBzklg2kfBMhZK.webp', '1OpP4o4GcUMJ0ZqG9eQs.webp',
-            '1QWvwqKPvj2EQfUKl5sX.webp', '1SVLPwEOmqhcMZN8yfnN.webp', '1UkRh4k7JmABhA7nVYlq.webp',
-            '1VLVc8OKl8lOcC9YyPYv.webp', '1WpnHSS0M5hxFRq8XLEL.webp', '1XJLLVhnSKCGYiRa3cPy.webp',
-            '1c4o0QJnGXBBhLWZjc8F.webp', '1eW7TRQwzw7bG7ZjGfGc.webp', '1fKHfWkUWqZznzgdm7pS.webp',
-            '1gKFXvQWQVOdYd4rLxlh.webp', '1gLvnCLOsJheLslSS7fG.webp', '1hYN9J8mjUAyPvDxKYlk.webp',
-            '1iVwNy9lQOXBOAaWlAKm.webp', '1iw2W8AxgDLXBqHZWWGZ.webp', '1jz1k9S1z0KCRLOALEHl.webp',
-            '1kDbEBiDLzBW8IHiNaPC.webp', '1kZ7mA2rAX4JB5fMQFOy.webp', '1mqKClOQyNxNH21r9sTX.webp',
-            '1pVu7iOdVtlUB3uN5Yf2.webp', '1qDONkc5QgzQq6Cyd5JG.webp', '1qQzRZoQONAMhACUjqRz.webp',
-            '1rzE8Gq0sYjqhUzKDaJK.webp', '1tqKMQ5WdqhWLTwjm3Jj.webp', '1uZ9rOKZKULnl6E8sJrQ.webp',
-            '1vPP0GfE9LEW5M3LI9Qv.webp', '1w0qAYJGgHME4Q6GYkfM.webp', '1wmBZYpQRwYXMfrOyFVE.webp',
-            '1yZGJEb4VnJB6VnGKSlx.webp', '1yqWN6OQzCQNAcR7qfHG.webp', '20e4kNfhNhEI5Znt2Sfy.webp',
-            '21ASElbEWHlLLGHErQX9.webp', '22KJiGBLvhWOQHFdqXdH.webp', '22z0HYnRgdfTHfrwMxvf.webp',
-            '233E0pGKvnqZhgQBROJV.webp', '23ztETL1U6fRhEYgFxSl.webp', '24kHjZe7vkIKhOhkJJJJ.webp',
-            '25ikmQFeLkc3T9qXBdhE.webp', '26KjgZJeOWjYySDqVvjr.webp', '27ZOJNcr4yq0COjM1Ndc.webp',
-            '28KQwbLnTnYGE8Fq6vMF.webp', '28nT8Y4LIgQvJ9xG5cj3.webp', '29RRlbhhQjVZGl2lkgHR.webp',
-            '2A48fNZGAhjUQ8Y4LKWa.webp', '2AJHOOYwlJHwmOHQ2fEL.webp', '2BHpMx3GJlfKjE7bwzG0.webp',
-            '2CC5CNKhf4xCPL2Qckz9.webp', '2ENJYmgmjAYzGGfOh1B9.webp', '2FLeFmGqXP6c3mSDOFYs.webp',
-            '2FnP7nKiWAcYg9K2G6MD.webp', '2GcNGKdK4yOIuOGfR1z5.webp', '2Gf3iX5Z5qLyNkwF2C7z.webp',
-            '2GwVW5ZXg8JCJvhgHU4R.webp', '2HCnWKjMNqCYTfNl9WnY.webp', '2HFXVWKj1IFdCmnGYH1f.webp',
-            '2J1pZrHnQYPfMzOKNn1r.webp', '2JLV6GTjJ7LPCYgQzqPe.webp', '2JUKXeqJ2CdQHfq7mqfq.webp',
-            '2KGaJCKhGnQVd6sJY7hG.webp', '2L3pRGMngAVHVGFN7Hqc.webp', '2MjqTYc2Y6qONJm2bXcJ.webp',
-            '2N3eJhHqfpNNOx8pNOqx.webp', '2OhIgPKl8ylIPZt5NJVS.webp', '2PC3GzjGAqzEHKk1bMhO.webp',
-            '2PJXwm2bHJLRcUbXjh7T.webp', '2PQRbRObHZmr1xGOkAhN.webp', '2QSgaKVGKC2KqK3R1kGX.webp',
-            '2RW0lGklqmXmLEJnPFOq.webp', '2RzNZhKn4JjqUOqYLkNR.webp', '2SVjKQKkfWVjCKQ3JqkV.webp',
-            '2TKMXJjqhHgNHjh9xOPX.webp', '2UGZ2z3YrVHHRHpqhFVZ.webp', '2UKaJV2VJjqKVH1HdVJq.webp',
-            '2VFH6gHHnGFGnHM6YKrK.webp', '2WHFHqHFq8fP5F0qpFH8.webp', '2XKGGJjqJOhKGh2jGHOt.webp',
-            '2YHqFYqHgOpGOhKUOhGq.webp', '2ZJGOHhKGUhGEhKEhHKG.webp', '2aJVHJKqhVqKJVqKJEJK.webp',
-            '2bEJKJVJEJVqJVqJVqKE.webp', '2cJEJVqJEJVJEqVJEJVq.webp', '2dEJVJEqJVJEVJEJVJEV.webp',
-            '2eVJEJVJEVJEVJEVJEVJ.webp', '2fJEVJEVJEVJEVJEVJEV.webp', '2gEVJEVJEVJEVJEVJEVJ.webp',
-            '2hJEVJEVJEVJEVJEVJEV.webp', '2iEVJEVJEVJEVJEVJEVJ.webp', '2jJEVJYH1D0dxYkQxltr.webp'
+            '0Tc8Vtd0mEIvNHZwYGBq.webp', '0VBC7iOXjVN2c89AngyH.webp', '0XOhygF9EVXZI4PEp1GG.webp',
+            '0iELEcoTlZgqxYoQG168.webp', '0ijarBbN0aKx6uXbanyP.webp', '0oN44NT2wHztAUYhV5bc.webp',
+            '0qvHNvqJU86FmxFEu8Fv.webp', '0yiMo3Hxx1iFQquiFJtX.webp', '0yj7DvfXP6ajqAXoac8A.webp',
+            '12IdAS832WEcngM0TmiU.webp', '15rRK9JyAaWsDxwVzCRM.webp'
         ];
 
-        // CONTENIDO REAL - Videos de uncensored-videos/ (93 videos)
-        const premiumVideos = [
+        const ALL_VIDEOS = [
             '0nF138CMxl1eGWUxaG2d.mp4', '0xXK6PxXSv6cpYxvI7HX.mp4', '1NYBqpy4q2GVCDCXmXDK.mp4',
             '1SZsGxjFfrA7diW05Yvj.mp4', '2FO1Ra6RDA8FjGWmDv8d.mp4', '3W7GxdRyaPj0uAK9fD4I.mp4',
             '3i61FDkL2wmF6RjQbZKR.mp4', '5qsmyiUv590ZBfrpct6G.mp4', '7gBpFJiLzDH9s5ukalLs.mp4',
-            '8RF2trrwvytHFkimtzDE.mp4', '8fQQnk9u7YAQQXDpfOW3.mp4', '8qfK5e4NbCYglU2WfMQ6.mp4',
-            '8yE2nxCwV2QcJsdXGf32.mp4', '99ACESTm9KLPGdLSh0J1.mp4', '9weRZL3KvPUd3qNQz0Mt.mp4',
-            'BA7Bvw9GHNCbsEKOruXh.mp4', 'Bg8z3Gk9SuxEAFGt1WBo.mp4', 'CzAtUvr9DPCv7JVMFNez.mp4',
-            'G4LILz0eqoh4m3YOZ2WK.mp4', 'G4XjXiZIHZZRsKwlDYCp.mp4', 'GK3wKGkNYhO4YyFDAg8x.mp4',
-            'Hn9Su6XHo4m7EGiR9f5S.mp4', 'IES8pgSNhuVYlqcse2sm.mp4', 'ImHBnXCOaNfqltnBwcUh.mp4',
-            'J2E8ciwOpkU0Jv79cdKj.mp4', 'JswE4SwqdmsQfLef3PzC.mp4', 'Jz7oLnRbSV732OCdu3u9.mp4',
-            'M6TEA1f8hNdjol3Wi1se.mp4', 'MCZSxdyGPDN7E7Mkdj8F.mp4', 'MaV4A0BTJiYg1UThuwHk.mp4',
-            'MkWQbiVWaJbShjipx4Kq.mp4', 'MOsBiYkWV6VFfK2P0Pxz.mp4', 'N5TItomcAI6KvA7202Lz.mp4',
-            'N6j12lQQ199vM8HTZw1O.mp4', 'NTGWrlYi5RltnwhDSO6R.mp4', 'Nnb48ZgMp3tNboq4uXWb.mp4',
-            'Ocb0MqRnLH1pezhcgpHh.mp4', 'P6FrIUZnYN1l3N7AKjX0.mp4', 'PiMHNagAFVaFtqmYvimt.mp4',
-            'QGeTBD8xHjPvnqA72uiF.mp4', 'RzI8s0b5kfP9tVnoGbAd.mp4', 'S7cVIsUsWJ1Nnf31dhTq.mp4',
-            'T6auQxu1yZKCGPqVJ7ue.mp4', 'UQGldJ8bdBrYyWDP0MEN.mp4', 'UiQ8qKsHUJAvIIPFCLnz.mp4',
-            'VijVO7RT6KjdzwE1iFRi.mp4', 'W1vTYUeyTSl8Pvv72sPW.mp4', 'XEW69wj2uK8Bu6NwHuce.mp4',
-            'XRCoUfkNLzwUepShH19v.mp4', 'Z8C1oBoK0vERMZ2g8aD9.mp4', 'ZPPOJjpdigAhYYekcnPx.mp4',
-            'ZaszI9a5huBi41yXZq2w.mp4', 'ahLNYijoKI9YoYoGToLK.mp4', 'beSTk3pKEdHZJSH7rwHs.mp4',
-            'cXi2dPqHJJwsJWWnRm6J.mp4', 'ebNx2Mft0L7qtcGy2sUy.mp4', 'eXZcQY7SeVHjcgwv8hHn.mp4',
-            'f8FbeCjEOwLRvwIgfK8l.mp4', 'fCE3ydur09Lbf0hxFHyD.mp4', 'fg2JqRBziuyvCFyjoaWE.mp4',
-            'g9fe19vfWl138v5dqou2.mp4', 'gII1RvXkZk6Szauv9cDp.mp4', 'hpGf0VPAwY3NrRbj9wd8.mp4',
-            'i1iPIEe7iIhancXwP05J.mp4', 'iniuJRrZzzGp74LWfZYy.mp4', 'juHQDjTQ8HeFlLsuDhzS.mp4',
-            'kAU1KdI09ffEf1fjCgPC.mp4', 'kfDFWczYHsZXjtwmMsP4.mp4', 'n4DaX8Nwj1glWI1Oe9vj.mp4',
-            'nLejk9R1jPVuOpyrlrAN.mp4', 'oHEzllQyoJOrAZ5lnUdU.mp4', 'peTmHJhWF44gaz25ACCr.mp4',
-            'qEOel0dBNRP2ttJtVUcQ.mp4', 'r14kVENgyJthsXKP4ckJ.mp4', 'rBSogUSRYAorst0XO7oy.mp4',
-            'rWwDSNSYmt9jpPd2ngiI.mp4', 'raKwkNU85MId6acMS6a0.mp4', 'vF3JI0gM7nDGJAiKFb7S.mp4',
-            'vJel6k1lAYlZxfEe5f1a.mp4', 'vhDZYiY0UkTLtmu7HrfF.mp4', 'wtcVFSKn4McI9xahFEGr.mp4',
-            'ymdZTKkujrU5ON7ZB66H.mp4', 'zX53TSjhlQj4Gy76iK0H.mp4'
+            '8RF2trrwvytHFkimtzDE.mp4'
         ];
 
-        // Banners REALES de carpeta full/
-        const bannerImages = [
-            'full/bikini.webp', 'full/backbikini.webp', 'full/Sintulo.webp', 
-            'full/Sinportada.webp', 'full/Sinoseup.webp', 'full/buena.webp'
-        ];
+        // Funciones de utilidad
+        function getDailySeed() {
+            const today = new Date();
+            return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        }
 
-        // Teasers REALES (primeras 10 imágenes de full/)
-        const teaserImages = [
-            'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
-            'full/bikini.webp', 'full/backbikini.webp', 'full/Sintulo.webp',
-            'full/Sinportada.webp', 'full/Sinoseup.webp', 'full/buena.webp',
-            'full/ya.webp', 'full/bikbanner.webp', 'full/bikbanner2.webp'
-        ];
+        function shuffleArrayWithSeed(array, seed) {
+            const shuffled = [...array];
+            let random = seed;
+            
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                random = (random * 9301 + 49297) % 233280;
+                const j = Math.floor((random / 233280) * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            
+            return shuffled;
+        }
+
+        function generateDailyContent() {
+            const seed = getDailySeed();
+            console.log('🎲 Generando contenido diario con seed:', seed);
+            
+            // 200 fotos aleatorias diarias de uncensored/
+            fetch('/uncensored_files.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const allUncensored = data.trim().split('\n').filter(f => f.endsWith('.webp'));
+                    const shuffled = shuffleArrayWithSeed(allUncensored, seed);
+                    dailyImages = shuffled.slice(0, 200);
+                    console.log('📸 200 fotos diarias generadas de', allUncensored.length, 'totales');
+                    loadGalleryContent();
+                })
+                .catch(() => {
+                    // Fallback si no se puede leer el archivo
+                    dailyImages = shuffleArrayWithSeed(ALL_UNCENSORED_IMAGES, seed).slice(0, 20);
+                    loadGalleryContent();
+                });
+
+            // 40 videos aleatorios diarios de uncensored-videos/
+            fetch('/videos_files.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const allVideos = data.trim().split('\n').filter(f => f.endsWith('.mp4'));
+                    const shuffled = shuffleArrayWithSeed(allVideos, seed);
+                    dailyVideos = shuffled.slice(0, 40);
+                    console.log('🎬 40 videos diarios generados de', allVideos.length, 'totales');
+                })
+                .catch(() => {
+                    // Fallback si no se puede leer el archivo
+                    dailyVideos = shuffleArrayWithSeed(ALL_VIDEOS, seed).slice(0, 10);
+                });
+
+            // Banners aleatorios de full/
+            fetch('/full_files.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const allFull = data.trim().split('\n').filter(f => f.endsWith('.webp'));
+                    const shuffled = shuffleArrayWithSeed(allFull, seed);
+                    const banners = shuffled.slice(0, 6);
+                    setupBannerRotation(banners);
+                    
+                    // Teasers
+                    const teasers = shuffled.slice(6, 16);
+                    loadTeaserGallery(teasers);
+                })
+                .catch(() => {
+                    // Fallback
+                    const banners = shuffleArrayWithSeed(ALL_FULL_IMAGES, seed).slice(0, 6);
+                    setupBannerRotation(banners);
+                    const teasers = shuffleArrayWithSeed(ALL_FULL_IMAGES, seed).slice(6, 16);
+                    loadTeaserGallery(teasers);
+                });
+        }
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
@@ -387,30 +425,53 @@
         });
 
         function initializeApp() {
-            console.log('🚀 Inicializando IbizaGirl.pics con contenido REAL...');
+            console.log('🚀 Inicializando IbizaGirl.pics con archivos REALES...');
             
             // Ocultar loading screen
             setTimeout(() => {
                 document.getElementById('loadingScreen').style.display = 'none';
             }, 1500);
             
+            // Verificar acceso VIP
+            checkVIPAccess();
+            
             // Configurar navegación
             setupNavigation();
             
-            // Configurar banner rotatorio
-            setupBannerRotation();
-            
-            // Cargar contenido REAL
-            loadTeaserGallery();
-            loadGalleryContent();
+            // Generar contenido diario
+            generateDailyContent();
             
             // Configurar PayPal
-            setupPayPal();
+            setTimeout(() => setupPayPal(), 2000);
             
             // Configurar event listeners
             setupEventListeners();
             
-            console.log('✅ Aplicación inicializada con 572 fotos y 93 videos');
+            console.log('✅ Aplicación inicializada con contenido diario');
+        }
+
+        function checkVIPAccess() {
+            const vipData = localStorage.getItem('vipAccess');
+            if (vipData) {
+                try {
+                    const access = JSON.parse(vipData);
+                    const now = new Date();
+                    const purchaseDate = new Date(access.purchaseDate);
+                    
+                    if (access.type === 'lifetime') {
+                        isVIP = true;
+                        console.log('🌟 Usuario VIP Lifetime detectado');
+                    } else if (access.type === 'monthly') {
+                        const monthAgo = new Date(purchaseDate.getTime() + (30 * 24 * 60 * 60 * 1000));
+                        if (now < monthAgo) {
+                            isVIP = true;
+                            console.log('🌟 Usuario VIP Monthly activo');
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error parsing VIP data:', e);
+                }
+            }
         }
 
         function setupNavigation() {
@@ -444,14 +505,17 @@
             }
         }
 
-        function setupBannerRotation() {
+        function setupBannerRotation(banners) {
             const bannerSlider = document.getElementById('banner-slider');
             const indicatorsContainer = document.getElementById('banner-indicators');
             
-            bannerImages.forEach((banner, index) => {
+            bannerSlider.innerHTML = '';
+            indicatorsContainer.innerHTML = '';
+            
+            banners.forEach((banner, index) => {
                 const slide = document.createElement('div');
                 slide.className = `banner-slide ${index === 0 ? 'active' : ''}`;
-                slide.style.backgroundImage = `url(${banner})`;
+                slide.style.backgroundImage = `url(full/${banner})`;
                 bannerSlider.appendChild(slide);
                 
                 const indicator = document.createElement('div');
@@ -461,9 +525,12 @@
             });
             
             // Auto rotación
+            if (bannerInterval) clearInterval(bannerInterval);
             bannerInterval = setInterval(() => {
                 nextBanner();
             }, 5000);
+            
+            console.log('🎠 Banner rotatorio configurado con', banners.length, 'imágenes diarias');
         }
 
         function goToBanner(index) {
@@ -473,24 +540,26 @@
             slides.forEach(slide => slide.classList.remove('active'));
             indicators.forEach(ind => ind.classList.remove('active'));
             
-            slides[index].classList.add('active');
-            indicators[index].classList.add('active');
+            if (slides[index]) slides[index].classList.add('active');
+            if (indicators[index]) indicators[index].classList.add('active');
             
             currentBannerIndex = index;
         }
 
         function nextBanner() {
             const slides = document.querySelectorAll('.banner-slide');
-            currentBannerIndex = (currentBannerIndex + 1) % slides.length;
-            goToBanner(currentBannerIndex);
+            if (slides.length > 0) {
+                currentBannerIndex = (currentBannerIndex + 1) % slides.length;
+                goToBanner(currentBannerIndex);
+            }
         }
 
-        function loadTeaserGallery() {
+        function loadTeaserGallery(teasers) {
             const teaserContainer = document.getElementById('teaser-gallery');
             
-            teaserContainer.innerHTML = teaserImages.map((img, index) => `
-                <div class="teaser-item" onclick="openLightbox('${img}', ${index})">
-                    <img src="${img}" alt="Teaser ${index + 1}" loading="lazy" onerror="this.src='full/bikini.webp'">
+            teaserContainer.innerHTML = teasers.map((img, index) => `
+                <div class="teaser-item" onclick="openLightbox('full/${img}', ${index})">
+                    <img src="full/${img}" alt="Teaser ${index + 1}" loading="lazy" onerror="this.src='full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp'">
                     <div class="teaser-overlay">
                         <div class="teaser-info">
                             <h4>Preview ${index + 1}</h4>
@@ -500,14 +569,19 @@
                 </div>
             `).join('');
             
-            console.log('✨ Teasers cargados:', teaserImages.length);
+            console.log('✨ Teasers cargados:', teasers.length);
         }
 
         function loadGalleryContent() {
+            if (dailyImages.length === 0) {
+                setTimeout(() => loadGalleryContent(), 500);
+                return;
+            }
+            
             const galleryContainer = document.getElementById('main-gallery');
             const startIndex = (currentPage - 1) * 24;
-            const endIndex = Math.min(startIndex + 24, premiumImages.length);
-            const currentImages = premiumImages.slice(startIndex, endIndex);
+            const endIndex = Math.min(startIndex + 24, dailyImages.length);
+            const currentImages = dailyImages.slice(startIndex, endIndex);
             
             const imageHTML = currentImages.map((img, index) => {
                 const globalIndex = startIndex + index;
@@ -516,16 +590,16 @@
                 
                 return `
                     <div class="gallery-item ${blurClass}" onclick="handleGalleryClick('uncensored/${img}', ${globalIndex})">
-                        <img src="uncensored/${img}" alt="Premium Photo ${globalIndex + 1}" loading="lazy" onerror="this.src='full/bikini.webp'">
+                        <img src="uncensored/${img}" alt="Premium Photo ${globalIndex + 1}" loading="lazy" onerror="this.src='full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp'" style="max-width:100%;height:auto;object-fit:cover;">
                         <div class="gallery-overlay">
                             <div class="gallery-info">
-                                <h4>Premium Photo ${globalIndex + 1}</h4>
+                                <h4>Photo ${globalIndex + 1}</h4>
                                 <p>${isPremium ? 'Premium €0.10' : 'VIP Access'}</p>
                             </div>
                         </div>
                         ${isPremium ? `
                             <div class="premium-overlay">
-                                <div class="premium-badge">
+                                <div class="premium-badge" onclick="event.stopPropagation(); showPremiumModal('uncensored/${img}', 'image')">
                                     <span class="price">€0.10</span>
                                     <span class="unlock-text">Unlock</span>
                                 </div>
@@ -543,14 +617,19 @@
             
             // Actualizar botón de carga
             const loadMoreBtn = document.getElementById('loadMoreBtn');
-            loadMoreBtn.style.display = endIndex < premiumImages.length ? 'block' : 'none';
+            loadMoreBtn.style.display = endIndex < dailyImages.length ? 'block' : 'none';
             
-            console.log(`🖼️ Galería cargada: ${endIndex}/${premiumImages.length} imágenes`);
+            console.log(`🖼️ Galería cargada: ${endIndex}/${dailyImages.length} imágenes diarias`);
         }
 
         function loadVideoContent() {
+            if (dailyVideos.length === 0) {
+                setTimeout(() => loadVideoContent(), 500);
+                return;
+            }
+            
             const videoContainer = document.getElementById('video-gallery');
-            const videosToShow = premiumVideos.slice(0, 24);
+            const videosToShow = dailyVideos.slice(0, 24);
             
             const videoHTML = videosToShow.map((video, index) => {
                 const isPremium = !isVIP;
@@ -558,12 +637,12 @@
                 
                 return `
                     <div class="video-item ${isPremium ? 'premium-blur' : ''}" onclick="handleVideoClick('uncensored-videos/${video}', ${index})">
-                        <img src="full/bikini.webp" alt="Video ${index + 1}" class="video-thumbnail" loading="lazy">
+                        <img src="full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp" alt="Video ${index + 1}" class="video-thumbnail" loading="lazy">
                         <div class="video-duration">${duration}</div>
                         <div class="video-play-btn">▶</div>
                         ${isPremium ? `
                             <div class="premium-overlay">
-                                <div class="premium-badge">
+                                <div class="premium-badge" onclick="event.stopPropagation(); showPremiumModal('uncensored-videos/${video}', 'video')">
                                     <span class="price">€0.30</span>
                                     <span class="unlock-text">Unlock Video</span>
                                 </div>
@@ -574,7 +653,7 @@
             }).join('');
             
             videoContainer.innerHTML = videoHTML;
-            console.log(`🎬 Videos cargados: ${videosToShow.length}`);
+            console.log(`🎬 Videos cargados: ${videosToShow.length} videos diarios`);
         }
 
         function handleGalleryClick(imagePath, index) {
@@ -601,19 +680,19 @@
             modal.innerHTML = `
                 <div class="modal-content">
                     <span class="close-modal" onclick="this.closest('.modal').remove()">&times;</span>
-                    <h2>Premium Content</h2>
+                    <h2>💎 Premium Content</h2>
                     <p>This ${type} requires a premium purchase.</p>
-                    <div class="premium-options">
-                        <div class="option">
+                    <div class="premium-options" style="display:flex;gap:20px;margin-top:20px;">
+                        <div class="option" style="text-align:center;padding:20px;background:rgba(255,255,255,0.1);border-radius:12px;flex:1;">
                             <h3>Single Purchase</h3>
-                            <div class="price-large">${price}</div>
-                            <button class="premium-btn" onclick="alert('Redirect to PayPal payment for ${price}')">
+                            <div class="price-large" style="font-size:2rem;color:#ff1493;margin:10px 0;">${price}</div>
+                            <button class="premium-btn" onclick="alert('Redirect to PayPal payment for ${price}'); this.closest('.modal').remove();">
                                 Buy Now
                             </button>
                         </div>
-                        <div class="option">
+                        <div class="option" style="text-align:center;padding:20px;background:rgba(255,215,0,0.1);border-radius:12px;flex:1;">
                             <h3>Full Access</h3>
-                            <div class="price-large">€9.99/month</div>
+                            <div class="price-large" style="font-size:2rem;color:#ffd700;margin:10px 0;">€9.99/month</div>
                             <button class="premium-btn" onclick="switchView('pricing'); this.closest('.modal').remove();">
                                 Get Full Access
                             </button>
@@ -628,94 +707,107 @@
         function setupPayPal() {
             console.log('💳 Configurando PayPal...');
             
-            // Pay Per View
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: '0.99',
-                                currency_code: 'EUR'
-                            },
-                            description: 'IbizaGirl.pics - Single Purchase Access'
-                        }]
-                    });
-                },
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(details) {
-                        handlePaymentSuccess('ppv', details);
-                    });
-                },
-                onError: function(err) {
-                    console.error('PayPal Error:', err);
-                },
-                style: {
-                    layout: 'vertical',
-                    color: 'blue',
-                    shape: 'rect',
-                    tagline: false
-                }
-            }).render('#paypal-ppv');
+            try {
+                // Pay Per View
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: '0.99',
+                                    currency_code: 'EUR'
+                                },
+                                description: 'IbizaGirl.pics - Single Purchase Access'
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            handlePaymentSuccess('ppv', details);
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('PayPal Error:', err);
+                    },
+                    style: {
+                        layout: 'vertical',
+                        color: 'blue',
+                        shape: 'rect',
+                        tagline: false
+                    }
+                }).render('#paypal-ppv');
 
-            // Monthly Subscription
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: '9.99',
-                                currency_code: 'EUR'
-                            },
-                            description: 'IbizaGirl.pics - Monthly Access'
-                        }]
-                    });
-                },
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(details) {
-                        handlePaymentSuccess('monthly', details);
-                    });
-                },
-                onError: function(err) {
-                    console.error('PayPal Error:', err);
-                },
-                style: {
-                    layout: 'vertical',
-                    color: 'gold',
-                    shape: 'rect',
-                    tagline: false
-                }
-            }).render('#paypal-monthly');
+                // Monthly Subscription
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: '9.99',
+                                    currency_code: 'EUR'
+                                },
+                                description: 'IbizaGirl.pics - Monthly Access'
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            handlePaymentSuccess('monthly', details);
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('PayPal Error:', err);
+                    },
+                    style: {
+                        layout: 'vertical',
+                        color: 'gold',
+                        shape: 'rect',
+                        tagline: false
+                    }
+                }).render('#paypal-monthly');
 
-            // Lifetime Access
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: '49.99',
-                                currency_code: 'EUR'
-                            },
-                            description: 'IbizaGirl.pics - Lifetime Access'
-                        }]
-                    });
-                },
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(details) {
-                        handlePaymentSuccess('lifetime', details);
-                    });
-                },
-                onError: function(err) {
-                    console.error('PayPal Error:', err);
-                },
-                style: {
-                    layout: 'vertical',
-                    color: 'gold',
-                    shape: 'rect',
-                    tagline: false
-                }
-            }).render('#paypal-lifetime');
-            
-            console.log('✅ PayPal configurado correctamente');
+                // Lifetime Access
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: '49.99',
+                                    currency_code: 'EUR'
+                                },
+                                description: 'IbizaGirl.pics - Lifetime Access'
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            handlePaymentSuccess('lifetime', details);
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('PayPal Error:', err);
+                    },
+                    style: {
+                        layout: 'vertical',
+                        color: 'gold',
+                        shape: 'rect',
+                        tagline: false
+                    }
+                }).render('#paypal-lifetime');
+                
+                console.log('✅ PayPal configurado correctamente');
+            } catch (error) {
+                console.error('Error configurando PayPal:', error);
+                
+                // Fallback visual para botones PayPal
+                const containers = ['paypal-ppv', 'paypal-monthly', 'paypal-lifetime'];
+                containers.forEach(id => {
+                    const container = document.getElementById(id);
+                    if (container) {
+                        container.innerHTML = '<div style="background:linear-gradient(45deg,#0070ba,#005ea6);color:white;padding:12px;border-radius:8px;text-align:center;cursor:pointer;margin-top:10px;" onclick="alert(\'PayPal is loading...\')">💳 PayPal Loading...</div>';
+                    }
+                });
+            }
         }
 
         function handlePaymentSuccess(type, details) {
@@ -763,7 +855,7 @@
             lightbox.classList.add('show');
             document.body.style.overflow = 'hidden';
             
-            lightboxImages = premiumImages.map(img => `uncensored/${img}`);
+            lightboxImages = dailyImages.map(img => `uncensored/${img}`);
         }
 
         function closeLightbox() {
@@ -773,6 +865,8 @@
         }
 
         function navigateLightbox(direction) {
+            if (lightboxImages.length === 0) return;
+            
             if (direction === 'prev') {
                 lightboxIndex = lightboxIndex > 0 ? lightboxIndex - 1 : lightboxImages.length - 1;
             } else {
@@ -782,37 +876,6 @@
             const lightboxImg = document.getElementById('lightbox-img');
             lightboxImg.src = lightboxImages[lightboxIndex];
         }
-
-        // Detectar acceso VIP al cargar
-        window.addEventListener('load', () => {
-            const vipData = localStorage.getItem('vipAccess');
-            if (vipData) {
-                try {
-                    const access = JSON.parse(vipData);
-                    const now = new Date();
-                    const purchaseDate = new Date(access.purchaseDate);
-                    
-                    if (access.type === 'lifetime') {
-                        isVIP = true;
-                        console.log('🌟 Usuario VIP Lifetime detectado');
-                    } else if (access.type === 'monthly') {
-                        const monthAgo = new Date(purchaseDate.getTime() + (30 * 24 * 60 * 60 * 1000));
-                        if (now < monthAgo) {
-                            isVIP = true;
-                            console.log('🌟 Usuario VIP Monthly activo');
-                        }
-                    }
-                } catch (e) {
-                    console.error('Error parsing VIP data:', e);
-                }
-            }
-        });
-
-        // Funciones globales para HTML
-        window.openLightbox = openLightbox;
-        window.closeLightbox = closeLightbox;
-        window.navigateLightbox = navigateLightbox;
-        window.switchView = switchView;
 
         // ============================
         // ISABELLA AI ASSISTANT
@@ -927,60 +990,21 @@
             if (lowerMessage.includes('premium') || lowerMessage.includes('acceso') || lowerMessage.includes('vip')) {
                 return `🌟 <strong>Acceso Premium</strong><br><br>
                         Con el acceso premium obtienes:<br>
-                        • 572+ fotos exclusivas sin censura<br>
-                        • 93+ videos HD de alta calidad<br>
-                        • Contenido actualizado regularmente<br>
+                        • 200+ fotos diarias de 572+ colección<br>
+                        • 40+ videos diarios de 93+ HD collection<br>
+                        • Contenido rotativo cada día<br>
                         • Sin anuncios ni interrupciones<br>
                         • Acceso desde cualquier dispositivo<br><br>
                         ¡Perfecto para disfrutar del contenido completo! 🔥`;
             }
             
-            if (lowerMessage.includes('pago') || lowerMessage.includes('paypal') || lowerMessage.includes('tarjeta')) {
-                return `💳 <strong>Métodos de Pago</strong><br><br>
-                        Aceptamos pagos seguros a través de:<br>
-                        • PayPal (recomendado) 🛡️<br>
-                        • Tarjetas Visa/Mastercard<br>
-                        • American Express<br>
-                        • Maestro y Diners<br><br>
-                        Todos los pagos están protegidos con cifrado SSL y son 100% seguros.`;
-            }
-            
             if (lowerMessage.includes('contenido') || lowerMessage.includes('fotos') || lowerMessage.includes('videos')) {
                 return `📊 <strong>Nuestro Contenido</strong><br><br>
-                        🖼️ <strong>572+ Fotos Premium:</strong> Contenido exclusivo de alta calidad<br>
-                        🎥 <strong>93+ Videos HD:</strong> Contenido en video de 2-12 minutos<br>
-                        🆕 <strong>Actualizaciones:</strong> Nuevo contenido añadido regularmente<br>
+                        🖼️ <strong>572+ Fotos Premium:</strong> 200 diferentes cada día<br>
+                        🎥 <strong>93+ Videos HD:</strong> 40 diferentes cada día<br>
+                        🆕 <strong>Rotación diaria:</strong> Contenido siempre fresco<br>
                         📱 <strong>Compatible:</strong> Optimizado para móvil y desktop<br><br>
                         ¡Todo el contenido es original y exclusivo de IbizaGirl.pics!`;
-            }
-            
-            if (lowerMessage.includes('ayuda') || lowerMessage.includes('help') || lowerMessage.includes('soporte')) {
-                return `🆘 <strong>¿Necesitas ayuda?</strong><br><br>
-                        Estoy aquí para ayudarte con:<br>
-                        • Explicarte cómo funciona el sitio<br>
-                        • Información sobre precios y pagos<br>
-                        • Problemas técnicos<br>
-                        • Preguntas sobre el contenido<br><br>
-                        ¡Solo dime qué necesitas y te ayudo al instante! 😊`;
-            }
-            
-            if (lowerMessage.includes('hola') || lowerMessage.includes('hi') || lowerMessage.includes('hello')) {
-                return `¡Hola! 👋 Bienvenido/a a IbizaGirl.pics<br><br>
-                        Soy Isabella, tu asistente personal. Estoy aquí para ayudarte con cualquier duda sobre:<br>
-                        • Nuestro contenido premium 🌟<br>
-                        • Precios y formas de pago 💳<br>
-                        • Cómo navegar el sitio 🧭<br>
-                        • Soporte técnico 🔧<br><br>
-                        ¿En qué puedo ayudarte hoy?`;
-            }
-            
-            if (lowerMessage.includes('gratis') || lowerMessage.includes('free')) {
-                return `🎁 <strong>Contenido Gratuito</strong><br><br>
-                        Puedes disfrutar gratis de:<br>
-                        • Galería de previews en la página principal<br>
-                        • 10 imágenes teaser de muestra<br>
-                        • Banners rotativos<br><br>
-                        Para acceso completo a las 572+ fotos y 93+ videos premium, necesitas una suscripción. ¡Pero puedes empezar con una foto individual por solo €0.10! 😉`;
             }
             
             // Respuesta por defecto
@@ -988,16 +1012,23 @@
                     Te puedo ayudar con información sobre:<br>
                     💎 Acceso premium y precios<br>
                     💳 Métodos de pago<br>
-                    📊 Nuestro contenido<br>
+                    📊 Nuestro contenido (572+ fotos, 93+ videos)<br>
                     🆘 Soporte técnico<br><br>
                     ¿Hay algo específico que te gustaría saber? ¡Estoy aquí para ayudarte! 😊`;
         }
-        
-        // Funciones globales para Isabella
+
+        // Funciones globales para HTML
+        window.openLightbox = openLightbox;
+        window.closeLightbox = closeLightbox;
+        window.navigateLightbox = navigateLightbox;
+        window.switchView = switchView;
         window.toggleIsabella = toggleIsabella;
         window.sendQuickMessage = sendQuickMessage;
         window.handleIsabellaEnter = handleIsabellaEnter;
         window.sendIsabellaMessage = sendIsabellaMessage;
+        window.showPremiumModal = showPremiumModal;
+        window.handleGalleryClick = handleGalleryClick;
+        window.handleVideoClick = handleVideoClick;
     </script>
 </body>
 </html>
