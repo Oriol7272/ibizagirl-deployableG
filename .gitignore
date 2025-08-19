@@ -37,4 +37,5 @@ build/
 .emergent*
 
 # Server logs
-server.log
+server*.log
+*.log
