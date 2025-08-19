@@ -417,6 +417,30 @@
         return null;
     }
     
+    // Update VIP status display - RESTORED FUNCTION
+    function updateVIPStatus() {
+        const vipAccess = checkVIPAccess();
+        const statusElement = document.querySelector('.vip-status');
+        
+        if (statusElement) {
+            if (vipAccess) {
+                statusElement.innerHTML = `
+                    <div class="vip-badge active">
+                        <span class="vip-icon">👑</span>
+                        <span class="vip-text">VIP ${vipAccess.toUpperCase()}</span>
+                    </div>
+                `;
+            } else {
+                statusElement.innerHTML = `
+                    <div class="vip-badge inactive">
+                        <span class="vip-icon">🔒</span>
+                        <span class="vip-text">No Premium</span>
+                    </div>
+                `;
+            }
+        }
+    }
+    
     // Create photo card with proper blur system (NO blur for teasers from "full" folder)
     function createPhotoCard(photo, isPremium = false) {
         const vipAccess = checkVIPAccess();
