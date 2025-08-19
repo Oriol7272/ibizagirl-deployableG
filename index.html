@@ -6,6 +6,67 @@
     <title>IbizaGirl.pics - Bienvenido al Paraíso</title>
     <meta name="description" content="Premium content from the paradise of Ibiza. Daily updates, exclusive photos and videos.">
     
+    <!-- SEO Meta Tags -->
+    <meta name="keywords" content="ibiza, premium content, photos, videos, paradise, exclusive">
+    <meta name="author" content="IbizaGirl">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ibizagirl.pics/">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="IbizaGirl.pics - Bienvenido al Paraíso">
+    <meta property="og:description" content="Premium content from the paradise of Ibiza. Daily updates, exclusive photos and videos.">
+    <meta property="og:image" content="https://ibizagirl.pics/full/bikbanner.webp">
+    <meta property="og:url" content="https://ibizagirl.pics/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IbizaGirl.pics">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IbizaGirl.pics - Bienvenido al Paraíso">
+    <meta name="twitter:description" content="Premium content from the paradise of Ibiza. Daily updates, exclusive photos and videos.">
+    <meta name="twitter:image" content="https://ibizagirl.pics/full/bikbanner.webp">
+    
+    <!-- Google Analytics - AÑADE TU MEASUREMENT ID AQUÍ -->
+    <!-- Sustituye G-XXXXXXXXXX por tu ID real de Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX', {
+            page_title: 'IbizaGirl.pics',
+            page_location: window.location.href,
+            content_group1: 'Premium Content'
+        });
+        
+        // Track PayPal payments
+        function trackPayment(amount, item) {
+            gtag('event', 'purchase', {
+                transaction_id: Date.now(),
+                value: parseFloat(amount),
+                currency: 'EUR',
+                items: [{
+                    item_id: item,
+                    item_name: item,
+                    category: 'Premium Content',
+                    price: parseFloat(amount),
+                    quantity: 1
+                }]
+            });
+        }
+        
+        // Track ad clicks
+        function trackAdClick(network, zone) {
+            gtag('event', 'ad_click', {
+                event_category: 'Advertising',
+                event_label: network + ' - Zone: ' + zone,
+                value: 1
+            });
+        }
+        
+        console.log('📊 Google Analytics configured');
+    </script>
+    
     <!-- PayPal SDK - Solo botones, sin tarjetas -->
     <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&disable-funding=credit,card"></script>
     
