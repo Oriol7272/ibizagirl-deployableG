@@ -1,518 +1,611 @@
-// main-script.js - Script Principal v5.0
-(function() {
-    'use strict';
+/**
+ * main-script.js - IbizaGirl.pics v5.1.0 FIXED
+ * Sistema principal integrado y corregido
+ */
+'use strict';
 
-    console.log('🎯 main-script.js v5.0 iniciando...');
+console.log('🚀 main-script.js v5.1.0 iniciando...');
 
-    // Wait for all dependencies
-    async function waitForDependencies() {
-        const maxAttempts = 50;
-        let attempts = 0;
-        
-        while (attempts < maxAttempts) {
-            if (window.UnifiedContentManager && 
-                window.PaymentSystem && 
-                window.AdSystem) {
-                console.log('✅ Todas las dependencias están listas');
+// ============================
+// VARIABLES GLOBALES
+// ============================
+let currentPage = 1;
+let currentView = 'gallery';
+let currentBannerIndex = 0;
+let bannerInterval = null;
+let isVIP = false;
+let lightboxIndex = 0;
+let lightboxImages = [];
+
+// ============================
+// DETECCIÓN VIP
+// ============================
+function checkVIPAccess() {
+    const vipData = localStorage.getItem('vipAccess');
+    if (vipData) {
+        try {
+            const access = JSON.parse(vipData);
+            const now = new Date();
+            const purchaseDate = new Date(access.purchaseDate);
+            
+            // Check if access is still valid
+            if (access.type === 'lifetime') {
+                isVIP = true;
                 return true;
             }
             
-            await new Promise(resolve => setTimeout(resolve, 100));
-            attempts++;
-        }
-        
-        console.error('❌ Timeout esperando dependencias');
-        return false;
-    }
-
-    // Initialize main application
-    async function initializeApp() {
-        console.log('🚀 Inicializando aplicación principal...');
-        
-        const ready = await waitForDependencies();
-        if (!ready) {
-            console.error('❌ No se pudieron cargar las dependencias');
-            return;
-        }
-
-        try {
-            // Initialize UI components
-            initializeUI();
-            
-            // Setup event handlers
-            setupEventHandlers();
-            
-            // Load initial content
-            loadInitialContent();
-            
-            console.log('✅ Aplicación inicializada correctamente');
-        } catch (error) {
-            console.error('❌ Error inicializando aplicación:', error);
-        }
-    }
-
-    // Initialize UI components
-    function initializeUI() {
-        console.log('🎨 Inicializando componentes UI...');
-        
-        // Initialize navigation
-        setupNavigation();
-        
-        // Initialize modals
-        setupModals();
-        
-        // Initialize lazy loading
-        setupLazyLoading();
-        
-        // Initialize tooltips
-        setupTooltips();
-    }
-
-    // Setup navigation
-    function setupNavigation() {
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', handleNavigation);
-        });
-    }
-
-    // Handle navigation
-    function handleNavigation(e) {
-        e.preventDefault();
-        const target = e.target.getAttribute('data-target');
-        
-        // Update active nav
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
-        e.target.classList.add('active');
-        
-        // Show target section
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        const targetSection = document.getElementById(target);
-        if (targetSection) {
-            targetSection.classList.add('active');
-        }
-    }
-
-    // Setup modals
-    function setupModals() {
-        // Close modal on backdrop click
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal')) {
-                closeModal(e.target);
+            if (access.type === 'monthly') {
+                const monthAgo = new Date(purchaseDate.getTime() + (30 * 24 * 60 * 60 * 1000));
+                if (now < monthAgo) {
+                    isVIP = true;
+                    return true;
+                }
             }
+        } catch (e) {
+            console.error('Error parsing VIP data:', e);
+        }
+    }
+    
+    isVIP = false;
+    return false;
+}
+
+// ============================
+// INICIALIZACIÓN
+// ============================
+async function initializeApp() {
+    console.log('📱 Inicializando aplicación...');
+    
+    // Hide loading screen
+    setTimeout(() => {
+        const loading = document.getElementById('loadingScreen');
+        if (loading) loading.style.display = 'none';
+    }, 1500);
+    
+    // Check VIP status
+    checkVIPAccess();
+    
+    // Setup navigation
+    setupNavigation();
+    
+    // Setup banner rotation
+    setupBannerRotation();
+    
+    // Load initial content
+    loadInitialContent();
+    
+    // Setup event listeners
+    setupEventListeners();
+    
+    // Setup lightbox
+    setupLightbox();
+    
+    console.log('✅ Aplicación inicializada correctamente');
+}
+
+// ============================
+// NAVEGACIÓN
+// ============================
+function setupNavigation() {
+    const navBtns = document.querySelectorAll('.nav-btn');
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const view = e.target.closest('.nav-btn').getAttribute('data-view');
+            switchView(view);
         });
-        
-        // Close button handlers
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modal = btn.closest('.modal');
-                if (modal) closeModal(modal);
-            });
-        });
+    });
+}
+
+function switchView(view) {
+    console.log('🔄 Cambiando a vista:', view);
+    
+    // Update nav buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-view="${view}"]`).classList.add('active');
+    
+    // Update views
+    document.querySelectorAll('.content-view').forEach(viewEl => {
+        viewEl.classList.remove('active');
+    });
+    document.getElementById(view + 'View').classList.add('active');
+    
+    currentView = view;
+    
+    // Load content for the view
+    if (view === 'gallery') {
+        loadGalleryContent();
+    } else if (view === 'videos') {
+        loadVideoContent();
     }
+}
 
-    // Open modal
-    window.openModal = function(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-    };
-
-    // Close modal
-    window.closeModal = function(modal) {
-        if (typeof modal === 'string') {
-            modal = document.getElementById(modal);
-        }
-        if (modal) {
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-    };
-
-    // Setup lazy loading
-    function setupLazyLoading() {
-        const lazyImages = document.querySelectorAll('img[data-src]');
+// ============================
+// BANNER ROTATORIO
+// ============================
+function setupBannerRotation() {
+    if (!window.BannerTeaserManager) {
+        console.warn('⚠️ BannerTeaserManager no disponible');
+        return;
+    }
+    
+    const banners = window.BannerTeaserManager.getBanners();
+    const bannerSlider = document.getElementById('banner-slider');
+    const indicatorsContainer = document.getElementById('banner-indicators');
+    
+    if (!bannerSlider || !banners.length) {
+        console.warn('⚠️ Banner slider no encontrado o sin banners');
+        return;
+    }
+    
+    // Create banner slides
+    banners.forEach((banner, index) => {
+        const slide = document.createElement('div');
+        slide.className = `banner-slide ${index === 0 ? 'active' : ''}`;
+        slide.style.backgroundImage = `url(${banner})`;
+        bannerSlider.appendChild(slide);
         
-        if ('IntersectionObserver' in window) {
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.dataset.src;
-                        img.removeAttribute('data-src');
-                        img.classList.add('loaded');
-                        observer.unobserve(img);
-                    }
-                });
-            });
-            
-            lazyImages.forEach(img => imageObserver.observe(img));
-        } else {
-            // Fallback for older browsers
-            lazyImages.forEach(img => {
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-            });
+        // Create indicator
+        const indicator = document.createElement('div');
+        indicator.className = `indicator ${index === 0 ? 'active' : ''}`;
+        indicator.addEventListener('click', () => goToBanner(index));
+        indicatorsContainer.appendChild(indicator);
+    });
+    
+    // Auto rotation
+    bannerInterval = setInterval(() => {
+        nextBanner();
+    }, 5000);
+    
+    console.log('🎠 Banner rotatorio configurado con', banners.length, 'imágenes');
+}
+
+function goToBanner(index) {
+    const slides = document.querySelectorAll('.banner-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    
+    slides.forEach(slide => slide.classList.remove('active'));
+    indicators.forEach(ind => ind.classList.remove('active'));
+    
+    slides[index].classList.add('active');
+    indicators[index].classList.add('active');
+    
+    currentBannerIndex = index;
+}
+
+function nextBanner() {
+    const slides = document.querySelectorAll('.banner-slide');
+    currentBannerIndex = (currentBannerIndex + 1) % slides.length;
+    goToBanner(currentBannerIndex);
+}
+
+// ============================
+// CONTENIDO DE GALERÍA
+// ============================
+function loadInitialContent() {
+    loadTeaserGallery();
+    loadGalleryContent();
+}
+
+function loadTeaserGallery() {
+    if (!window.BannerTeaserManager) return;
+    
+    const teasers = window.BannerTeaserManager.getTeasers();
+    const teaserContainer = document.getElementById('teaser-gallery');
+    
+    if (!teaserContainer || !teasers.length) return;
+    
+    teaserContainer.innerHTML = teasers.map((teaser, index) => `
+        <div class="teaser-item" data-src="${teaser}" onclick="openLightbox('${teaser}', ${index})">
+            <img src="${teaser}" alt="Teaser ${index + 1}" loading="lazy">
+            <div class="teaser-overlay">
+                <div class="teaser-info">
+                    <h4>Preview ${index + 1}</h4>
+                    <p>Click para ampliar</p>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    console.log('✨ Teasers cargados:', teasers.length);
+}
+
+function loadGalleryContent(page = 1) {
+    const galleryContainer = document.getElementById('main-gallery');
+    if (!galleryContainer) return;
+    
+    let images = [];
+    
+    // Combine public and premium content based on VIP status
+    if (window.PublicContentManager) {
+        images = [...window.PublicContentManager.getAll()];
+    }
+    
+    if (isVIP) {
+        if (window.PremiumContentPart1) {
+            images = [...images, ...window.PremiumContentPart1.getAll()];
+        }
+        if (window.PremiumContentPart2) {
+            images = [...images, ...window.PremiumContentPart2.getAll()];
         }
     }
-
-    // Setup tooltips
-    function setupTooltips() {
-        const tooltipElements = document.querySelectorAll('[data-tooltip]');
+    
+    // Shuffle and paginate
+    if (window.ArrayUtils) {
+        const seed = window.TimeUtils ? window.TimeUtils.getDailySeed() : Date.now();
+        images = window.ArrayUtils.shuffleWithSeed(images, seed);
+        const paginated = window.ArrayUtils.paginate(images, page, 24);
+        displayGalleryImages(paginated.data);
         
-        tooltipElements.forEach(element => {
-            element.addEventListener('mouseenter', showTooltip);
-            element.addEventListener('mouseleave', hideTooltip);
-        });
-    }
-
-    // Show tooltip
-    function showTooltip(e) {
-        const text = e.target.getAttribute('data-tooltip');
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.textContent = text;
-        
-        document.body.appendChild(tooltip);
-        
-        const rect = e.target.getBoundingClientRect();
-        tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
-        tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
-        
-        e.target._tooltip = tooltip;
-    }
-
-    // Hide tooltip
-    function hideTooltip(e) {
-        if (e.target._tooltip) {
-            e.target._tooltip.remove();
-            delete e.target._tooltip;
-        }
-    }
-
-    // Setup event handlers
-    function setupEventHandlers() {
-        console.log('📱 Configurando event handlers...');
-        
-        // Search functionality
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('input', handleSearch);
-        }
-        
-        // Filter buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', handleFilter);
-        });
-        
-        // Load more button
+        // Update load more button
         const loadMoreBtn = document.getElementById('loadMoreBtn');
         if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', loadMoreContent);
+            loadMoreBtn.style.display = paginated.hasNext ? 'block' : 'none';
+        }
+    } else {
+        displayGalleryImages(images.slice(0, 24));
+    }
+    
+    console.log('🖼️ Galería cargada:', images.length, 'imágenes disponibles');
+}
+
+function displayGalleryImages(images) {
+    const galleryContainer = document.getElementById('main-gallery');
+    if (!galleryContainer) return;
+    
+    const imageHTML = images.map((img, index) => {
+        const isPremium = img.includes('uncensored/') && !isVIP;
+        const blurClass = isPremium ? 'premium-blur' : '';
+        const overlayHTML = isPremium ? `
+            <div class="premium-overlay">
+                <div class="premium-badge">
+                    <span class="price">€0.10</span>
+                    <span class="unlock-text">Unlock to view</span>
+                </div>
+            </div>
+        ` : '';
+        
+        return `
+            <div class="gallery-item ${blurClass}" data-src="${img}" onclick="handleGalleryClick('${img}', ${index})">
+                <img src="${img}" alt="Gallery Image ${index + 1}" loading="lazy">
+                <div class="gallery-overlay">
+                    <div class="gallery-info">
+                        <h4>Image ${index + 1}</h4>
+                        <p>${isPremium ? 'Premium Content' : 'Free Content'}</p>
+                    </div>
+                </div>
+                ${overlayHTML}
+            </div>
+        `;
+    }).join('');
+    
+    if (currentPage === 1) {
+        galleryContainer.innerHTML = imageHTML;
+    } else {
+        galleryContainer.innerHTML += imageHTML;
+    }
+    
+    lightboxImages = images;
+}
+
+function handleGalleryClick(imagePath, index) {
+    if (imagePath.includes('uncensored/') && !isVIP) {
+        // Show premium purchase modal
+        showPremiumModal(imagePath);
+    } else {
+        // Open in lightbox
+        openLightbox(imagePath, index);
+    }
+}
+
+// ============================
+// CONTENIDO DE VIDEOS
+// ============================
+function loadVideoContent(page = 1) {
+    if (!window.VideoContentManager) {
+        console.warn('⚠️ VideoContentManager no disponible');
+        return;
+    }
+    
+    const videos = window.VideoContentManager.getAll();
+    const videoContainer = document.getElementById('video-gallery');
+    
+    if (!videoContainer) return;
+    
+    const videoHTML = videos.slice(0, 12).map((video, index) => {
+        const isPremium = !isVIP;
+        const blurClass = isPremium ? 'premium-blur' : '';
+        
+        return `
+            <div class="video-item ${blurClass}" data-src="${video}" onclick="handleVideoClick('${video}', ${index})">
+                <img src="${video}" alt="Video ${index + 1}" class="video-thumbnail" loading="lazy">
+                <div class="video-duration">2:45</div>
+                <div class="video-play-btn">▶</div>
+                ${isPremium ? `
+                    <div class="premium-overlay">
+                        <div class="premium-badge">
+                            <span class="price">€0.30</span>
+                            <span class="unlock-text">Unlock Video</span>
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
+    
+    videoContainer.innerHTML = videoHTML;
+    console.log('🎬 Videos cargados:', videos.length);
+}
+
+function handleVideoClick(videoPath, index) {
+    if (!isVIP) {
+        showPremiumModal(videoPath, 'video');
+    } else {
+        // Play video logic here
+        console.log('Playing video:', videoPath);
+    }
+}
+
+// ============================
+// MODAL PREMIUM
+// ============================
+function showPremiumModal(contentPath, type = 'image') {
+    const price = type === 'video' ? '€0.30' : '€0.10';
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal show';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-modal" onclick="this.closest('.modal').remove()">&times;</span>
+            <h2>Premium Content</h2>
+            <p>This ${type} requires a premium purchase.</p>
+            <div class="premium-options">
+                <div class="option">
+                    <h3>Single Purchase</h3>
+                    <div class="price-large">${price}</div>
+                    <button class="premium-btn" onclick="purchaseContent('${contentPath}', '${type}')">
+                        Buy Now
+                    </button>
+                </div>
+                <div class="option recommended">
+                    <h3>Full Access</h3>
+                    <div class="price-large">€9.99/month</div>
+                    <button class="premium-btn" onclick="window.location.hash='pricing'">
+                        Get Full Access
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// ============================
+// LIGHTBOX
+// ============================
+function setupLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+    
+    // Close on backdrop click
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (lightbox.classList.contains('show')) {
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    prevImage();
+                    break;
+                case 'ArrowRight':
+                    nextImage();
+                    break;
+            }
+        }
+    });
+}
+
+function openLightbox(imagePath, index = 0) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    
+    if (!lightbox || !lightboxImg) return;
+    
+    lightboxImg.src = imagePath;
+    lightboxIndex = index;
+    lightbox.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+}
+
+function prevImage() {
+    if (lightboxImages.length > 0) {
+        lightboxIndex = lightboxIndex > 0 ? lightboxIndex - 1 : lightboxImages.length - 1;
+        const lightboxImg = document.getElementById('lightbox-img');
+        if (lightboxImg) {
+            lightboxImg.src = lightboxImages[lightboxIndex];
         }
     }
+}
 
-    // Handle search
-    function handleSearch(e) {
-        const query = e.target.value.trim();
-        
-        if (query.length < 2) {
-            displaySearchResults([]);
-            return;
-        }
-        
-        if (window.searchContent) {
-            const results = window.searchContent(query);
-            displaySearchResults(results);
+function nextImage() {
+    if (lightboxImages.length > 0) {
+        lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+        const lightboxImg = document.getElementById('lightbox-img');
+        if (lightboxImg) {
+            lightboxImg.src = lightboxImages[lightboxIndex];
         }
     }
+}
 
-    // Display search results
-    function displaySearchResults(results) {
-        const resultsContainer = document.getElementById('searchResults');
-        if (!resultsContainer) return;
-        
-        if (!results || (results.photos?.length === 0 && results.videos?.length === 0)) {
-            resultsContainer.innerHTML = '<p class="no-results">No se encontraron resultados</p>';
-            return;
-        }
-        
-        let html = '';
-        
-        if (results.photos?.length > 0) {
-            html += '<h3>Fotos</h3><div class="results-grid">';
-            results.photos.slice(0, 6).forEach(photo => {
-                html += createPhotoCard(photo);
-            });
-            html += '</div>';
-        }
-        
-        if (results.videos?.length > 0) {
-            html += '<h3>Videos</h3><div class="results-grid">';
-            results.videos.slice(0, 6).forEach(video => {
-                html += createVideoCard(video);
-            });
-            html += '</div>';
-        }
-        
-        resultsContainer.innerHTML = html;
-    }
-
-    // Handle filter
-    function handleFilter(e) {
-        const filter = e.target.getAttribute('data-filter');
-        
-        // Update active filter
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
+// ============================
+// EVENT LISTENERS
+// ============================
+function setupEventListeners() {
+    // Load more button
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            currentPage++;
+            loadGalleryContent(currentPage);
         });
-        e.target.classList.add('active');
-        
-        // Apply filter
-        applyFilter(filter);
     }
-
-    // Apply filter
-    function applyFilter(filter) {
-        console.log('Aplicando filtro:', filter);
-        // Implementation depends on your content structure
+    
+    // Hash change for deep linking
+    window.addEventListener('hashchange', () => {
+        const hash = window.location.hash.substring(1);
+        if (['gallery', 'videos', 'pricing'].includes(hash)) {
+            switchView(hash);
+        }
+    });
+    
+    // Check initial hash
+    const initialHash = window.location.hash.substring(1);
+    if (['gallery', 'videos', 'pricing'].includes(initialHash)) {
+        switchView(initialHash);
     }
+}
 
-    // Load more content
-    function loadMoreContent() {
-        console.log('Cargando más contenido...');
-        // Implementation for loading more content
+// ============================
+// UTILIDADES
+// ============================
+function formatPrice(price) {
+    return new Intl.NumberFormat('es-ES', {
+        style: 'currency',
+        currency: 'EUR'
+    }).format(price);
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 5px;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// ============================
+// FUNCIONES GLOBALES PARA HTML
+// ============================
+window.openLightbox = openLightbox;
+window.closeLightbox = closeLightbox;
+window.prevImage = prevImage;
+window.nextImage = nextImage;
+window.navigateLightbox = function(direction) {
+    direction === 'prev' ? prevImage() : nextImage();
+};
+
+// ============================
+// INICIALIZACIÓN AUTOMÁTICA
+// ============================
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+}
+
+// ============================
+// CSS DINÁMICO
+// ============================
+const dynamicStyles = `
+    .premium-blur {
+        filter: blur(10px);
+        position: relative;
     }
-
-    // Load initial content
-    function loadInitialContent() {
-        console.log('📦 Cargando contenido inicial...');
-        
-        // Load daily photos
-        if (window.getDailyPhotos) {
-            const photos = window.getDailyPhotos();
-            displayPhotos(photos.slice(0, 12));
-        }
-        
-        // Load daily videos
-        if (window.getDailyVideos) {
-            const videos = window.getDailyVideos();
-            displayVideos(videos.slice(0, 6));
-        }
-        
-        // Load banner images
-        if (window.getBannerImages) {
-            const bannerImages = window.getBannerImages();
-            setupBanner(bannerImages);
-        }
+    
+    .premium-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
     }
-
-    // Display photos
-    function displayPhotos(photos) {
-        const container = document.getElementById('photosGrid');
-        if (!container) return;
-        
-        container.innerHTML = photos.map(photo => createPhotoCard(photo)).join('');
+    
+    .premium-badge {
+        background: linear-gradient(45deg, #ff1493, #ff69b4);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s ease;
     }
-
-    // Display videos
-    function displayVideos(videos) {
-        const container = document.getElementById('videosGrid');
-        if (!container) return;
-        
-        container.innerHTML = videos.map(video => createVideoCard(video)).join('');
+    
+    .premium-badge:hover {
+        transform: scale(1.1);
     }
-
-    // Create photo card
-    function createPhotoCard(photo) {
-        return `
-            <div class="content-card photo-card ${photo.isNew ? 'new' : ''}">
-                ${photo.isNew ? '<span class="badge-new">NUEVO</span>' : ''}
-                <div class="card-image">
-                    <img data-src="${photo.thumbnail}" alt="${photo.title || 'Photo'}" />
-                </div>
-                <div class="card-info">
-                    <h4>${photo.title || 'Sin título'}</h4>
-                    ${photo.model ? `<p class="model">Modelo: ${photo.model}</p>` : ''}
-                </div>
-            </div>
-        `;
+    
+    .premium-badge .price {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 5px;
     }
-
-    // Create video card
-    function createVideoCard(video) {
-        return `
-            <div class="content-card video-card ${video.isNew ? 'new' : ''}">
-                ${video.isNew ? '<span class="badge-new">NUEVO</span>' : ''}
-                <div class="card-image">
-                    <img data-src="${video.thumbnail}" alt="${video.title || 'Video'}" />
-                    <span class="duration">${video.duration || '00:00'}</span>
-                </div>
-                <div class="card-info">
-                    <h4>${video.title || 'Sin título'}</h4>
-                    ${video.model ? `<p class="model">Modelo: ${video.model}</p>` : ''}
-                </div>
-            </div>
-        `;
+    
+    .premium-badge .unlock-text {
+        display: block;
+        font-size: 0.9rem;
+        opacity: 0.9;
     }
-
-    // Setup banner
-    function setupBanner(images) {
-        const banner = document.getElementById('heroBanner');
-        if (!banner || !images || images.length === 0) return;
-        
-        let currentIndex = 0;
-        
-        function updateBanner() {
-            const image = images[currentIndex];
-            banner.style.backgroundImage = `url(${image.url})`;
-            currentIndex = (currentIndex + 1) % images.length;
-        }
-        
-        updateBanner();
-        setInterval(updateBanner, 5000);
+    
+    .lightbox.show {
+        display: flex;
     }
-
-    // Add styles
-    const style = document.createElement('style');
-    style.textContent = `
-        .content-section {
-            display: none;
-            animation: fadeIn 0.3s ease;
+    
+    .notification {
+        animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
         }
-        
-        .content-section.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal.show {
-            display: flex;
-        }
-        
-        .tooltip {
-            position: absolute;
-            background: #333;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            z-index: 10001;
-            pointer-events: none;
-        }
-        
-        .content-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            position: relative;
-        }
-        
-        .content-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .badge-new {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            z-index: 10;
-        }
-        
-        .card-image {
-            position: relative;
-            padding-bottom: 60%;
-            overflow: hidden;
-        }
-        
-        .card-image img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.3s ease;
-        }
-        
-        .card-image img.loaded {
+        to {
+            transform: translateX(0);
             opacity: 1;
         }
-        
-        .duration {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        
-        .card-info {
-            padding: 15px;
-        }
-        
-        .card-info h4 {
-            margin: 0 0 5px 0;
-            font-size: 16px;
-            color: #333;
-        }
-        
-        .card-info .model {
-            margin: 0;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .no-results {
-            text-align: center;
-            color: #999;
-            padding: 40px;
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeApp);
-    } else {
-        initializeApp();
     }
+`;
 
-    console.log('✅ main-script.js v5.0 cargado');
+const styleSheet = document.createElement('style');
+styleSheet.textContent = dynamicStyles;
+document.head.appendChild(styleSheet);
 
-})();
+console.log('✅ main-script.js v5.1.0 cargado y listo');
