@@ -97,7 +97,13 @@
             <!-- Ad Zone: 300x250 (ID: 2092250) -->
             <div class="ad-container ad-mobile" id="ad-mobile-top">
                 <script type="text/javascript">
-                    jads('2092250','300','250');
+                    if (typeof jads !== 'undefined') {
+                        jads('2092250','300','250');
+                    } else {
+                        setTimeout(() => {
+                            if (typeof jads !== 'undefined') jads('2092250','300','250');
+                        }, 1000);
+                    }
                 </script>
             </div>
             
