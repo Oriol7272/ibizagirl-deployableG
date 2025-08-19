@@ -537,6 +537,10 @@ body {
     cursor: pointer;
     transition: transform 0.3s ease;
     box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 }
 
 .premium-badge:hover {
@@ -547,13 +551,91 @@ body {
     display: block;
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 5px;
 }
 
 .premium-badge .unlock-text {
     display: block;
     font-size: 0.9rem;
     opacity: 0.9;
+}
+
+/* ============================
+   ADS CONTAINERS - ENHANCED
+   ============================ */
+.ad-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--border-radius);
+    min-height: 60px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.ad-mobile {
+    width: 320px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+.ad-banner {
+    width: 728px;
+    height: 90px;
+    margin: 0 auto;
+}
+
+.ad-rectangle {
+    width: 300px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+.ad-square {
+    width: 125px;
+    height: 125px;
+    margin: 20px auto;
+}
+
+.ad-mobile-bottom {
+    width: 320px;
+    height: 50px;
+    margin: 0 auto;
+}
+
+.ad-banner-footer {
+    width: 728px;
+    height: 90px;
+    margin: 0 auto;
+}
+
+.ad-square-footer {
+    width: 125px;
+    height: 125px;
+    margin: 20px auto;
+}
+
+.ads-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 40px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--border-radius);
+}
+
+.footer-ads {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius);
 }
 
 /* ============================
