@@ -1,777 +1,1146 @@
-// main-script.js - Script Principal v5.0
-(function() {
-    'use strict';
+// ============================
+// IBIZAGIRL.PICS - MAIN SCRIPT v4.1.0
+// Sistema Principal con Integración Modular
+// ============================
 
-    console.log('🎯 main-script.js v5.0 iniciando...');
+'use strict';
 
-    // Wait for real dependencies that actually exist
-    async function waitForDependencies() {
-        const maxAttempts = 50;
-        let attempts = 0;
+// ============================
+// CONFIGURATION & CONSTANTS
+// ============================
+
+const CONFIG = {
+    version: '4.1.0',
+    debug: false,
+    api: {
+        baseUrl: 'https://ibizagirl.pics',
+        timeout: 10000,
+        retryAttempts: 3
+    },
+    media: {
+        lazyLoadOffset: 50,
+        imageQuality: 'high',
+        videoPreload: 'metadata'
+    },
+    cache: {
+        duration: 3600000, // 1 hora
+        maxSize: 50 // MB
+    },
+    analytics: {
+        enabled: true,
+        trackingId: 'G-DBXYNPBSPY'
+    },
+    ads: {
+        enabled: true,
+        refreshInterval: 60000, // 1 minuto
+        maxRetries: 3
+    }
+};
+
+const ENVIRONMENT = {
+    isDevelopment: window.location.hostname === 'localhost',
+    isProduction: window.location.hostname === 'ibizagirl.pics',
+    isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+};
+
+// ============================
+// TRANSLATIONS
+// ============================
+
+const TRANSLATIONS = {
+    es: {
+        welcome: "Bienvenido",
+        photos: "Fotos",
+        videos: "Videos",
+        vip: "VIP",
+        packages: "Paquetes",
+        daily: "Diarias",
+        premium: "Premium",
+        exclusive: "Exclusivo",
+        subscribe: "Suscribirse",
+        buyNow: "Comprar Ahora",
+        loading: "Cargando...",
+        error: "Error al cargar",
+        retry: "Reintentar"
+    },
+    en: {
+        welcome: "Welcome",
+        photos: "Photos",
+        videos: "Videos",
+        vip: "VIP",
+        packages: "Packages",
+        daily: "Daily",
+        premium: "Premium",
+        exclusive: "Exclusive",
+        subscribe: "Subscribe",
+        buyNow: "Buy Now",
+        loading: "Loading...",
+        error: "Loading error",
+        retry: "Retry"
+    },
+    fr: {
+        welcome: "Bienvenue",
+        photos: "Photos",
+        videos: "Vidéos",
+        vip: "VIP",
+        packages: "Forfaits",
+        daily: "Quotidien",
+        premium: "Premium",
+        exclusive: "Exclusif",
+        subscribe: "S'abonner",
+        buyNow: "Acheter",
+        loading: "Chargement...",
+        error: "Erreur de chargement",
+        retry: "Réessayer"
+    },
+    de: {
+        welcome: "Willkommen",
+        photos: "Fotos",
+        videos: "Videos",
+        vip: "VIP",
+        packages: "Pakete",
+        daily: "Täglich",
+        premium: "Premium",
+        exclusive: "Exklusiv",
+        subscribe: "Abonnieren",
+        buyNow: "Jetzt kaufen",
+        loading: "Laden...",
+        error: "Ladefehler",
+        retry: "Wiederholen"
+    },
+    it: {
+        welcome: "Benvenuto",
+        photos: "Foto",
+        videos: "Video",
+        vip: "VIP",
+        packages: "Pacchetti",
+        daily: "Giornaliero",
+        premium: "Premium",
+        exclusive: "Esclusivo",
+        subscribe: "Iscriviti",
+        buyNow: "Acquista ora",
+        loading: "Caricamento...",
+        error: "Errore di caricamento",
+        retry: "Riprova"
+    },
+    pt: {
+        welcome: "Bem-vindo",
+        photos: "Fotos",
+        videos: "Vídeos",
+        vip: "VIP",
+        packages: "Pacotes",
+        daily: "Diário",
+        premium: "Premium",
+        exclusive: "Exclusivo",
+        subscribe: "Inscrever-se",
+        buyNow: "Comprar agora",
+        loading: "Carregando...",
+        error: "Erro ao carregar",
+        retry: "Tentar novamente"
+    }
+};
+
+// ============================
+// STATE MANAGEMENT
+// ============================
+
+const state = {
+    currentLanguage: 'es',
+    isLoading: false,
+    currentSlide: 0,
+    dailyContent: null,
+    userData: {
+        isVIP: false,
+        purchases: [],
+        preferences: {}
+    },
+    ui: {
+        modalOpen: false,
+        sidebarOpen: false,
+        currentView: 'gallery'
+    },
+    cache: new Map(),
+    errors: []
+};
+
+// ============================
+// ERROR HANDLER
+// ============================
+
+const ErrorHandler = {
+    errors: [],
+    maxErrors: 50,
+    
+    logError(error, context = '') {
+        const errorInfo = {
+            message: error?.message || String(error),
+            stack: error?.stack,
+            context,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            url: window.location.href
+        };
         
-        while (attempts < maxAttempts) {
-            if (window.BannerTeaserManager && 
-                window.PublicContentManager && 
-                window.VideoContentManager &&
-                window.EventManager) {
-                console.log('✅ Todas las dependencias reales están listas');
-                return true;
-            }
-            
-            await new Promise(resolve => setTimeout(resolve, 100));
-            attempts++;
+        this.errors.push(errorInfo);
+        
+        if (this.errors.length > this.maxErrors) {
+            this.errors.shift();
         }
         
-        console.error('❌ Timeout esperando dependencias reales');
-        return false;
-    }
-
-    // Initialize main application
-    async function initializeApp() {
-        console.log('🚀 Inicializando aplicación principal...');
-        
-        const ready = await waitForDependencies();
-        if (!ready) {
-            console.error('❌ No se pudieron cargar las dependencias');
-            return;
+        if (CONFIG.debug) {
+            console.error(`[${context}]`, error);
         }
-
-        try {
-            // Initialize UI components
-            initializeUI();
-            updateVIPStatus(); // Initialize VIP status display
-            
-            // Setup event handlers
-            setupEventHandlers();
-            
-            // Load initial content
-            loadInitialContent();
-            
-            // Hide loading screen
-            hideLoadingScreen();
-            
-            console.log('✅ Aplicación inicializada correctamente');
-        } catch (error) {
-            console.error('❌ Error inicializando aplicación:', error);
-            // Hide loading screen even on error
-            hideLoadingScreen();
+        
+        // Enviar errores críticos al servidor
+        if (this.isCriticalError(error)) {
+            this.reportToServer(errorInfo);
         }
-    }
-
-    // Initialize UI components
-    function initializeUI() {
-        console.log('🎨 Inicializando componentes UI...');
+    },
+    
+    isCriticalError(error) {
+        const criticalPatterns = [
+            'PayPal',
+            'payment',
+            'undefined is not',
+            'Cannot read property',
+            'Network request failed'
+        ];
         
-        // Initialize navigation
-        setupNavigation();
-        
-        // Initialize modals
-        setupModals();
-        
-        // Initialize lazy loading
-        setupLazyLoading();
-        
-        // Initialize tooltips
-        setupTooltips();
-    }
-
-    // Setup navigation
-    function setupNavigation() {
-        const navButtons = document.querySelectorAll('.nav-btn');
-        navButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                const targetView = e.currentTarget.getAttribute('data-view');
-                if (targetView) {
-                    showView(targetView);
-                    
-                    // Update active button
-                    navButtons.forEach(b => b.classList.remove('active'));
-                    e.currentTarget.classList.add('active');
-                }
+        return criticalPatterns.some(pattern => 
+            error?.message?.includes(pattern)
+        );
+    },
+    
+    reportToServer(errorInfo) {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'exception', {
+                description: errorInfo.message,
+                fatal: false
             });
-        });
+        }
+    },
+    
+    clearErrors() {
+        this.errors = [];
+    }
+};
+
+// ============================
+// UTILITY FUNCTIONS
+// ============================
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+
+function generateSessionId() {
+    return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function setCookie(name, value, days = 30) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = `expires=${date.toUTCString()}`;
+    document.cookie = `${name}=${value};${expires};path=/;SameSite=Strict;Secure`;
+}
+
+// ============================
+// LANGUAGE FUNCTIONS
+// ============================
+
+function detectUserLanguage() {
+    const savedLang = localStorage.getItem('userLanguage');
+    if (savedLang && TRANSLATIONS[savedLang]) {
+        return savedLang;
     }
     
-    // Show specific view
-    function showView(viewName) {
-        // Hide all views
-        document.querySelectorAll('.content-view').forEach(view => {
-            view.classList.remove('active');
-        });
+    const browserLang = navigator.language.substring(0, 2).toLowerCase();
+    if (TRANSLATIONS[browserLang]) {
+        return browserLang;
+    }
+    
+    return 'es';
+}
+
+function changeLanguage(lang) {
+    if (!TRANSLATIONS[lang]) {
+        console.warn(`Language ${lang} not supported`);
+        return;
+    }
+    
+    state.currentLanguage = lang;
+    localStorage.setItem('userLanguage', lang);
+    updateUILanguage();
+    
+    // Track language change
+    trackEvent('language_change', { language: lang });
+}
+
+function updateUILanguage() {
+    const elements = document.querySelectorAll('[data-translate]');
+    const currentTranslations = TRANSLATIONS[state.currentLanguage];
+    
+    elements.forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (currentTranslations[key]) {
+            element.textContent = currentTranslations[key];
+        }
+    });
+}
+
+// ============================
+// MEDIA HANDLERS
+// ============================
+
+function handleImageError(img) {
+    console.warn('Image failed to load:', img.src);
+    
+    if (!img.dataset.retryCount) {
+        img.dataset.retryCount = '0';
+    }
+    
+    const retryCount = parseInt(img.dataset.retryCount);
+    
+    if (retryCount < CONFIG.api.retryAttempts) {
+        img.dataset.retryCount = String(retryCount + 1);
         
-        // Show target view
-        const targetView = document.getElementById(viewName + 'View');
-        if (targetView) {
-            targetView.classList.add('active');
-            console.log(`📄 Vista ${viewName} activada`);
+        setTimeout(() => {
+            const originalSrc = img.src;
+            img.src = '';
+            img.src = originalSrc;
+        }, 1000 * Math.pow(2, retryCount));
+    } else {
+        img.src = '/assets/placeholder.webp';
+        img.classList.add('error');
+        
+        const parent = img.closest('.media-item');
+        if (parent) {
+            parent.classList.add('load-error');
         }
     }
+}
 
-    // Setup modals
-    function setupModals() {
-        // Close modal on backdrop click
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal')) {
-                closeModal(e.target);
-            }
-        });
-        
-        // Close button handlers
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modal = btn.closest('.modal');
-                if (modal) closeModal(modal);
-            });
-        });
+function handleVideoError(video) {
+    console.warn('Video failed to load:', video.src);
+    
+    const parent = video.closest('.media-item');
+    if (parent) {
+        parent.classList.add('load-error');
+        parent.innerHTML = `
+            <div class="video-error">
+                <p>Error al cargar el video</p>
+                <button onclick="retryVideo('${video.src}', this)">Reintentar</button>
+            </div>
+        `;
     }
+}
 
-    // Open modal
-    window.openModal = function(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-    };
+function retryVideo(src, button) {
+    const parent = button.closest('.media-item');
+    parent.classList.remove('load-error');
+    parent.innerHTML = `
+        <video controls preload="${CONFIG.media.videoPreload}" 
+               onerror="handleVideoError(this)">
+            <source src="${src}" type="video/mp4">
+        </video>
+    `;
+}
 
-    // Close modal
-    window.closeModal = function(modal) {
-        if (typeof modal === 'string') {
-            modal = document.getElementById(modal);
-        }
-        if (modal) {
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-    };
+// ============================
+// LAZY LOADING
+// ============================
 
-    // Setup lazy loading
-    function setupLazyLoading() {
-        const lazyImages = document.querySelectorAll('img[data-src]');
-        
-        if ('IntersectionObserver' in window) {
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
+function setupLazyLoading() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
                         img.src = img.dataset.src;
                         img.removeAttribute('data-src');
-                        img.classList.add('loaded');
-                        observer.unobserve(img);
+                        imageObserver.unobserve(img);
                     }
+                }
+            });
+        }, {
+            rootMargin: `${CONFIG.media.lazyLoadOffset}px`
+        });
+        
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    } else {
+        // Fallback para navegadores antiguos
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+        });
+    }
+}
+
+// ============================
+// MODAL FUNCTIONS
+// ============================
+
+function showVIPModal() {
+    const modal = document.getElementById('vipModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        state.ui.modalOpen = true;
+        trackEvent('modal_open', { type: 'vip' });
+    }
+}
+
+function showPackModal() {
+    const modal = document.getElementById('packModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        state.ui.modalOpen = true;
+        trackEvent('modal_open', { type: 'pack' });
+    }
+}
+
+function showPPVModal() {
+    const modal = document.getElementById('ppvModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        state.ui.modalOpen = true;
+        trackEvent('modal_open', { type: 'ppv' });
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        state.ui.modalOpen = false;
+        trackEvent('modal_close', { type: modalId });
+    }
+}
+
+// ============================
+// PAYMENT FUNCTIONS
+// ============================
+
+function selectPlan(planType) {
+    trackEvent('plan_selected', { plan: planType });
+    
+    const prices = {
+        monthly: 29.99,
+        quarterly: 79.99,
+        annual: 299.99
+    };
+    
+    const price = prices[planType];
+    if (!price) return;
+    
+    // Inicializar PayPal
+    if (typeof paypal !== 'undefined') {
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: price.toFixed(2),
+                            currency_code: 'EUR'
+                        },
+                        description: `VIP ${planType} - IbizaGirl.pics`
+                    }]
                 });
-            });
-            
-            lazyImages.forEach(img => imageObserver.observe(img));
-        } else {
-            // Fallback for older browsers
-            lazyImages.forEach(img => {
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-            });
-        }
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    handlePaymentSuccess('vip', planType, details);
+                });
+            },
+            onError: function(err) {
+                handlePaymentError(err);
+            }
+        }).render('#paypal-button-container');
     }
+}
 
-    // Setup tooltips
-    function setupTooltips() {
-        const tooltipElements = document.querySelectorAll('[data-tooltip]');
-        
-        tooltipElements.forEach(element => {
-            element.addEventListener('mouseenter', showTooltip);
-            element.addEventListener('mouseleave', hideTooltip);
+function selectPack(packType) {
+    trackEvent('pack_selected', { pack: packType });
+    
+    const prices = {
+        pack10: 14.99,
+        pack25: 29.99,
+        pack50: 49.99,
+        packAll: 99.99
+    };
+    
+    const price = prices[packType];
+    if (!price) return;
+    
+    // Procesar pago
+    initializePayment('pack', packType, price);
+}
+
+function initializePayment(type, item, price) {
+    if (typeof paypal !== 'undefined') {
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: price.toFixed(2),
+                            currency_code: 'EUR'
+                        },
+                        description: `${type} - ${item} - IbizaGirl.pics`
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    handlePaymentSuccess(type, item, details);
+                });
+            },
+            onError: function(err) {
+                handlePaymentError(err);
+            }
+        }).render('#paypal-container-' + type);
+    }
+}
+
+function handlePaymentSuccess(type, item, details) {
+    console.log('Payment successful:', details);
+    
+    // Guardar compra
+    state.userData.purchases.push({
+        type,
+        item,
+        date: new Date().toISOString(),
+        transactionId: details.id
+    });
+    
+    // Actualizar UI
+    if (type === 'vip') {
+        state.userData.isVIP = true;
+        unlockVIPContent();
+    }
+    
+    // Mostrar confirmación
+    showSuccessMessage(`¡Gracias por tu compra! ${type} - ${item}`);
+    
+    // Track conversion
+    trackEvent('purchase_complete', {
+        type,
+        item,
+        value: details.purchase_units[0].amount.value
+    });
+    
+    // Celebración
+    if (typeof confetti !== 'undefined') {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
         });
     }
+}
 
-    // Show tooltip
-    function showTooltip(e) {
-        const text = e.target.getAttribute('data-tooltip');
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.textContent = text;
-        
-        document.body.appendChild(tooltip);
-        
-        const rect = e.target.getBoundingClientRect();
-        tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
-        tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
-        
-        e.target._tooltip = tooltip;
+function handlePaymentError(error) {
+    console.error('Payment error:', error);
+    ErrorHandler.logError(error, 'Payment');
+    
+    showErrorMessage('Error al procesar el pago. Por favor, intenta de nuevo.');
+    
+    trackEvent('payment_error', {
+        error: error.message
+    });
+}
+
+function showSuccessMessage(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast success';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+function showErrorMessage(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast error';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+// ============================
+// CONTENT FUNCTIONS
+// ============================
+
+function unlockVIPContent() {
+    // Desbloquear contenido VIP
+    document.querySelectorAll('.vip-locked').forEach(element => {
+        element.classList.remove('vip-locked');
+        element.classList.add('vip-unlocked');
+    });
+    
+    // Actualizar UI
+    const vipBadge = document.getElementById('vip-badge');
+    if (vipBadge) {
+        vipBadge.style.display = 'block';
     }
+    
+    // Recargar galería con contenido VIP
+    loadVIPContent();
+}
 
-    // Hide tooltip
-    function hideTooltip(e) {
-        if (e.target._tooltip) {
-            e.target._tooltip.remove();
-            delete e.target._tooltip;
-        }
+function loadVIPContent() {
+    // Esta función será integrada con el sistema modular
+    if (window.ContentAPI && window.ContentAPI.getVideos) {
+        const videos = window.ContentAPI.getVideos(20);
+        displayVideos(videos);
     }
+}
 
-    // Setup event handlers
-    function setupEventHandlers() {
-        console.log('📱 Configurando event handlers...');
-        
-        // Search functionality
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('input', handleSearch);
-        }
-        
-        // Filter buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', handleFilter);
-        });
-        
-        // Load more button
-        const loadMoreBtn = document.getElementById('loadMoreBtn');
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', loadMoreContent);
-        }
+function displayVideos(videos) {
+    const container = document.getElementById('video-gallery');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    videos.forEach(video => {
+        const videoElement = document.createElement('div');
+        videoElement.className = 'video-item';
+        videoElement.innerHTML = `
+            <video controls preload="metadata" poster="${video.poster || ''}">
+                <source src="${video.src}" type="video/mp4">
+            </video>
+            <div class="video-info">
+                <h3>${video.title || 'Premium Video'}</h3>
+                <p>${video.duration || ''}</p>
+            </div>
+        `;
+        container.appendChild(videoElement);
+    });
+}
+
+// ============================
+// CLICK HANDLERS
+// ============================
+
+function handlePhotoClick(element) {
+    if (element.classList.contains('premium-photo') && !state.userData.isVIP) {
+        showVIPModal();
+        trackEvent('premium_photo_click', { blocked: true });
+    } else {
+        openPhotoViewer(element);
+        trackEvent('photo_view', { src: element.dataset.src });
     }
+}
 
-    // Handle search
-    function handleSearch(e) {
-        const query = e.target.value.trim();
-        
-        if (query.length < 2) {
-            displaySearchResults([]);
-            return;
-        }
-        
-        if (window.searchContent) {
-            const results = window.searchContent(query);
-            displaySearchResults(results);
-        }
+function handleVideoClick(element) {
+    if (!state.userData.isVIP) {
+        showVIPModal();
+        trackEvent('premium_video_click', { blocked: true });
+    } else {
+        playVideo(element);
+        trackEvent('video_play', { src: element.dataset.src });
     }
+}
 
-    // Display search results
-    function displaySearchResults(results) {
-        const resultsContainer = document.getElementById('searchResults');
-        if (!resultsContainer) return;
-        
-        if (!results || (results.photos?.length === 0 && results.videos?.length === 0)) {
-            resultsContainer.innerHTML = '<p class="no-results">No se encontraron resultados</p>';
-            return;
-        }
-        
-        let html = '';
-        
-        if (results.photos?.length > 0) {
-            html += '<h3>Fotos</h3><div class="results-grid">';
-            results.photos.slice(0, 6).forEach(photo => {
-                html += createPhotoCard(photo);
+function handleTeaserClick(element) {
+    showPPVModal();
+    trackEvent('teaser_click', { src: element.dataset.src });
+}
+
+function openPhotoViewer(element) {
+    // Implementar visor de fotos
+    console.log('Opening photo viewer for:', element);
+}
+
+function playVideo(element) {
+    // Implementar reproductor de video
+    console.log('Playing video:', element);
+}
+
+// ============================
+// ANALYTICS
+// ============================
+
+function trackEvent(eventName, parameters = {}) {
+    if (!CONFIG.analytics.enabled) return;
+    
+    try {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', eventName, {
+                ...parameters,
+                timestamp: new Date().toISOString(),
+                session_id: state.sessionId
             });
-            html += '</div>';
         }
-        
-        if (results.videos?.length > 0) {
-            html += '<h3>Videos</h3><div class="results-grid">';
-            results.videos.slice(0, 6).forEach(video => {
-                html += createVideoCard(video);
-            });
-            html += '</div>';
-        }
-        
-        resultsContainer.innerHTML = html;
+    } catch (error) {
+        console.warn('Analytics error:', error);
     }
+}
 
-    // Handle filter
-    function handleFilter(e) {
-        const filter = e.target.getAttribute('data-filter');
+// ============================
+// ISABELLA TOGGLE
+// ============================
+
+function toggleIsabella() {
+    const isabellaContent = document.getElementById('isabella-content');
+    const mainContent = document.getElementById('main-content');
+    
+    if (isabellaContent && mainContent) {
+        if (isabellaContent.style.display === 'none') {
+            isabellaContent.style.display = 'block';
+            mainContent.style.display = 'none';
+            trackEvent('isabella_mode_activated');
+        } else {
+            isabellaContent.style.display = 'none';
+            mainContent.style.display = 'block';
+            trackEvent('isabella_mode_deactivated');
+        }
+    }
+}
+
+// ============================
+// INITIALIZATION
+// ============================
+
+async function initializeApplication() {
+    try {
+        console.log('🚀 Initializing IbizaGirl.pics v' + CONFIG.version);
         
-        // Update active filter
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
+        // Generar ID de sesión
+        state.sessionId = generateSessionId();
+        
+        // Detectar idioma
+        state.currentLanguage = detectUserLanguage();
+        updateUILanguage();
+        
+        // Verificar sistema modular
+        await checkModularSystem();
+        
+        // Cargar contenido diario
+        await loadDailyContent();
+        
+        // Configurar lazy loading
+        setupLazyLoading();
+        
+        // Inicializar componentes UI
+        initializeUIComponents();
+        
+        // Configurar event listeners
+        setupEventListeners();
+        
+        // Iniciar slideshow
+        startBannerSlideshow();
+        
+        // Actualizar contadores
+        updateViewCounters();
+        
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator && ENVIRONMENT.isProduction) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.warn('Service Worker registration failed'));
+        }
+        
+        console.log('✅ Application initialized successfully');
+        
+    } catch (error) {
+        ErrorHandler.logError(error, 'Initialization');
+        showFallbackContent();
+    }
+}
+
+async function checkModularSystem() {
+    return new Promise((resolve) => {
+        let attempts = 0;
+        const maxAttempts = 50;
+        
+        const checkInterval = setInterval(() => {
+            attempts++;
+            
+            if (window.ContentAPI && window.UnifiedContentAPI) {
+                clearInterval(checkInterval);
+                console.log('✅ Modular system loaded');
+                resolve(true);
+            } else if (attempts >= maxAttempts) {
+                clearInterval(checkInterval);
+                console.warn('⚠️ Modular system not fully loaded');
+                resolve(false);
+            }
+        }, 100);
+    });
+}
+
+async function loadDailyContent() {
+    try {
+        if (window.UnifiedContentAPI && window.UnifiedContentAPI.getTodaysContent) {
+            state.dailyContent = window.UnifiedContentAPI.getTodaysContent();
+            console.log('📅 Daily content loaded:', state.dailyContent);
+            
+            // Renderizar contenido
+            if (state.dailyContent) {
+                renderDailyPhotos(state.dailyContent.photos);
+                renderDailyVideos(state.dailyContent.videos);
+            }
+        }
+    } catch (error) {
+        ErrorHandler.logError(error, 'loadDailyContent');
+    }
+}
+
+function renderDailyPhotos(photos) {
+    const container = document.getElementById('daily-photos');
+    if (!container || !photos) return;
+    
+    container.innerHTML = photos.map(photo => `
+        <div class="photo-item" onclick="handlePhotoClick(this)" data-src="${photo}">
+            <img src="${photo}" alt="Daily Photo" loading="lazy" onerror="handleImageError(this)">
+        </div>
+    `).join('');
+}
+
+function renderDailyVideos(videos) {
+    const container = document.getElementById('daily-videos');
+    if (!container || !videos) return;
+    
+    container.innerHTML = videos.map(video => `
+        <div class="video-item" onclick="handleVideoClick(this)" data-src="${video}">
+            <video preload="metadata" muted>
+                <source src="${video}" type="video/mp4">
+            </video>
+            <div class="play-overlay">▶</div>
+        </div>
+    `).join('');
+}
+
+function initializeUIComponents() {
+    // Inicializar tooltips
+    document.querySelectorAll('[data-tooltip]').forEach(element => {
+        element.addEventListener('mouseenter', showTooltip);
+        element.addEventListener('mouseleave', hideTooltip);
+    });
+    
+    // Inicializar dropdowns
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', toggleDropdown);
+    });
+}
+
+function setupEventListeners() {
+    // Cerrar modales con ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && state.ui.modalOpen) {
+            const openModal = document.querySelector('.modal[style*="flex"]');
+            if (openModal) {
+                closeModal(openModal.id);
+            }
+        }
+    });
+    
+    // Cerrar modales al hacer clic fuera
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal(modal.id);
+            }
         });
-        e.target.classList.add('active');
-        
-        // Apply filter
-        applyFilter(filter);
-    }
-
-    // Apply filter
-    function applyFilter(filter) {
-        console.log('Aplicando filtro:', filter);
-        // Implementation depends on your content structure
-    }
-
-    // Load more content
-    function loadMoreContent() {
-        console.log('Cargando más contenido...');
-        // Implementation for loading more content
-    }
-
-    // Load initial content
-    function loadInitialContent() {
-        console.log('📦 Cargando contenido inicial...');
-        
-        // Load public photos (teasers from "full" folder - NO blur, daily randomized)
-        if (window.ContentAPI && window.ContentAPI.getPublicImages) {
-            console.log('📸 Cargando fotos públicas...');
-            let publicPhotos = window.ContentAPI.getPublicImages(24);
-            
-            // Apply daily randomization for teasers/banners from "full" folder
-            publicPhotos = getDailyRandomImages(publicPhotos, 12);
-            
-            displayPhotos(publicPhotos);
-        }
-        
-        // Load premium photos (from "uncensored" folder - blurred without access)
-        if (window.ContentAPI && window.ContentAPI.getPremiumImages) {
-            console.log('💎 Cargando fotos premium...');
-            const premiumPhotos = window.ContentAPI.getPremiumImages(12);
-            displayPremiumPhotos(premiumPhotos);
-        }
-        
-        // Load videos (from "uncensored-videos" folder - always premium)
-        if (window.ContentAPI && window.ContentAPI.getVideos) {
-            console.log('🎬 Cargando videos...');
-            const videos = window.ContentAPI.getVideos(6);
-            displayVideos(videos);
-        }
-        
-        // Load banner images with daily randomization from "full" folder
-        if (window.ContentAPI && window.ContentAPI.getBanners) {
-            console.log('🎠 Configurando banners...');
-            let bannerImages = window.ContentAPI.getBanners();
-            
-            // Apply daily randomization for banners
-            bannerImages = getDailyRandomImages(bannerImages, 6);
-            
-            setupBanner(bannerImages);
-        }
-        
-        console.log('✅ Contenido inicial cargado completamente');
-    }
-
-    // Display photos (teasers from "full" folder - NO blur, daily randomized)
-    function displayPhotos(photos) {
-        console.log('📷 Mostrando fotos públicas:', photos.length);
-        const container = document.getElementById('teaser-gallery');
-        if (!container) {
-            console.warn('⚠️ No se encontró container teaser-gallery');
-            return;
-        }
-        
-        // These are teasers from "full" folder - never blurred, never premium
-        container.innerHTML = photos.map(photo => createPhotoCard(photo, false)).join('');
-    }
-
-    // Display premium photos (from "uncensored" folder - blurred without access)
-    function displayPremiumPhotos(photos) {
-        console.log('💎 Mostrando fotos premium:', photos.length);
-        const container = document.getElementById('main-gallery');
-        if (!container) {
-            console.warn('⚠️ No se encontró container main-gallery');
-            return;
-        }
-        
-        // These are from "uncensored" folder - blurred without access
-        container.innerHTML = photos.map(photo => createPhotoCard(photo, true)).join('');
-    }
-
-    // Display videos (from "uncensored-videos" folder - always premium)
-    function displayVideos(videos) {
-        console.log('🎥 Mostrando videos:', videos.length);
-        const container = document.getElementById('video-gallery');
-        if (!container) {
-            console.warn('⚠️ No se encontró container video-gallery');
-            return;
-        }
-        
-        // All videos are premium from "uncensored-videos" folder
-        container.innerHTML = videos.map(video => createVideoCard(video)).join('');
-    }
-
-    // Enhanced VIP access system for purchase functionality
-    function checkVIPAccess() {
-        // Check lifetime access
-        if (localStorage.getItem('ibiza_lifetime_access') === 'true') {
-            return 'lifetime';
-        }
-        
-        // Check monthly access
-        const monthlyAccess = localStorage.getItem('ibiza_monthly_access');
-        if (monthlyAccess) {
-            const expiryTime = parseInt(monthlyAccess);
-            if (Date.now() < expiryTime) {
-                return 'monthly';
-            } else {
-                localStorage.removeItem('ibiza_monthly_access');
-            }
-        }
-        
-        // Check premium access (pay-per-view)
-        const premiumAccess = localStorage.getItem('ibiza_premium_access');
-        if (premiumAccess) {
-            const accessTime = parseInt(premiumAccess);
-            const oneDay = 24 * 60 * 60 * 1000; // 24 hours
-            if (Date.now() - accessTime < oneDay) {
-                return 'premium';
-            } else {
-                localStorage.removeItem('ibiza_premium_access');
-            }
-        }
-        
-        return null;
-    }
+    });
     
-    // Update VIP status display - RESTORED FUNCTION
-    function updateVIPStatus() {
-        const vipAccess = checkVIPAccess();
-        const statusElement = document.querySelector('.vip-status');
-        
-        if (statusElement) {
-            if (vipAccess) {
-                statusElement.innerHTML = `
-                    <div class="vip-badge active">
-                        <span class="vip-icon">👑</span>
-                        <span class="vip-text">VIP ${vipAccess.toUpperCase()}</span>
-                    </div>
-                `;
-            } else {
-                statusElement.innerHTML = `
-                    <div class="vip-badge inactive">
-                        <span class="vip-icon">🔒</span>
-                        <span class="vip-text">No Premium</span>
-                    </div>
-                `;
-            }
+    // Optimizar scroll
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (!scrollTimeout) {
+            scrollTimeout = setTimeout(() => {
+                scrollTimeout = null;
+                handleScroll();
+            }, 100);
         }
-    }
-    
-    // Create photo card with proper blur system (NO blur for teasers from "full" folder)
-    function createPhotoCard(photo, isPremium = false) {
-        const vipAccess = checkVIPAccess();
-        const hasAccess = vipAccess && (vipAccess === 'lifetime' || vipAccess === 'monthly' || vipAccess === 'premium');
-        
-        const imagePath = photo;
-        
-        // BLUR LOGIC: Only premium content (from "uncensored" folder) gets blurred, NOT teasers from "full"
-        const isFromFullFolder = imagePath.includes('full/');
-        const shouldBlur = isPremium && !hasAccess && !isFromFullFolder;
-        const blurClass = shouldBlur ? 'premium-blur' : '';
-        
-        let overlayContent = '';
-        
-        if (isPremium && !hasAccess && !isFromFullFolder) {
-            // Premium content from "uncensored" - show price overlay
-            overlayContent = `
-                <div class="premium-overlay" onclick="buyPremiumAccess()">
-                    <div class="premium-badge">
-                        <span class="price">€0.10</span>
-                        <span class="unlock-text">Comprar Imagen</span>
-                    </div>
-                </div>
-            `;
-        } else if (isPremium && hasAccess && !isFromFullFolder) {
-            // Premium content with access
-            overlayContent = `
-                <div class="vip-access-badge">
-                    <span class="vip-icon">👑</span>
-                    <span class="vip-text">PREMIUM</span>
-                </div>
-            `;
-        }
-        
-        return `
-            <div class="content-card photo-card">
-                <div class="card-image">
-                    <img src="${imagePath}" alt="Photo" class="${blurClass}" loading="lazy" />
-                    ${overlayContent}
-                </div>
-                <div class="card-info">
-                    <h4>${isPremium && !isFromFullFolder ? 'Premium Photo' : 'Teaser'}</h4>
-                    ${isPremium && hasAccess && !isFromFullFolder ? '<p class="access-granted">✅ Acceso Premium</p>' : ''}
-                </div>
-            </div>
-        `;
-    }
+    });
+}
 
-    // Create video card (always premium, always from uncensored-videos)
-    function createVideoCard(video) {
-        const vipAccess = checkVIPAccess();
-        const hasAccess = vipAccess && (vipAccess === 'lifetime' || vipAccess === 'monthly' || vipAccess === 'premium');
-        
-        const videoPath = video;
-        
-        let overlayContent = '';
-        if (!hasAccess) {
-            overlayContent = `
-                <div class="premium-overlay" onclick="buyVideoAccess()">
-                    <div class="premium-badge">
-                        <span class="price">€0.30</span>
-                        <span class="unlock-text">Comprar Video</span>
-                    </div>
-                    <div class="video-play-btn">▶</div>
-                </div>
-            `;
+function handleScroll() {
+    const scrolled = window.pageYOffset;
+    const header = document.querySelector('header');
+    
+    if (header) {
+        if (scrolled > 100) {
+            header.classList.add('scrolled');
         } else {
-            overlayContent = `
-                <div class="vip-access-badge">
-                    <span class="vip-icon">👑</span>
-                    <span class="vip-text">PREMIUM</span>
-                </div>
-                <div class="video-play-btn functional" onclick="playVideo('${videoPath}')">▶</div>
-            `;
+            header.classList.remove('scrolled');
         }
-        
-        return `
-            <div class="content-card video-card">
-                <div class="card-image">
-                    <video class="${!hasAccess ? 'premium-blur' : ''}" preload="metadata">
-                        <source src="${videoPath}" type="video/mp4">
-                    </video>
-                    ${overlayContent}
-                    <div class="video-duration">2:30</div>
-                </div>
-                <div class="card-info">
-                    <h4>Premium Video</h4>
-                    ${hasAccess ? '<p class="access-granted">✅ Acceso Premium</p>' : ''}
-                </div>
-            </div>
-        `;
     }
     
-    // Purchase functions for PayPal integration
-    function buyPremiumAccess() {
-        showPricingView();
-    }
-    
-    function buyVideoAccess() {
-        showPricingView();
-    }
-    
-    // Daily randomization system for teasers/banners (from "full" folder)
-    function getDailyRandomImages(imageArray, count) {
-        // Use date as seed for consistent daily randomization
-        const today = new Date();
-        const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-        
-        // Simple seeded random function
-        function seededRandom(seed) {
-            const x = Math.sin(seed) * 10000;
-            return x - Math.floor(x);
-        }
-        
-        // Shuffle array with daily seed
-        const shuffled = [...imageArray];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(seededRandom(seed + i) * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        
-        return shuffled.slice(0, count);
-    }
-    
-    // Video player function
-    function playVideo(videoPath) {
-        const modal = document.createElement('div');
-        modal.className = 'video-modal';
-        modal.innerHTML = `
-            <div class="video-modal-content">
-                <span class="video-close" onclick="this.parentElement.parentElement.remove()">&times;</span>
-                <video controls autoplay style="width: 100%; max-width: 800px;">
-                    <source src="${videoPath}" type="video/mp4">
-                </video>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
-    
-    // Show pricing view function
-    function showPricingView() {
-        showView('pricing');
-        // Update nav buttons
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.querySelector('[data-view="pricing"]').classList.add('active');
-    }
-    
-    // Make functions globally available
-    window.buyPremiumAccess = buyPremiumAccess;
-    window.buyVideoAccess = buyVideoAccess;
-    window.playVideo = playVideo;
-    window.showPricingView = showPricingView;
+    // Lazy load más imágenes si es necesario
+    setupLazyLoading();
+}
 
-    // Setup banner with daily randomized images from "full" folder
-    function setupBanner(images) {
-        console.log('🎠 Configurando banner con imágenes:', images);
-        const banner = document.getElementById('banner-slider');
-        if (!banner) {
-            console.warn('⚠️ No se encontró elemento banner-slider');
-            return;
-        }
-        
-        if (!images || images.length === 0) {
-            console.warn('⚠️ No hay imágenes para el banner');
-            return;
-        }
-        
-        let currentIndex = 0;
-        
-        function updateBanner() {
-            // Las imágenes ya incluyen la ruta completa y están randomizadas diariamente
-            const imagePath = images[currentIndex];
-            banner.style.backgroundImage = `url(${imagePath})`;
-            banner.style.backgroundSize = 'cover';
-            banner.style.backgroundPosition = 'center';
-            currentIndex = (currentIndex + 1) % images.length;
-        }
-        
-        // Actualizar inmediatamente
-        updateBanner();
-        
-        // Configurar rotación automática cada 5 segundos
-        setInterval(updateBanner, 5000);
-        console.log('✅ Banner configurado con', images.length, 'imágenes');
-    }
+function showTooltip(e) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    tooltip.textContent = e.target.dataset.tooltip;
+    document.body.appendChild(tooltip);
+    
+    const rect = e.target.getBoundingClientRect();
+    tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+    tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+}
 
-    // Hide loading screen
-    function hideLoadingScreen() {
-        console.log('🎯 Ocultando pantalla de loading...');
-        const loadingScreen = document.getElementById('loadingScreen');
-        if (loadingScreen) {
-            loadingScreen.style.display = 'none';
-            console.log('✅ Pantalla de loading oculta');
-        } else {
-            console.warn('⚠️ No se encontró elemento loadingScreen');
-        }
-    }
+function hideTooltip() {
+    document.querySelectorAll('.tooltip').forEach(t => t.remove());
+}
 
-    // Add styles
-    const style = document.createElement('style');
-    style.textContent = `
-        .content-section {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
+function toggleDropdown(e) {
+    e.preventDefault();
+    const dropdown = e.target.nextElementSibling;
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+}
+
+function startBannerSlideshow() {
+    try {
+        const slides = document.querySelectorAll('.banner-slide');
+        if (slides.length === 0) return;
         
-        .content-section.active {
-            display: block;
-        }
+        setInterval(() => {
+            if (slides[state.currentSlide]) {
+                slides[state.currentSlide].classList.remove('active');
+            }
+            state.currentSlide = (state.currentSlide + 1) % slides.length;
+            if (slides[state.currentSlide]) {
+                slides[state.currentSlide].classList.add('active');
+            }
+        }, 5000);
         
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        console.log('🎬 Banner slideshow started');
+    } catch (error) {
+        ErrorHandler.logError(error, 'startBannerSlideshow');
+    }
+}
+
+function updateViewCounters() {
+    try {
+        if (state.dailyContent) {
+            const photoCount = document.getElementById('photoCount');
+            const videoCount = document.getElementById('videoCount');
+            
+            if (photoCount) photoCount.textContent = state.dailyContent.stats.dailyPhotos;
+            if (videoCount) videoCount.textContent = state.dailyContent.stats.dailyVideos;
         }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 10000;
+    } catch (error) {
+        ErrorHandler.logError(error, 'updateViewCounters');
+    }
+}
+
+function showFallbackContent() {
+    document.body.innerHTML = `
+        <div style="
+            display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .modal.show {
-            display: flex;
-        }
-        
-        .tooltip {
-            position: absolute;
-            background: #333;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #001f3f 0%, #003366 100%);
             color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            z-index: 10001;
-            pointer-events: none;
-        }
-        
-        .content-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            position: relative;
-        }
-        
-        .content-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .badge-new {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            z-index: 10;
-        }
-        
-        .card-image {
-            position: relative;
-            padding-bottom: 60%;
-            overflow: hidden;
-        }
-        
-        .card-image img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.3s ease;
-        }
-        
-        .card-image img.loaded {
-            opacity: 1;
-        }
-        
-        .duration {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        
-        .card-info {
-            padding: 15px;
-        }
-        
-        .card-info h4 {
-            margin: 0 0 5px 0;
-            font-size: 16px;
-            color: #333;
-        }
-        
-        .card-info .model {
-            margin: 0;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .no-results {
+            font-family: Arial, sans-serif;
             text-align: center;
-            color: #999;
-            padding: 40px;
-        }
+            padding: 2rem;
+        ">
+            <div>
+                <h1>🌊 IbizaGirl.pics</h1>
+                <p>Estamos experimentando dificultades técnicas.</p>
+                <p>Por favor, recarga la página en unos momentos.</p>
+                <button onclick="window.location.reload()" style="
+                    background: linear-gradient(135deg, #00a8cc, #00d4ff);
+                    color: #001f3f;
+                    border: none;
+                    padding: 1rem 2rem;
+                    border-radius: 25px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    margin-top: 1rem;
+                ">🔄 Recargar</button>
+            </div>
+        </div>
     `;
-    document.head.appendChild(style);
+}
 
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeApp);
-    } else {
-        initializeApp();
+// ============================
+// GLOBAL ERROR HANDLING
+// ============================
+
+window.addEventListener('error', (e) => {
+    const message = e.message || e.error?.message || '';
+    const filename = e.filename || '';
+    
+    const ignoredPatterns = [
+        'Script error',
+        'ResizeObserver',
+        'Non-Error promise rejection',
+        'extension://',
+        'chrome-extension://',
+        'moz-extension://',
+        '429',
+        'Failed to fetch',
+        'NetworkError',
+        'AbortError',
+        'The user aborted',
+        'Load failed',
+        'TypeError: Failed to fetch',
+        'TypeError: NetworkError',
+        'net::ERR_',
+        'Cross-origin',
+        'CORS',
+        'Refused to execute',
+        'Blocked by',
+        'Mixed Content'
+    ];
+    
+    const shouldIgnore = ignoredPatterns.some(pattern => 
+        message.includes(pattern) || filename.includes(pattern)
+    );
+    
+    if (!shouldIgnore) {
+        ErrorHandler.logError(e.error || e, 'Window Error');
     }
+});
 
-    console.log('✅ main-script.js v5.0 cargado');
+window.addEventListener('unhandledrejection', (e) => {
+    const reason = String(e.reason);
+    
+    const ignoredRejections = [
+        'Non-Error promise rejection',
+        'ResizeObserver',
+        '429',
+        'AbortError',
+        'Failed to fetch',
+        'TypeError: Failed to fetch',
+        'net::ERR_',
+        'CORS',
+        'Cross-origin',
+        'Blocked',
+        'Mixed Content'
+    ];
+    
+    const shouldIgnore = ignoredRejections.some(pattern => 
+        reason.includes(pattern)
+    );
+    
+    if (!shouldIgnore) {
+        ErrorHandler.logError(e.reason, 'Unhandled Promise Rejection');
+    }
+    
+    e.preventDefault();
+});
 
-})();
+// ============================
+// GLOBAL EXPORTS
+// ============================
+
+window.handleImageError = handleImageError;
+window.handleVideoError = handleVideoError;
+window.changeLanguage = changeLanguage;
+window.handlePhotoClick = handlePhotoClick;
+window.handleVideoClick = handleVideoClick;
+window.handleTeaserClick = handleTeaserClick;
+window.showVIPModal = showVIPModal;
+window.showPackModal = showPackModal;
+window.showPPVModal = showPPVModal;
+window.closeModal = closeModal;
+window.selectPlan = selectPlan;
+window.selectPack = selectPack;
+window.toggleIsabella = toggleIsabella;
+window.trackEvent = trackEvent;
+
+// ============================
+// DOM READY HANDLER
+// ============================
+
+document.addEventListener('DOMContentLoaded', initializeApplication);
+
+// ============================
+// COMPATIBILITY AND DEBUGGING
+// ============================
+
+// Asegurar compatibilidad con el sistema anterior
+window.state = state;
+window.CONFIG = CONFIG;
+window.TRANSLATIONS = TRANSLATIONS;
+
+// Funciones de debugging para desarrollo
+if (ENVIRONMENT.isDevelopment) {
+    window.debugModularSystem = function() {
+        console.log('🔍 DEBUG: Estado del sistema modular');
+        console.table({
+            'Content System Ready': !!(window.ContentAPI && window.UnifiedContentAPI),
+            'Arrays Available': {
+                'ALL_PHOTOS_POOL': !!window.ALL_PHOTOS_POOL,
+                'ALL_VIDEOS_POOL': !!window.ALL_VIDEOS_POOL,
+                'BANNER_IMAGES': !!window.BANNER_IMAGES,
+                'TEASER_IMAGES': !!window.TEASER_IMAGES
+            },
+            'State': state,
+            'Daily Content': !!state.dailyContent,
+            'Errors': ErrorHandler.errors.length
+        });
+    };
+    
+    window.getSystemErrors = function() {
+        return ErrorHandler.errors;
+    };
+    
+    window.clearSystemErrors = function() {
+        ErrorHandler.clearErrors();
+        console.log('System errors cleared');
+    };
+}
+
+// ============================
+// END OF MAIN SCRIPT
+// ============================
+
+console.log('📜 Main script loaded successfully');
