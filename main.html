@@ -367,7 +367,7 @@
 
         function generateDailyContent() {
             const seed = getDailySeed();
-            console.log(`🎲 Generando contenido diario con seed: ${seed}`);
+            console.log('Generando contenido diario con seed: ' + seed);
             
             // Generar contenido aleatorio diario
             const dailyBanners = shuffleArrayWithSeed(FULL_IMAGES, seed).slice(0, 6);
