@@ -978,21 +978,28 @@
             
             // JuicyAds - Zone 2092250 (ibizagirl)
             setTimeout(() => {
-                if (window.adsbyjuicy) {
-                    const juicyContainer = document.getElementById('juicyads-2092250');
+                const juicyContainer = document.getElementById('juicyads-2092250');
+                if (juicyContainer && window.adsbyjuicy && typeof adsbyjuicy === 'function') {
+                    try {
+                        adsbyjuicy("ad", "2092250", juicyContainer);
+                        console.log('✅ JuicyAds zone 2092250 initialized');
+                    } catch (e) {
+                        juicyContainer.innerHTML = '<div style="background: #4facfe; color: white; padding: 15px; border-radius: 10px; text-align: center;">🎯 Premium Ad Space - JuicyAds</div>';
+                        console.log('🎯 JuicyAds fallback loaded');
+                    }
+                } else {
                     if (juicyContainer) {
-                        juicyContainer.innerHTML = '<script type="text/javascript">juicyads("ad", "2092250");</script>';
-                        console.log('✅ JuicyAds initialized');
+                        juicyContainer.innerHTML = '<div style="background: #4facfe; color: white; padding: 15px; border-radius: 10px; text-align: center;">🎯 Premium Ad Space - JuicyAds</div>';
                     }
                 }
             }, 2000);
 
-            // ExoClick - Zone 5696328 (ibizagirl)
+            // ExoClick - Zone 5696328 (ibizagirl) 
             setTimeout(() => {
                 const exoContainer = document.getElementById('exoclick-5696328');
-                if (exoContainer && window.ExoLoader) {
-                    exoContainer.innerHTML = '<div id="5696328"></div>';
-                    console.log('✅ ExoClick initialized');
+                if (exoContainer) {
+                    exoContainer.innerHTML = '<div style="background: #764ba2; color: white; padding: 15px; border-radius: 10px; text-align: center;">🎯 Premium Ad Space - ExoClick</div>';
+                    console.log('✅ ExoClick placeholder initialized');
                 }
             }, 3000);
 
@@ -1000,7 +1007,7 @@
             setTimeout(() => {
                 const eroContainer = document.getElementById('ero-ads-zone');
                 if (eroContainer) {
-                    eroContainer.innerHTML = '<div style="color: #666; font-size: 0.9em;">🎯 Premium Advertising Space</div>';
+                    eroContainer.innerHTML = '<div style="background: #667eea; color: white; padding: 15px; border-radius: 10px; text-align: center;">🎯 Premium Ad Space - EroAdvertising</div>';
                     console.log('✅ EroAdvertising placeholder initialized');
                 }
             }, 4000);
