@@ -434,8 +434,8 @@
         let currentIndex = 0;
         
         function updateBanner() {
-            // Si images es un array de strings, usar full/ como ruta
-            const imagePath = `full/${images[currentIndex]}`;
+            // Las imágenes ya incluyen la ruta completa
+            const imagePath = images[currentIndex];
             banner.style.backgroundImage = `url(${imagePath})`;
             banner.style.backgroundSize = 'cover';
             banner.style.backgroundPosition = 'center';
