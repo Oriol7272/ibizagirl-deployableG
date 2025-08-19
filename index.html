@@ -1732,53 +1732,6 @@
             
             document.body.appendChild(modal);
         }
-            console.log(`🔥 Creating PayPal payment: ${type} - ${amount} - ${description}`);
-            
-            // Show loading state
-            const button = event.target;
-            const originalText = button.innerHTML;
-            button.innerHTML = '⏳ Processing...';
-            button.disabled = true;
-            
-            // Create PayPal payment
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: amount,
-                                currency_code: 'EUR'
-                            },
-                            description: description
-                        }]
-                    });
-                },
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(details) {
-                        console.log('✅ PayPal payment successful:', details);
-                        
-                        // Payment successful - unlock content
-                        unlockContent(type, contentUrl, description);
-                        
-                        // Show success message
-                        showSuccessMessage('¡Pago completado! Contenido desbloqueado.');
-                        
-                        // Reset button
-                        button.innerHTML = '✅ Comprado';
-                        button.style.background = '#28a745';
-                        button.disabled = true;
-                    });
-                },
-                onError: function(err) {
-                    console.error('❌ PayPal payment error:', err);
-                    showErrorMessage('Error en el pago. Inténtalo de nuevo.');
-                    
-                    // Reset button
-                    button.innerHTML = originalText;
-                    button.disabled = false;
-                }
-            }).render(button.parentElement);
-        }
         
         // Unlock content after successful payment
         function unlockContent(type, contentUrl, description) {
