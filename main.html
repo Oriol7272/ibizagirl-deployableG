@@ -795,7 +795,7 @@
                 }, 1000);
                 
                 input.value = '';
-                messages?.scrollTop = messages.scrollHeight;
+                if (messages) messages.scrollTop = messages.scrollHeight;
             }
         }
 
