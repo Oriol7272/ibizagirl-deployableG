@@ -652,7 +652,7 @@
 
         function handlePremiumClick(contentType, filename) {
             const price = contentType === 'photo' ? '€0.10' : '€0.30';
-            const confirmed = confirm(`¿Desbloquear este ${contentType} por ${price}?`);
+            const confirmed = confirm('Desbloquear este ' + contentType + ' por ' + price + '?');
             if (confirmed) {
                 localStorage.setItem('vip_access', 'true');
                 window.location.reload();
