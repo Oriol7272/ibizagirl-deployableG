@@ -318,30 +318,100 @@
     <!-- Script principal actualizado -->
     <script src="main-script.js"></script>
     
-    <!-- JuicyAds Setup - ARREGLADO SIN appendChild -->
+    <!-- Multi-Network Ad Setup -->
     <script type="text/javascript">
-        // Configurar ads de manera segura sin appendChild
+        // Wait for DOM to be ready
         window.addEventListener('DOMContentLoaded', function() {
+            // Delay ad initialization to ensure DOM elements exist
             setTimeout(function() {
-                try {
-                    // Verificar que jads esté disponible
-                    if (typeof jads === 'function') {
-                        console.log('✅ JuicyAds script cargado, configurando zones...');
+                console.log('🎯 Inicializando redes de anuncios...');
+                
+                // JuicyAds Setup - Safe initialization
+                if (typeof jads === 'function') {
+                    try {
+                        console.log('✅ JuicyAds disponible, configurando zones...');
                         
-                        // Configurar zonas de ads de manera segura
-                        try { jads('2092250','300','250'); } catch(e) { console.log('Ad zone 2092250 fallback'); }
-                        try { jads('2092251','125','125'); } catch(e) { console.log('Ad zone 2092251 fallback'); }
-                        try { jads('2092471','300','50'); } catch(e) { console.log('Ad zone 2092471 fallback'); }
-                        try { jads('2092470','125','125'); } catch(e) { console.log('Ad zone 2092470 fallback'); }
+                        // Main content ads
+                        if (document.getElementById('jads-zone-2092250')) {
+                            jads('2092250','300','250');
+                            console.log('✅ JuicyAds zone 2092250 configurada');
+                        }
                         
-                        console.log('✅ JuicyAds zones configuradas exitosamente');
-                    } else {
-                        console.log('⚠️ JuicyAds script no disponible, usando fallbacks');
+                        // Footer ads
+                        if (document.getElementById('jads-zone-2092471')) {
+                            jads('2092471','300','50');
+                            console.log('✅ JuicyAds zone 2092471 configurada');
+                        }
+                        
+                        if (document.getElementById('jads-zone-2092470')) {
+                            jads('2092470','125','125');
+                            console.log('✅ JuicyAds zone 2092470 configurada');
+                        }
+                        
+                    } catch(error) {
+                        console.warn('⚠️ Error configurando JuicyAds:', error);
                     }
-                } catch (error) {
-                    console.log('⚠️ Error en JuicyAds setup:', error);
+                } else {
+                    console.warn('⚠️ JuicyAds script no disponible');
                 }
-            }, 5000); // Esperar 5 segundos para que todo cargue
+                
+                // ExoClick Setup
+                try {
+                    if (window.ExoLoader) {
+                        // ExoClick banner
+                        if (document.getElementById('exoclick-zone-4889484')) {
+                            window.ExoLoader.serve({
+                                "id": "4889484",
+                                "serve": "std"
+                            });
+                            console.log('✅ ExoClick zone configurada');
+                        }
+                        
+                        // Footer banner
+                        if (document.getElementById('exoclick-footer-banner')) {
+                            window.ExoLoader.serve({
+                                "id": "4889485",
+                                "serve": "std"
+                            });
+                        }
+                    } else {
+                        console.warn('⚠️ ExoClick no disponible');
+                    }
+                } catch(error) {
+                    console.warn('⚠️ Error configurando ExoClick:', error);
+                }
+                
+                // Ero-Advertising Setup
+                try {
+                    // Banner setup
+                    if (document.getElementById('ero-ad-zone')) {
+                        const eroScript = document.createElement('script');
+                        eroScript.type = 'text/javascript';
+                        eroScript.src = '//cdn.eroadvertising.com/bnr.php?section=General&pub=236173&format=728x90&ga=g';
+                        eroScript.onerror = function() {
+                            console.warn('⚠️ Ero-Advertising banner falló al cargar');
+                        };
+                        document.getElementById('ero-ad-zone').appendChild(eroScript);
+                        console.log('✅ Ero-Advertising banner configurado');
+                    }
+                    
+                    // Footer square
+                    if (document.getElementById('ero-footer-square')) {
+                        const eroFooter = document.createElement('script');
+                        eroFooter.type = 'text/javascript';
+                        eroFooter.src = '//cdn.eroadvertising.com/bnr.php?section=General&pub=236173&format=300x250&ga=g';
+                        eroFooter.onerror = function() {
+                            console.warn('⚠️ Ero-Advertising footer falló al cargar');
+                        };
+                        document.getElementById('ero-footer-square').appendChild(eroFooter);
+                    }
+                } catch(error) {
+                    console.warn('⚠️ Error configurando Ero-Advertising:', error);
+                }
+                
+                console.log('✅ Inicialización de anuncios completada');
+                
+            }, 3000); // Wait 3 seconds for all elements to be ready
         });
     </script>
     
