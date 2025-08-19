@@ -153,47 +153,47 @@
             </div>
         </div>
         
-        <!-- Pricing View -->
+            <!-- Pricing View -->
         <div id="pricingView" class="content-view">
             <div class="pricing-header">
-                <h2>💎 Unlock Premium Access</h2>
-                <p>Get instant access to all content</p>
+                <h2 data-i18n="pricingTitle">💎 Desbloquea Acceso Premium</h2>
+                <p data-i18n="pricingSubtitle">Obtén acceso instantáneo a todo el contenido</p>
             </div>
             
             <div class="pricing-cards">
                 <!-- PPV Option -->
                 <div class="pricing-card">
                     <div class="card-header">
-                        <h3>Pay Per View</h3>
-                        <div class="price">€0.99</div>
-                        <span class="price-period">per item</span>
+                        <h3 data-i18n="ppvTitle">Pago por Vista</h3>
+                        <div class="price" data-i18n="ppvPrice">€0.99</div>
+                        <span class="price-period" data-i18n="ppvPeriod">por artículo</span>
                     </div>
                     <ul class="features-list">
-                        <li>✓ Single photo or video</li>
-                        <li>✓ Instant access</li>
-                        <li>✓ HD quality</li>
-                        <li>✓ Download enabled</li>
-                        <li>✓ PayPal secure payment</li>
-                        <li>✓ No subscription needed</li>
+                        <li data-i18n="feature1">✓ Foto o video individual</li>
+                        <li data-i18n="feature2">✓ Acceso instantáneo</li>
+                        <li data-i18n="feature3">✓ Calidad HD</li>
+                        <li data-i18n="feature4">✓ Descarga habilitada</li>
+                        <li data-i18n="feature5">✓ Pago seguro PayPal</li>
+                        <li data-i18n="feature6">✓ Sin suscripción necesaria</li>
                     </ul>
                     <div id="paypal-ppv-button" class="paypal-button-container"></div>
                 </div>
                 
                 <!-- Monthly Subscription -->
                 <div class="pricing-card featured">
-                    <div class="popular-badge">Most Popular</div>
+                    <div class="popular-badge" data-i18n="mostPopular">Más Popular</div>
                     <div class="card-header">
-                        <h3>Monthly Access</h3>
-                        <div class="price">€9.99</div>
-                        <span class="price-period">per month</span>
+                        <h3 data-i18n="monthlyTitle">Acceso Mensual</h3>
+                        <div class="price" data-i18n="monthlyPrice">€9.99</div>
+                        <span class="price-period" data-i18n="monthlyPeriod">por mes</span>
                     </div>
                     <ul class="features-list">
-                        <li>✓ All 200 daily photos</li>
-                        <li>✓ All 40 daily videos</li>
-                        <li>✓ 30% new content daily</li>
-                        <li>✓ Priority updates</li>
-                        <li>✓ HD downloads</li>
-                        <li>✓ PayPal secure payment</li>
+                        <li data-i18n="feature7">✓ Todas las 200 fotos diarias</li>
+                        <li data-i18n="feature8">✓ Todos los 40 videos diarios</li>
+                        <li data-i18n="feature9">✓ 30% contenido nuevo diario</li>
+                        <li data-i18n="feature10">✓ Actualizaciones prioritarias</li>
+                        <li data-i18n="feature11">✓ Descargas HD</li>
+                        <li data-i18n="feature5">✓ Pago seguro PayPal</li>
                     </ul>
                     <div id="paypal-monthly-button" class="paypal-button-container"></div>
                 </div>
@@ -201,17 +201,17 @@
                 <!-- Lifetime Access -->
                 <div class="pricing-card">
                     <div class="card-header">
-                        <h3>Lifetime Access</h3>
-                        <div class="price">€49.99</div>
-                        <span class="price-period">one time</span>
+                        <h3 data-i18n="lifetimeTitle">Acceso de Por Vida</h3>
+                        <div class="price" data-i18n="lifetimePrice">€49.99</div>
+                        <span class="price-period" data-i18n="lifetimePeriod">una sola vez</span>
                     </div>
                     <ul class="features-list">
-                        <li>✓ Forever access</li>
-                        <li>✓ All current content</li>
-                        <li>✓ All future updates</li>
-                        <li>✓ Priority support</li>
-                        <li>✓ Exclusive bonuses</li>
-                        <li>✓ PayPal secure payment</li>
+                        <li data-i18n="feature12">✓ Acceso para siempre</li>
+                        <li data-i18n="feature13">✓ Todo el contenido actual</li>
+                        <li data-i18n="feature14">✓ Todas las actualizaciones futuras</li>
+                        <li data-i18n="feature15">✓ Soporte prioritario</li>
+                        <li data-i18n="feature16">✓ Bonos exclusivos</li>
+                        <li data-i18n="feature5">✓ Pago seguro PayPal</li>
                     </ul>
                     <div id="paypal-lifetime-button" class="paypal-button-container"></div>
                 </div>
@@ -221,12 +221,25 @@
             <div class="payment-trust">
                 <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_100x26.png" alt="PayPal" style="height: 40px;">
                 <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/cc-badges-ppmcvdam.png" alt="Credit Cards" style="height: 40px;">
-                <p>🔒 Secure Payment Processing by PayPal</p>
+                <p data-i18n="securePayment">🔒 Procesamiento de Pago Seguro por PayPal</p>
             </div>
             
-            <!-- Ad Zone: 125x125 (ID: 2092251) -->
-            <div class="ad-container ad-square">
-                <div id="jads-zone-2092251"></div>
+            <!-- Multiple Ad Zones -->
+            <div class="ads-grid">
+                <!-- JuicyAds Banner -->
+                <div class="ad-container ad-banner">
+                    <div id="jads-zone-2092250"></div>
+                </div>
+                
+                <!-- ExoClick Zone -->
+                <div class="ad-container ad-square">
+                    <div id="exoclick-zone-4889484"></div>
+                </div>
+                
+                <!-- Ero-Advertising Zone -->
+                <div class="ad-container ad-rectangle">
+                    <div id="ero-ad-zone"></div>
+                </div>
             </div>
         </div>
     </main>
