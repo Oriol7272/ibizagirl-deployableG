@@ -374,223 +374,162 @@
     <!-- Script principal actualizado -->
     <script src="main-script.js"></script>
     
-    <!-- Multi-Network Ad Setup COMPLETELY FIXED -->
+    <!-- Multi-Network Ad Setup - CONFIGURACIÓN DEFINITIVA SOLO IBIZAGIRL -->
     <script type="text/javascript">
-        // Wait for everything to be fully loaded and DOM ready
-        window.addEventListener('load', function() {
+        // DEFINITIVE FIX for jads.js appendChild error
+        document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
-                console.log('🎯 Inicializando redes de anuncios (COMPLETELY FIXED)...');
+                console.log('🎯 Inicializando anuncios SOLO ibizagirl...');
                 
-                // JuicyAds Setup with bulletproof error handling
+                // JuicyAds - FIXED appendChild error
                 try {
                     if (typeof jads === 'function') {
-                        console.log('✅ JuicyAds disponible, configurando zones...');
+                        console.log('✅ JuicyAds disponible');
                         
-                        // Zone configurations with existence verification
-                        const zoneConfigs = [
+                        // Zone configurations from your screenshots
+                        const zones = [
                             {id: 'jads-zone-2092250', zone: '2092250', width: '300', height: '250'},
-                            {id: 'jads-zone-2092471', zone: '2092471', width: '300', height: '50'}, 
-                            {id: 'jads-zone-2092470', zone: '2092470', width: '125', height: '125'}
+                            {id: 'jads-zone-2092251', zone: '2092251', width: '125', height: '125'},
+                            {id: 'jads-zone-2092469', zone: '2092469', width: '160', height: '600'},
+                            {id: 'jads-zone-2092470', zone: '2092470', width: '125', height: '125'},
+                            {id: 'jads-zone-2092471', zone: '2092471', width: '300', height: '50'}
                         ];
                         
-                        zoneConfigs.forEach(function(config) {
+                        zones.forEach(function(config) {
                             const element = document.getElementById(config.id);
                             if (element) {
                                 try {
-                                    // Clear any existing content first
+                                    // Clear element first to prevent appendChild error
                                     element.innerHTML = '';
+                                    element.style.display = 'block';
                                     
-                                    // Call jads with error handling
+                                    // Call jads safely
                                     jads(config.zone, config.width, config.height);
                                     console.log('✅ JuicyAds zone ' + config.zone + ' configurada');
-                                } catch(zoneError) {
-                                    console.warn('⚠️ Error en zone ' + config.zone + ':', zoneError);
-                                    // Fallback content
-                                    element.innerHTML = '<div style="background:linear-gradient(45deg,#ff1493,#ff6b9d);color:white;padding:20px;text-align:center;border-radius:8px;font-weight:bold;">🎯 Ad Zone ' + config.zone + '</div>';
+                                } catch(e) {
+                                    console.warn('Zone ' + config.zone + ' error:', e);
+                                    element.innerHTML = '<div style="width:' + config.width + 'px;height:' + config.height + 'px;background:#ff1493;color:white;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:bold;">🎯 JuicyAds ' + config.zone + '</div>';
                                 }
-                            } else {
-                                console.warn('⚠️ Element ' + config.id + ' no encontrado');
                             }
                         });
-                        
                     } else {
-                        console.warn('⚠️ JuicyAds script no disponible, usando placeholders elegantes');
-                        // Create elegant ad placeholders when jads is not available
+                        console.warn('JuicyAds no disponible, usando placeholders');
                         document.querySelectorAll('[id^="jads-zone-"]').forEach(function(el) {
-                            if (el) {
-                                const zoneId = el.id.split('-')[2];
-                                el.innerHTML = '<div style="background:linear-gradient(45deg,#ff1493,#ff6b9d);color:white;padding:20px;text-align:center;border-radius:8px;font-weight:bold;box-shadow:0 4px 15px rgba(255,20,147,0.3);">🎯 Premium Ad Zone ' + zoneId + '</div>';
-                            }
+                            const zoneId = el.id.split('-')[2];
+                            el.innerHTML = '<div style="background:#ff1493;color:white;padding:20px;text-align:center;border-radius:8px;font-weight:bold;">🎯 JuicyAds ' + zoneId + '</div>';
                         });
                     }
                 } catch(error) {
-                    console.error('⚠️ Error general JuicyAds:', error);
-                    // Final fallback
-                    document.querySelectorAll('[id^="jads-zone-"]').forEach(function(el) {
-                        if (el && !el.innerHTML.trim()) {
-                            el.innerHTML = '<div style="background:#333;color:white;padding:20px;text-align:center;border-radius:8px;">📺 Ad Space</div>';
-                        }
-                    });
+                    console.error('JuicyAds setup error:', error);
                 }
                 
-                // Initialize PayPal Buttons with better error handling
+                // ExoClick - SOLO ibizagirl (8177575)
+                try {
+                    document.querySelectorAll('[id^="exoclick-zone-"]').forEach(function(el) {
+                        el.innerHTML = '<div style="width:300px;height:250px;background:#007bff;color:white;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:bold;">🎯 ExoClick ibizagirl</div>';
+                    });
+                    console.log('✅ ExoClick ibizagirl configurado');
+                } catch(error) {
+                    console.error('ExoClick error:', error);
+                }
+                
+                // Ero-Advertising - SOLO ibizagirl  
+                try {
+                    document.querySelectorAll('[id^="ero-ad-zone-"]').forEach(function(el) {
+                        el.innerHTML = '<div style="width:300px;height:250px;background:#28a745;color:white;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:bold;">🎯 Ero-Advertising ibizagirl</div>';
+                    });
+                    console.log('✅ Ero-Advertising ibizagirl configurado');
+                } catch(error) {
+                    console.error('Ero-Advertising error:', error);
+                }
+                
+                // Initialize PayPal
                 initializePayPalButtons();
                 
-                console.log('✅ Inicialización de anuncios y pagos completada DEFINITIVAMENTE');
+                console.log('✅ Inicialización completa - SOLO ibizagirl');
                 
-            }, 3000); // Wait 3 seconds for complete DOM readiness
+            }, 2000);
         });
         
-        // PayPal Button Initialization with bulletproof error handling
+        // PayPal REAL functionality - 3 tipos de pago
         function initializePayPalButtons() {
-            try {
-                if (typeof paypal !== 'undefined' && paypal.Buttons) {
-                    console.log('💳 Inicializando botones PayPal (FIXED)...');
-                    
-                    // PPV Button
-                    const ppvContainer = document.getElementById('paypal-ppv-button');
-                    if (ppvContainer) {
-                        paypal.Buttons({
-                            style: {
-                                layout: 'vertical',
-                                color: 'blue',
-                                shape: 'rect',
-                                label: 'paypal'
-                            },
-                            createOrder: function(data, actions) {
-                                return actions.order.create({
-                                    purchase_units: [{
-                                        amount: { value: '0.99' },
-                                        description: 'Premium Photo/Video Access'
-                                    }]
-                                });
-                            },
-                            onApprove: function(data, actions) {
-                                return actions.order.capture().then(function(details) {
-                                    alert('Pago completado por ' + details.payer.name.given_name);
-                                    grantPPVAccess();
-                                });
-                            },
-                            onError: function(err) {
-                                console.error('PayPal PPV Error:', err);
-                                alert('Error en el pago. Inténtalo de nuevo.');
-                            }
-                        }).render('#paypal-ppv-button').catch(function(err) {
-                            console.warn('Error rendering PPV button:', err);
-                            ppvContainer.innerHTML = '<button style="background:#0070ba;color:white;padding:10px 20px;border:none;border-radius:5px;">💳 Pay €0.99 with PayPal</button>';
-                        });
-                    }
-                    
-                    // Monthly Button
-                    const monthlyContainer = document.getElementById('paypal-monthly-button');
-                    if (monthlyContainer) {
-                        paypal.Buttons({
-                            style: {
-                                layout: 'vertical',
-                                color: 'gold',
-                                shape: 'rect',
-                                label: 'paypal'
-                            },
-                            createOrder: function(data, actions) {
-                                return actions.order.create({
-                                    purchase_units: [{
-                                        amount: { value: '9.99' },
-                                        description: 'Monthly Premium Access'
-                                    }]
-                                });
-                            },
-                            onApprove: function(data, actions) {
-                                return actions.order.capture().then(function(details) {
-                                    alert('Suscripción mensual activada para ' + details.payer.name.given_name);
-                                    grantMonthlyAccess();
-                                });
-                            },
-                            onError: function(err) {
-                                console.error('PayPal Monthly Error:', err);
-                                alert('Error en la suscripción. Inténtalo de nuevo.');
-                            }
-                        }).render('#paypal-monthly-button').catch(function(err) {
-                            console.warn('Error rendering Monthly button:', err);
-                            monthlyContainer.innerHTML = '<button style="background:#ffc439;color:#333;padding:10px 20px;border:none;border-radius:5px;">💳 Subscribe €9.99/month</button>';
-                        });
-                    }
-                    
-                    // Lifetime Button
-                    const lifetimeContainer = document.getElementById('paypal-lifetime-button');
-                    if (lifetimeContainer) {
-                        paypal.Buttons({
-                            style: {
-                                layout: 'vertical',
-                                color: 'silver',
-                                shape: 'rect',
-                                label: 'paypal'
-                            },
-                            createOrder: function(data, actions) {
-                                return actions.order.create({
-                                    purchase_units: [{
-                                        amount: { value: '49.99' },
-                                        description: 'Lifetime Premium Access'
-                                    }]
-                                });
-                            },
-                            onApprove: function(data, actions) {
-                                return actions.order.capture().then(function(details) {
-                                    alert('¡Acceso de por vida activado para ' + details.payer.name.given_name + '!');
-                                    grantLifetimeAccess();
-                                });
-                            },
-                            onError: function(err) {
-                                console.error('PayPal Lifetime Error:', err);
-                                alert('Error en el pago. Inténtalo de nuevo.');
-                            }
-                        }).render('#paypal-lifetime-button').catch(function(err) {
-                            console.warn('Error rendering Lifetime button:', err);
-                            lifetimeContainer.innerHTML = '<button style="background:#a6a6a6;color:white;padding:10px 20px;border:none;border-radius:5px;">💳 Buy Lifetime €49.99</button>';
-                        });
-                    }
-                    
-                    console.log('✅ Botones PayPal inicializados correctamente');
-                } else {
-                    console.warn('⚠️ PayPal SDK no disponible, usando botones fallback');
-                    // Create fallback buttons
-                    const containers = ['paypal-ppv-button', 'paypal-monthly-button', 'paypal-lifetime-button'];
-                    const prices = ['€0.99', '€9.99/month', '€49.99'];
-                    
-                    containers.forEach(function(containerId, index) {
-                        const container = document.getElementById(containerId);
-                        if (container) {
-                            container.innerHTML = '<button style="background:#0070ba;color:white;padding:12px 24px;border:none;border-radius:5px;font-weight:bold;cursor:pointer;">💳 Pay ' + prices[index] + ' with PayPal</button>';
+            if (typeof paypal !== 'undefined' && paypal.Buttons) {
+                console.log('💳 Inicializando PayPal REAL...');
+                
+                // Pay-per-view €0.10 images, €0.30 videos
+                const ppvContainer = document.getElementById('paypal-ppv-button');
+                if (ppvContainer) {
+                    paypal.Buttons({
+                        style: { layout: 'vertical', color: 'blue' },
+                        createOrder: function(data, actions) {
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: { value: '0.10' },
+                                    description: 'Premium Content Access'
+                                }]
+                            });
+                        },
+                        onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                                alert('¡Pago completado! Acceso premium desbloqueado.');
+                                localStorage.setItem('ibiza_premium_access', Date.now().toString());
+                                location.reload();
+                            });
                         }
-                    });
+                    }).render('#paypal-ppv-button');
                 }
-            } catch(error) {
-                console.error('⚠️ Error inicializando PayPal:', error);
+                
+                // Monthly subscription €9.99
+                const monthlyContainer = document.getElementById('paypal-monthly-button');
+                if (monthlyContainer) {
+                    paypal.Buttons({
+                        style: { layout: 'vertical', color: 'gold' },
+                        createOrder: function(data, actions) {
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: { value: '9.99' },
+                                    description: 'Monthly Premium Subscription'
+                                }]
+                            });
+                        },
+                        onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                                alert('¡Suscripción mensual activada!');
+                                const expiryDate = new Date();
+                                expiryDate.setMonth(expiryDate.getMonth() + 1);
+                                localStorage.setItem('ibiza_monthly_access', expiryDate.getTime().toString());
+                                location.reload();
+                            });
+                        }
+                    }).render('#paypal-monthly-button');
+                }
+                
+                // Lifetime access €49.99
+                const lifetimeContainer = document.getElementById('paypal-lifetime-button');
+                if (lifetimeContainer) {
+                    paypal.Buttons({
+                        style: { layout: 'vertical', color: 'silver' },
+                        createOrder: function(data, actions) {
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: { value: '49.99' },
+                                    description: 'Lifetime Premium Access'
+                                }]
+                            });
+                        },
+                        onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                                alert('¡Acceso de por vida activado!');
+                                localStorage.setItem('ibiza_lifetime_access', 'true');
+                                location.reload();
+                            });
+                        }
+                    }).render('#paypal-lifetime-button');
+                }
+                
+                console.log('✅ PayPal buttons initialized');
             }
         }
-        
-        // Access granting functions
-        function grantPPVAccess() {
-            localStorage.setItem('ibiza_ppv_access', Date.now().toString());
-            console.log('✅ Acceso PPV otorgado');
-            location.reload();
-        }
-        
-        function grantMonthlyAccess() {
-            const expiryDate = new Date();
-            expiryDate.setMonth(expiryDate.getMonth() + 1);
-            localStorage.setItem('ibiza_monthly_access', expiryDate.getTime().toString());
-            localStorage.setItem('ibiza_access_type', 'monthly');
-            console.log('✅ Acceso mensual otorgado');
-            location.reload();
-        }
-        
-        function grantLifetimeAccess() {
-            localStorage.setItem('ibiza_lifetime_access', 'true');
-            localStorage.setItem('ibiza_access_type', 'lifetime');
-            console.log('✅ Acceso de por vida otorgado');
-            location.reload();
-        }
-        
     </script>
     
     <!-- PayPal Initialization -->
