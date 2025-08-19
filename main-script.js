@@ -386,6 +386,18 @@
         setInterval(updateBanner, 5000);
     }
 
+    // Hide loading screen
+    function hideLoadingScreen() {
+        console.log('🎯 Ocultando pantalla de loading...');
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            loadingScreen.style.display = 'none';
+            console.log('✅ Pantalla de loading oculta');
+        } else {
+            console.warn('⚠️ No se encontró elemento loadingScreen');
+        }
+    }
+
     // Add styles
     const style = document.createElement('style');
     style.textContent = `
