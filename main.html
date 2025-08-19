@@ -60,9 +60,16 @@
         };
     </script>
     
-    <!-- Load external ad scripts -->
-    <script type="text/javascript" src="https://poweredby.jads.co/js/jads.js" async onerror="console.warn('JuicyAds externo no disponible, usando fallback')"></script>
-    <script type="text/javascript" src="https://a.exdynsrv.com/ad-provider.js" async onerror="console.warn('ExoClick externo no disponible, usando fallback')"></script>
+    <!-- Initialize ad namespaces to prevent undefined errors -->
+    <script type="text/javascript">
+        // Initialize JuicyAds namespace before external script
+        window.adsbyjuicy = window.adsbyjuicy || {};
+        console.log('🔧 JuicyAds namespace initialized');
+    </script>
+    
+    <!-- Load external ad scripts with proper timing -->
+    <script type="text/javascript" src="https://poweredby.jads.co/js/jads.js" defer onerror="console.warn('JuicyAds externo no disponible, usando fallback')"></script>
+    <script type="text/javascript" src="https://a.exdynsrv.com/ad-provider.js" defer onerror="console.warn('ExoClick externo no disponible, usando fallback')"></script>
     
     <!-- PopAds - FIXED -->
     <script type="text/javascript">
