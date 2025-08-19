@@ -1235,54 +1235,49 @@
             }
         }
 
-        // Initialize Ads with PROPER configuration
+        // Initialize ads with UPDATED CODES
         function initializeAds() {
-            console.log('🎯 Initializing ads...');
+            console.log('🎯 Initializing ads with new codes...');
             
-            // JuicyAds - Zone 2092250 (ibizagirl)
-            setTimeout(() => {
-                const juicyContainer = document.getElementById('juicyads-2092250');
-                if (juicyContainer) {
-                    if (window.adsbyjuicy && typeof window.adsbyjuicy === 'function') {
-                        try {
-                            window.adsbyjuicy("ad", "2092250");
-                            console.log('✅ JuicyAds zone 2092250 initialized');
-                        } catch (e) {
-                            juicyContainer.innerHTML = '<div style="background: linear-gradient(45deg, #4facfe, #00f2fe); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium JuicyAds Space - Zone 2092250</div>';
-                            console.log('🎯 JuicyAds fallback loaded');
-                        }
-                    } else {
-                        juicyContainer.innerHTML = '<div style="background: linear-gradient(45deg, #4facfe, #00f2fe); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium JuicyAds Space - Zone 2092250</div>';
+            // JuicyAds - Using zones: 2092250, 2092251, 208469, 209470, 209471
+            if (window.adsbyjuicy && window.juicyZones) {
+                window.juicyZones.forEach((zone, index) => {
+                    const adElement = document.querySelector(`[data-juicy-zone="${zone}"]`);
+                    if (adElement) {
+                        window.adsbyjuicy.cmd.push(function() {
+                            window.adsbyjuicy.ads.push({
+                                adunit: zone,
+                                div: adElement.id
+                            });
+                        });
+                        console.log(`🍊 JuicyAds zone ${zone} initialized`);
                     }
-                }
-            }, 2000);
-
-            // ExoClick - Zone 5696328 (ibizagirl) 
-            setTimeout(() => {
-                const exoContainer = document.getElementById('exoclick-5696328');
-                if (exoContainer) {
-                    if (window.ExoLoader) {
-                        try {
-                            ExoLoader.serve({"gptAd":1,"id":"5696328","kw":[]});
-                            console.log('✅ ExoClick zone 5696328 initialized');
-                        } catch (e) {
-                            exoContainer.innerHTML = '<div style="background: linear-gradient(45deg, #764ba2, #667eea); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium ExoClick Space - Zone 5696328</div>';
-                            console.log('🎯 ExoClick fallback loaded');
-                        }
-                    } else {
-                        exoContainer.innerHTML = '<div style="background: linear-gradient(45deg, #764ba2, #667eea); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium ExoClick Space - Zone 5696328</div>';
-                    }
-                }
-            }, 3000);
-
-            // EroAdvertising
-            setTimeout(() => {
-                const eroContainer = document.getElementById('ero-ads-zone');
-                if (eroContainer) {
-                    eroContainer.innerHTML = '<div style="background: linear-gradient(45deg, #f093fb, #f5576c); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium EroAdvertising Space</div>';
-                    console.log('✅ EroAdvertising placeholder initialized');
-                }
-            }, 4000);
+                });
+            }
+            
+            // ExoClick - Zone 5696328 with token
+            if (window.AdProvider) {
+                const exoElements = document.querySelectorAll('.eas6a97888e2');
+                exoElements.forEach(element => {
+                    element.setAttribute('data-zoneid', '5696328');
+                });
+                console.log('🎯 ExoClick zone 5696328 configured');
+            }
+            
+            // EroAdvertising - ID 8177575
+            if (window.eroAdId) {
+                const eroElements = document.querySelectorAll('[data-ero-ad]');
+                eroElements.forEach(element => {
+                    element.setAttribute('data-ad-id', window.eroAdId);
+                    element.setAttribute('data-website-id', window.eroWebsiteId);
+                });
+                console.log(`💎 EroAdvertising ID ${window.eroAdId} configured`);
+            }
+            
+            // PopAds - Already initialized via script
+            console.log('🚀 PopAds initialized via script');
+            
+            console.log('✅ All ad networks initialized with new codes');
         }
 
         // Chatbot functionality
