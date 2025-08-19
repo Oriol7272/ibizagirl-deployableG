@@ -840,6 +840,65 @@ body {
 }
 
 /* ============================
+   CONTENT CARDS - FIXED SIZES
+   ============================ */
+.content-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--box-shadow);
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.content-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-hover);
+    border-color: var(--primary-color);
+}
+
+.card-image {
+    position: relative;
+    width: 100%;
+    height: 220px; /* FIXED HEIGHT for consistent thumbnails */
+    overflow: hidden;
+    background: #000;
+}
+
+.card-image img,
+.card-image video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures proper aspect ratio */
+    transition: var(--transition);
+}
+
+.card-image:hover img,
+.card-image:hover video {
+    transform: scale(1.05);
+}
+
+.card-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.card-info h4 {
+    margin: 0 0 5px 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.card-info p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* ============================
    PRICING CARDS
    ============================ */
 .pricing-cards {
