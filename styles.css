@@ -988,3 +988,297 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-color);
 }
+
+/* ============================
+   ISABELLA AI CHAT ASSISTANT
+   ============================ */
+.isabella-chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+}
+
+.isabella-button {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(255, 20, 147, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+.isabella-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(255, 20, 147, 0.4);
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 4px 20px rgba(255, 20, 147, 0.3); }
+    50% { box-shadow: 0 4px 30px rgba(255, 20, 147, 0.6); }
+    100% { box-shadow: 0 4px 20px rgba(255, 20, 147, 0.3); }
+}
+
+.isabella-icon {
+    font-size: 1.2rem;
+}
+
+.isabella-name {
+    font-size: 1rem;
+}
+
+.isabella-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 350px;
+    height: 500px;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.isabella-header {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.isabella-avatar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.isabella-emoji {
+    font-size: 1.5rem;
+}
+
+.isabella-info h4 {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.isabella-status {
+    font-size: 0.8rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.isabella-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.isabella-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.isabella-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.isabella-message {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+}
+
+.ai-message {
+    align-self: flex-start;
+}
+
+.user-message {
+    align-self: flex-end;
+}
+
+.message-content {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 15px;
+    border-radius: 18px;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.ai-message .message-content {
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.2), rgba(255, 105, 180, 0.2));
+    border-bottom-left-radius: 5px;
+}
+
+.user-message .message-content {
+    background: rgba(255, 255, 255, 0.2);
+    border-bottom-right-radius: 5px;
+}
+
+.message-time {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 5px;
+    padding: 0 5px;
+}
+
+.user-message .message-time {
+    text-align: right;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    animation: typing 1.4s infinite;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+    30% {
+        transform: translateY(-10px);
+        opacity: 1;
+    }
+}
+
+.isabella-quick-actions {
+    padding: 10px 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quick-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.quick-btn:hover {
+    background: rgba(255, 20, 147, 0.3);
+    border-color: var(--primary-color);
+}
+
+.isabella-input-area {
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#isabella-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 10px 15px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    outline: none;
+    transition: var(--transition);
+}
+
+#isabella-input:focus {
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+#isabella-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.isabella-input-area button {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.isabella-input-area button:hover {
+    transform: scale(1.1);
+}
+
+/* Isabella Mobile Responsive */
+@media (max-width: 768px) {
+    .isabella-window {
+        width: 300px;
+        height: 450px;
+        bottom: 70px;
+        right: -20px;
+    }
+    
+    .isabella-button {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .isabella-name {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .isabella-window {
+        width: calc(100vw - 40px);
+        right: 20px;
+        height: 400px;
+    }
+    
+    .isabella-chat-container {
+        right: 10px;
+        bottom: 10px;
+    }
+}
