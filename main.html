@@ -827,15 +827,19 @@
             const lightbox = document.getElementById('lightbox');
             const closeBtn = document.querySelector('.lightbox-close');
             
-            closeBtn?.addEventListener('click', () => {
-                lightbox?.classList.remove('active');
-            });
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    if (lightbox) lightbox.classList.remove('active');
+                });
+            }
             
-            lightbox?.addEventListener('click', (e) => {
-                if (e.target === lightbox) {
-                    lightbox.classList.remove('active');
-                }
-            });
+            if (lightbox) {
+                lightbox.addEventListener('click', (e) => {
+                    if (e.target === lightbox) {
+                        lightbox.classList.remove('active');
+                    }
+                });
+            }
         }
 
         // ============================
