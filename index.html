@@ -67,6 +67,31 @@
         console.log('📊 Google Analytics configured');
     </script>
     
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "IbizaGirl.pics",
+        "description": "Premium content from the paradise of Ibiza. Daily updates, exclusive photos and videos.",
+        "url": "https://ibizagirl.pics/",
+        "image": "https://ibizagirl.pics/full/bikbanner.webp",
+        "author": {
+            "@type": "Organization",
+            "name": "IbizaGirl"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "IbizaGirl"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://ibizagirl.pics/?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    
     <!-- PayPal SDK - Solo botones, sin tarjetas -->
     <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&disable-funding=credit,card"></script>
     
