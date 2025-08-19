@@ -789,6 +789,17 @@ async function initializeApplication() {
         
         console.log('✅ Application initialized successfully');
         
+        // Ocultar loading screen
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            loadingScreen.style.transition = 'opacity 0.5s';
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                console.log('✅ Loading screen ocultado');
+            }, 500);
+        }
+        
     } catch (error) {
         ErrorHandler.logError(error, 'Initialization');
         showFallbackContent();
