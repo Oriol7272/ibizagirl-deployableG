@@ -1,26 +1,24 @@
 /**
- * styles.css - IbizaGirl.pics
- * Estilos principales con soporte para banner rotatorio y galería
+ * IbizaGirl.pics - CSS Principal
+ * Sistema HTML original optimizado
  */
 
 /* ============================
    VARIABLES CSS
    ============================ */
 :root {
-    --primary-color: #ff1493;
-    --secondary-color: #ff69b4;
-    --accent-color: #ffd700;
-    --dark-bg: #0a0a0a;
-    --card-bg: #1a1a1a;
+    --primary-color: #FF1493;
+    --secondary-color: #FFD700;
+    --accent-color: #FF69B4;
+    --dark-bg: #1a1a2e;
+    --card-bg: rgba(255, 255, 255, 0.1);
     --text-primary: #ffffff;
-    --text-secondary: #b0b0b0;
-    --success-color: #00ff00;
-    --error-color: #ff4444;
+    --text-secondary: #cccccc;
+    --success-color: #4CAF50;
     --border-radius: 12px;
     --transition: all 0.3s ease;
-    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --box-shadow-hover: 0 8px 12px rgba(255, 20, 147, 0.3);
-    --blur-amount: 20px;
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    --box-shadow-hover: 0 8px 25px rgba(255, 20, 147, 0.3);
 }
 
 /* ============================
