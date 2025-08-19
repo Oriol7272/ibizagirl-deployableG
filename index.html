@@ -4,24 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IbizaGirl.pics - Premium Content</title>
+    <meta name="description" content="Premium photos and videos from Ibiza. Daily updates, exclusive content.">
     
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="IbizaGirl.pics - Premium content gallery with exclusive photos and videos">
-    <meta name="keywords" content="ibiza, girl, pics, premium, photos, videos, gallery">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="IbizaGirl.pics - Premium Content">
-    <meta property="og:description" content="Premium content gallery with exclusive photos and videos">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="">
-    
-    <!-- Site Verification Meta Tags -->
-    <meta name="juicyads-site-verification" content="f67a56f266e834d596c42122f88bb88d">
-    <meta name="eroads_" content="5f8afe77e5b70fec960d89b314e045a4">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="https://ibizagirl.pics/favicon.ico">
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR"></script>
     
     <style>
         * {
@@ -31,115 +17,259 @@
         }
         
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: white;
-            overflow: hidden;
+            min-height: 100vh;
         }
         
-        .landing-container {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
             text-align: center;
-            z-index: 10;
-            position: relative;
-        }
-        
-        .palm-animation {
-            position: absolute;
-            top: -100px;
-            left: -50px;
-            font-size: 8rem;
-            animation: sway 3s ease-in-out infinite;
-            opacity: 0.3;
-        }
-        
-        .palm-animation:nth-child(2) {
-            top: -80px;
-            right: -50px;
-            left: auto;
-            animation-delay: -1s;
+            padding: 40px 0;
         }
         
         .logo {
-            font-size: 4rem;
+            font-size: 3em;
             font-weight: bold;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #FF1493, #FFD700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
-        .subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+        .tagline {
+            font-size: 1.2em;
             opacity: 0.9;
         }
         
-        .age-warning {
-            background: rgba(255, 20, 147, 0.2);
-            border: 2px solid #FF1493;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            font-weight: bold;
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
         }
         
-        .enter-btn {
-            background: linear-gradient(45deg, #FF1493, #FFD700);
+        .section {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .section h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background: #ff4757;
             color: white;
+            padding: 12px 25px;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
             border-radius: 25px;
             cursor: pointer;
-            transition: transform 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
+            font-size: 1em;
+            margin: 10px;
+            transition: background 0.3s;
         }
         
-        .enter-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        .btn:hover {
+            background: #ff3742;
         }
         
-        @keyframes sway {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
         }
         
-        @media (max-width: 768px) {
-            .logo { font-size: 2.5rem; }
-            .palm-animation { font-size: 4rem; }
+        .language-selector select {
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="palm-animation">🌴</div>
-    <div class="palm-animation">🌴</div>
-    
-    <div class="landing-container">
-        <h1 class="logo">IbizaGirl.pics</h1>
-        <p class="subtitle">Premium Content Gallery</p>
-        
-        <div class="age-warning">
-            ⚠️ Adults Only (18+) ⚠️<br>
-            Este sitio contiene contenido para adultos
-        </div>
-        
-        <a href="main.html" class="enter-btn">ENTER PARADISE 🌴</a>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
+            <option value="fr">Français</option>
+        </select>
     </div>
-    
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">🌴 IbizaGirl.pics 🌴</div>
+            <div class="tagline" id="tagline">Premium Content from Paradise</div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h3 id="galleryTitle">📸 Free Gallery</h3>
+                <p id="galleryDesc">Daily updated photos from beautiful Ibiza</p>
+                <button class="btn" onclick="showGallery()" id="galleryBtn">View Gallery</button>
+            </div>
+
+            <div class="section">
+                <h3 id="premiumTitle">💎 Premium Photos</h3>
+                <p id="premiumDesc">200+ exclusive photos - €0.10 each</p>
+                <button class="btn" onclick="showPremium()" id="premiumBtn">View Premium</button>
+            </div>
+
+            <div class="section">
+                <h3 id="videosTitle">🎬 Premium Videos</h3>
+                <p id="videosDesc">40+ HD videos - €0.30 each</p>
+                <button class="btn" onclick="showVideos()" id="videosBtn">Watch Videos</button>
+            </div>
+
+            <div class="section">
+                <h3 id="subscriptionTitle">⭐ Subscription</h3>
+                <p id="subscriptionDesc">Monthly €19.99 or Lifetime €100</p>
+                <button class="btn" onclick="showSubscription()" id="subscriptionBtn">Subscribe</button>
+            </div>
+        </div>
+
+        <div id="loadingSection" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading content...</p>
+        </div>
+    </div>
+
+    <!-- PopAds Script -->
+    <script type="text/javascript" data-cfasync="false">
+    /*<![CDATA[/* */
+    (function(){var h=window,c="e494ffb82839a29122608e933394c091",v=[["siteId",369+565*676*239-86057271],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],k=["d3d3LnByZW1pdW12ZXJ0aXNpbmcuY29tL3QvaWx4eHEvaHRhYmxldG9wLm1pbi5qcw==","ZDJqMDQyY2oxNDIxd2kuY2xvdWRmcm9udC5uZXQvbG1kYi5taW4uanM=","d3d3LmRiaHFyYWlocHltLmNvbS9BbEcvVWJzL3F0YWJsZXRvcC5taW4uanM=","d3d3LnV6anphcnVubGFhYy5jb20vbW1kYi5taW4uanM="],e=-1,g,u,r=function(){clearTimeout(u);e++;if(k[e]&&!(1781533872000<(new Date).getTime()&&1<e)){g=h.document.createElement("script");g.type="text/javascript";g.async=!0;var j=h.document.getElementsByTagName("script")[0];g.src="https://"+atob(k[e]);g.crossOrigin="anonymous";g.onerror=r;g.onload=function(){clearTimeout(u);h[c.slice(0,16)+c.slice(0,16)]||r()};u=setTimeout(r,5E3);j.parentNode.insertBefore(g,j)}};if(!h[c]){try{Object.freeze(h[c]=v)}catch(e){}r()}})();
+    /*]]>/* */
+    </script>
+
     <script>
-        // Auto redirect after 3 seconds
-        setTimeout(() => {
-            window.location.href = 'main.html';
-        }, 3000);
+        // Translations
+        const translations = {
+            es: {
+                tagline: "Contenido Premium desde el Paraíso",
+                galleryTitle: "📸 Galería Gratuita",
+                galleryDesc: "Fotos actualizadas diariamente desde la hermosa Ibiza",
+                galleryBtn: "Ver Galería",
+                premiumTitle: "💎 Fotos Premium",
+                premiumDesc: "200+ fotos exclusivas - €0.10 cada una",
+                premiumBtn: "Ver Premium",
+                videosTitle: "🎬 Videos Premium",
+                videosDesc: "40+ videos HD - €0.30 cada uno",
+                videosBtn: "Ver Videos",
+                subscriptionTitle: "⭐ Suscripción",
+                subscriptionDesc: "Mensual €19.99 o Vitalicia €100",
+                subscriptionBtn: "Suscribirse"
+            },
+            en: {
+                tagline: "Premium Content from Paradise",
+                galleryTitle: "📸 Free Gallery",
+                galleryDesc: "Daily updated photos from beautiful Ibiza",
+                galleryBtn: "View Gallery",
+                premiumTitle: "💎 Premium Photos",
+                premiumDesc: "200+ exclusive photos - €0.10 each",
+                premiumBtn: "View Premium",
+                videosTitle: "🎬 Premium Videos",
+                videosDesc: "40+ HD videos - €0.30 each",
+                videosBtn: "Watch Videos",
+                subscriptionTitle: "⭐ Subscription",
+                subscriptionDesc: "Monthly €19.99 or Lifetime €100",
+                subscriptionBtn: "Subscribe"
+            }
+        };
+
+        // Language functions
+        function changeLanguage() {
+            const lang = document.getElementById('languageSelect').value;
+            const t = translations[lang] || translations.en;
+            
+            document.getElementById('tagline').textContent = t.tagline;
+            document.getElementById('galleryTitle').textContent = t.galleryTitle;
+            document.getElementById('galleryDesc').textContent = t.galleryDesc;
+            document.getElementById('galleryBtn').textContent = t.galleryBtn;
+            document.getElementById('premiumTitle').textContent = t.premiumTitle;
+            document.getElementById('premiumDesc').textContent = t.premiumDesc;
+            document.getElementById('premiumBtn').textContent = t.premiumBtn;
+            document.getElementById('videosTitle').textContent = t.videosTitle;
+            document.getElementById('videosDesc').textContent = t.videosDesc;
+            document.getElementById('videosBtn').textContent = t.videosBtn;
+            document.getElementById('subscriptionTitle').textContent = t.subscriptionTitle;
+            document.getElementById('subscriptionDesc').textContent = t.subscriptionDesc;
+            document.getElementById('subscriptionBtn').textContent = t.subscriptionBtn;
+            
+            localStorage.setItem('preferred-language', lang);
+        }
+
+        // Navigation functions
+        function showGallery() {
+            showLoading();
+            setTimeout(() => {
+                window.location.href = '/gallery.html';
+            }, 1000);
+        }
+
+        function showPremium() {
+            showLoading();
+            setTimeout(() => {
+                window.location.href = '/premium.html';
+            }, 1000);
+        }
+
+        function showVideos() {
+            showLoading();
+            setTimeout(() => {
+                window.location.href = '/videos.html';
+            }, 1000);
+        }
+
+        function showSubscription() {
+            showLoading();
+            setTimeout(() => {
+                window.location.href = '/subscription.html';
+            }, 1000);
+        }
+
+        function showLoading() {
+            document.getElementById('loadingSection').style.display = 'block';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferred-language') || 'es';
+            document.getElementById('languageSelect').value = savedLang;
+            changeLanguage();
+            
+            document.getElementById('languageSelect').addEventListener('change', changeLanguage);
+            
+            console.log('🌴 IbizaGirl.pics loaded successfully');
+        });
     </script>
 </body>
 </html>
