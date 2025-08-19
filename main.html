@@ -813,6 +813,191 @@
         window.closeLightbox = closeLightbox;
         window.navigateLightbox = navigateLightbox;
         window.switchView = switchView;
+
+        // ============================
+        // ISABELLA AI ASSISTANT
+        // ============================
+        let isabellaOpen = false;
+        
+        function toggleIsabella() {
+            const window = document.getElementById('isabella-window');
+            const button = document.getElementById('isabella-button');
+            
+            isabellaOpen = !isabellaOpen;
+            
+            if (isabellaOpen) {
+                window.style.display = 'flex';
+                button.style.transform = 'scale(0.8)';
+            } else {
+                window.style.display = 'none';
+                button.style.transform = 'scale(1)';
+            }
+        }
+        
+        function sendQuickMessage(message) {
+            document.getElementById('isabella-input').value = message;
+            sendIsabellaMessage();
+        }
+        
+        function handleIsabellaEnter(event) {
+            if (event.key === 'Enter') {
+                sendIsabellaMessage();
+            }
+        }
+        
+        function sendIsabellaMessage() {
+            const input = document.getElementById('isabella-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Agregar mensaje del usuario
+            addIsabellaMessage(message, 'user');
+            input.value = '';
+            
+            // Simular typing
+            showIsabellaTyping();
+            
+            // Respuesta de Isabella después de delay
+            setTimeout(() => {
+                const response = getIsabellaResponse(message);
+                hideIsabellaTyping();
+                addIsabellaMessage(response, 'ai');
+            }, 1500);
+        }
+        
+        function addIsabellaMessage(message, type) {
+            const messagesContainer = document.getElementById('isabella-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `isabella-message ${type}-message`;
+            
+            const time = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <p>${message}</p>
+                </div>
+                <div class="message-time">${time}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function showIsabellaTyping() {
+            const messagesContainer = document.getElementById('isabella-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'isabella-message ai-message typing-message';
+            typingDiv.id = 'typing-indicator';
+            
+            typingDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function hideIsabellaTyping() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        function getIsabellaResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Respuestas inteligentes basadas en keywords
+            if (lowerMessage.includes('precio') || lowerMessage.includes('cuesta') || lowerMessage.includes('coste')) {
+                return `💰 ¡Te explico los precios!<br><br>
+                        📸 <strong>Fotos individuales:</strong> €0.10 cada una<br>
+                        🎬 <strong>Videos individuales:</strong> €0.30 cada uno<br>
+                        📅 <strong>Acceso mensual:</strong> €9.99 (todo ilimitado)<br>
+                        ♾️ <strong>Acceso de por vida:</strong> €49.99 (mejor valor)<br><br>
+                        ¿Te gustaría acceder al área premium?`;
+            }
+            
+            if (lowerMessage.includes('premium') || lowerMessage.includes('acceso') || lowerMessage.includes('vip')) {
+                return `🌟 <strong>Acceso Premium</strong><br><br>
+                        Con el acceso premium obtienes:<br>
+                        • 572+ fotos exclusivas sin censura<br>
+                        • 93+ videos HD de alta calidad<br>
+                        • Contenido actualizado regularmente<br>
+                        • Sin anuncios ni interrupciones<br>
+                        • Acceso desde cualquier dispositivo<br><br>
+                        ¡Perfecto para disfrutar del contenido completo! 🔥`;
+            }
+            
+            if (lowerMessage.includes('pago') || lowerMessage.includes('paypal') || lowerMessage.includes('tarjeta')) {
+                return `💳 <strong>Métodos de Pago</strong><br><br>
+                        Aceptamos pagos seguros a través de:<br>
+                        • PayPal (recomendado) 🛡️<br>
+                        • Tarjetas Visa/Mastercard<br>
+                        • American Express<br>
+                        • Maestro y Diners<br><br>
+                        Todos los pagos están protegidos con cifrado SSL y son 100% seguros.`;
+            }
+            
+            if (lowerMessage.includes('contenido') || lowerMessage.includes('fotos') || lowerMessage.includes('videos')) {
+                return `📊 <strong>Nuestro Contenido</strong><br><br>
+                        🖼️ <strong>572+ Fotos Premium:</strong> Contenido exclusivo de alta calidad<br>
+                        🎥 <strong>93+ Videos HD:</strong> Contenido en video de 2-12 minutos<br>
+                        🆕 <strong>Actualizaciones:</strong> Nuevo contenido añadido regularmente<br>
+                        📱 <strong>Compatible:</strong> Optimizado para móvil y desktop<br><br>
+                        ¡Todo el contenido es original y exclusivo de IbizaGirl.pics!`;
+            }
+            
+            if (lowerMessage.includes('ayuda') || lowerMessage.includes('help') || lowerMessage.includes('soporte')) {
+                return `🆘 <strong>¿Necesitas ayuda?</strong><br><br>
+                        Estoy aquí para ayudarte con:<br>
+                        • Explicarte cómo funciona el sitio<br>
+                        • Información sobre precios y pagos<br>
+                        • Problemas técnicos<br>
+                        • Preguntas sobre el contenido<br><br>
+                        ¡Solo dime qué necesitas y te ayudo al instante! 😊`;
+            }
+            
+            if (lowerMessage.includes('hola') || lowerMessage.includes('hi') || lowerMessage.includes('hello')) {
+                return `¡Hola! 👋 Bienvenido/a a IbizaGirl.pics<br><br>
+                        Soy Isabella, tu asistente personal. Estoy aquí para ayudarte con cualquier duda sobre:<br>
+                        • Nuestro contenido premium 🌟<br>
+                        • Precios y formas de pago 💳<br>
+                        • Cómo navegar el sitio 🧭<br>
+                        • Soporte técnico 🔧<br><br>
+                        ¿En qué puedo ayudarte hoy?`;
+            }
+            
+            if (lowerMessage.includes('gratis') || lowerMessage.includes('free')) {
+                return `🎁 <strong>Contenido Gratuito</strong><br><br>
+                        Puedes disfrutar gratis de:<br>
+                        • Galería de previews en la página principal<br>
+                        • 10 imágenes teaser de muestra<br>
+                        • Banners rotativos<br><br>
+                        Para acceso completo a las 572+ fotos y 93+ videos premium, necesitas una suscripción. ¡Pero puedes empezar con una foto individual por solo €0.10! 😉`;
+            }
+            
+            // Respuesta por defecto
+            return `Interesante pregunta 🤔<br><br>
+                    Te puedo ayudar con información sobre:<br>
+                    💎 Acceso premium y precios<br>
+                    💳 Métodos de pago<br>
+                    📊 Nuestro contenido<br>
+                    🆘 Soporte técnico<br><br>
+                    ¿Hay algo específico que te gustaría saber? ¡Estoy aquí para ayudarte! 😊`;
+        }
+        
+        // Funciones globales para Isabella
+        window.toggleIsabella = toggleIsabella;
+        window.sendQuickMessage = sendQuickMessage;
+        window.handleIsabellaEnter = handleIsabellaEnter;
+        window.sendIsabellaMessage = sendIsabellaMessage;
     </script>
 </body>
 </html>
