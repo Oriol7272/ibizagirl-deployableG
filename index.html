@@ -858,9 +858,22 @@
     <!-- Premium Photos Section -->
     <div class="section" id="premium">
         <h2 class="section-title" id="premiumTitle">Premium Photos Collection</h2>
-        <p class="section-desc" id="premiumDesc">
-            100+ exclusive high-quality photos • €0.10 each • 30% marked as NEW!
+        <p class="section-desc" id="premiumDesc" style="text-align: center; font-size: 1.3em; margin-bottom: 40px; color: #fff;">
+            100+ fotos exclusivas de alta calidad • €0.10 c/u • 
+            <span style="color: #ffd700; font-weight: bold;">¡Paquete 10 fotos: €0.80!</span><br>
+            <span style="color: #ff6b6b; font-weight: bold;">💎 Premium VIP: €9.99/mes - Acceso total sin anuncios</span>
+            <br>• ¡30% marcadas como NUEVAS! • Descarga directa en HD
         </p>
+        
+        <!-- Premium Pricing Options -->
+        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+            <button class="premium-option" onclick="showPremiumPricing()" style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; padding: 15px 25px; border-radius: 10px; cursor: pointer; font-size: 1.1em; font-weight: bold;">
+                🛒 Ver Opciones de Compra
+            </button>
+            <button class="premium-option" onclick="showVIPSubscription()" style="background: linear-gradient(45deg, #f093fb, #f5576c); color: white; border: none; padding: 15px 25px; border-radius: 10px; cursor: pointer; font-size: 1.1em; font-weight: bold;">
+                💎 VIP Sin Anuncios €9.99/mes
+            </button>
+        </div>
         
         <div class="loading" id="premiumLoading">
             <div class="spinner"></div>
