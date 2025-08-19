@@ -317,101 +317,200 @@
     <!-- Script principal actualizado -->
     <script src="main-script.js"></script>
     
-    <!-- Multi-Network Ad Setup -->
+    <!-- Multi-Network Ad Setup FIXED -->
     <script type="text/javascript">
-        // Wait for DOM to be ready
-        window.addEventListener('DOMContentLoaded', function() {
-            // Delay ad initialization to ensure DOM elements exist
+        // Wait for everything to be fully loaded
+        window.addEventListener('load', function() {
+            // Additional delay to ensure all DOM elements exist
             setTimeout(function() {
-                console.log('🎯 Inicializando redes de anuncios...');
+                console.log('🎯 Inicializando redes de anuncios (FIXED)...');
                 
-                // JuicyAds Setup - Safe initialization
+                // JuicyAds Setup with proper error handling
                 if (typeof jads === 'function') {
                     try {
                         console.log('✅ JuicyAds disponible, configurando zones...');
                         
-                        // Main content ads
-                        if (document.getElementById('jads-zone-2092250')) {
-                            jads('2092250','300','250');
-                            console.log('✅ JuicyAds zone 2092250 configurada');
-                        }
+                        // Verify elements exist before calling jads
+                        const zones = [
+                            {id: 'jads-zone-2092250', zone: '2092250', width: '300', height: '250'},
+                            {id: 'jads-zone-2092471', zone: '2092471', width: '300', height: '50'},
+                            {id: 'jads-zone-2092470', zone: '2092470', width: '125', height: '125'}
+                        ];
                         
-                        // Footer ads
-                        if (document.getElementById('jads-zone-2092471')) {
-                            jads('2092471','300','50');
-                            console.log('✅ JuicyAds zone 2092471 configurada');
-                        }
-                        
-                        if (document.getElementById('jads-zone-2092470')) {
-                            jads('2092470','125','125');
-                            console.log('✅ JuicyAds zone 2092470 configurada');
-                        }
+                        zones.forEach(function(config) {
+                            const element = document.getElementById(config.id);
+                            if (element) {
+                                try {
+                                    jads(config.zone, config.width, config.height);
+                                    console.log('✅ JuicyAds zone ' + config.zone + ' configurada');
+                                } catch(zoneError) {
+                                    console.warn('⚠️ Error en zone ' + config.zone + ':', zoneError);
+                                }
+                            } else {
+                                console.warn('⚠️ Element ' + config.id + ' no encontrado');
+                            }
+                        });
                         
                     } catch(error) {
-                        console.warn('⚠️ Error configurando JuicyAds:', error);
+                        console.warn('⚠️ Error general JuicyAds:', error);
+                        // Fallback: Create placeholder content
+                        document.querySelectorAll('[id^="jads-zone-"]').forEach(function(el) {
+                            if (el && !el.innerHTML.trim()) {
+                                el.innerHTML = '<div style="background:#f0f0f0;padding:20px;text-align:center;color:#999;">Ad Space</div>';
+                            }
+                        });
                     }
                 } else {
-                    console.warn('⚠️ JuicyAds script no disponible');
-                }
-                
-                // ExoClick Setup
-                try {
-                    if (window.ExoLoader) {
-                        // ExoClick banner
-                        if (document.getElementById('exoclick-zone-4889484')) {
-                            window.ExoLoader.serve({
-                                "id": "4889484",
-                                "serve": "std"
-                            });
-                            console.log('✅ ExoClick zone configurada');
+                    console.warn('⚠️ JuicyAds script no disponible, usando placeholders');
+                    // Create ad placeholders when jads is not available
+                    document.querySelectorAll('[id^="jads-zone-"]').forEach(function(el) {
+                        if (el) {
+                            el.innerHTML = '<div style="background:linear-gradient(45deg,#ff1493,#ff6b9d);padding:20px;text-align:center;color:white;border-radius:8px;">Premium Ad Space</div>';
                         }
-                        
-                        // Footer banner
-                        if (document.getElementById('exoclick-footer-banner')) {
-                            window.ExoLoader.serve({
-                                "id": "4889485",
-                                "serve": "std"
-                            });
-                        }
-                    } else {
-                        console.warn('⚠️ ExoClick no disponible');
-                    }
-                } catch(error) {
-                    console.warn('⚠️ Error configurando ExoClick:', error);
+                    });
                 }
                 
-                // Ero-Advertising Setup
-                try {
-                    // Banner setup
-                    if (document.getElementById('ero-ad-zone')) {
-                        const eroScript = document.createElement('script');
-                        eroScript.type = 'text/javascript';
-                        eroScript.src = '//cdn.eroadvertising.com/bnr.php?section=General&pub=236173&format=728x90&ga=g';
-                        eroScript.onerror = function() {
-                            console.warn('⚠️ Ero-Advertising banner falló al cargar');
-                        };
-                        document.getElementById('ero-ad-zone').appendChild(eroScript);
-                        console.log('✅ Ero-Advertising banner configurado');
-                    }
-                    
-                    // Footer square
-                    if (document.getElementById('ero-footer-square')) {
-                        const eroFooter = document.createElement('script');
-                        eroFooter.type = 'text/javascript';
-                        eroFooter.src = '//cdn.eroadvertising.com/bnr.php?section=General&pub=236173&format=300x250&ga=g';
-                        eroFooter.onerror = function() {
-                            console.warn('⚠️ Ero-Advertising footer falló al cargar');
-                        };
-                        document.getElementById('ero-footer-square').appendChild(eroFooter);
-                    }
-                } catch(error) {
-                    console.warn('⚠️ Error configurando Ero-Advertising:', error);
-                }
+                // Initialize PayPal Buttons
+                initializePayPalButtons();
                 
-                console.log('✅ Inicialización de anuncios completada');
+                console.log('✅ Inicialización de anuncios y pagos completada');
                 
-            }, 3000); // Wait 3 seconds for all elements to be ready
+            }, 2000); // Wait 2 seconds for complete DOM readiness
         });
+        
+        // PayPal Button Initialization
+        function initializePayPalButtons() {
+            if (typeof paypal !== 'undefined') {
+                console.log('💳 Inicializando botones PayPal...');
+                
+                // PPV Button
+                if (document.getElementById('paypal-ppv-button')) {
+                    paypal.Buttons({
+                        style: {
+                            layout: 'vertical',
+                            color:  'blue',
+                            shape:  'rect',
+                            label:  'paypal'
+                        },
+                        createOrder: function(data, actions) {
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: {
+                                        value: '0.99'
+                                    },
+                                    description: 'Premium Photo/Video Access'
+                                }]
+                            });
+                        },
+                        onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                                alert('Pago completado por ' + details.payer.name.given_name);
+                                // Grant access to content
+                                grantPPVAccess();
+                            });
+                        },
+                        onError: function(err) {
+                            console.error('PayPal PPV Error:', err);
+                            alert('Error en el pago. Inténtalo de nuevo.');
+                        }
+                    }).render('#paypal-ppv-button');
+                }
+                
+                // Monthly Button
+                if (document.getElementById('paypal-monthly-button')) {
+                    paypal.Buttons({
+                        style: {
+                            layout: 'vertical',
+                            color:  'gold',
+                            shape:  'rect',
+                            label:  'paypal'
+                        },
+                        createOrder: function(data, actions) {
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: {
+                                        value: '9.99'
+                                    },
+                                    description: 'Monthly Premium Access'
+                                }]
+                            });
+                        },
+                        onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                                alert('Suscripción mensual activada para ' + details.payer.name.given_name);
+                                // Grant monthly access
+                                grantMonthlyAccess();
+                            });
+                        },
+                        onError: function(err) {
+                            console.error('PayPal Monthly Error:', err);
+                            alert('Error en la suscripción. Inténtalo de nuevo.');
+                        }
+                    }).render('#paypal-monthly-button');
+                }
+                
+                // Lifetime Button
+                if (document.getElementById('paypal-lifetime-button')) {
+                    paypal.Buttons({
+                        style: {
+                            layout: 'vertical',
+                            color:  'silver',
+                            shape:  'rect',
+                            label:  'paypal'
+                        },
+                        createOrder: function(data, actions) {
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: {
+                                        value: '49.99'
+                                    },
+                                    description: 'Lifetime Premium Access'
+                                }]
+                            });
+                        },
+                        onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                                alert('¡Acceso de por vida activado para ' + details.payer.name.given_name + '!');
+                                // Grant lifetime access
+                                grantLifetimeAccess();
+                            });
+                        },
+                        onError: function(err) {
+                            console.error('PayPal Lifetime Error:', err);
+                            alert('Error en el pago. Inténtalo de nuevo.');
+                        }
+                    }).render('#paypal-lifetime-button');
+                }
+                
+                console.log('✅ Botones PayPal inicializados');
+            } else {
+                console.warn('⚠️ PayPal SDK no disponible');
+            }
+        }
+        
+        // Access granting functions
+        function grantPPVAccess() {
+            localStorage.setItem('ibiza_ppv_access', Date.now().toString());
+            console.log('✅ Acceso PPV otorgado');
+            location.reload();
+        }
+        
+        function grantMonthlyAccess() {
+            const expiryDate = new Date();
+            expiryDate.setMonth(expiryDate.getMonth() + 1);
+            localStorage.setItem('ibiza_monthly_access', expiryDate.getTime().toString());
+            localStorage.setItem('ibiza_access_type', 'monthly');
+            console.log('✅ Acceso mensual otorgado');
+            location.reload();
+        }
+        
+        function grantLifetimeAccess() {
+            localStorage.setItem('ibiza_lifetime_access', 'true');
+            localStorage.setItem('ibiza_access_type', 'lifetime');
+            console.log('✅ Acceso de por vida otorgado');
+            location.reload();
+        }
+        
     </script>
     
     <!-- PayPal Initialization -->
