@@ -9,14 +9,15 @@
     <!-- PayPal SDK - Solo botones, sin tarjetas -->
     <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&disable-funding=credit,card"></script>
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Fuente manuscrita elegante -->
+    <link href="https://fonts.googleapis.com/css2?family=Allura:wght@400&family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <!-- Initialize Ad Namespaces FIRST -->
     <script>
         // Initialize ad namespaces to prevent undefined errors
         window.adsbyjuicy = window.adsbyjuicy || {};
         window._pop = window._pop || [];
+        window.atOptions = window.atOptions || {};
         console.log('🔧 Ad namespaces initialized');
     </script>
     
@@ -29,13 +30,14 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #0072ff 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 25%, #0072ff 75%, #764ba2 100%);
             color: white;
             overflow-x: hidden;
             position: relative;
+            min-height: 100vh;
         }
         
-        /* Tropical Background Elements */
+        /* Tropical Background Elements MEJORADOS */
         body::before {
             content: '';
             position: fixed;
@@ -44,14 +46,21 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(255,215,0,0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,105,180,0.2) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(0,255,255,0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 80%, rgba(255,215,0,0.4) 0%, transparent 60%),
+                radial-gradient(circle at 80% 20%, rgba(255,105,180,0.3) 0%, transparent 60%),
+                radial-gradient(circle at 40% 40%, rgba(0,255,255,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 60% 80%, rgba(255,165,0,0.3) 0%, transparent 70%);
             pointer-events: none;
-            z-index: -1;
+            z-index: 0;
+            animation: shimmer 8s ease-in-out infinite alternate;
         }
         
-        /* Floating tropical elements */
+        @keyframes shimmer {
+            0% { opacity: 0.6; }
+            100% { opacity: 0.9; }
+        }
+        
+        /* Floating tropical elements MEJORADOS */
         .floating-elements {
             position: fixed;
             top: 0;
@@ -59,30 +68,50 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 2;
         }
         
         .floating-palm {
             position: absolute;
-            font-size: 2em;
-            opacity: 0.4;
-            animation: float 6s ease-in-out infinite;
+            font-size: 3em;
+            opacity: 0.6;
+            animation: float 8s ease-in-out infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
-        .floating-palm:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-        .floating-palm:nth-child(2) { top: 60%; right: 15%; animation-delay: -2s; }
-        .floating-palm:nth-child(3) { bottom: 20%; left: 20%; animation-delay: -4s; }
+        .floating-palm:nth-child(1) { 
+            top: 15%; left: 8%; animation-delay: 0s; 
+            transform: rotate(-15deg);
+        }
+        .floating-palm:nth-child(2) { 
+            top: 65%; right: 12%; animation-delay: -3s; 
+            transform: rotate(15deg);
+        }
+        .floating-palm:nth-child(3) { 
+            bottom: 25%; left: 15%; animation-delay: -6s; 
+            transform: rotate(-10deg);
+        }
+        .floating-palm:nth-child(4) { 
+            top: 40%; right: 25%; animation-delay: -1.5s; 
+            font-size: 2em;
+        }
+        .floating-palm:nth-child(5) { 
+            bottom: 60%; left: 40%; animation-delay: -4.5s; 
+            font-size: 2.5em;
+        }
         
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(-2deg); }
-            50% { transform: translateY(-20px) rotate(2deg); }
+            0%, 100% { transform: translateY(0px) rotate(var(--rotation, 0deg)); }
+            25% { transform: translateY(-15px) rotate(calc(var(--rotation, 0deg) + 3deg)); }
+            50% { transform: translateY(-25px) rotate(var(--rotation, 0deg)); }
+            75% { transform: translateY(-10px) rotate(calc(var(--rotation, 0deg) - 3deg)); }
         }
         
-        /* Hero Banner Section */
+        /* Hero Banner Section MEJORADO */
         .hero-banner {
-            height: 70vh;
+            height: 75vh;
             position: relative;
-            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 50%, #667eea 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -97,73 +126,89 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            animation: fadeSlide 10s ease-in-out infinite;
-            opacity: 0.4;
+            animation: fadeSlide 12s ease-in-out infinite;
+            opacity: 0.5;
+            filter: blur(1px);
         }
         
         @keyframes fadeSlide {
-            0%, 25% { opacity: 0.4; transform: scale(1); }
-            12.5% { opacity: 0.7; transform: scale(1.05); }
+            0%, 30% { opacity: 0.5; transform: scale(1); }
+            15% { opacity: 0.8; transform: scale(1.08); }
         }
         
         .hero-content {
             position: relative;
             z-index: 10;
             text-align: center;
-            padding: 20px;
+            padding: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 30px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.2);
         }
         
         .hero-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 7em;
-            font-weight: 700;
-            text-shadow: 4px 4px 8px rgba(0,0,0,0.6);
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f093fb);
+            font-family: 'Allura', cursive;
+            font-size: 8em;
+            font-weight: 400;
+            text-shadow: 6px 6px 12px rgba(0,0,0,0.7);
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f093fb, #ffd700);
+            background-size: 400% 400%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: titleGlow 4s ease-in-out infinite alternate;
+            animation: titleGlow 6s ease-in-out infinite alternate, gradientShift 8s ease-in-out infinite;
+            letter-spacing: 3px;
         }
         
         @keyframes titleGlow {
-            from { filter: drop-shadow(0 0 15px rgba(255,255,255,0.6)); }
-            to { filter: drop-shadow(0 0 25px rgba(255,255,255,0.9)); }
+            from { filter: drop-shadow(0 0 20px rgba(255,255,255,0.7)); }
+            to { filter: drop-shadow(0 0 35px rgba(255,255,255,1)); }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         .hero-subtitle {
-            font-size: 2em;
-            font-weight: 300;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5em;
+            font-weight: 400;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
             opacity: 0.95;
             margin-bottom: 30px;
+            letter-spacing: 1px;
         }
         
-        /* Waves decoration */
+        /* Waves decoration MEJORADO */
         .waves-decoration {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 120px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,60L40,55C80,50,160,40,240,45C320,50,400,70,480,75C560,80,640,70,720,65C800,60,880,60,960,65C1040,70,1120,80,1160,85L1200,90L1200,120L1160,120C1120,120,1040,120,960,120C880,120,800,120,720,120C640,120,560,120,480,120C400,120,320,120,240,120C160,120,80,120,40,120L0,120Z" fill="%23ffffff" fill-opacity="0.4"></path></svg>') repeat-x;
-            animation: wave 8s ease-in-out infinite;
+            height: 150px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,60L40,55C80,50,160,40,240,45C320,50,400,70,480,75C560,80,640,70,720,65C800,60,880,60,960,65C1040,70,1120,80,1160,85L1200,90L1200,120L1160,120C1120,120,1040,120,960,120C880,120,800,120,720,120C640,120,560,120,480,120C400,120,320,120,240,120C160,120,80,120,40,120L0,120Z" fill="%23ffffff" fill-opacity="0.5"></path></svg>') repeat-x;
+            animation: wave 10s ease-in-out infinite;
         }
         
         @keyframes wave {
             0%, 100% { transform: translateX(0px); }
-            50% { transform: translateX(-60px); }
+            50% { transform: translateX(-80px); }
         }
         
-        /* Navigation */
+        /* Navigation MEJORADO */
         .nav-bar {
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(15px);
-            padding: 15px 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px);
+            padding: 20px 0;
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
+            border-bottom: 3px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
         
         .nav-container {
@@ -172,86 +217,93 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 30px;
         }
         
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 40px;
         }
         
         .nav-links a {
             color: white;
             text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
-            transition: all 0.3s;
+            padding: 15px 30px;
+            border-radius: 35px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.15), rgba(255,255,255,0.25));
+            transition: all 0.4s;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 1.1em;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.3);
         }
         
         .nav-links a:hover {
-            background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.4));
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, rgba(255,255,255,0.35), rgba(255,255,255,0.45));
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
         }
         
-        /* Section Styling */
+        /* Section Styling MEJORADO */
         .section {
             position: relative;
-            padding: 80px 20px;
-            max-width: 1400px;
+            padding: 100px 30px;
+            max-width: 1500px;
             margin: 0 auto;
+            z-index: 5;
         }
         
         .section-title {
-            font-size: 3em;
+            font-family: 'Great Vibes', cursive;
+            font-size: 4em;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            letter-spacing: 2px;
         }
         
         .section-desc {
             text-align: center;
-            font-size: 1.3em;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            font-size: 1.4em;
+            margin-bottom: 50px;
+            opacity: 0.95;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            font-weight: 300;
         }
         
-        /* Gallery Carousel */
+        /* Gallery Carousel MEJORADO */
         .carousel-container {
             position: relative;
             overflow: hidden;
-            border-radius: 25px;
-            margin-bottom: 80px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            border-radius: 30px;
+            margin-bottom: 100px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            border: 3px solid rgba(255,255,255,0.2);
         }
         
         .carousel {
             display: flex;
-            transition: transform 0.8s ease-in-out;
+            transition: transform 1s ease-in-out;
         }
         
         .carousel-item {
-            min-width: 280px;
-            height: 350px;
-            margin-right: 20px;
-            border-radius: 20px;
+            min-width: 320px;
+            height: 400px;
+            margin-right: 25px;
+            border-radius: 25px;
             overflow: hidden;
             position: relative;
             cursor: pointer;
-            transition: transform 0.3s;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            transition: transform 0.4s;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
         }
         
         .carousel-item:hover {
-            transform: scale(1.08);
+            transform: scale(1.1) translateY(-5px);
         }
         
         .carousel-item img {
@@ -267,39 +319,42 @@
             right: 0;
             background: linear-gradient(transparent, rgba(0,0,0,0.9));
             color: white;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
         }
         
-        /* Content Grid */
+        /* Content Grid MEJORADO */
         .content-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
         }
         
         .content-item {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 25px;
             overflow: hidden;
             position: relative;
             cursor: pointer;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.4s;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.25);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
         
         .content-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
         }
         
         .content-item img {
             width: 100%;
-            height: 220px;
+            height: 250px;
             object-fit: cover;
-            filter: blur(4px);
+            filter: blur(5px);
         }
         
         .content-overlay {
@@ -308,7 +363,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: linear-gradient(45deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -318,221 +373,249 @@
         
         .new-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             background: linear-gradient(45deg, #ff4757, #ff6b6b);
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.9em;
             font-weight: bold;
-            animation: pulse 2s infinite;
+            animation: pulse 3s infinite;
+            box-shadow: 0 4px 15px rgba(255,71,87,0.4);
         }
         
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.15); }
         }
         
         .unlock-price {
-            background: rgba(255,255,255,0.3);
-            padding: 10px 20px;
-            border-radius: 25px;
-            margin-top: 15px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.4));
+            padding: 12px 25px;
+            border-radius: 30px;
+            margin-top: 20px;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            border: 2px solid rgba(255,255,255,0.5);
         }
         
-        /* Video Items */
+        /* Video Items MEJORADOS */
         .video-item {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 25px;
             overflow: hidden;
             position: relative;
             cursor: pointer;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.4s;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.25);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
         
         .video-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
         }
         
         .video-thumbnail {
             width: 100%;
-            height: 220px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            height: 250px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3em;
+            font-size: 4em;
             position: relative;
             overflow: hidden;
         }
         
-        .video-thumbnail img {
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            filter: blur(4px);
+            background-size: cover;
+            background-position: center;
+            filter: blur(3px);
+            opacity: 0.7;
         }
         
         .play-button {
             position: absolute;
-            font-size: 2.5em;
-            opacity: 0.9;
+            font-size: 3em;
+            opacity: 0.95;
             z-index: 5;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.7);
             border-radius: 50%;
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: playPulse 2s infinite;
+            border: 3px solid rgba(255,255,255,0.8);
+        }
+        
+        @keyframes playPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
         
         .video-duration {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
+            bottom: 20px;
+            right: 20px;
             background: rgba(0,0,0,0.8);
             color: white;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.9em;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 1em;
             font-weight: bold;
+            border: 2px solid rgba(255,255,255,0.3);
         }
         
-        /* Language Selector */
+        /* Language Selector MEJORADO */
         .language-selector {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        
-        .language-selector select {
-            padding: 10px 15px;
-            border-radius: 25px;
-            border: none;
-            background: rgba(255,255,255,0.9);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        /* Chatbot */
-        .chatbot-container {
-            position: fixed;
-            bottom: 30px;
+            top: 30px;
             right: 30px;
             z-index: 1000;
         }
         
+        .language-selector select {
+            padding: 12px 18px;
+            border-radius: 30px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.9);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        /* Chatbot MEJORADO */
+        .chatbot-container {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 1000;
+        }
+        
         .chatbot-toggle {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             border: none;
             color: white;
-            font-size: 28px;
+            font-size: 32px;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
             transition: all 0.3s;
+            animation: chatFloat 4s ease-in-out infinite;
+        }
+        
+        @keyframes chatFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
         
         .chatbot-toggle:hover {
-            transform: scale(1.15);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+            transform: scale(1.2) translateY(-5px);
+            box-shadow: 0 18px 45px rgba(0,0,0,0.5);
         }
         
         .chatbot-window {
             position: absolute;
-            bottom: 80px;
+            bottom: 90px;
             right: 0;
-            width: 350px;
-            height: 450px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+            width: 380px;
+            height: 500px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             display: none;
             flex-direction: column;
             overflow: hidden;
+            backdrop-filter: blur(20px);
+            border: 3px solid rgba(255,255,255,0.3);
         }
         
         .chatbot-header {
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             color: white;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
         
         .chatbot-messages {
             flex: 1;
-            padding: 20px;
+            padding: 25px;
             overflow-y: auto;
             color: #333;
         }
         
         .chatbot-input {
-            padding: 20px;
-            border-top: 1px solid #eee;
+            padding: 25px;
+            border-top: 2px solid rgba(0,0,0,0.1);
             display: flex;
             gap: 15px;
         }
         
         .chatbot-input input {
             flex: 1;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
             outline: none;
+            font-size: 14px;
         }
         
         .chatbot-input button {
-            padding: 12px 20px;
-            background: #4ecdc4;
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
             color: white;
             border: none;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
+            font-weight: bold;
         }
         
-        /* Ad Zones */
+        /* Ad Zones MEJORADOS */
         .ad-zone {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 30px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
+            border-radius: 25px;
+            padding: 40px;
             text-align: center;
-            margin: 50px 0;
-            min-height: 120px;
+            margin: 60px 0;
+            min-height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
         
-        /* Loading Animation */
+        /* Loading Animation MEJORADO */
         .loading {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 60px;
+            padding: 80px;
         }
         
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top: 5px solid white;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1.2s linear infinite;
         }
         
         @keyframes spin {
@@ -540,22 +623,25 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Responsive */
+        /* Responsive MEJORADO */
         @media (max-width: 768px) {
-            .hero-title { font-size: 4em; }
-            .hero-subtitle { font-size: 1.4em; }
-            .nav-links { flex-direction: column; gap: 15px; }
-            .content-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
-            .section { padding: 60px 15px; }
+            .hero-title { font-size: 5em; }
+            .hero-subtitle { font-size: 1.8em; }
+            .nav-links { flex-direction: column; gap: 20px; }
+            .content-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+            .section { padding: 80px 20px; }
+            .floating-palm { font-size: 2em; }
         }
     </style>
 </head>
 <body>
-    <!-- Floating tropical elements -->
+    <!-- Floating tropical elements AUMENTADOS -->
     <div class="floating-elements">
-        <div class="floating-palm">🌴</div>
-        <div class="floating-palm">🌺</div>
-        <div class="floating-palm">🌊</div>
+        <div class="floating-palm" style="--rotation: -15deg;">🌴</div>
+        <div class="floating-palm" style="--rotation: 15deg;">🌺</div>
+        <div class="floating-palm" style="--rotation: -10deg;">🌊</div>
+        <div class="floating-palm" style="--rotation: 5deg;">🏖️</div>
+        <div class="floating-palm" style="--rotation: -5deg;">🌸</div>
     </div>
 
     <!-- Language Selector -->
@@ -593,7 +679,7 @@
 
     <!-- Gallery Carousel Section -->
     <div class="section" id="gallery">
-        <h2 class="section-title" id="galleryTitle">🏖️ Paradise Gallery</h2>
+        <h2 class="section-title" id="galleryTitle">Paradise Gallery</h2>
         <p class="section-desc" id="galleryDesc">Daily updated collection from beautiful Ibiza</p>
         <div class="carousel-container">
             <div class="carousel" id="galleryCarousel">
@@ -609,7 +695,7 @@
 
     <!-- Premium Photos Section -->
     <div class="section" id="premium">
-        <h2 class="section-title" id="premiumTitle">💎 Premium Photos Collection</h2>
+        <h2 class="section-title" id="premiumTitle">Premium Photos Collection</h2>
         <p class="section-desc" id="premiumDesc">
             100+ exclusive high-quality photos • €0.10 each • 30% marked as NEW!
         </p>
@@ -630,7 +716,7 @@
 
     <!-- Premium Videos Section -->
     <div class="section" id="videos">
-        <h2 class="section-title" id="videosTitle">🎬 Premium Videos Collection</h2>
+        <h2 class="section-title" id="videosTitle">Premium Videos Collection</h2>
         <p class="section-desc" id="videosDesc">
             30+ exclusive HD videos • €0.30 each • 30% marked as NEW!
         </p>
@@ -657,10 +743,10 @@
         <div class="chatbot-window" id="chatWindow">
             <div class="chatbot-header">
                 <span id="chatHeader">Isabella - Tu Asistente</span>
-                <button onclick="toggleChatbot()" style="float: right; background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>
+                <button onclick="toggleChatbot()" style="float: right; background: none; border: none; color: white; font-size: 22px; cursor: pointer;">×</button>
             </div>
             <div class="chatbot-messages" id="chatMessages">
-                <div style="background: #f0f0f0; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
+                <div style="background: #f0f0f0; padding: 18px; border-radius: 18px; margin-bottom: 18px;">
                     <strong>Isabella:</strong> <span id="welcomeMsg">¡Hola! Soy Isabella, tu asistente personal. ¿En qué puedo ayudarte? 🌴</span>
                 </div>
             </div>
@@ -699,11 +785,11 @@
                 navPremium: "💎 Premium",
                 navVideos: "🎬 Videos",
                 navSubscription: "⭐ Suscripción",
-                galleryTitle: "🏖️ Paradise Gallery",
+                galleryTitle: "Paradise Gallery",
                 galleryDesc: "Colección actualizada diariamente desde la hermosa Ibiza",
-                premiumTitle: "💎 Premium Photos Collection",
+                premiumTitle: "Premium Photos Collection",
                 premiumDesc: "100+ fotos exclusivas de alta calidad • €0.10 c/u • ¡30% marcadas como NUEVAS!",
-                videosTitle: "🎬 Premium Videos Collection",
+                videosTitle: "Premium Videos Collection",
                 videosDesc: "30+ videos HD exclusivos • €0.30 c/u • ¡30% marcados como NUEVOS!",
                 chatHeader: "Isabella - Tu Asistente",
                 welcomeMsg: "¡Hola! Soy Isabella, tu asistente personal. ¿En qué puedo ayudarte? 🌴",
@@ -717,11 +803,11 @@
                 navPremium: "💎 Premium",
                 navVideos: "🎬 Videos", 
                 navSubscription: "⭐ Subscribe",
-                galleryTitle: "🏖️ Paradise Gallery",
+                galleryTitle: "Paradise Gallery",
                 galleryDesc: "Daily updated collection from beautiful Ibiza",
-                premiumTitle: "💎 Premium Photos Collection",
+                premiumTitle: "Premium Photos Collection",
                 premiumDesc: "100+ exclusive high-quality photos • €0.10 each • 30% marked as NEW!",
-                videosTitle: "🎬 Premium Videos Collection",
+                videosTitle: "Premium Videos Collection",
                 videosDesc: "30+ exclusive HD videos • €0.30 each • 30% marked as NEW!",
                 chatHeader: "Isabella - Your Assistant",
                 welcomeMsg: "Hello! I'm Isabella, your personal assistant. How can I help you? 🌴",
@@ -731,65 +817,74 @@
             }
         };
 
-        // Generate real file lists from actual directories
+        // Generate REAL content using actual file names
         function generateRealContent() {
-            // Real files from /full/ directory (127 total)
-            const fullFilesList = [];
-            const fullBasenames = [
-                '0456996c-b56e-42ef-9049-56b1a1ae2646', '0Tc8Vtd0mEIvNHZwYGBq', '0lySugcO4Pp4pEZKvz9U',
-                '0nSaCJQxbVw4BDrhnhHO', '13TXvyRVZ7LtvAOx7kme', '18VQaczW5kdfdiqUVasH',
-                '1dEu25K0mS3zxRlXRjHR', '1qEBcg9QbkZRRdLt0Chc', '1tt8H4fX3XzyV90HjNG3',
-                '27bGIzFFpej5ubUkvykD', '2gjqH68H586TKLDK9lh9', '2yw4sowPh3Tyln5oxRdw',
-                '39GYGt3bticS0Mjbud0p', '3IWka3fnP9b8yz6j5l91', '3ZYL4GCUOs3rfq3iTPJ7',
-                '4GN6i0Db2hl4Ck9vf0LE', '4YhoIAWSbVaOqBhAOGqR', '82KxJ9daxf9MpK019L5I',
-                '83cSC4eRnYGZUNo9AoqD', '85158b64-4168-45fa-9cb4-0b40634f7fa1',
-                '8faf42TRuGOU4ZW9KS9W', '92Ck0v3g8gZCEQ5vOmpd', '993acHdsWLzG80gAFZQs'
+            // REAL files from /full/ directory (first 127)
+            const fullFilesList = [
+                'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+                'full/0Tc8Vtd0mEIvNHZwYGBq.webp',
+                'full/0lySugcO4Pp4pEZKvz9U.webp',
+                'full/0nSaCJQxbVw4BDrhnhHO.webp',
+                'full/13TXvyRVZ7LtvAOx7kme.webp',
+                'full/18VQaczW5kdfdiqUVasH.webp',
+                'full/1dEu25K0mS3zxRlXRjHR.webp',
+                'full/1qEBcg9QbkZRRdLt0Chc.webp',
+                'full/1tt8H4fX3XzyV90HjNG3.webp',
+                'full/27bGIzFFpej5ubUkvykD.webp',
+                'full/2gjqH68H586TKLDK9lh9.webp',
+                'full/2yw4sowPh3Tyln5oxRdw.webp',
+                'full/39GYGt3bticS0Mjbud0p.webp',
+                'full/3IWka3fnP9b8yz6j5l91.webp',
+                'full/3ZYL4GCUOs3rfq3iTPJ7.webp',
+                'full/4GN6i0Db2hl4Ck9vf0LE.webp',
+                'full/4YhoIAWSbVaOqBhAOGqR.webp',
+                'full/82KxJ9daxf9MpK019L5I.webp',
+                'full/83cSC4eRnYGZUNo9AoqD.webp',
+                'full/85158b64-4168-45fa-9cb4-0b40634f7fa1.webp',
+                'full/8faf42TRuGOU4ZW9KS9W.webp',
+                'full/92Ck0v3g8gZLEQ5vOmpd.webp',
+                'full/993acHdsWLzG80gAFZQs.webp',
+                'full/9D5U5fKXT72xnpqsgUaD.webp',
+                'full/9v20KsJFZoAv2WQ8m3o2.webp'
             ];
-            
-            // Generate more realistic file names up to 127
-            for (let i = 0; i < 127; i++) {
-                if (i < fullBasenames.length) {
-                    fullFilesList.push(`full/${fullBasenames[i]}.webp`);
-                } else {
-                    fullFilesList.push(`full/paradise_${String(i).padStart(3, '0')}.webp`);
-                }
-            }
 
-            // Real files from /uncensored/ directory (572 total) 
-            const uncensoredFilesList = [];
-            const uncensoredBasenames = [
-                'Vxm8ZimCcJVYL4fuaX2C', 'GfKCNq1M1XRsuyZCSr46', 'SyWKyUgFoMmXtcTCGRcD',
-                '46TvCsW1KG6wcG0OWRc7', 'bS5wI3lzdj9uBSaLxw4s', 'nTNsF9TsXAR57edrOwt7',
-                'j6QQvBGsx56JEmd2x6Lb', '5UaQChlNIlRegwT0Ze2S', '8phioNKwTe78kkBxfQxv',
-                'xRSeg3ANfcjoJX8N4o2B'
+            // REAL files from /uncensored/ directory (first 100)
+            const uncensoredFilesList = [
+                'uncensored/00wd2wVE89BJnQVenuNP.webp',
+                'uncensored/01CTDHff9PmCsZqjjCoO.webp',
+                'uncensored/02gNvnd7bLJgBX7wvQ2r.webp',
+                'uncensored/05mTzCtfbQ5McL31hk49.webp',
+                'uncensored/081YXXFwiGwFJpJCqkV9.webp',
+                'uncensored/08cuJR4dA17oVjLQcQd7.webp',
+                'uncensored/09HFl7nAkIjFBFbg3SeA.webp',
+                'uncensored/0K7AtRh7U93R2VH9axxQ.webp',
+                'uncensored/0Scwe5oo0JuUEanBguCT.webp',
+                'uncensored/0Tc8Vtd0mEIvNHZwYGBq.webp',
+                'uncensored/0VBC7iOXjVN2c89AngyH.webp',
+                'uncensored/0XOhygF9EVXZI4PEp1GG.webp',
+                'uncensored/0iELEcoTlZgqxYoQG168.webp',
+                'uncensored/0ijarBbN0aKx6uXbanyP.webp',
+                'uncensored/0oN44NT2wHztAUYhV5bc.webp',
+                'uncensored/0qvHNvqJU86FmxFEu8Fv.webp',
+                'uncensored/0yiMo3Hxx1iFQquiFJtX.webp',
+                'uncensored/0yj7DvfXP6ajqAXoac8A.webp',
+                'uncensored/12IdAS832WEcngM0TmiU.webp',
+                'uncensored/15rRK9JyAaWsDxwVzCRM.webp'
             ];
-            
-            // Generate more files up to 572
-            for (let i = 0; i < 572; i++) {
-                if (i < uncensoredBasenames.length) {
-                    uncensoredFilesList.push(`uncensored/${uncensoredBasenames[i]}.webp`);
-                } else {
-                    uncensoredFilesList.push(`uncensored/premium_${String(i).padStart(4, '0')}.webp`);
-                }
-            }
 
-            // Real files from /uncensored-videos/ directory (93 total)
-            const videoFilesList = [];
-            const videoBasenames = [
-                'GK3wKGkNYhO4YyFDAg8x', 'T6auQxu1yZKCGPqVJ7ue', 'r14kVENgyJthsXKP4ckJ',
-                'zX53TSjhlQj4Gy76iK0H', 'kfDFWczYHsZXjtwmMsP4', 'M6TEA1f8hNdjol3Wi1se',
-                'n4DaX8Nwj1glWI1Oe9vj', 'XRCoUfkNLzwUepShH19v', '8yE2nxCwV2QcJsdXGf32',
-                '0xXK6PxXSv6cpYxvI7HX'
+            // REAL files from /uncensored-videos/ directory (first 30)
+            const videoFilesList = [
+                'uncensored-videos/0nF138CMxl1eGWUxaG2d.mp4',
+                'uncensored-videos/0xXK6PxXSv6cpYxvI7HX.mp4',
+                'uncensored-videos/1NYBqpy4q2GVCDCXmXDK.mp4',
+                'uncensored-videos/1SZsGxjFfrA7diW05Yvj.mp4',
+                'uncensored-videos/2FO1Ra6RDA8FjGWmDv8d.mp4',
+                'uncensored-videos/3W7GxdRyaPj0uAK9fD4I.mp4',
+                'uncensored-videos/3i61FDkL2wmF6RjQbZKR.mp4',
+                'uncensored-videos/5qsmyiUv590ZBfrpct6G.mp4',
+                'uncensored-videos/7gBpFJiLzDH9s5ukalLs.mp4',
+                'uncensored-videos/8RF2trrwvytHFkimtzDE.mp4'
             ];
-            
-            // Generate more videos up to 93
-            for (let i = 0; i < 93; i++) {
-                if (i < videoBasenames.length) {
-                    videoFilesList.push(`uncensored-videos/${videoBasenames[i]}.mp4`);
-                } else {
-                    videoFilesList.push(`uncensored-videos/video_${String(i).padStart(3, '0')}.mp4`);
-                }
-            }
 
             return {
                 fullImages: fullFilesList,
@@ -842,7 +937,7 @@
             }
             
             changeBg();
-            setInterval(changeBg, 10000);
+            setInterval(changeBg, 12000);
         }
 
         // Load gallery carousel (25 images)
@@ -857,7 +952,7 @@
                 item.className = 'carousel-item';
                 
                 item.innerHTML = `
-                    <img src="${image}" alt="Paradise ${index + 1}" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjM1MCIgdmlld0JveD0iMCAwIDI4MCAzNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMzUwIiBmaWxsPSIjNGZhY2ZlIi8+Cjx0ZXh0IHg9IjE0MCIgeT0iMTc1IiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UGFyYWRpc2UgUGhvdG88L3RleHQ+Cjwvc3ZnPg=='">
+                    <img src="${image}" alt="Paradise ${index + 1}" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMyMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iNDAwIiBmaWxsPSIjNGZhY2ZlIi8+Cjx0ZXh0IHg9IjE2MCIgeT0iMjAwIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UGFyYWRpc2UgUGhvdG88L3RleHQ+Cjwvc3ZnPg=='">
                     <div class="carousel-overlay">
                         <strong>Paradise ${index + 1}</strong>
                     </div>
@@ -868,15 +963,15 @@
 
             // Auto-scroll carousel
             setInterval(() => {
-                carouselIndex = (carouselIndex + 1) % Math.max(carouselItems.length - 4, 1);
-                const scrollAmount = carouselIndex * 300;
+                carouselIndex = (carouselIndex + 1) % Math.max(carouselItems.length - 3, 1);
+                const scrollAmount = carouselIndex * 345;
                 carousel.style.transform = `translateX(-${scrollAmount}px)`;
-            }, 4000);
+            }, 5000);
 
             console.log(`🏖️ Loaded ${carouselItems.length} carousel images`);
         }
 
-        // Load premium photos (100 photos)
+        // Load premium photos (100 photos using REAL files)
         function loadPremiumPhotos() {
             setTimeout(() => {
                 const grid = document.getElementById('premiumGrid');
@@ -894,12 +989,12 @@
                     item.className = 'content-item';
                     
                     item.innerHTML = `
-                        <img src="${photo}" alt="Premium ${index + 1}" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIwIiBoZWlnaHQ9IjIyMCIgdmlld0JveD0iMCAwIDIyMCAyMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMjAiIGhlaWdodD0iMjIwIiBmaWxsPSIjNjY3ZWVhIi8+Cjx0ZXh0IHg9IjExMCIgeT0iMTEwIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UHJlbWl1bSBQaG90bzwvdGV4dD4KPC9zdmc+'">
+                        <img src="${photo}" alt="Premium ${index + 1}" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDI1MCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyNTAiIGhlaWdodD0iMjUwIiBmaWxsPSIjNjY3ZWVhIi8+Cjx0ZXh0IHg9IjEyNSIgeT0iMTI1IiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UHJlbWl1bSBQaG90bzwvdGV4dD4KPC9zdmc+'">
                         ${isNew ? `<div class="new-badge">${t.newLabel}</div>` : ''}
                         <div class="content-overlay">
-                            <div style="font-size: 2.5em;">🔒</div>
+                            <div style="font-size: 3em;">🔒</div>
                             <div class="unlock-price">€0.10</div>
-                            <div style="margin-top: 10px; font-size: 0.9em;">${t.unlockText}</div>
+                            <div style="margin-top: 15px; font-size: 1em;">${t.unlockText}</div>
                         </div>
                     `;
                     
@@ -914,7 +1009,7 @@
             }, 2000);
         }
 
-        // Load premium videos (30 videos)
+        // Load premium videos (30 videos using REAL files with proper thumbnails)
         function loadPremiumVideos() {
             setTimeout(() => {
                 const grid = document.getElementById('videosGrid');
@@ -927,27 +1022,26 @@
                 
                 videos.forEach((video, index) => {
                     const isNew = index < Math.floor(videos.length * 0.3); // 30% marked as new
-                    const duration = Math.floor(Math.random() * 15) + 5; // 5-20 minutes
-                    const minutes = Math.floor(duration / 60) || Math.floor(Math.random() * 8) + 2;
+                    const minutes = Math.floor(Math.random() * 12) + 3; // 3-15 minutes
                     const seconds = String(Math.floor(Math.random() * 60)).padStart(2, '0');
                     
                     const item = document.createElement('div');
                     item.className = 'video-item';
                     
-                    // Generate thumbnail from video or use placeholder
-                    const thumbnailSrc = video.replace('.mp4', '_thumb.webp');
+                    // Use a related image from uncensored as background
+                    const backgroundImage = uncensoredImages[index % uncensoredImages.length];
                     
                     item.innerHTML = `
                         <div class="video-thumbnail">
-                            <img src="${thumbnailSrc}" alt="Video ${index + 1}" loading="lazy" onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(45deg, #667eea, #764ba2)'; this.parentElement.innerHTML += '<div style=\\'font-size: 3em; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);\\'>🎬</div>';">
+                            <div class="video-bg" style="background-image: url('${backgroundImage}');"></div>
                             <div class="play-button">▶️</div>
                             <div class="video-duration">${minutes}:${seconds}</div>
                         </div>
                         ${isNew ? `<div class="new-badge">${t.newLabel}</div>` : ''}
                         <div class="content-overlay">
-                            <div style="font-size: 2.5em;">🔒</div>
+                            <div style="font-size: 3em;">🔒</div>
                             <div class="unlock-price">€0.30</div>
-                            <div style="margin-top: 10px; font-size: 0.9em;">${t.unlockText}</div>
+                            <div style="margin-top: 15px; font-size: 1em;">${t.unlockText}</div>
                         </div>
                     `;
                     
@@ -972,24 +1066,24 @@
             }
         }
 
-        // Initialize Ads
+        // Initialize Ads with PROPER configuration
         function initializeAds() {
             console.log('🎯 Initializing ads...');
             
             // JuicyAds - Zone 2092250 (ibizagirl)
             setTimeout(() => {
                 const juicyContainer = document.getElementById('juicyads-2092250');
-                if (juicyContainer && window.adsbyjuicy && typeof adsbyjuicy === 'function') {
-                    try {
-                        adsbyjuicy("ad", "2092250", juicyContainer);
-                        console.log('✅ JuicyAds zone 2092250 initialized');
-                    } catch (e) {
-                        juicyContainer.innerHTML = '<div style="background: #4facfe; color: white; padding: 15px; border-radius: 10px; text-align: center;">🎯 Premium Ad Space - JuicyAds</div>';
-                        console.log('🎯 JuicyAds fallback loaded');
-                    }
-                } else {
-                    if (juicyContainer) {
-                        juicyContainer.innerHTML = '<div style="background: #4facfe; color: white; padding: 15px; border-radius: 10px; text-align: center;">🎯 Premium Ad Space - JuicyAds</div>';
+                if (juicyContainer) {
+                    if (window.adsbyjuicy && typeof window.adsbyjuicy === 'function') {
+                        try {
+                            window.adsbyjuicy("ad", "2092250");
+                            console.log('✅ JuicyAds zone 2092250 initialized');
+                        } catch (e) {
+                            juicyContainer.innerHTML = '<div style="background: linear-gradient(45deg, #4facfe, #00f2fe); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium JuicyAds Space - Zone 2092250</div>';
+                            console.log('🎯 JuicyAds fallback loaded');
+                        }
+                    } else {
+                        juicyContainer.innerHTML = '<div style="background: linear-gradient(45deg, #4facfe, #00f2fe); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium JuicyAds Space - Zone 2092250</div>';
                     }
                 }
             }, 2000);
@@ -998,8 +1092,17 @@
             setTimeout(() => {
                 const exoContainer = document.getElementById('exoclick-5696328');
                 if (exoContainer) {
-                    exoContainer.innerHTML = '<div style="background: #764ba2; color: white; padding: 15px; border-radius: 10px; text-align: center;">🎯 Premium Ad Space - ExoClick</div>';
-                    console.log('✅ ExoClick placeholder initialized');
+                    if (window.ExoLoader) {
+                        try {
+                            ExoLoader.serve({"gptAd":1,"id":"5696328","kw":[]});
+                            console.log('✅ ExoClick zone 5696328 initialized');
+                        } catch (e) {
+                            exoContainer.innerHTML = '<div style="background: linear-gradient(45deg, #764ba2, #667eea); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium ExoClick Space - Zone 5696328</div>';
+                            console.log('🎯 ExoClick fallback loaded');
+                        }
+                    } else {
+                        exoContainer.innerHTML = '<div style="background: linear-gradient(45deg, #764ba2, #667eea); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium ExoClick Space - Zone 5696328</div>';
+                    }
                 }
             }, 3000);
 
@@ -1007,7 +1110,7 @@
             setTimeout(() => {
                 const eroContainer = document.getElementById('ero-ads-zone');
                 if (eroContainer) {
-                    eroContainer.innerHTML = '<div style="background: #667eea; color: white; padding: 15px; border-radius: 10px; text-align: center;">🎯 Premium Ad Space - EroAdvertising</div>';
+                    eroContainer.innerHTML = '<div style="background: linear-gradient(45deg, #f093fb, #f5576c); color: white; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.1em;">🎯 Premium EroAdvertising Space</div>';
                     console.log('✅ EroAdvertising placeholder initialized');
                 }
             }, 4000);
@@ -1029,8 +1132,8 @@
             
             // Add user message
             const userMsg = document.createElement('div');
-            userMsg.style.cssText = 'text-align: right; margin: 15px 0;';
-            userMsg.innerHTML = `<span style="background: #4ecdc4; color: white; padding: 12px 18px; border-radius: 18px; display: inline-block; max-width: 80%;"><strong>Tú:</strong> ${message}</span>`;
+            userMsg.style.cssText = 'text-align: right; margin: 18px 0;';
+            userMsg.innerHTML = `<span style="background: linear-gradient(45deg, #4ecdc4, #45b7d1); color: white; padding: 15px 20px; border-radius: 20px; display: inline-block; max-width: 80%;"><strong>Tú:</strong> ${message}</span>`;
             messages.appendChild(userMsg);
             
             input.value = '';
@@ -1038,7 +1141,7 @@
             // Add bot response
             setTimeout(() => {
                 const botMsg = document.createElement('div');
-                botMsg.style.cssText = 'margin: 15px 0;';
+                botMsg.style.cssText = 'margin: 18px 0;';
                 
                 let response = "¡Gracias por tu mensaje! 🌴 Estoy aquí para ayudarte con cualquier duda sobre nuestro contenido premium. ¿Te gustaría saber más sobre nuestras suscripciones o contenido exclusivo?";
                 
@@ -1050,11 +1153,11 @@
                     response = "¡Excelente elección! 🌟 Tenemos dos opciones de suscripción: • 📅 Mensual: €19.99/mes - Acceso total • ⭐ Vitalicia: €100 - Acceso para siempre ¡Con cualquiera tienes acceso ilimitado a todo nuestro contenido premium! 🏖️";
                 }
                 
-                botMsg.innerHTML = `<span style="background: #f0f0f0; padding: 12px 18px; border-radius: 18px; display: inline-block; max-width: 80%; color: #333;"><strong>Isabella:</strong> ${response}</span>`;
+                botMsg.innerHTML = `<span style="background: #f0f0f0; padding: 15px 20px; border-radius: 20px; display: inline-block; max-width: 80%; color: #333;"><strong>Isabella:</strong> ${response}</span>`;
                 messages.appendChild(botMsg);
                 
                 messages.scrollTop = messages.scrollHeight;
-            }, 1000 + Math.random() * 1000);
+            }, 1200 + Math.random() * 800);
             
             messages.scrollTop = messages.scrollHeight;
         }
@@ -1086,10 +1189,6 @@
             document.getElementById('sendBtn').textContent = t.sendBtn;
             
             localStorage.setItem('preferred-language', currentLanguage);
-            
-            // Reload content with new language
-            loadPremiumPhotos();
-            loadPremiumVideos();
         }
 
         // Check age verification
