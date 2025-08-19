@@ -301,23 +301,35 @@
     function loadInitialContent() {
         console.log('📦 Cargando contenido inicial...');
         
-        // Load daily photos
-        if (window.getDailyPhotos) {
-            const photos = window.getDailyPhotos();
-            displayPhotos(photos.slice(0, 12));
+        // Load daily photos using ContentAPI
+        if (window.ContentAPI && window.ContentAPI.getPublicImages) {
+            console.log('📸 Cargando fotos públicas...');
+            const publicPhotos = window.ContentAPI.getPublicImages(12);
+            displayPhotos(publicPhotos);
         }
         
-        // Load daily videos
-        if (window.getDailyVideos) {
-            const videos = window.getDailyVideos();
-            displayVideos(videos.slice(0, 6));
+        // Load premium photos
+        if (window.ContentAPI && window.ContentAPI.getPremiumImages) {
+            console.log('💎 Cargando fotos premium...');
+            const premiumPhotos = window.ContentAPI.getPremiumImages(12);
+            displayPremiumPhotos(premiumPhotos);
         }
         
-        // Load banner images
-        if (window.getBannerImages) {
-            const bannerImages = window.getBannerImages();
+        // Load daily videos using ContentAPI
+        if (window.ContentAPI && window.ContentAPI.getVideos) {
+            console.log('🎬 Cargando videos...');
+            const videos = window.ContentAPI.getVideos(6);
+            displayVideos(videos);
+        }
+        
+        // Load banner images using ContentAPI
+        if (window.ContentAPI && window.ContentAPI.getBanners) {
+            console.log('🎠 Configurando banners...');
+            const bannerImages = window.ContentAPI.getBanners();
             setupBanner(bannerImages);
         }
+        
+        console.log('✅ Contenido inicial cargado completamente');
     }
 
     // Display photos
