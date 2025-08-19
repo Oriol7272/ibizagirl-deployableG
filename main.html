@@ -644,7 +644,7 @@
         }
 
         function simulatePayment(type) {
-            const confirmed = confirm(`¿Proceder con el pago para ${type}?`);
+            const confirmed = confirm('Proceder con el pago para ' + type + '?');
             if (confirmed) {
                 handlePaymentSuccess(type, { simulated: true });
             }
