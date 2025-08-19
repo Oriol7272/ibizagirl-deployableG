@@ -373,7 +373,7 @@
         container.innerHTML = videos.map(video => createVideoCard(video)).join('');
     }
 
-    // Check VIP access status
+    // Enhanced VIP access system for purchase functionality
     function checkVIPAccess() {
         // Check lifetime access
         if (localStorage.getItem('ibiza_lifetime_access') === 'true') {
@@ -387,75 +387,55 @@
             if (Date.now() < expiryTime) {
                 return 'monthly';
             } else {
-                // Expired monthly access
                 localStorage.removeItem('ibiza_monthly_access');
-                localStorage.removeItem('ibiza_access_type');
             }
         }
         
-        // Check PPV access (valid for 1 hour)
-        const ppvAccess = localStorage.getItem('ibiza_ppv_access');
-        if (ppvAccess) {
-            const accessTime = parseInt(ppvAccess);
-            const oneHour = 60 * 60 * 1000;
-            if (Date.now() - accessTime < oneHour) {
-                return 'ppv';
+        // Check premium access (pay-per-view)
+        const premiumAccess = localStorage.getItem('ibiza_premium_access');
+        if (premiumAccess) {
+            const accessTime = parseInt(premiumAccess);
+            const oneDay = 24 * 60 * 60 * 1000; // 24 hours
+            if (Date.now() - accessTime < oneDay) {
+                return 'premium';
             } else {
-                // Expired PPV access
-                localStorage.removeItem('ibiza_ppv_access');
+                localStorage.removeItem('ibiza_premium_access');
             }
         }
         
         return null;
     }
     
-    // Update VIP status display
-    function updateVIPStatus() {
-        const vipAccess = checkVIPAccess();
-        const statusElement = document.querySelector('.vip-status');
-        
-        if (statusElement) {
-            if (vipAccess) {
-                statusElement.innerHTML = `
-                    <div class="vip-badge active">
-                        <span class="vip-icon">👑</span>
-                        <span class="vip-text">VIP ${vipAccess.toUpperCase()}</span>
-                    </div>
-                `;
-            } else {
-                statusElement.innerHTML = `
-                    <div class="vip-badge inactive">
-                        <span class="vip-icon">🔒</span>
-                        <span class="vip-text">No Premium</span>
-                    </div>
-                `;
-            }
-        }
-    }
-    
-    // Enhanced create photo card with VIP check
+    // Create photo card with proper blur system (NO blur for teasers from "full" folder)
     function createPhotoCard(photo, isPremium = false) {
         const vipAccess = checkVIPAccess();
-        const hasAccess = vipAccess && (vipAccess === 'lifetime' || vipAccess === 'monthly' || vipAccess === 'ppv');
+        const hasAccess = vipAccess && (vipAccess === 'lifetime' || vipAccess === 'monthly' || vipAccess === 'premium');
         
         const imagePath = photo;
-        const blurClass = (isPremium && !hasAccess) ? 'premium-blur' : '';
         
-        let premiumOverlay = '';
-        if (isPremium && !hasAccess) {
-            premiumOverlay = `
-                <div class="premium-overlay" onclick="showPricingView()">
+        // BLUR LOGIC: Only premium content (from "uncensored" folder) gets blurred, NOT teasers from "full"
+        const isFromFullFolder = imagePath.includes('full/');
+        const shouldBlur = isPremium && !hasAccess && !isFromFullFolder;
+        const blurClass = shouldBlur ? 'premium-blur' : '';
+        
+        let overlayContent = '';
+        
+        if (isPremium && !hasAccess && !isFromFullFolder) {
+            // Premium content from "uncensored" - show price overlay
+            overlayContent = `
+                <div class="premium-overlay" onclick="buyPremiumAccess()">
                     <div class="premium-badge">
                         <span class="price">€0.10</span>
-                        <span class="unlock-text" data-i18n="unlock">Desbloquear</span>
+                        <span class="unlock-text">Comprar Imagen</span>
                     </div>
                 </div>
             `;
-        } else if (isPremium && hasAccess) {
-            premiumOverlay = `
+        } else if (isPremium && hasAccess && !isFromFullFolder) {
+            // Premium content with access
+            overlayContent = `
                 <div class="vip-access-badge">
                     <span class="vip-icon">👑</span>
-                    <span class="vip-text">VIP ACCESS</span>
+                    <span class="vip-text">PREMIUM</span>
                 </div>
             `;
         }
@@ -464,39 +444,39 @@
             <div class="content-card photo-card">
                 <div class="card-image">
                     <img src="${imagePath}" alt="Photo" class="${blurClass}" loading="lazy" />
-                    ${premiumOverlay}
+                    ${overlayContent}
                 </div>
                 <div class="card-info">
-                    <h4>${isPremium ? 'Premium Photo' : 'Photo'}</h4>
-                    ${isPremium && hasAccess ? '<p class="access-granted">✅ Acceso Concedido</p>' : ''}
+                    <h4>${isPremium && !isFromFullFolder ? 'Premium Photo' : 'Teaser'}</h4>
+                    ${isPremium && hasAccess && !isFromFullFolder ? '<p class="access-granted">✅ Acceso Premium</p>' : ''}
                 </div>
             </div>
         `;
     }
 
-    // Enhanced create video card with VIP check  
+    // Create video card (always premium, always from uncensored-videos)
     function createVideoCard(video) {
         const vipAccess = checkVIPAccess();
-        const hasAccess = vipAccess && (vipAccess === 'lifetime' || vipAccess === 'monthly' || vipAccess === 'ppv');
+        const hasAccess = vipAccess && (vipAccess === 'lifetime' || vipAccess === 'monthly' || vipAccess === 'premium');
         
         const videoPath = video;
         
-        let premiumOverlay = '';
+        let overlayContent = '';
         if (!hasAccess) {
-            premiumOverlay = `
-                <div class="premium-overlay" onclick="showPricingView()">
+            overlayContent = `
+                <div class="premium-overlay" onclick="buyVideoAccess()">
                     <div class="premium-badge">
                         <span class="price">€0.30</span>
-                        <span class="unlock-text" data-i18n="unlock">Desbloquear</span>
+                        <span class="unlock-text">Comprar Video</span>
                     </div>
                     <div class="video-play-btn">▶</div>
                 </div>
             `;
         } else {
-            premiumOverlay = `
+            overlayContent = `
                 <div class="vip-access-badge">
                     <span class="vip-icon">👑</span>
-                    <span class="vip-text">VIP ACCESS</span>
+                    <span class="vip-text">PREMIUM</span>
                 </div>
                 <div class="video-play-btn functional" onclick="playVideo('${videoPath}')">▶</div>
             `;
@@ -505,46 +485,54 @@
         return `
             <div class="content-card video-card">
                 <div class="card-image">
-                    <video class="${!hasAccess ? 'premium-blur' : ''}" preload="metadata" poster="${videoPath.replace('.mp4', '_thumb.jpg')}">
+                    <video class="${!hasAccess ? 'premium-blur' : ''}" preload="metadata">
                         <source src="${videoPath}" type="video/mp4">
                     </video>
-                    ${premiumOverlay}
+                    ${overlayContent}
                     <div class="video-duration">2:30</div>
                 </div>
                 <div class="card-info">
                     <h4>Premium Video</h4>
-                    ${hasAccess ? '<p class="access-granted">✅ Acceso Concedido</p>' : ''}
+                    ${hasAccess ? '<p class="access-granted">✅ Acceso Premium</p>' : ''}
                 </div>
             </div>
         `;
     }
     
-    // Video player function
-    function playVideo(videoPath) {
-        const modal = document.createElement('div');
-        modal.className = 'video-modal';
-        modal.innerHTML = `
-            <div class="video-modal-content">
-                <span class="video-close" onclick="this.parentElement.parentElement.remove()">&times;</span>
-                <video controls autoplay style="width: 100%; max-width: 800px;">
-                    <source src="${videoPath}" type="video/mp4">
-                </video>
-            </div>
-        `;
-        document.body.appendChild(modal);
+    // Purchase functions for PayPal integration
+    function buyPremiumAccess() {
+        showPricingView();
     }
     
-    // Show pricing view function
-    function showPricingView() {
-        showView('pricing');
-        // Update nav buttons
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.querySelector('[data-view="pricing"]').classList.add('active');
+    function buyVideoAccess() {
+        showPricingView();
+    }
+    
+    // Daily randomization system for teasers/banners (from "full" folder)
+    function getDailyRandomImages(imageArray, count) {
+        // Use date as seed for consistent daily randomization
+        const today = new Date();
+        const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        
+        // Simple seeded random function
+        function seededRandom(seed) {
+            const x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
+        
+        // Shuffle array with daily seed
+        const shuffled = [...imageArray];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(seededRandom(seed + i) * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        
+        return shuffled.slice(0, count);
     }
     
     // Make functions globally available
-    window.playVideo = playVideo;
-    window.showPricingView = showPricingView;
+    window.buyPremiumAccess = buyPremiumAccess;
+    window.buyVideoAccess = buyVideoAccess;
 
     // Setup banner
     function setupBanner(images) {
