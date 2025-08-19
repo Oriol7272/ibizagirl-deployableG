@@ -3,47 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IbizaGirl.pics - Premium Paradise Gallery | Daily Updates</title>
-    <meta name="description" content="200+ exclusive photos and 40+ HD videos from paradise. Daily updates with 30% new content. Mediterranean paradise content.">
-    <meta name="keywords" content="Ibiza, gallery, premium, photos HD, exclusive videos, VIP content, paradise gallery, Mediterranean, Spanish beaches">
-    <meta name="author" content="IbizaGirl.pics">
+    <title>IbizaGirl.pics - Premium Content</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="IbizaGirl.pics - Premium content gallery with exclusive photos and videos">
+    <meta name="keywords" content="ibiza, girl, pics, premium, photos, videos, gallery">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://ibizagirl.pics/">
     
     <!-- Open Graph -->
+    <meta property="og:title" content="IbizaGirl.pics - Premium Content">
+    <meta property="og:description" content="Premium content gallery with exclusive photos and videos">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ibizagirl.pics/">
-    <meta property="og:title" content="IbizaGirl.pics - Premium Paradise Gallery">
-    <meta property="og:description" content="200+ exclusive photos and 40+ HD videos. Daily updates.">
-    <meta property="og:image" content="https://ibizagirl.pics/full/bikini.webp">
+    <meta property="og:url" content="https://ibizagirl.pics">
     
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="IbizaGirl.pics">
-    <meta name="twitter:description" content="Premium paradise content daily">
-    <meta name="twitter:image" content="https://ibizagirl.pics/full/bikini.webp">
-    
-    <!-- Verificaciones de Ad Networks -->
+    <!-- Site Verification Meta Tags -->
     <meta name="juicyads-site-verification" content="f67a56f266e834d596c42122f88bb88d">
     <meta name="eroads_" content="5f8afe77e5b70fec960d89b314e045a4">
-    <meta name="exoclick-site-verification" content="97ce8adfbeb6e153ef4ebf2566dfeb7d">
-    
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#FF1493">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/webp" href="/full/bikini.webp">
-    <link rel="apple-touch-icon" href="/full/bikini.webp">
-    
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBXYNPBSPY"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-DBXYNPBSPY');
-    </script>
+    <link rel="icon" type="image/x-icon" href="https://ibizagirl.pics/favicon.ico">
     
     <style>
         * {
@@ -53,106 +31,114 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .container {
-            text-align: center;
-            padding: 20px;
-            max-width: 600px;
-        }
-        
-        h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes glow {
-            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px #ff1493; }
-            to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px #ff1493, 0 0 30px #ff1493; }
-        }
-        
-        .tagline {
-            font-size: 1.3em;
-            margin-bottom: 30px;
-            opacity: 0.95;
-        }
-        
-        .enter-btn {
-            display: inline-block;
-            padding: 18px 40px;
-            font-size: 1.2em;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff1493, #ff69b4);
             color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(255,20,147,0.4);
-            transition: all 0.3s ease;
-            animation: pulse 2s infinite;
+            overflow: hidden;
         }
         
-        .enter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,20,147,0.6);
+        .landing-container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
         }
         
-        @keyframes pulse {
-            0% { box-shadow: 0 4px 15px rgba(255,20,147,0.4); }
-            50% { box-shadow: 0 4px 25px rgba(255,20,147,0.8); }
-            100% { box-shadow: 0 4px 15px rgba(255,20,147,0.4); }
+        .palm-animation {
+            position: absolute;
+            top: -100px;
+            left: -50px;
+            font-size: 8rem;
+            animation: sway 3s ease-in-out infinite;
+            opacity: 0.3;
         }
         
-        .warning {
-            margin-top: 30px;
-            padding: 15px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            font-size: 0.9em;
+        .palm-animation:nth-child(2) {
+            top: -80px;
+            right: -50px;
+            left: auto;
+            animation-delay: -1s;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #FF1493, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
             opacity: 0.9;
         }
         
-        .palm {
+        .age-warning {
+            background: rgba(255, 20, 147, 0.2);
+            border: 2px solid #FF1493;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        
+        .enter-btn {
+            background: linear-gradient(45deg, #FF1493, #FFD700);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
             display: inline-block;
-            animation: sway 3s ease-in-out infinite;
+        }
+        
+        .enter-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         @keyframes sway {
             0%, 100% { transform: rotate(-5deg); }
             50% { transform: rotate(5deg); }
         }
+        
+        @media (max-width: 768px) {
+            .logo { font-size: 2.5rem; }
+            .palm-animation { font-size: 4rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>
-            <span class="palm">🌴</span>
-            IbizaGirl.pics
-            <span class="palm">🌴</span>
-        </h1>
-        <p class="tagline">Premium Paradise Gallery</p>
-        <p class="tagline">200+ Photos • 40+ Videos • Daily Updates</p>
+    <div class="palm-animation">🌴</div>
+    <div class="palm-animation">🌴</div>
+    
+    <div class="landing-container">
+        <h1 class="logo">IbizaGirl.pics</h1>
+        <p class="subtitle">Premium Content Gallery</p>
         
-        <a href="/main.html" class="enter-btn">ENTER PARADISE</a>
-        
-        <div class="warning">
-            <p>🔞 Adults Only (18+)</p>
-            <p>Premium Content Inside</p>
+        <div class="age-warning">
+            ⚠️ Adults Only (18+) ⚠️<br>
+            Este sitio contiene contenido para adultos
         </div>
+        
+        <a href="main.html" class="enter-btn">ENTER PARADISE 🌴</a>
     </div>
-
-    <!-- Redirección automática después de 3 segundos -->
+    
     <script>
-        setTimeout(function() {
-            window.location.href = '/main.html';
+        // Auto redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = 'main.html';
         }, 3000);
     </script>
 </body>
