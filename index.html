@@ -390,13 +390,39 @@
             box-shadow: 0 12px 30px rgba(0,0,0,0.4);
         }
         
-        /* Section Styling MEJORADO */
+        /* Section Styling with decorative elements */
         .section {
             position: relative;
             padding: 100px 30px;
             max-width: 1500px;
             margin: 0 auto;
             z-index: 5;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            background: url('/decorative-images/decoration1.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.4;
+            z-index: -1;
+        }
+        
+        .section::after {
+            content: '';
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: url('/decorative-images/decoration2.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.3;
+            z-index: -1;
         }
         
         .section-title {
