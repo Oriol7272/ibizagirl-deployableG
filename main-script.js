@@ -530,9 +530,34 @@
         return shuffled.slice(0, count);
     }
     
+    // Video player function
+    function playVideo(videoPath) {
+        const modal = document.createElement('div');
+        modal.className = 'video-modal';
+        modal.innerHTML = `
+            <div class="video-modal-content">
+                <span class="video-close" onclick="this.parentElement.parentElement.remove()">&times;</span>
+                <video controls autoplay style="width: 100%; max-width: 800px;">
+                    <source src="${videoPath}" type="video/mp4">
+                </video>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    // Show pricing view function
+    function showPricingView() {
+        showView('pricing');
+        // Update nav buttons
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('[data-view="pricing"]').classList.add('active');
+    }
+    
     // Make functions globally available
     window.buyPremiumAccess = buyPremiumAccess;
     window.buyVideoAccess = buyVideoAccess;
+    window.playVideo = playVideo;
+    window.showPricingView = showPricingView;
 
     // Setup banner
     function setupBanner(images) {
