@@ -417,19 +417,35 @@
 
     // Setup banner
     function setupBanner(images) {
+        console.log('🎠 Configurando banner con imágenes:', images);
         const banner = document.getElementById('heroBanner');
-        if (!banner || !images || images.length === 0) return;
+        if (!banner) {
+            console.warn('⚠️ No se encontró elemento heroBanner');
+            return;
+        }
+        
+        if (!images || images.length === 0) {
+            console.warn('⚠️ No hay imágenes para el banner');
+            return;
+        }
         
         let currentIndex = 0;
         
         function updateBanner() {
-            const image = images[currentIndex];
-            banner.style.backgroundImage = `url(${image.url})`;
+            // Si images es un array de strings, usar full/ como ruta
+            const imagePath = `full/${images[currentIndex]}`;
+            banner.style.backgroundImage = `url(${imagePath})`;
+            banner.style.backgroundSize = 'cover';
+            banner.style.backgroundPosition = 'center';
             currentIndex = (currentIndex + 1) % images.length;
         }
         
+        // Actualizar inmediatamente
         updateBanner();
+        
+        // Configurar rotación automática cada 5 segundos
         setInterval(updateBanner, 5000);
+        console.log('✅ Banner configurado con', images.length, 'imágenes');
     }
 
     // Hide loading screen
