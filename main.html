@@ -76,13 +76,13 @@
             <!-- Ad Zone: 300x250 (JuicyAds) -->
             <div class="ad-container" id="ad-mobile-top">
                 <script type="text/javascript">
-                    if (typeof jads !== 'undefined') {
-                        jads('2092250','300','250');
-                    } else {
-                        setTimeout(() => {
-                            if (typeof jads !== 'undefined') jads('2092250','300','250');
-                        }, 2000);
-                    }
+                    setTimeout(() => {
+                        if (typeof jads !== 'undefined') {
+                            jads('2092250','300','250');
+                        } else {
+                            document.getElementById('ad-mobile-top').innerHTML = '<div style="width:300px;height:250px;background:rgba(255,255,255,0.1);border:1px dashed #fff;display:flex;align-items:center;justify-content:center;color:#fff;">Ad Zone 300x250</div>';
+                        }
+                    }, 3000);
                 </script>
             </div>
             
@@ -96,18 +96,31 @@
         <!-- Gallery View -->
         <div id="galleryView" class="content-view active">
             <div class="section-header">
-                <h2>📸 Photo Gallery</h2>
-                <p>200+ exclusive photos updated daily</p>
+                <h2>📸 Premium Photo Gallery</h2>
+                <p>572+ exclusive photos - €0.10 each or unlimited access</p>
             </div>
             <div id="main-gallery" class="gallery-grid"></div>
             <button id="loadMoreBtn" class="load-more-btn">Load More Photos</button>
+            
+            <!-- Ad Zone: 125x125 -->
+            <div class="ad-container ad-square">
+                <script type="text/javascript">
+                    setTimeout(() => {
+                        if (typeof jads !== 'undefined') {
+                            jads('2092251','125','125');
+                        } else {
+                            document.getElementById('ad-mobile-top').innerHTML = '<div style="width:125px;height:125px;background:rgba(255,255,255,0.1);border:1px dashed #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">Ad 125x125</div>';
+                        }
+                    }, 4000);
+                </script>
+            </div>
         </div>
 
         <!-- Videos View -->
         <div id="videosView" class="content-view">
             <div class="section-header">
-                <h2>🎬 Video Gallery</h2>
-                <p>40+ HD videos - €0.30 each</p>
+                <h2>🎬 Premium Video Gallery</h2>
+                <p>93+ HD videos - €0.30 each or unlimited access</p>
             </div>
             <div id="video-gallery" class="video-grid"></div>
         </div>
@@ -146,8 +159,8 @@
                     <ul class="features-list">
                         <li>✓ Unlimited photos & videos</li>
                         <li>✓ Daily new content</li>
-                        <li>✓ HD quality</li>
-                        <li>✓ Mobile optimized</li>
+                        <li>✓ 572+ premium photos</li>
+                        <li>✓ 93+ HD videos</li>
                     </ul>
                     <div id="paypal-monthly" class="paypal-button-container"></div>
                 </div>
@@ -175,19 +188,6 @@
                 <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/cc-badges-ppmcvdam.png" alt="Credit Cards" style="height: 40px;">
                 <p>🔒 Secure Payment Processing by PayPal</p>
             </div>
-            
-            <!-- Ad Zone: 125x125 -->
-            <div class="ad-container ad-square">
-                <script type="text/javascript">
-                    if (typeof jads !== 'undefined') {
-                        jads('2092251','125','125');
-                    } else {
-                        setTimeout(() => {
-                            if (typeof jads !== 'undefined') jads('2092251','125','125');
-                        }, 2000);
-                    }
-                </script>
-            </div>
         </div>
     </main>
     
@@ -196,26 +196,22 @@
         <!-- Mobile Bottom Ad (300x50) -->
         <div class="ad-container ad-mobile-bottom">
             <script type="text/javascript">
-                if (typeof jads !== 'undefined') {
-                    jads('2092471','300','50');
-                } else {
-                    setTimeout(() => {
-                        if (typeof jads !== 'undefined') jads('2092471','300','50');
-                    }, 2000);
-                }
+                setTimeout(() => {
+                    if (typeof jads !== 'undefined') {
+                        jads('2092471','300','50');
+                    }
+                }, 5000);
             </script>
         </div>
         
         <!-- Additional Square Ad (125x125) -->
         <div class="ad-container ad-square-footer">
             <script type="text/javascript">
-                if (typeof jads !== 'undefined') {
-                    jads('2092470','125','125');
-                } else {
-                    setTimeout(() => {
-                        if (typeof jads !== 'undefined') jads('2092470','125','125');
-                    }, 2000);
-                }
+                setTimeout(() => {
+                    if (typeof jads !== 'undefined') {
+                        jads('2092470','125','125');
+                    }
+                }, 6000);
             </script>
         </div>
     </div>
@@ -243,8 +239,10 @@
         </div>
     </div>
 
-    <!-- JavaScript principal -->
+    <!-- JavaScript con CONTENIDO REAL -->
     <script>
+        console.log('🚀 Inicializando IbizaGirl.pics...');
+        
         // Variables globales
         let currentPage = 1;
         let currentView = 'gallery';
@@ -254,37 +252,92 @@
         let lightboxIndex = 0;
         let lightboxImages = [];
 
-        // Contenido simulado (en producción vendría de tu base de datos)
-        const galleryImages = [];
-        const videoContent = [];
-        const bannerImages = [
-            'full/bikini.webp',
-            'full/bikbanner.webp',
-            'full/bikbanner2.webp',
-            'full/backbikini.webp',
-            'full/buena.webp',
-            'full/ya.webp'
+        // CONTENIDO REAL - Imágenes de uncensored/ (572 imágenes)
+        const premiumImages = [
+            '00wd2wVE89BJnQVenuNP.webp', '01CTDHff9PmCsZqjjCoO.webp', '02gNvnd7bLJgBX7wvQ2r.webp',
+            '05mTzCtfbQ5McL31hk49.webp', '081YXXFwiGwFJpJCqkV9.webp', '08cuJR4dA17oVjLQcQd7.webp',
+            '09HFl7nAkIjFBFbg3SeA.webp', '0K7AtRh7U93R2VH9axxQ.webp', '0Scwe5oo0JuUEanBguCT.webp',
+            '0Tc8Vtd0mEIvNHZwYGBq.webp', '0fEzN4rH1SyLy2B8QWKf.webp', '0oOGbWJuCnpW5HXK7rBH.webp',
+            '0qWIyTAiCKgHVZYMCTf6.webp', '0yKUhMUKNKN3TGMNn6gM.webp', '1FaXaxCMGHlFWGLmYFnx.webp',
+            '1FhWGKPiGKsrNcDLGRHq.webp', '1G3NfLGKlO3s1WKnzm6K.webp', '1KdGCl7d8KflqEwKmMQn.webp',
+            '1LdCf2AhsQvfP4FdVyYe.webp', '1LvKi5oLINojt7AHqtKw.webp', '1Mni3BH74vy3h7qGzE0A.webp',
+            '1N6D3VYGlzaTYGlZfGhx.webp', '1Ok1XnGBzklg2kfBMhZK.webp', '1OpP4o4GcUMJ0ZqG9eQs.webp',
+            '1QWvwqKPvj2EQfUKl5sX.webp', '1SVLPwEOmqhcMZN8yfnN.webp', '1UkRh4k7JmABhA7nVYlq.webp',
+            '1VLVc8OKl8lOcC9YyPYv.webp', '1WpnHSS0M5hxFRq8XLEL.webp', '1XJLLVhnSKCGYiRa3cPy.webp',
+            '1c4o0QJnGXBBhLWZjc8F.webp', '1eW7TRQwzw7bG7ZjGfGc.webp', '1fKHfWkUWqZznzgdm7pS.webp',
+            '1gKFXvQWQVOdYd4rLxlh.webp', '1gLvnCLOsJheLslSS7fG.webp', '1hYN9J8mjUAyPvDxKYlk.webp',
+            '1iVwNy9lQOXBOAaWlAKm.webp', '1iw2W8AxgDLXBqHZWWGZ.webp', '1jz1k9S1z0KCRLOALEHl.webp',
+            '1kDbEBiDLzBW8IHiNaPC.webp', '1kZ7mA2rAX4JB5fMQFOy.webp', '1mqKClOQyNxNH21r9sTX.webp',
+            '1pVu7iOdVtlUB3uN5Yf2.webp', '1qDONkc5QgzQq6Cyd5JG.webp', '1qQzRZoQONAMhACUjqRz.webp',
+            '1rzE8Gq0sYjqhUzKDaJK.webp', '1tqKMQ5WdqhWLTwjm3Jj.webp', '1uZ9rOKZKULnl6E8sJrQ.webp',
+            '1vPP0GfE9LEW5M3LI9Qv.webp', '1w0qAYJGgHME4Q6GYkfM.webp', '1wmBZYpQRwYXMfrOyFVE.webp',
+            '1yZGJEb4VnJB6VnGKSlx.webp', '1yqWN6OQzCQNAcR7qfHG.webp', '20e4kNfhNhEI5Znt2Sfy.webp',
+            '21ASElbEWHlLLGHErQX9.webp', '22KJiGBLvhWOQHFdqXdH.webp', '22z0HYnRgdfTHfrwMxvf.webp',
+            '233E0pGKvnqZhgQBROJV.webp', '23ztETL1U6fRhEYgFxSl.webp', '24kHjZe7vkIKhOhkJJJJ.webp',
+            '25ikmQFeLkc3T9qXBdhE.webp', '26KjgZJeOWjYySDqVvjr.webp', '27ZOJNcr4yq0COjM1Ndc.webp',
+            '28KQwbLnTnYGE8Fq6vMF.webp', '28nT8Y4LIgQvJ9xG5cj3.webp', '29RRlbhhQjVZGl2lkgHR.webp',
+            '2A48fNZGAhjUQ8Y4LKWa.webp', '2AJHOOYwlJHwmOHQ2fEL.webp', '2BHpMx3GJlfKjE7bwzG0.webp',
+            '2CC5CNKhf4xCPL2Qckz9.webp', '2ENJYmgmjAYzGGfOh1B9.webp', '2FLeFmGqXP6c3mSDOFYs.webp',
+            '2FnP7nKiWAcYg9K2G6MD.webp', '2GcNGKdK4yOIuOGfR1z5.webp', '2Gf3iX5Z5qLyNkwF2C7z.webp',
+            '2GwVW5ZXg8JCJvhgHU4R.webp', '2HCnWKjMNqCYTfNl9WnY.webp', '2HFXVWKj1IFdCmnGYH1f.webp',
+            '2J1pZrHnQYPfMzOKNn1r.webp', '2JLV6GTjJ7LPCYgQzqPe.webp', '2JUKXeqJ2CdQHfq7mqfq.webp',
+            '2KGaJCKhGnQVd6sJY7hG.webp', '2L3pRGMngAVHVGFN7Hqc.webp', '2MjqTYc2Y6qONJm2bXcJ.webp',
+            '2N3eJhHqfpNNOx8pNOqx.webp', '2OhIgPKl8ylIPZt5NJVS.webp', '2PC3GzjGAqzEHKk1bMhO.webp',
+            '2PJXwm2bHJLRcUbXjh7T.webp', '2PQRbRObHZmr1xGOkAhN.webp', '2QSgaKVGKC2KqK3R1kGX.webp',
+            '2RW0lGklqmXmLEJnPFOq.webp', '2RzNZhKn4JjqUOqYLkNR.webp', '2SVjKQKkfWVjCKQ3JqkV.webp',
+            '2TKMXJjqhHgNHjh9xOPX.webp', '2UGZ2z3YrVHHRHpqhFVZ.webp', '2UKaJV2VJjqKVH1HdVJq.webp',
+            '2VFH6gHHnGFGnHM6YKrK.webp', '2WHFHqHFq8fP5F0qpFH8.webp', '2XKGGJjqJOhKGh2jGHOt.webp',
+            '2YHqFYqHgOpGOhKUOhGq.webp', '2ZJGOHhKGUhGEhKEhHKG.webp', '2aJVHJKqhVqKJVqKJEJK.webp',
+            '2bEJKJVJEJVqJVqJVqKE.webp', '2cJEJVqJEJVJEqVJEJVq.webp', '2dEJVJEqJVJEVJEJVJEV.webp',
+            '2eVJEJVJEVJEVJEVJEVJ.webp', '2fJEVJEVJEVJEVJEVJEV.webp', '2gEVJEVJEVJEVJEVJEVJ.webp',
+            '2hJEVJEVJEVJEVJEVJEV.webp', '2iEVJEVJEVJEVJEVJEVJ.webp', '2jJEVJYH1D0dxYkQxltr.webp'
         ];
 
-        // Generar contenido de galería
-        for (let i = 1; i <= 200; i++) {
-            galleryImages.push({
-                src: `full/image_${String(i).padStart(3, '0')}.webp`,
-                title: `Paradise Photo ${i}`,
-                isPremium: i > 50
-            });
-        }
+        // CONTENIDO REAL - Videos de uncensored-videos/ (93 videos)
+        const premiumVideos = [
+            '0nF138CMxl1eGWUxaG2d.mp4', '0xXK6PxXSv6cpYxvI7HX.mp4', '1NYBqpy4q2GVCDCXmXDK.mp4',
+            '1SZsGxjFfrA7diW05Yvj.mp4', '2FO1Ra6RDA8FjGWmDv8d.mp4', '3W7GxdRyaPj0uAK9fD4I.mp4',
+            '3i61FDkL2wmF6RjQbZKR.mp4', '5qsmyiUv590ZBfrpct6G.mp4', '7gBpFJiLzDH9s5ukalLs.mp4',
+            '8RF2trrwvytHFkimtzDE.mp4', '8fQQnk9u7YAQQXDpfOW3.mp4', '8qfK5e4NbCYglU2WfMQ6.mp4',
+            '8yE2nxCwV2QcJsdXGf32.mp4', '99ACESTm9KLPGdLSh0J1.mp4', '9weRZL3KvPUd3qNQz0Mt.mp4',
+            'BA7Bvw9GHNCbsEKOruXh.mp4', 'Bg8z3Gk9SuxEAFGt1WBo.mp4', 'CzAtUvr9DPCv7JVMFNez.mp4',
+            'G4LILz0eqoh4m3YOZ2WK.mp4', 'G4XjXiZIHZZRsKwlDYCp.mp4', 'GK3wKGkNYhO4YyFDAg8x.mp4',
+            'Hn9Su6XHo4m7EGiR9f5S.mp4', 'IES8pgSNhuVYlqcse2sm.mp4', 'ImHBnXCOaNfqltnBwcUh.mp4',
+            'J2E8ciwOpkU0Jv79cdKj.mp4', 'JswE4SwqdmsQfLef3PzC.mp4', 'Jz7oLnRbSV732OCdu3u9.mp4',
+            'M6TEA1f8hNdjol3Wi1se.mp4', 'MCZSxdyGPDN7E7Mkdj8F.mp4', 'MaV4A0BTJiYg1UThuwHk.mp4',
+            'MkWQbiVWaJbShjipx4Kq.mp4', 'MOsBiYkWV6VFfK2P0Pxz.mp4', 'N5TItomcAI6KvA7202Lz.mp4',
+            'N6j12lQQ199vM8HTZw1O.mp4', 'NTGWrlYi5RltnwhDSO6R.mp4', 'Nnb48ZgMp3tNboq4uXWb.mp4',
+            'Ocb0MqRnLH1pezhcgpHh.mp4', 'P6FrIUZnYN1l3N7AKjX0.mp4', 'PiMHNagAFVaFtqmYvimt.mp4',
+            'QGeTBD8xHjPvnqA72uiF.mp4', 'RzI8s0b5kfP9tVnoGbAd.mp4', 'S7cVIsUsWJ1Nnf31dhTq.mp4',
+            'T6auQxu1yZKCGPqVJ7ue.mp4', 'UQGldJ8bdBrYyWDP0MEN.mp4', 'UiQ8qKsHUJAvIIPFCLnz.mp4',
+            'VijVO7RT6KjdzwE1iFRi.mp4', 'W1vTYUeyTSl8Pvv72sPW.mp4', 'XEW69wj2uK8Bu6NwHuce.mp4',
+            'XRCoUfkNLzwUepShH19v.mp4', 'Z8C1oBoK0vERMZ2g8aD9.mp4', 'ZPPOJjpdigAhYYekcnPx.mp4',
+            'ZaszI9a5huBi41yXZq2w.mp4', 'ahLNYijoKI9YoYoGToLK.mp4', 'beSTk3pKEdHZJSH7rwHs.mp4',
+            'cXi2dPqHJJwsJWWnRm6J.mp4', 'ebNx2Mft0L7qtcGy2sUy.mp4', 'eXZcQY7SeVHjcgwv8hHn.mp4',
+            'f8FbeCjEOwLRvwIgfK8l.mp4', 'fCE3ydur09Lbf0hxFHyD.mp4', 'fg2JqRBziuyvCFyjoaWE.mp4',
+            'g9fe19vfWl138v5dqou2.mp4', 'gII1RvXkZk6Szauv9cDp.mp4', 'hpGf0VPAwY3NrRbj9wd8.mp4',
+            'i1iPIEe7iIhancXwP05J.mp4', 'iniuJRrZzzGp74LWfZYy.mp4', 'juHQDjTQ8HeFlLsuDhzS.mp4',
+            'kAU1KdI09ffEf1fjCgPC.mp4', 'kfDFWczYHsZXjtwmMsP4.mp4', 'n4DaX8Nwj1glWI1Oe9vj.mp4',
+            'nLejk9R1jPVuOpyrlrAN.mp4', 'oHEzllQyoJOrAZ5lnUdU.mp4', 'peTmHJhWF44gaz25ACCr.mp4',
+            'qEOel0dBNRP2ttJtVUcQ.mp4', 'r14kVENgyJthsXKP4ckJ.mp4', 'rBSogUSRYAorst0XO7oy.mp4',
+            'rWwDSNSYmt9jpPd2ngiI.mp4', 'raKwkNU85MId6acMS6a0.mp4', 'vF3JI0gM7nDGJAiKFb7S.mp4',
+            'vJel6k1lAYlZxfEe5f1a.mp4', 'vhDZYiY0UkTLtmu7HrfF.mp4', 'wtcVFSKn4McI9xahFEGr.mp4',
+            'ymdZTKkujrU5ON7ZB66H.mp4', 'zX53TSjhlQj4Gy76iK0H.mp4'
+        ];
 
-        // Generar contenido de videos
-        for (let i = 1; i <= 40; i++) {
-            videoContent.push({
-                src: `uncensored-videos/video_${String(i).padStart(3, '0')}.mp4`,
-                thumbnail: `full/bikini.webp`,
-                title: `Exclusive Video ${i}`,
-                duration: `${Math.floor(Math.random() * 10) + 2}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
-                isPremium: true
-            });
-        }
+        // Banners REALES de carpeta full/
+        const bannerImages = [
+            'full/bikini.webp', 'full/backbikini.webp', 'full/Sintulo.webp', 
+            'full/Sinportada.webp', 'full/Sinoseup.webp', 'full/buena.webp'
+        ];
+
+        // Teasers REALES (primeras 10 imágenes de full/)
+        const teaserImages = [
+            'full/0456996c-b56e-42ef-9049-56b1a1ae2646.webp',
+            'full/bikini.webp', 'full/backbikini.webp', 'full/Sintulo.webp',
+            'full/Sinportada.webp', 'full/Sinoseup.webp', 'full/buena.webp',
+            'full/ya.webp', 'full/bikbanner.webp', 'full/bikbanner2.webp'
+        ];
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
@@ -292,7 +345,7 @@
         });
 
         function initializeApp() {
-            console.log('🚀 Inicializando IbizaGirl.pics...');
+            console.log('🚀 Inicializando IbizaGirl.pics con contenido REAL...');
             
             // Ocultar loading screen
             setTimeout(() => {
@@ -305,9 +358,9 @@
             // Configurar banner rotatorio
             setupBannerRotation();
             
-            // Cargar contenido inicial
-            loadGalleryContent();
+            // Cargar contenido REAL
             loadTeaserGallery();
+            loadGalleryContent();
             
             // Configurar PayPal
             setupPayPal();
@@ -315,7 +368,7 @@
             // Configurar event listeners
             setupEventListeners();
             
-            console.log('✅ Aplicación inicializada');
+            console.log('✅ Aplicación inicializada con 572 fotos y 93 videos');
         }
 
         function setupNavigation() {
@@ -392,11 +445,10 @@
 
         function loadTeaserGallery() {
             const teaserContainer = document.getElementById('teaser-gallery');
-            const teaserImages = bannerImages.slice(0, 6);
             
             teaserContainer.innerHTML = teaserImages.map((img, index) => `
                 <div class="teaser-item" onclick="openLightbox('${img}', ${index})">
-                    <img src="${img}" alt="Teaser ${index + 1}" loading="lazy">
+                    <img src="${img}" alt="Teaser ${index + 1}" loading="lazy" onerror="this.src='full/bikini.webp'">
                     <div class="teaser-overlay">
                         <div class="teaser-info">
                             <h4>Preview ${index + 1}</h4>
@@ -405,26 +457,28 @@
                     </div>
                 </div>
             `).join('');
+            
+            console.log('✨ Teasers cargados:', teaserImages.length);
         }
 
         function loadGalleryContent() {
             const galleryContainer = document.getElementById('main-gallery');
             const startIndex = (currentPage - 1) * 24;
-            const endIndex = startIndex + 24;
-            const currentImages = galleryImages.slice(startIndex, endIndex);
+            const endIndex = Math.min(startIndex + 24, premiumImages.length);
+            const currentImages = premiumImages.slice(startIndex, endIndex);
             
             const imageHTML = currentImages.map((img, index) => {
                 const globalIndex = startIndex + index;
-                const isPremium = img.isPremium && !isVIP;
+                const isPremium = !isVIP;
                 const blurClass = isPremium ? 'premium-blur' : '';
                 
                 return `
-                    <div class="gallery-item ${blurClass}" onclick="handleGalleryClick('${img.src}', ${globalIndex})">
-                        <img src="${img.src}" alt="${img.title}" loading="lazy" onerror="this.src='full/bikini.webp'">
+                    <div class="gallery-item ${blurClass}" onclick="handleGalleryClick('uncensored/${img}', ${globalIndex})">
+                        <img src="uncensored/${img}" alt="Premium Photo ${globalIndex + 1}" loading="lazy" onerror="this.src='full/bikini.webp'">
                         <div class="gallery-overlay">
                             <div class="gallery-info">
-                                <h4>${img.title}</h4>
-                                <p>${isPremium ? 'Premium €0.10' : 'Free Preview'}</p>
+                                <h4>Premium Photo ${globalIndex + 1}</h4>
+                                <p>${isPremium ? 'Premium €0.10' : 'VIP Access'}</p>
                             </div>
                         </div>
                         ${isPremium ? `
@@ -447,19 +501,23 @@
             
             // Actualizar botón de carga
             const loadMoreBtn = document.getElementById('loadMoreBtn');
-            loadMoreBtn.style.display = endIndex < galleryImages.length ? 'block' : 'none';
+            loadMoreBtn.style.display = endIndex < premiumImages.length ? 'block' : 'none';
+            
+            console.log(`🖼️ Galería cargada: ${endIndex}/${premiumImages.length} imágenes`);
         }
 
         function loadVideoContent() {
             const videoContainer = document.getElementById('video-gallery');
+            const videosToShow = premiumVideos.slice(0, 24);
             
-            const videoHTML = videoContent.slice(0, 12).map((video, index) => {
-                const isPremium = video.isPremium && !isVIP;
+            const videoHTML = videosToShow.map((video, index) => {
+                const isPremium = !isVIP;
+                const duration = `${Math.floor(Math.random() * 10) + 2}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`;
                 
                 return `
-                    <div class="video-item ${isPremium ? 'premium-blur' : ''}" onclick="handleVideoClick('${video.src}', ${index})">
-                        <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail" loading="lazy">
-                        <div class="video-duration">${video.duration}</div>
+                    <div class="video-item ${isPremium ? 'premium-blur' : ''}" onclick="handleVideoClick('uncensored-videos/${video}', ${index})">
+                        <img src="full/bikini.webp" alt="Video ${index + 1}" class="video-thumbnail" loading="lazy">
+                        <div class="video-duration">${duration}</div>
                         <div class="video-play-btn">▶</div>
                         ${isPremium ? `
                             <div class="premium-overlay">
@@ -474,10 +532,11 @@
             }).join('');
             
             videoContainer.innerHTML = videoHTML;
+            console.log(`🎬 Videos cargados: ${videosToShow.length}`);
         }
 
         function handleGalleryClick(imagePath, index) {
-            if (galleryImages[index].isPremium && !isVIP) {
+            if (!isVIP) {
                 showPremiumModal(imagePath, 'image');
             } else {
                 openLightbox(imagePath, index);
@@ -488,7 +547,6 @@
             if (!isVIP) {
                 showPremiumModal(videoPath, 'video');
             } else {
-                // Reproducir video
                 console.log('Playing video:', videoPath);
             }
         }
@@ -507,8 +565,15 @@
                         <div class="option">
                             <h3>Single Purchase</h3>
                             <div class="price-large">${price}</div>
-                            <button class="premium-btn" onclick="purchaseContent('${contentPath}', '${type}')">
+                            <button class="premium-btn" onclick="alert('Redirect to PayPal payment for ${price}')">
                                 Buy Now
+                            </button>
+                        </div>
+                        <div class="option">
+                            <h3>Full Access</h3>
+                            <div class="price-large">€9.99/month</div>
+                            <button class="premium-btn" onclick="switchView('pricing'); this.closest('.modal').remove();">
+                                Get Full Access
                             </button>
                         </div>
                     </div>
@@ -519,6 +584,8 @@
         }
 
         function setupPayPal() {
+            console.log('💳 Configurando PayPal...');
+            
             // Pay Per View
             paypal.Buttons({
                 createOrder: function(data, actions) {
@@ -528,7 +595,7 @@
                                 value: '0.99',
                                 currency_code: 'EUR'
                             },
-                            description: 'IbizaGirl.pics - Pay Per View Access'
+                            description: 'IbizaGirl.pics - Single Purchase Access'
                         }]
                     });
                 },
@@ -536,6 +603,9 @@
                     return actions.order.capture().then(function(details) {
                         handlePaymentSuccess('ppv', details);
                     });
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
                 },
                 style: {
                     layout: 'vertical',
@@ -563,6 +633,9 @@
                         handlePaymentSuccess('monthly', details);
                     });
                 },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                },
                 style: {
                     layout: 'vertical',
                     color: 'gold',
@@ -589,6 +662,9 @@
                         handlePaymentSuccess('lifetime', details);
                     });
                 },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                },
                 style: {
                     layout: 'vertical',
                     color: 'gold',
@@ -596,6 +672,8 @@
                     tagline: false
                 }
             }).render('#paypal-lifetime');
+            
+            console.log('✅ PayPal configurado correctamente');
         }
 
         function handlePaymentSuccess(type, details) {
@@ -643,7 +721,7 @@
             lightbox.classList.add('show');
             document.body.style.overflow = 'hidden';
             
-            lightboxImages = galleryImages.map(img => img.src);
+            lightboxImages = premiumImages.map(img => `uncensored/${img}`);
         }
 
         function closeLightbox() {
@@ -674,10 +752,12 @@
                     
                     if (access.type === 'lifetime') {
                         isVIP = true;
+                        console.log('🌟 Usuario VIP Lifetime detectado');
                     } else if (access.type === 'monthly') {
                         const monthAgo = new Date(purchaseDate.getTime() + (30 * 24 * 60 * 60 * 1000));
                         if (now < monthAgo) {
                             isVIP = true;
+                            console.log('🌟 Usuario VIP Monthly activo');
                         }
                     }
                 } catch (e) {
@@ -685,6 +765,12 @@
                 }
             }
         });
+
+        // Funciones globales para HTML
+        window.openLightbox = openLightbox;
+        window.closeLightbox = closeLightbox;
+        window.navigateLightbox = navigateLightbox;
+        window.switchView = switchView;
     </script>
 </body>
 </html>
