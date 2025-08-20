@@ -1,18 +1,36 @@
+# BeachGirl.pics - Paradise Beach Collection
+# Robots.txt for search engine optimization
+
 User-agent: *
 Allow: /
-Allow: /age-verification.html
-Allow: /gallery.html
-Allow: /premium.html
-Allow: /videos.html
-Allow: /subscription.html
-
-# Disallow sensitive content for crawlers
+Disallow: /admin/
+Disallow: /private/
+Disallow: *.log
 Disallow: /uncensored/
 Disallow: /uncensored-videos/
 
-# Allow ad verification files
-Allow: /f67a56f266e834d596c42122f88bb88d.html
-Allow: /97ce8adfbeb6e153ef4ebf2566dfeb7d.html
-Allow: /eroads__5f8afe77e5b70fec960d89b314e045a4.html
+# Specific crawl rules for adult content
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 5
 
-Sitemap: https://ibizagirl.pics/sitemap.xml
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 5
+
+User-agent: Yandex
+Allow: /
+Crawl-delay: 10
+
+# Block aggressive crawlers
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+# Sitemap location
+Sitemap: https://beachgirl.pics/sitemap.xml
