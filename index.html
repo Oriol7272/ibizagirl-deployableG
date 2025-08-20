@@ -1727,9 +1727,14 @@
         // Initialize purchases check after content loads
         setTimeout(checkExistingPurchases, 2000);
 
-        // Error Handling
+        // Error Handling mejorado
         window.addEventListener('error', function(e) {
             console.error('🚨 BeachGirl.pics Error:', e.error);
+            // Don't let ad errors break the site
+            if (e.filename && (e.filename.includes('jads.co') || e.filename.includes('exoclick') || e.filename.includes('ero-advertising'))) {
+                console.log('Ad script error ignored to prevent site breakage');
+                e.preventDefault();
+            }
         });
 
         // Performance Monitoring
