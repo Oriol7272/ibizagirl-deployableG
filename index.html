@@ -893,9 +893,38 @@
         </p>
     </footer>
 
-    <!-- Load ad scripts with BeachGirl IDs -->
-    <script src="https://poweredby.jads.co/js/jads.js" async></script>
-    <script src="https://a.exdynsrv.com/ad-provider.js" async></script>
+    <!-- Load ad scripts with BeachGirl IDs - Error handling -->
+    <script>
+        // Load JuicyAds safely
+        (function() {
+            try {
+                const script = document.createElement('script');
+                script.src = 'https://poweredby.jads.co/js/jads.js';
+                script.async = true;
+                script.onerror = function() {
+                    console.log('JuicyAds script failed to load');
+                };
+                document.head.appendChild(script);
+            } catch(e) {
+                console.log('JuicyAds loading error:', e);
+            }
+        })();
+
+        // Load ExoClick provider safely
+        (function() {
+            try {
+                const script = document.createElement('script');
+                script.src = 'https://a.exdynsrv.com/ad-provider.js';
+                script.async = true;
+                script.onerror = function() {
+                    console.log('ExoClick provider script failed to load');
+                };
+                document.head.appendChild(script);
+            } catch(e) {
+                console.log('ExoClick provider loading error:', e);
+            }
+        })();
+    </script>
 
     <!-- PayPal SDK -->
     <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&disable-funding=credit,card,bancontact,blik,eps,giropay,ideal,mercadopago,mybank,p24,sepa,sofort,venmo"></script>
