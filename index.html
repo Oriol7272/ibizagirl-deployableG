@@ -893,41 +893,12 @@
         </p>
     </footer>
 
-    <!-- Load ad scripts with BeachGirl IDs - Error handling -->
-    <script>
-        // Load JuicyAds safely
-        (function() {
-            try {
-                const script = document.createElement('script');
-                script.src = 'https://poweredby.jads.co/js/jads.js';
-                script.async = true;
-                script.onerror = function() {
-                    console.log('JuicyAds script failed to load');
-                };
-                document.head.appendChild(script);
-            } catch(e) {
-                console.log('JuicyAds loading error:', e);
-            }
-        })();
-
-        // Load ExoClick provider safely
-        (function() {
-            try {
-                const script = document.createElement('script');
-                script.src = 'https://a.exdynsrv.com/ad-provider.js';
-                script.async = true;
-                script.onerror = function() {
-                    console.log('ExoClick provider script failed to load');
-                };
-                document.head.appendChild(script);
-            } catch(e) {
-                console.log('ExoClick provider loading error:', e);
-            }
-        })();
-    </script>
+    <!-- Load ad scripts with BeachGirl IDs -->
+    <script src="https://poweredby.jads.co/js/jads.js" async></script>
+    <script src="https://a.exdynsrv.com/ad-provider.js" async></script>
 
     <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AfQEdiielw5fm3wF08p9pcxwqR3gPz82YRNUTKY4A8WNG9AktiGsDNyr2i7BsjVzSwwpeCwR7Tt7DPq5&currency=EUR&disable-funding=credit,card,bancontact,blik,eps,giropay,ideal,mercadopago,mybank,p24,sepa,sofort,venmo"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=EUR&disable-funding=credit,card,bancontact,blik,eps,giropay,ideal,mercadopago,mybank,p24,sepa,sofort,venmo"></script>
 
     <script>
         // ============================================
@@ -1575,21 +1546,9 @@
 
             console.log('📢 Loading ads...');
             
-            // Load JuicyAds with error handling
-            try {
-                if (typeof window.JuicyAdsStart !== 'undefined') {
-                    window.JuicyAdsStart(CONFIG.AD_IDS.JUICYADS_ZONE);
-                } else {
-                    // Alternative JuicyAds loading
-                    const juicyScript = document.createElement('script');
-                    juicyScript.innerHTML = `
-                        var jads_zone = ${CONFIG.AD_IDS.JUICYADS_ZONE};
-                        var jads_ad = ${CONFIG.AD_IDS.JUICYADS_AD};
-                    `;
-                    document.head.appendChild(juicyScript);
-                }
-            } catch (error) {
-                console.log('JuicyAds loading skipped:', error.message);
+            // Load JuicyAds
+            if (window.JuicyAdsStart) {
+                window.JuicyAdsStart(CONFIG.AD_IDS.JUICYADS_ZONE);
             }
 
             // Load ExoClick
@@ -1603,23 +1562,11 @@
         }
 
         function loadExoClickAds() {
-            // ExoClick banner implementation with error handling
-            try {
-                const script = document.createElement('script');
-                script.src = `https://syndication.exoclick.com/tag.js?id=${CONFIG.AD_IDS.EXOCLICK}`;
-                script.async = true;
-                script.onerror = function() {
-                    console.log('ExoClick script failed to load');
-                    // Fallback to alternative URL if needed
-                    const fallbackScript = document.createElement('script');
-                    fallbackScript.src = `//a.exoclick.com/tag_gen.js?id=${CONFIG.AD_IDS.EXOCLICK}`;
-                    fallbackScript.async = true;
-                    document.head.appendChild(fallbackScript);
-                };
-                document.head.appendChild(script);
-            } catch (error) {
-                console.error('Error loading ExoClick:', error);
-            }
+            // ExoClick banner implementation
+            const script = document.createElement('script');
+            script.src = `//syndication.exoclick.com/tag.js?id=${CONFIG.AD_IDS.EXOCLICK}`;
+            script.async = true;
+            document.head.appendChild(script);
         }
 
         function loadPopAds() {
@@ -1636,34 +1583,20 @@
         }
 
         function loadEroAds() {
-            // EroAdvertising banner - Fixed implementation
-            try {
-                const bannerDiv = document.createElement('div');
-                bannerDiv.innerHTML = `
-                    <script type="text/javascript">
-                        var EroAds = EroAds || {};
-                        EroAds.zoneId = ${CONFIG.AD_IDS.EROADS_ZONE};
-                        EroAds.bannerId = ${CONFIG.AD_IDS.EROADS_BANNER};
-                    </script>
-                `;
-                
-                // Insert banner in footer
-                const footer = document.querySelector('footer');
-                if (footer) {
-                    footer.appendChild(bannerDiv);
-                    
-                    // Load EroAdvertising script separately
-                    const script = document.createElement('script');
-                    script.src = '//dsp.ero-advertising.com/tag.js';
-                    script.async = true;
-                    script.onerror = function() {
-                        console.log('EroAdvertising script failed to load');
+            // EroAdvertising banner
+            const bannerDiv = document.createElement('div');
+            bannerDiv.innerHTML = `
+                <script type="text/javascript">
+                    var EroAds = {
+                        zoneId: ${CONFIG.AD_IDS.EROADS_ZONE},
+                        bannerId: ${CONFIG.AD_IDS.EROADS_BANNER}
                     };
-                    document.head.appendChild(script);
-                }
-            } catch (error) {
-                console.error('Error loading EroAds:', error);
-            }
+                </script>
+                <script src="//dsp.ero-advertising.com/tag.js" async></script>
+            `;
+            
+            // Insert banner in footer
+            document.querySelector('footer').appendChild(bannerDiv);
         }
 
         function hideAds() {
@@ -1727,14 +1660,9 @@
         // Initialize purchases check after content loads
         setTimeout(checkExistingPurchases, 2000);
 
-        // Error Handling mejorado
+        // Error Handling
         window.addEventListener('error', function(e) {
             console.error('🚨 BeachGirl.pics Error:', e.error);
-            // Don't let ad errors break the site
-            if (e.filename && (e.filename.includes('jads.co') || e.filename.includes('exoclick') || e.filename.includes('ero-advertising'))) {
-                console.log('Ad script error ignored to prevent site breakage');
-                e.preventDefault();
-            }
         });
 
         // Performance Monitoring
