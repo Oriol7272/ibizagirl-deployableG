@@ -1574,11 +1574,23 @@
         }
 
         function loadExoClickAds() {
-            // ExoClick banner implementation
-            const script = document.createElement('script');
-            script.src = `//syndication.exoclick.com/tag.js?id=${CONFIG.AD_IDS.EXOCLICK}`;
-            script.async = true;
-            document.head.appendChild(script);
+            // ExoClick banner implementation with error handling
+            try {
+                const script = document.createElement('script');
+                script.src = `https://syndication.exoclick.com/tag.js?id=${CONFIG.AD_IDS.EXOCLICK}`;
+                script.async = true;
+                script.onerror = function() {
+                    console.log('ExoClick script failed to load');
+                    // Fallback to alternative URL if needed
+                    const fallbackScript = document.createElement('script');
+                    fallbackScript.src = `//a.exoclick.com/tag_gen.js?id=${CONFIG.AD_IDS.EXOCLICK}`;
+                    fallbackScript.async = true;
+                    document.head.appendChild(fallbackScript);
+                };
+                document.head.appendChild(script);
+            } catch (error) {
+                console.error('Error loading ExoClick:', error);
+            }
         }
 
         function loadPopAds() {
