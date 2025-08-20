@@ -1583,20 +1583,34 @@
         }
 
         function loadEroAds() {
-            // EroAdvertising banner
-            const bannerDiv = document.createElement('div');
-            bannerDiv.innerHTML = `
-                <script type="text/javascript">
-                    var EroAds = {
-                        zoneId: ${CONFIG.AD_IDS.EROADS_ZONE},
-                        bannerId: ${CONFIG.AD_IDS.EROADS_BANNER}
+            // EroAdvertising banner - Fixed implementation
+            try {
+                const bannerDiv = document.createElement('div');
+                bannerDiv.innerHTML = `
+                    <script type="text/javascript">
+                        var EroAds = EroAds || {};
+                        EroAds.zoneId = ${CONFIG.AD_IDS.EROADS_ZONE};
+                        EroAds.bannerId = ${CONFIG.AD_IDS.EROADS_BANNER};
+                    </script>
+                `;
+                
+                // Insert banner in footer
+                const footer = document.querySelector('footer');
+                if (footer) {
+                    footer.appendChild(bannerDiv);
+                    
+                    // Load EroAdvertising script separately
+                    const script = document.createElement('script');
+                    script.src = '//dsp.ero-advertising.com/tag.js';
+                    script.async = true;
+                    script.onerror = function() {
+                        console.log('EroAdvertising script failed to load');
                     };
-                </script>
-                <script src="//dsp.ero-advertising.com/tag.js" async></script>
-            `;
-            
-            // Insert banner in footer
-            document.querySelector('footer').appendChild(bannerDiv);
+                    document.head.appendChild(script);
+                }
+            } catch (error) {
+                console.error('Error loading EroAds:', error);
+            }
         }
 
         function hideAds() {
