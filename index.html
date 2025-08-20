@@ -1546,9 +1546,21 @@
 
             console.log('📢 Loading ads...');
             
-            // Load JuicyAds
-            if (window.JuicyAdsStart) {
-                window.JuicyAdsStart(CONFIG.AD_IDS.JUICYADS_ZONE);
+            // Load JuicyAds with error handling
+            try {
+                if (typeof window.JuicyAdsStart !== 'undefined') {
+                    window.JuicyAdsStart(CONFIG.AD_IDS.JUICYADS_ZONE);
+                } else {
+                    // Alternative JuicyAds loading
+                    const juicyScript = document.createElement('script');
+                    juicyScript.innerHTML = `
+                        var jads_zone = ${CONFIG.AD_IDS.JUICYADS_ZONE};
+                        var jads_ad = ${CONFIG.AD_IDS.JUICYADS_AD};
+                    `;
+                    document.head.appendChild(juicyScript);
+                }
+            } catch (error) {
+                console.log('JuicyAds loading skipped:', error.message);
             }
 
             // Load ExoClick
